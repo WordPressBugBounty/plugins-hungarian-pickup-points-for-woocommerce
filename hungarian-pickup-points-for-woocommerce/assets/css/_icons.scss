@@ -1,0 +1,86 @@
+//Provider icons
+.vp-woo-pont-provider-icon {
+	&-foxpost {background-image: url(../images/icon-foxpost.svg);}
+	&-postapont {background-image: url(../images/icon-postapont-csomagautomata.svg);}
+	&-mpl {background-image: url(../images/icon-postapont-posta.svg);}
+	&-posta {background-image: url(../images/icon-mpl.svg);}
+	&-postapont_10 {background-image: url(../images/icon-postapont-posta.svg);}
+	&-postapont_20 {background-image: url(../images/icon-postapont-mol.svg);}
+	&-postapont_30 {background-image: url(../images/icon-postapont-csomagautomata.svg);}
+	&-postapont_50 {background-image: url(../images/icon-postapont-coop.svg);}
+	&-postapont_70 {background-image: url(../images/icon-postapont-mediamarkt.svg);}
+	&-postapont_posta {background-image: url(../images/icon-postapont-posta.svg);}
+	&-postapont_mol {background-image: url(../images/icon-postapont-mol.svg);}
+	&-postapont_automata {background-image: url(../images/icon-postapont-csomagautomata.svg);}
+	&-postapont_coop {background-image: url(../images/icon-postapont-coop.svg);}
+	&-postapont_mediamarkt {background-image: url(../images/icon-postapont-mediamarkt.svg);}
+	&-postapont_postapont {background-image: url(../images/icon-postapont.svg);}
+	&-packeta {background-image: url(../images/icon-packeta.svg);}
+	&-packeta_zbox {background-image: url(../images/icon-packeta-zbox.svg);}
+	&-packeta_shop {background-image: url(../images/icon-packeta.svg);}
+	&-packeta_mpl_postapont {background-image: url(../images/icon-postapont-posta.svg);}
+	&-packeta_mpl_automata {background-image: url(../images/icon-postapont-csomagautomata.svg);}
+	&-sprinter {background-image: url(../images/icon-sprinter.svg);}
+	&-expressone {background-image: url(../images/icon-expressone.svg);}
+	&-expressone_alzabox {background-image: url(../images/icon-expressone-alzabox.svg);}
+	&-expressone_omv {background-image: url(../images/icon-expressone-omv.svg);}
+	&-expressone_packeta {background-image: url(../images/icon-expressone-packeta.svg);}
+	&-gls {background-image: url(../images/icon-gls.svg);}
+	&-gls_locker {background-image: url(../images/icon-gls-locker.svg);}
+	&-gls_shop {background-image: url(../images/icon-gls-shop.svg);}
+	&-dpd {background-image: url(../images/icon-dpd.svg);}
+	&-dpd_alzabox {background-image: url(../images/icon-expressone-alzabox.svg);}
+	&-dpd_parcelshop {background-image: url(../images/icon-dpd.svg);}
+	&-sameday {background-image: url(../images/icon-easybox.svg);}
+	&-custom {background-image: url(../images/icon-custom.svg);}
+	&-transsped {background-image: url(../images/icon-transsped.svg);}
+	&-pactic {background-image: url(../images/icon-pactic.svg);}
+	&-pactic_sk_gls {background-image: url(../images/icon-gls.svg);}
+	&-pactic_hr_gls {background-image: url(../images/icon-gls.svg);}
+	&-pactic_si_gls {background-image: url(../images/icon-gls.svg);}
+	&-pactic_ro_sameday {background-image: url(../images/icon-easybox.svg);}
+	&-pactic_pl_inpost {background-image: url(../images/icon-inpost.svg);}
+	&-pactic_bg_econt {background-image: url(../images/icon-econt.svg);}
+	&-pactic_sk_post {background-image: url(../images/icon-sk-post.svg);}
+	&-pactic_cz_ppl {background-image: url(../images/icon-ppl.svg);}
+	&-csomagpiac {background-image: url(../images/icon-csomagpiac.svg);}
+	&-csomagpiac_dpd {background-image: url(../images/icon-dpd.svg);}
+	&-csomagpiac_sameday {background-image: url(../images/icon-easybox.svg);}
+	&-csomagpiac_mpl_postapont {background-image: url(../images/icon-postapont.svg);}
+	&-csomagpiac_mpl_posta {background-image: url(../images/icon-postapont-posta.svg);}
+	&-csomagpiac_mpl_automata {background-image: url(../images/icon-postapont-csomagautomata.svg);}
+	&-dhl {background-image: url(../images/icon-dhl.svg);}
+	
+	&-kvikk {background-image: url(../images/icon-kvikk.svg);}
+	&-kvikk_packeta {background-image: url(../images/icon-packeta.svg);}
+	&-kvikk_mpl {background-image: url(../images/icon-mpl.svg);}
+	&-kvikk_expressone {background-image: url(../images/icon-expressone.svg);}
+	&-kvikk_famafutar {background-image: url(../images/icon-famafutar.svg);}
+	&-kvikk_mpl_postapont {background-image: url(../images/icon-postapont.svg);}
+	&-kvikk_mpl_posta {background-image: url(../images/icon-postapont-posta.svg);}
+	&-kvikk_mpl_automata {background-image: url(../images/icon-postapont-csomagautomata.svg);}
+	&-kvikk_packeta_zpont {background-image: url(../images/icon-packeta.svg);}
+	&-kvikk_packeta_zbox {background-image: url(../images/icon-packeta-zbox.svg);}
+	&-kvikk_alzabox {background-image: url(../images/icon-expressone-alzabox.svg);}
+	&-kvikk_expressone_omv {background-image: url(../images/icon-expressone-omv.svg);}
+
+}
+
+.wp-admin {
+	.vp-woo-pont-provider-icon {
+		&-kvikk_packeta_zpont {background-image: url(../images/icon-kvikk-packeta-zpont.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_packeta_zbox {background-image: url(../images/icon-kvikk-packeta-zbox.svg); width: 72px !important;background-size: 100% !important;}
+
+		&-kvikk_alzabox, &-kvikk_expressone_alzabox {background-image: url(../images/icon-kvikk-expressone-alzabox.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_expressone_omv {background-image: url(../images/icon-kvikk-expressone-omv.svg); width: 72px !important;background-size: 100% !important;}
+
+		&-kvikk_mpl_postapont {background-image: url(../images/icon-kvikk-mpl-postapont.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_mpl_posta {background-image: url(../images/icon-kvikk-mpl-posta.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_mpl_automata {background-image: url(../images/icon-kvikk-mpl-automata.svg); width: 72px !important;background-size: 100% !important;}
+
+		&-kvikk_packeta {background-image: url(../images/icon-kvikk-packeta.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_expressone {background-image: url(../images/icon-kvikk-expressone.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_mpl {background-image: url(../images/icon-kvikk-mpl.svg); width: 72px !important;background-size: 100% !important;}
+		&-kvikk_famafutar {background-image: url(../images/icon-kvikk-famafutar.svg); width: 72px !important;background-size: 100% !important;}	
+	}
+}

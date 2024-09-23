@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>sameday</title>
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#B22024" offset="0%"></stop>
+            <stop stop-color="#ED2225" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="sameday" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-easybox" transform="translate(-0.000000, 0.000003)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <path d="M0,10.737391 L8.300847,14.093217 L8.300847,21.12 C8.296792,21.172274 8.323977,21.222064 8.370354,21.247304 C8.409299,21.269278 8.455146,21.275981 8.498837,21.266087 L10.579841,20.569043 L12.610294,22.87513 C12.629251,22.914783 12.66927,22.925217 12.719821,22.925217 L12.778797,22.925217 C12.837592,22.904298 12.877068,22.849372 12.877792,22.787478 L13.164246,16.054957 L23.027952,20.070261 L23.027952,48 L0,39.157565 L0,10.737391 Z M48,11.795478 L48,39.499826 L26.981438,47.997913 L26.981438,20.059826 L48,11.795478 Z M36.529203,5.290435 L45.482996,9.030261 L25.127913,17.254957 L15.620168,13.396174 L36.529203,5.290435 Z M23.899952,0 L31.566809,3.199304 L10.67673,11.363478 L2.693931,8.126609 L23.899952,0 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

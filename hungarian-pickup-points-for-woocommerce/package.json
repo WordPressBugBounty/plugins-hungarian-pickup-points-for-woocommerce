@@ -1,0 +1,43 @@
+{
+	"name": "vp-woo-pont-block",
+	"version": "1.0.0",
+	"author": "The WordPress Contributors",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start",
+		"env": "wp-env",
+		"build-map": "browserify assets/js/frontend.js --plugin tinyify > assets/js/frontend.min.js",
+		"build-tracking-map": "browserify assets/js/frontend-tracking.js --plugin tinyify > assets/js/frontend-tracking.min.js",
+		"build-admin": "browserify assets/js/admin.js --plugin tinyify > assets/js/admin.min.js",
+		"watch-map": "watchify assets/js/frontend.js -o assets/js/frontend.min.js -v"
+	},
+	"dependencies": {
+		"@varvet/tiny-autocomplete": "^1.1.1",
+		"@wordpress/icons": "^9.30.0",
+		"body-scroll-lock": "^4.0.0-beta.0",
+		"browserify": "^17.0.0",
+		"classnames": "^2.5.1",
+		"js-search": "^2.0.1",
+		"leaflet": "^1.9.4",
+		"leaflet.featuregroup.subgroup": "^1.0.2",
+		"leaflet.markercluster": "^1.5.3",
+		"lodash": "^4.17.21"
+	},
+	"devDependencies": {
+		"@woocommerce/dependency-extraction-webpack-plugin": "^2.2.0",
+		"@woocommerce/eslint-plugin": "^2.2.0",
+		"@wordpress/env": "^7.0.0",
+		"@wordpress/prettier-config": "^2.22.0",
+		"@wordpress/scripts": "^26.10.0",
+		"prettier": "npm:wp-prettier@^2.6.2",
+		"tinyify": "^4.0.0",
+		"watchify": "^4.0.0"
+	}
+}

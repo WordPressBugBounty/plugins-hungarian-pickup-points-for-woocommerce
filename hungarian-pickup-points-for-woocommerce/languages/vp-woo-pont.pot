@@ -1,0 +1,3827 @@
+# Copyright (C) 2024 Viszt Péter
+# This file is distributed under the same license as the Hungarian Pickup Points & Shipping Labels for WooCommerce plugin.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Hungarian Pickup Points & Shipping Labels for "
+"WooCommerce 3.1.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hungarian-pickup-"
+"points-for-woocommerce\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-09-15 15:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: vp-woo-pont\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;"
+
+#: includes/class-tracking.php:337 includes/class-tracking.php:397
+#: includes/class-tracking.php:599 includes/views/html-metabox-tracking.php:37
+#: templates/order/order-tracking.php:33 templates/order/order-tracking.php:43
+#, php-format
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:9
+msgid "%d in total"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:14
+msgid "%d labels generated"
+msgstr ""
+
+#: includes/class-tracking.php:415
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:160
+#, php-format
+msgid "%s custom point"
+msgid_plural "%s custom point"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/providers/class-pactic.php:89
+#, php-format
+msgid "%s Service ID"
+msgstr ""
+
+#: templates/checkout/pont-map.php:42
+msgid "(today)"
+msgstr ""
+
+#: includes/providers/class-posta.php:192
+msgid "0 day"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:13
+msgid "1 label generated"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:12
+msgid "1 label generating"
+msgstr ""
+
+#: includes/providers/class-posta.php:194
+msgid "10 days"
+msgstr ""
+
+#: includes/providers/class-expressone.php:82
+msgid "100x150mm"
+msgstr ""
+
+#: includes/providers/class-packeta.php:111
+msgid "105x35mm on A4"
+msgstr ""
+
+#: includes/providers/class-transsped.php:205
+msgid "25x10"
+msgstr ""
+
+#: includes/views/html-admin-pro-notice.php:17
+#: includes/views/html-admin-walkthrough.php:128
+msgid "35 EUR / year"
+msgstr ""
+
+#: includes/providers/class-posta.php:193
+msgid "5 days"
+msgstr ""
+
+#: includes/providers/class-transsped.php:206
+msgid "85x85"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:34
+msgid "[{site_title}]: Shipping label created for #{order_number}"
+msgstr ""
+
+#: includes/providers/class-foxpost.php:119
+msgid "_85X85"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:54
+msgid ""
+"A Kvikk rendszerével kedvezményes áron szállíthatsz WooCommerce áruházadból "
+"a népszerű futárcégekkel egy egyszerű regisztráció után."
+msgstr ""
+
+#: includes/providers/class-sameday.php:35
+msgid "A központi raktárban"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:42
+msgid ""
+"A new shipping label was generated for order {order_number}! Tracking number "
+"is {tracking_number}. The PDF file is attached to this e-mail."
+msgstr ""
+
+#: includes/providers/class-posta.php:164
+#: includes/providers/class-sameday.php:112
+msgid "A4"
+msgstr ""
+
+#: includes/providers/class-gls.php:252
+msgid "A4_2x2 (Landscape)"
+msgstr ""
+
+#: includes/providers/class-gls.php:254
+msgid "A4_4x1"
+msgstr ""
+
+#: includes/providers/class-foxpost.php:116
+#: includes/providers/class-transsped.php:204
+#: includes/providers/class-custom.php:73
+msgid "A5"
+msgstr ""
+
+#: includes/providers/class-posta.php:165
+msgid "A5 at the top of an A4 page"
+msgstr ""
+
+#: includes/providers/class-posta.php:167
+msgid "A5 landscape"
+msgstr ""
+
+#: includes/providers/class-posta.php:168
+msgid "A5 landscape(with comments)"
+msgstr ""
+
+#: includes/providers/class-posta.php:169
+msgid "A5 portrait"
+msgstr ""
+
+#: includes/providers/class-posta.php:170
+#: includes/providers/class-foxpost.php:118
+#: includes/providers/class-kvikk.php:119
+msgid "A6"
+msgstr ""
+
+#: includes/providers/class-posta.php:171
+#: includes/providers/class-packeta.php:109
+#: includes/providers/class-gls.php:253
+#: includes/providers/class-foxpost.php:117
+#: includes/providers/class-kvikk.php:118
+#: includes/providers/class-expressone.php:81
+#: includes/providers/class-custom.php:74
+msgid "A6 on A4(recommended)"
+msgstr ""
+
+#: includes/providers/class-packeta.php:107
+msgid "A6 on A6"
+msgstr ""
+
+#: includes/providers/class-sameday.php:113
+msgid "A6(recommended)"
+msgstr ""
+
+#: includes/providers/class-foxpost.php:115
+msgid "A7"
+msgstr ""
+
+#: includes/providers/class-packeta.php:110
+msgid "A7 on A4"
+msgstr ""
+
+#: includes/providers/class-packeta.php:108
+msgid "A7 on A7"
+msgstr ""
+
+#: includes/providers/class-packeta.php:112
+msgid "A8"
+msgstr ""
+
+#: includes/views/html-admin-pro-notice.php:23
+msgid "Activate"
+msgstr ""
+
+#: includes/views/html-metabox.php:49
+msgid "Activate PRO version"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:90
+msgid "Add custom pickup point"
+msgstr ""
+
+#: includes/views/html-admin-tracking-automations.php:90
+#: includes/views/html-admin-automations.php:72
+msgid "Add new automation"
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:50
+msgid "Add new correction"
+msgstr ""
+
+#: includes/views/html-admin-pricing-table.php:91
+msgid "Add new cost"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:55
+msgid "Add new fee"
+msgstr ""
+
+#: includes/views/html-admin-notes.php:66
+msgid "Add new note"
+msgstr ""
+
+#: includes/views/html-admin-notes.php:32
+#: includes/views/html-admin-notes.php:78
+msgid "Add note to this provider:"
+msgstr ""
+
+#: includes/views/html-admin-notes.php:51
+#: includes/views/html-admin-notes.php:97
+msgid "Add note, if"
+msgstr ""
+
+#: includes/views/html-modal-add-provider.php:12
+msgid "Add provider"
+msgstr ""
+
+#: includes/providers/class-custom.php:62
+msgid "Additional details"
+msgstr ""
+
+#: includes/providers/class-dpd.php:78
+msgid "Additional information"
+msgstr ""
+
+#: includes/providers/class-custom.php:64
+msgid "Additional text that appears below the barcode"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:57
+msgid "Address"
+msgstr ""
+
+#: includes/compatibility/modules/class-vp-woo-pont-szamlazz.php:97
+msgctxt "admin"
+msgid "Mark as paid"
+msgstr ""
+
+#: includes/class-conditions.php:92
+#: includes/compatibility/modules/class-vp-woo-pont-woo-billingo.php:28
+#: includes/compatibility/modules/class-vp-woo-pont-szamlazz.php:33
+msgctxt "admin"
+msgid "Pickup point"
+msgstr ""
+
+#: includes/settings/settings-points.php:25
+msgctxt "admin"
+msgid "Pickup points"
+msgstr ""
+
+#: includes/views/html-admin-automations.php:17
+#, php-format
+msgid "after %1$s status"
+msgstr ""
+
+#: includes/providers/class-packeta.php:632
+#: includes/providers/class-packeta.php:650
+msgid "Age verification 18+"
+msgstr ""
+
+#: includes/providers/class-posta.php:112
+msgid "Agreement code"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:43
+#: includes/views/html-admin-cod-fees.php:84
+#: includes/views/html-admin-automations.php:60
+#: includes/views/html-admin-automations.php:108
+#: includes/views/html-admin-weight-corrections.php:38
+#: includes/views/html-admin-weight-corrections.php:80
+#: includes/views/html-admin-notes.php:54
+#: includes/views/html-admin-notes.php:100
+#: includes/views/html-admin-pricing-table.php:51
+#: includes/views/html-admin-pricing-table.php:114
+msgid "All"
+msgstr ""
+
+#: includes/class-shipments.php:113
+msgid "All shipments closed successfully."
+msgstr ""
+
+#: includes/class-helpers.php:61 includes/class-helpers.php:66
+msgid "AlzaBox"
+msgstr ""
+
+#: includes/providers/class-posta.php:97
+#: includes/providers/class-foxpost.php:91
+#: includes/providers/class-kvikk.php:99
+msgid "API key"
+msgstr ""
+
+#: includes/views/html-admin-kvikk-api.php:30
+msgid "API key is invalid"
+msgstr ""
+
+#: includes/views/html-admin-kvikk-api.php:27
+msgid "API key is valid"
+msgstr ""
+
+#: includes/providers/class-posta.php:102
+#: includes/providers/class-foxpost.php:86
+msgid "API password"
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:62
+msgid "API Token"
+msgstr ""
+
+#: includes/providers/class-foxpost.php:81
+msgid "API username"
+msgstr ""
+
+#: includes/views/html-modal-design.php:53
+msgid "Appearance"
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:36
+#: includes/views/html-admin-weight-corrections.php:78
+msgid "Apply this correction, if"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:41
+#: includes/views/html-admin-cod-fees.php:82
+msgid "Apply this fee, if"
+msgstr ""
+
+#: includes/views/html-admin-pricing-table.php:49
+#: includes/views/html-admin-pricing-table.php:112
+msgid "Apply this pricing, if"
+msgstr ""
+
+#: includes/views/html-admin-pricing-table.php:72
+#: includes/views/html-admin-pricing-table.php:135
+msgid "Apply to the following pickup point countries:"
+msgstr ""
+
+#: includes/views/html-admin-pricing-table.php:59
+#: includes/views/html-admin-pricing-table.php:122
+msgid "Apply to the following pickup points:"
+msgstr ""
+
+#: includes/providers/class-dpd.php:44 includes/providers/class-dpd.php:70
+msgid "At parcel delivery centre."
+msgstr ""
+
+#: includes/settings/settings-tracking.php:62
+msgid "At the beginning"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:63
+msgid "At the end"
+msgstr ""
+
+#: includes/providers/class-dpd.php:99
+msgid "Austria"
+msgstr ""
+
+#: includes/views/html-admin-automations.php:12
+msgctxt "Automation trigger"
+msgid "On successful payment"
+msgstr ""
+
+#: includes/views/html-admin-automations.php:11
+msgctxt "Automation trigger"
+msgid "When order created"
+msgstr ""
+
+#: includes/settings/settings-labels.php:31
+msgid "Automations"
+msgstr ""
+
+#: includes/class-tracking.php:740
+msgid "Available for pickup"
+msgstr ""
+
+#. %s: list of placeholders
+#: includes/emails/class-email-generated.php:107
+#: includes/emails/class-email.php:52
+#, php-format
+msgid "Available placeholders: %s"
+msgstr ""
+
+#: includes/providers/class-dpd.php:50 includes/providers/class-dpd.php:66
+#: includes/providers/class-dpd.php:75
+msgid "Back at parcel delivery center after an unsuccessful delivery attempt"
+msgstr ""
+
+#: includes/providers/class-posta.php:249
+msgid "Bank account number for payments"
+msgstr ""
+
+#: includes/providers/class-sameday.php:30
+msgid "Beérkezett futárrendelés"
+msgstr ""
+
+#: includes/class-shipments-table.php:288 includes/class-conditions.php:97
+msgid "Billing address"
+msgstr ""
+
+#: includes/class-conditions.php:36
+msgid "Billing country"
+msgstr ""
+
+#: includes/class-customizer.php:60
+msgid "Border color"
+msgstr ""
+
+#: includes/providers/class-pactic.php:45
+msgid "Bulgaria Econt"
+msgstr ""
+
+#: includes/providers/class-posta.php:85
+msgid "Bulky handling"
+msgstr ""
+
+#: includes/providers/class-transsped.php:225
+#, php-format
+msgid ""
+"By default it will auto-select the next available day for pickup. Enter it "
+"in this format: year-month-day. Leave empty to use the default value: "
+"<strong>%s</strong>"
+msgstr ""
+
+#: includes/views/html-metabox.php:79 includes/views/html-metabox.php:128
+msgid "Calculated cost(net)"
+msgstr ""
+
+#: includes/views/html-modal-design.php:72
+msgid "Cancel"
+msgstr ""
+
+#: includes/views/html-admin-packeta-carriers.php:23
+#: includes/views/html-admin-carriers.php:25
+msgid "Carrier"
+msgstr ""
+
+#: index.php:1002 includes/class-settings.php:17
+#: includes/class-settings.php:192 includes/settings/settings-carriers.php:13
+#: includes/views/html-admin-home-delivery.php:46
+msgid "Carriers"
+msgstr ""
+
+#: includes/class-conditions.php:40
+msgid "Cart Total"
+msgstr ""
+
+#: includes/class-conditions.php:44
+msgid "Cart Total(with discount)"
+msgstr ""
+
+#: includes/providers/class-posta.php:244
+msgid "Cash"
+msgstr ""
+
+#: index.php:777 index.php:782
+msgid ""
+"Cash on delivery is not available on the selected pick-up point. Please "
+"select a different payment method or pick-up point!"
+msgstr ""
+
+#: templates/checkout/pont-map.php:51
+msgid "Cash on delivery is not available on this pickup point!"
+msgstr ""
+
+#: includes/providers/class-gls.php:78
+msgid "Change completed for Delivery address"
+msgstr ""
+
+#: includes/providers/class-gls.php:70
+msgid "Change delivery for shipper's request."
+msgstr ""
+
+#: includes/views/html-admin-tracking-automations.php:49
+#: includes/views/html-admin-tracking-automations.php:101
+msgid "Change order status to"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:85
+msgid "Change the order status automatically based on the tracking status"
+msgstr ""
+
+#: includes/providers/class-sameday.php:79
+msgid "Check this if you bring your packages to a pickup point in person."
+msgstr ""
+
+#: includes/emails/class-email-generated.php:150
+#: includes/emails/class-email.php:93
+msgid "Choose which format of email to send."
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:61
+msgid "City"
+msgstr ""
+
+#: index.php:49 includes/compatibility/class-compatibility.php:18
+msgid "Cloning this object is forbidden."
+msgstr ""
+
+#: includes/views/html-modal-replace-point.php:14
+#: includes/views/html-modal-add-provider.php:14
+#: includes/views/html-modal-coordinates.php:14
+#: includes/views/html-modal-import.php:14
+#: includes/views/html-modal-pro-version.php:20
+#: includes/views/html-modal-generate.php:30
+msgid "Close modal panel"
+msgstr ""
+
+#: includes/class-labels.php:703
+msgid "Closed"
+msgstr ""
+
+#: includes/views/html-metabox.php:175
+msgid "Closed manually"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:82
+msgid "Closed packages"
+msgstr ""
+
+#: templates/order/custom-label.php:82
+msgid "COD"
+msgstr ""
+
+#: includes/views/html-metabox-kvikk.php:52
+msgid "COD % fee"
+msgstr ""
+
+#: includes/class-cod.php:120 includes/settings/settings-cod.php:25
+msgid "COD Fee"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:23
+#: includes/views/html-admin-cod-fees.php:64
+msgid "COD fee(net)"
+msgstr ""
+
+#: includes/views/html-metabox-kvikk.php:43
+msgid "COD fixed fee(net)"
+msgstr ""
+
+#: includes/providers/class-posta.php:240
+msgid "COD payment handling"
+msgstr ""
+
+#: includes/settings/settings-labels.php:64
+msgid "COD Reference number"
+msgstr ""
+
+#: includes/views/html-modal-design.php:33
+msgid "Colors"
+msgstr ""
+
+#: includes/class-conditions.php:28
+msgid "Company"
+msgstr ""
+
+#: includes/providers/class-expressone.php:56
+msgid "Company ID"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:35
+#: includes/views/html-admin-cod-fees.php:76
+#: includes/views/html-admin-automations.php:52
+#: includes/views/html-admin-automations.php:100
+#: includes/views/html-admin-weight-corrections.php:30
+#: includes/views/html-admin-weight-corrections.php:72
+#: includes/views/html-admin-notes.php:43
+#: includes/views/html-admin-notes.php:89
+#: includes/views/html-admin-pricing-table.php:43
+#: includes/views/html-admin-pricing-table.php:106
+msgid "Conditional logic"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:72
+msgid "Configured"
+msgstr ""
+
+#: includes/providers/class-gls.php:255
+msgid "Connect"
+msgstr ""
+
+#: includes/providers/class-dpd.php:113
+msgid "Connection type"
+msgstr ""
+
+#: includes/providers/class-gls.php:115
+msgid "Consignee contacted Email delivery notification"
+msgstr ""
+
+#: includes/providers/class-gls.php:69
+msgid "Consignee was not in, contact card couldn't be left."
+msgstr ""
+
+#: includes/providers/class-gls.php:242
+#: includes/providers/class-transsped.php:161
+msgid "Contact name"
+msgstr ""
+
+#: includes/providers/class-gls.php:127
+msgid "Contact Service (CS1)"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:140
+#: includes/emails/class-email.php:77
+msgid "Content"
+msgstr ""
+
+#: includes/class-helpers.php:93 includes/class-helpers.php:96
+msgid "Coop"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:46
+msgid "Coordinates"
+msgstr ""
+
+#: includes/views/html-admin-packeta-carriers.php:22
+msgid "Country"
+msgstr ""
+
+#: includes/views/html-metabox-kvikk.php:17
+msgid "Courier tracking #"
+msgstr ""
+
+#: includes/settings/settings-labels.php:94
+msgid "Create a ZIP file"
+msgstr ""
+
+#: includes/views/html-admin-kvikk-api.php:23
+msgid "Create API key"
+msgstr ""
+
+#: includes/providers/class-dpd.php:94 includes/providers/class-gls.php:140
+msgid "Croatia"
+msgstr ""
+
+#: includes/providers/class-pactic.php:21
+msgid "Croatia GLS"
+msgstr ""
+
+#: includes/class-helpers.php:52 includes/class-helpers.php:92
+msgid "Csomagautomata"
+msgstr ""
+
+#: includes/providers/class-packeta.php:346
+msgid "Csomagautomata (MPL)"
+msgstr ""
+
+#: includes/providers/class-sameday.php:38
+msgid "Csomagok a raktárban"
+msgstr ""
+
+#: includes/class-settings.php:239 includes/providers/class-csomagpiac.php:178
+msgid "Csomagpiac"
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:58
+msgid "Csomagpiac settings"
+msgstr ""
+
+#: includes/class-helpers.php:65
+msgid "Csomagpont"
+msgstr ""
+
+#: includes/class-conditions.php:74
+msgid "Current date"
+msgstr ""
+
+#: includes/providers/class-transsped.php:123
+#: includes/providers/class-transsped.php:218
+msgid "Custom"
+msgstr ""
+
+#: includes/providers/class-transsped.php:223
+msgid "Custom import date"
+msgstr ""
+
+#: includes/providers/class-custom.php:40
+msgid "Custom Label"
+msgstr ""
+
+#: includes/class-settings.php:240 includes/class-helpers.php:82
+msgid "Custom Labels"
+msgstr ""
+
+#: includes/settings/settings-points.php:6
+msgid "Custom pickup points"
+msgstr ""
+
+#: includes/settings/settings-points.php:11
+msgid "Custom provider name"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:32
+msgid "Custom tracking page"
+msgstr ""
+
+#: includes/providers/class-posta.php:107
+msgid "Customer code"
+msgstr ""
+
+#: includes/providers/class-dpd.php:166
+msgid "Customer ID"
+msgstr ""
+
+#: includes/providers/class-expressone.php:71
+msgid "Customer SMS Notification"
+msgstr ""
+
+#: includes/providers/class-gls.php:89
+msgid ""
+"Customs clearance is delayed as the consignee's phone number is not "
+"available."
+msgstr ""
+
+#: includes/providers/class-gls.php:100
+msgid "Customs clearance is delayed due to a customs inspection."
+msgstr ""
+
+#: includes/providers/class-gls.php:87
+msgid "Customs clearance is delayed due to a missing invoice."
+msgstr ""
+
+#: includes/providers/class-gls.php:96
+msgid "Customs clearance is delayed due to incomplete documents."
+msgstr ""
+
+#: includes/providers/class-gls.php:97
+msgid ""
+"Customs clearance is delayed due to missing or inaccurate customs documents."
+msgstr ""
+
+#: includes/providers/class-gls.php:92
+msgid ""
+"Customs clearance is delayed until the consignee's approval is available."
+msgstr ""
+
+#: includes/providers/class-gls.php:98
+msgid "Customs data must be recorded."
+msgstr ""
+
+#: includes/providers/class-gls.php:102
+msgid "Customs data recorded, parcel can be sent do final location."
+msgstr ""
+
+#: includes/providers/class-packeta.php:35
+msgid "Customs declaration process."
+msgstr ""
+
+#: includes/providers/class-gls.php:99
+msgid "Customs parcel locked in origin country."
+msgstr ""
+
+#: includes/providers/class-pactic.php:37
+msgid "Czech PPL"
+msgstr ""
+
+#: includes/providers/class-packeta.php:349
+msgid "Czech Republic (Packeta)"
+msgstr ""
+
+#: includes/providers/class-dpd.php:95 includes/providers/class-gls.php:141
+msgid "Czechia"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:126
+msgid "Database"
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:51
+msgid "Deactivate license"
+msgstr ""
+
+#: includes/settings/settings-global.php:37
+msgid "Default cost"
+msgstr ""
+
+#: includes/providers/class-transsped.php:211
+msgid "Default package type"
+msgstr ""
+
+#: includes/providers/class-transsped.php:212
+msgid ""
+"Default package type, used in case you generate labels with an automation. "
+"Can be changed manually on each order."
+msgstr ""
+
+#: includes/providers/class-posta.php:212
+msgid "Default package weight(g)"
+msgstr ""
+
+#: includes/providers/class-sameday.php:101
+msgid "Default package weight(kg)"
+msgstr ""
+
+#: includes/providers/class-dpd.php:149
+msgid "Default service"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:188
+msgid "Delete"
+msgstr ""
+
+#: includes/views/html-admin-tracking-automations.php:63
+#: includes/views/html-admin-tracking-automations.php:115
+#: includes/views/html-admin-cod-fees.php:37
+#: includes/views/html-admin-cod-fees.php:78
+#: includes/views/html-admin-automations.php:54
+#: includes/views/html-admin-automations.php:102
+#: includes/views/html-admin-weight-corrections.php:32
+#: includes/views/html-admin-weight-corrections.php:74
+#: includes/views/html-admin-notes.php:45
+#: includes/views/html-admin-notes.php:91
+#: includes/views/html-admin-points-table.php:33
+#: includes/views/html-admin-points-table.php:103
+#: includes/views/html-admin-pricing-table.php:45
+#: includes/views/html-admin-pricing-table.php:108
+msgid "delete"
+msgstr ""
+
+#: includes/views/html-metabox.php:165
+msgid "Delete label"
+msgstr ""
+
+#: includes/views/html-metabox.php:165 includes/views/html-metabox.php:176
+msgctxt "Delete label"
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/views/html-metabox.php:101
+msgctxt "Delete point"
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/class-tracking.php:707 includes/providers/class-dpd.php:32
+#: includes/views/html-admin-tracking-automations.php:74
+#: includes/views/html-admin-tracking-automations.php:126
+msgid "Delivered"
+msgstr ""
+
+#: includes/providers/class-posta.php:84 includes/providers/class-posta.php:226
+msgid "Delivered to an occasional recipient"
+msgstr ""
+
+#: includes/providers/class-dpd.php:39 includes/providers/class-dpd.php:80
+msgid "Delivered to pick-up point"
+msgstr ""
+
+#: includes/class-shipments-table.php:8 includes/class-shipments-table.php:139
+msgid "Delivery note"
+msgstr ""
+
+#: includes/views/html-metabox.php:178
+msgid "Delivery note ID"
+msgstr ""
+
+#: includes/providers/class-gls.php:72
+msgid "Delivery note not signed"
+msgstr ""
+
+#: includes/class-shipments-table.php:9
+msgid "Delivery notes"
+msgstr ""
+
+#: includes/settings/settings-global.php:46
+msgid "Detailed cost"
+msgstr ""
+
+#: includes/settings/settings-labels.php:87
+#: includes/providers/class-csomagpiac.php:83
+msgid "Developer mode"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:128
+msgid "Disable COD"
+msgstr ""
+
+#: includes/providers/class-gls.php:61
+msgid "Disposed"
+msgstr ""
+
+#: index.php:421 includes/views/html-admin-pro-version.php:24
+msgid "Documentation"
+msgstr ""
+
+#: includes/class-settings.php:182
+msgid "Don't use custom page"
+msgstr ""
+
+#: includes/class-shipments-table.php:125 includes/class-labels.php:710
+#: includes/class-labels.php:731 includes/views/html-admin-shipments.php:97
+#: includes/views/html-metabox.php:141
+#: includes/views/html-modal-generate.php:62
+msgid "Download"
+msgstr ""
+
+#: includes/class-labels.php:76 includes/class-labels.php:120
+msgid "Download shipping labels"
+msgstr ""
+
+#: includes/class-settings.php:234 includes/class-helpers.php:43
+#: includes/class-helpers.php:79 includes/class-helpers.php:98
+#: includes/views/html-admin-shipments.php:12
+msgid "DPD"
+msgstr ""
+
+#: includes/providers/class-dpd.php:152
+msgid "DPD Classic"
+msgstr ""
+
+#: includes/providers/class-dpd.php:153
+msgid "DPD Classic with Predict"
+msgstr ""
+
+#: includes/providers/class-dpd.php:109
+msgid "DPD settings"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:65
+#: includes/views/html-admin-points-table.php:135
+msgid "E-Mail address"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:68
+msgid "E-mail text"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:58
+msgid "E-mail text position"
+msgstr ""
+
+#: includes/class-helpers.php:67
+msgid "Easybox"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:186
+msgid "Edit"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:132
+#: includes/emails/class-email.php:69
+msgid "Email heading"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:148
+#: includes/emails/class-email.php:91
+msgid "Email type"
+msgstr ""
+
+#: includes/settings/settings-labels.php:82
+#: includes/settings/settings-labels.php:90
+#: includes/settings/settings-labels.php:98
+msgid "Enable"
+msgstr ""
+
+#: includes/settings/settings-carriers.php:16
+msgid ""
+"Enable and configure your shipping carriers. You can use these to show "
+"parcel lockers and pickup points during checkout and use them to generate "
+"shipping labels."
+msgstr ""
+
+#: includes/providers/class-custom.php:46
+msgid "Enable carrier"
+msgstr ""
+
+#: includes/providers/class-posta.php:123 includes/providers/class-dpd.php:180
+#: includes/providers/class-sameday.php:83
+#: includes/providers/class-transsped.php:151
+msgid "Enable DEV mode"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:104
+msgid "Enable local pickup"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:198
+msgid "Enable more providers"
+msgstr ""
+
+#: includes/providers/class-gls.php:188
+msgid "Enable sandbox mode"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:112
+#: includes/emails/class-email.php:57
+msgid "Enable this email notification"
+msgstr ""
+
+#: includes/providers/class-custom.php:44
+#: includes/emails/class-email-generated.php:110
+#: includes/emails/class-email.php:55
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/providers/class-dpd.php:141 includes/providers/class-gls.php:181
+msgid "Enabled countries"
+msgstr ""
+
+#: includes/settings/settings-global.php:21
+#: includes/providers/class-pactic.php:77
+msgid "Enabled providers"
+msgstr ""
+
+#: includes/providers/class-posta.php:219
+#: includes/providers/class-csomagpiac.php:89
+msgid "Enabled services"
+msgstr ""
+
+#: includes/providers/class-gls.php:262
+msgid "Enabled services for home delivery"
+msgstr ""
+
+#: includes/providers/class-gls.php:270
+msgid "Enabled services for point delivery"
+msgstr ""
+
+#: includes/settings/settings-global.php:40
+msgid ""
+"Enter a default price for this shipping option. You can overwrite this later "
+"based on conditional logic."
+msgstr ""
+
+#: includes/providers/class-custom.php:58
+msgid "Enter an image URL"
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:71
+msgid "Enter if you have multiple stores connected to Csomagpiac."
+msgstr ""
+
+#: includes/emails/class-email-generated.php:118
+#, php-format
+msgid "Enter recipients (comma separated) for this email. Defaults to %s."
+msgstr ""
+
+#: includes/providers/class-kvikk.php:101
+msgid "Enter your account's API key."
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:64
+msgid "Enter your account's API token."
+msgstr ""
+
+#: includes/providers/class-dpd.php:135
+msgid "Enter your DPD account's Weblabel password."
+msgstr ""
+
+#: includes/providers/class-dpd.php:128
+msgid "Enter your DPD account's Weblabel username."
+msgstr ""
+
+#: includes/providers/class-gls.php:164
+msgid "Enter your GLS account's e-mail address."
+msgstr ""
+
+#: includes/providers/class-gls.php:170
+msgid "Enter your GLS account's password."
+msgstr ""
+
+#: includes/providers/class-gls.php:176
+msgid "Enter your GLS customer number."
+msgstr ""
+
+#: includes/class-conditions.php:157
+msgid "equal"
+msgstr ""
+
+#: includes/providers/class-posta.php:268
+msgid "Europe+ parcel"
+msgstr ""
+
+#: includes/providers/class-gls.php:134
+msgid "Exchange Service"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:92
+#: includes/views/html-admin-pricing-table.php:93
+msgid "Export"
+msgstr ""
+
+#: includes/providers/class-dpd.php:77
+msgid "Export / Import cleared"
+msgstr ""
+
+#: includes/class-settings.php:236 includes/class-helpers.php:41
+#: includes/class-helpers.php:81 includes/views/html-admin-shipments.php:11
+msgid "Express One"
+msgstr ""
+
+#: includes/providers/class-expressone.php:52
+msgid "Express One settings"
+msgstr ""
+
+#: includes/settings/settings-global.php:89
+msgid "Extra notes"
+msgstr ""
+
+#: includes/views/html-metabox.php:208 includes/views/html-metabox.php:226
+msgid "Extra services"
+msgstr ""
+
+#: includes/settings/settings-cod.php:23
+msgid "Fee name"
+msgstr ""
+
+#: includes/settings/settings-cod.php:6 includes/settings/settings-cod.php:18
+#: includes/settings/settings-cod.php:29
+msgid "Fees"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:26
+msgid "Fetch tracking information automatically"
+msgstr ""
+
+#: index.php:995
+msgid "Filter shipping providers"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:78
+msgid "Find out more"
+msgstr ""
+
+#: includes/providers/class-gls.php:128
+msgid "FlexDelivery Service (FDS)"
+msgstr ""
+
+#: includes/providers/class-gls.php:129
+msgid "FlexDelivery SMS Service (FSS)"
+msgstr ""
+
+#: includes/views/html-modal-design.php:43
+msgid "Font sizes"
+msgstr ""
+
+#: includes/providers/class-gls.php:58
+msgid "Forwarded misrouted"
+msgstr ""
+
+#: includes/providers/class-gls.php:74
+msgid "Forwarded normal"
+msgstr ""
+
+#: includes/providers/class-gls.php:54
+msgid "Forwarded sorting error"
+msgstr ""
+
+#: includes/class-settings.php:230 includes/class-helpers.php:37
+#: includes/class-helpers.php:54 includes/class-helpers.php:78
+#: includes/views/html-admin-shipments.php:10
+msgid "Foxpost"
+msgstr ""
+
+#: includes/providers/class-foxpost.php:77
+msgid "Foxpost settings"
+msgstr ""
+
+#: includes/providers/class-posta.php:81 includes/providers/class-posta.php:223
+msgid "Fragile handling"
+msgstr ""
+
+#: includes/providers/class-posta.php:276
+msgid "Fragile products"
+msgstr ""
+
+#: includes/settings/settings-global.php:62
+msgid "Free shipping"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:127
+msgid "Free with coupon"
+msgstr ""
+
+#: index.php:509 includes/views/html-modal-design.php:11
+#: includes/views/html-admin-points-table.php:14
+msgid "Friday"
+msgstr ""
+
+#: includes/views/html-admin-pro-notice.php:17
+#: includes/views/html-admin-walkthrough.php:127
+msgid "from"
+msgstr ""
+
+#: index.php:1406 includes/settings/settings-global.php:16
+#: templates/emails/email-vp-woo-pont-order-details.php:23
+#: templates/checkout/pont.php:22 templates/checkout/pont.php:23
+msgctxt "frontend"
+msgid "Pickup point"
+msgstr ""
+
+#: includes/providers/class-transsped.php:120
+#: includes/providers/class-transsped.php:216
+msgid "Full container"
+msgstr ""
+
+#: includes/class-labels.php:737
+msgid "Generate & print label"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:53
+msgid ""
+"Generate at least one label, after that, you can generate the necessary "
+"delivery note for them."
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:66
+#: includes/views/html-admin-shipments.php:72
+msgid "Generate delivery note"
+msgstr ""
+
+#: includes/views/html-metabox.php:194
+msgid "Generate label"
+msgstr ""
+
+#: includes/views/html-metabox.php:193
+msgctxt "Generate label"
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:28
+msgid "Generate labels"
+msgstr ""
+
+#: includes/views/html-admin-automations.php:84
+msgid "Generate shipping label"
+msgstr ""
+
+#: includes/class-labels.php:74 includes/class-labels.php:118
+msgid "Generate shipping labels"
+msgstr ""
+
+#: includes/class-background-generator.php:74
+msgid "Generating labels..."
+msgstr ""
+
+#: includes/class-background-generator.php:79
+msgid "Generating shipping labels in the background"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:87
+msgid "Generating..."
+msgstr ""
+
+#: includes/providers/class-dpd.php:98
+msgid "Germany"
+msgstr ""
+
+#: includes/class-settings.php:232 includes/class-helpers.php:42
+#: includes/class-helpers.php:75
+msgid "GLS"
+msgstr ""
+
+#: includes/providers/class-gls.php:174
+msgid "GLS Customer Number"
+msgstr ""
+
+#: includes/providers/class-gls.php:168
+msgid "GLS Password"
+msgstr ""
+
+#: includes/providers/class-gls.php:158
+msgid "GLS settings"
+msgstr ""
+
+#: includes/providers/class-gls.php:162
+msgid "GLS Username"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:49
+msgid "Go to my Kvikk account"
+msgstr ""
+
+#: includes/views/html-admin-instance.php:18
+msgid "Go to settings"
+msgstr ""
+
+#: includes/views/html-metabox.php:250
+msgid "gramms"
+msgstr ""
+
+#: includes/class-conditions.php:159
+msgid "greater than"
+msgstr ""
+
+#: includes/providers/class-dpd.php:101
+msgid "Greece"
+msgstr ""
+
+#: includes/providers/class-gls.php:132 includes/providers/class-gls.php:152
+msgid "Guaranteed delivery in 24 Hours"
+msgstr ""
+
+#: includes/providers/class-transsped.php:121
+#: includes/providers/class-transsped.php:217
+msgid "Half container"
+msgstr ""
+
+#: includes/emails/class-email-pickup.php:51
+msgid ""
+"Hello {customer_name}! We're happy to let you know that your order has been "
+"delivered to your selected pickup point!"
+msgstr ""
+
+#: includes/emails/class-email-shipped.php:51
+msgid ""
+"Hello {customer_name}! We're happy to let you know that your order has been "
+"shipped!"
+msgstr ""
+
+#: includes/emails/class-email-delivery.php:51
+msgid ""
+"Hello {customer_name}! We're happy to let you know that your order is "
+"currently out for delivery!"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:81
+msgid "Hide pickup point"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:128
+msgid "Hide the COD payment method if the provider is selected."
+msgstr ""
+
+#: includes/views/html-admin-provider-email-text.php:27
+msgid "Home delivery"
+msgstr ""
+
+#: includes/settings/settings-labels.php:25
+msgid "Home delivery providers"
+msgstr ""
+
+#. URI of the plugin
+msgid "http://visztpeter.me"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://visztpeter.me"
+msgstr ""
+
+#. Name of the plugin
+msgid "Hungarian Pickup Points & Shipping Labels for WooCommerce"
+msgstr ""
+
+#: includes/providers/class-dpd.php:92 includes/providers/class-gls.php:138
+msgid "Hungary"
+msgstr ""
+
+#: includes/providers/class-packeta.php:344
+msgid "Hungary (Packeta)"
+msgstr ""
+
+#: includes/class-shipments-table.php:136
+msgid "ID"
+msgstr ""
+
+#: includes/settings/settings-labels.php:58
+msgid ""
+"If a label was generated for the order, change the order status "
+"automatically."
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:27
+msgid ""
+"If an order has this shipping method, it will use the selected carrier to "
+"generate a shipping label by default."
+msgstr ""
+
+#: includes/providers/class-packeta.php:635
+#: includes/providers/class-packeta.php:653
+msgid ""
+"If checked, the packet will be handed over only to person older than 18 "
+"years(only for internal Packeta pickup points)."
+msgstr ""
+
+#: includes/providers/class-posta.php:234
+msgid ""
+"If empty, it will be the order total up to 50.000 HUF. If you need a higher "
+"maximum limit, enter that here."
+msgstr ""
+
+#: includes/settings/settings-global.php:84
+msgid ""
+"If enabled, the phone number field will be validated on checkout for "
+"Hungarian phone numbers only."
+msgstr ""
+
+#: includes/settings/settings-global.php:63
+msgid "If free shipping is available, make pickup points free too"
+msgstr ""
+
+#: includes/settings/settings-global.php:55
+msgid ""
+"If theres multiple matches for the shipping cost, use the lowest or the "
+"highest cost."
+msgstr ""
+
+#: includes/settings/settings-labels.php:91
+msgid ""
+"If turned on, the data sent to the provider during when createing a label "
+"will be logged in WooCommerce / Status / Logs. Can be used to debug issues."
+msgstr ""
+
+#: includes/settings/settings-labels.php:83
+msgid ""
+"If turned on, the settings panel for generating the label manually will be "
+"visible by default."
+msgstr ""
+
+#: includes/settings/settings-tracking.php:27
+msgid ""
+"If turned on, the tracking informations will be downloaded hourly from "
+"supported providers in the background. The tracking info is visible on the "
+"orders table(custom cell) and on the order details page."
+msgstr ""
+
+#: includes/settings/settings-tracking.php:78
+msgid ""
+"If turned on, the tracking number and the tracking link will be visible in "
+"My Account / Order Details."
+msgstr ""
+
+#: includes/providers/class-packeta.php:99
+msgid ""
+"If you are planning to ship worldwide with home delivery, select the "
+"provider you want to use in each supported country."
+msgstr ""
+
+#: includes/providers/class-foxpost.php:126
+msgid "If you generate a delivery note, this name will be on it as sender."
+msgstr ""
+
+#: includes/settings/settings-points.php:13
+msgid ""
+"If you setup your own pickup points, this will be the name of that category."
+msgstr ""
+
+#: includes/providers/class-posta.php:119
+msgid ""
+"If you ship outside of Hungary, you can setup a different agreement code for "
+"international shipments"
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:46
+msgid ""
+"If you want to activate the license on another website, you must first "
+"deactivate it on this website."
+msgstr ""
+
+#: includes/settings/settings-labels.php:97
+msgid ""
+"If you want to download multiple shipping labels at once, this option will "
+"create a ZIP file with separate PDF files(the default option will merge all "
+"invoices into a single PDF)."
+msgstr ""
+
+#: includes/settings/settings-tracking.php:35
+msgid ""
+"If you want to use a custom order tracking page instead of redirecting the "
+"customer to the carrier's tracking website, create a new page with the "
+"following shortcode: [woocommerce_order_tracking]. The tracking links sent "
+"to customers via e-mail will redirect to this page instead, where the "
+"package status and all tracking informations are visible. If you use this "
+"option, make sure the auto tracking infomration fetching is enabled for the "
+"best experience."
+msgstr ""
+
+#: includes/views/html-modal-import.php:30
+#: includes/views/html-admin-points-table.php:91
+#: includes/views/html-admin-pricing-table.php:92
+msgid "Import"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:168
+msgid "Import failed or not finished yet"
+msgstr ""
+
+#: includes/class-import.php:800 includes/providers/class-packeta.php:602
+msgid "Import run successfully."
+msgstr ""
+
+#: includes/views/html-modal-import.php:12
+msgid "Import settings"
+msgstr ""
+
+#: includes/views/html-modal-import.php:20
+msgid "Important: this action will replace your existing options!"
+msgstr ""
+
+#: includes/providers/class-dpd.php:51
+msgid "In transit (Consolidation)"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:74
+msgid "Inactive"
+msgstr ""
+
+#: includes/providers/class-gls.php:63
+msgid "Inbound damaged"
+msgstr ""
+
+#: includes/providers/class-packeta.php:81
+msgid "Indication"
+msgstr ""
+
+#: includes/class-conditions.php:27
+msgid "Individual"
+msgstr ""
+
+#: includes/class-conditions.php:99
+msgid "Inside the EU"
+msgstr ""
+
+#: includes/providers/class-posta.php:117
+msgid "Internatinal agreement code"
+msgstr ""
+
+#: includes/providers/class-posta.php:269
+msgid "International EMS express mail"
+msgstr ""
+
+#: includes/providers/class-posta.php:266
+msgid "International postal parcel"
+msgstr ""
+
+#: includes/providers/class-posta.php:267
+msgid "International priority postal parcel"
+msgstr ""
+
+#: includes/providers/class-posta.php:271
+msgid "Inverse MPL Europe Standard"
+msgstr ""
+
+#: templates/order/custom-label.php:99
+msgid "Invoice"
+msgstr ""
+
+#: includes/settings/settings-global.php:74
+msgid "Invoice line item description"
+msgstr ""
+
+#: includes/settings/settings-global.php:68
+msgid "Invoice line item name"
+msgstr ""
+
+#: includes/settings/settings-labels.php:43
+#: includes/settings/settings-labels.php:70
+msgid "Invoice number"
+msgstr ""
+
+#: templates/order/custom-label.php:97
+msgid "Items"
+msgstr ""
+
+#: includes/class-conditions.php:69
+msgid "Items in cart"
+msgstr ""
+
+#: includes/class-conditions.php:117
+msgid "Items in order(qty)"
+msgstr ""
+
+#: includes/providers/class-dpd.php:159
+msgid "JWT Token"
+msgstr ""
+
+#: includes/providers/class-sameday.php:29
+msgid "Kiállított fuvarokmány"
+msgstr ""
+
+#: includes/class-settings.php:229 includes/providers/class-kvikk.php:79
+#: includes/providers/class-kvikk.php:188
+#: includes/views/html-admin-shipments.php:8
+msgid "Kvikk"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:194
+msgid "Kvikk Express One"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:195
+msgid "Kvikk FámaFutár"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:193
+msgid "Kvikk MPL"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:95
+msgid "Kvikk settings"
+msgstr ""
+
+#: includes/providers/class-posta.php:206
+#: includes/providers/class-foxpost.php:104
+msgid "L"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:41
+msgid "Label"
+msgstr ""
+
+#: includes/providers/class-packeta.php:104
+msgid "Label format"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:14
+msgid "Label generated"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:15
+msgid ""
+"Label generated emails are sent to chosen recipient(s) when a new shipping "
+"label is generated, and the file is attached as a PDF."
+msgstr ""
+
+#: includes/class-background-generator.php:74
+msgid "Label generation was successful"
+msgstr ""
+
+#: includes/settings/settings-labels.php:19
+msgid "Label generator"
+msgstr ""
+
+#: includes/views/html-modal-layout-selector.php:13
+msgid "Label position"
+msgstr ""
+
+#: includes/class-settings.php:18
+msgid "Labels"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:50
+msgid "Labels are currently generating, just a sec..."
+msgstr ""
+
+#: includes/class-background-generator.php:80
+msgid "Labels generated successfully. Reload the page to see the labels."
+msgstr ""
+
+#: includes/class-customizer.php:48
+msgid "Large cluster color"
+msgstr ""
+
+#: includes/providers/class-sameday.php:95
+msgid "Large package"
+msgstr ""
+
+#: includes/views/html-modal-tracking.php:30
+msgid "Last updated"
+msgstr ""
+
+#: includes/views/html-metabox.php:48
+msgid "Learn More"
+msgstr ""
+
+#: includes/class-conditions.php:160
+msgid "less than"
+msgstr ""
+
+#: includes/views/html-admin-pro-notice.php:22
+#: includes/views/html-modal-pro-version.php:26
+msgid "License key"
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:32
+msgid "License type"
+msgstr ""
+
+#: includes/providers/class-custom.php:56
+msgid "Logo on label"
+msgstr ""
+
+#: includes/settings/settings-global.php:57
+msgid "Lowest"
+msgstr ""
+
+#: includes/providers/class-posta.php:205
+#: includes/providers/class-foxpost.php:103
+msgid "M"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:127
+msgid "Make this option free if the cart contains a free shipping coupon."
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:79
+msgid "Manage"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:79
+#, php-format
+msgid "Manage the \"%s\" carrier"
+msgstr ""
+
+#: includes/views/html-admin-pro-version.php:28
+msgid "Map design"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:67
+#: includes/views/html-admin-shipments.php:73
+msgid "Mark as shipped"
+msgstr ""
+
+#: includes/providers/class-custom.php:91
+msgid ""
+"Mark order tracking status \"delivered\", if the order status changes to "
+"this."
+msgstr ""
+
+#: includes/providers/class-custom.php:83
+msgid ""
+"Mark order tracking status \"in delivery\", if the order status changes to "
+"this."
+msgstr ""
+
+#: includes/class-helpers.php:94 includes/class-helpers.php:97
+msgid "Mediamarkt"
+msgstr ""
+
+#: includes/class-customizer.php:52
+msgid "Medium cluster color"
+msgstr ""
+
+#: includes/settings/settings-global.php:13
+msgid "Method title"
+msgstr ""
+
+#: includes/class-wc-shipping-pont.php:13
+msgctxt "method title"
+msgid "Pickup points"
+msgstr ""
+
+#: includes/providers/class-transsped.php:122
+msgid "Mini container"
+msgstr ""
+
+#: includes/views/html-metabox.php:63 templates/checkout/pont.php:36
+msgid "Modify"
+msgstr ""
+
+#: includes/class-helpers.php:91 includes/class-helpers.php:95
+msgid "Mol"
+msgstr ""
+
+#: index.php:505 includes/views/html-modal-design.php:7
+#: includes/views/html-admin-points-table.php:10
+msgid "Monday"
+msgstr ""
+
+#: includes/class-settings.php:233 includes/class-helpers.php:76
+#: includes/views/html-admin-shipments.php:9
+msgid "MPL"
+msgstr ""
+
+#: includes/class-helpers.php:57
+msgid "MPL Csomagautomata"
+msgstr ""
+
+#: includes/providers/class-posta.php:270
+msgid "MPL Europe Standard"
+msgstr ""
+
+#: includes/class-helpers.php:58
+msgid "MPL Postapont"
+msgstr ""
+
+#: includes/settings/settings-global.php:50
+msgid "Multiple cost logic"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:125
+msgid "Name"
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:42
+msgid "Next payment"
+msgstr ""
+
+#: includes/class-shipments.php:51
+msgid "No packages selected."
+msgstr ""
+
+#: includes/views/html-admin-home-delivery.php:33
+msgid "None"
+msgstr ""
+
+#: includes/providers/class-gls.php:48
+msgid "Not delivered lack of time"
+msgstr ""
+
+#: includes/class-conditions.php:158
+msgid "not equal"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:60
+msgid "Not paired"
+msgstr ""
+
+#: includes/views/html-admin-notes.php:27
+#: includes/views/html-admin-notes.php:73
+#: includes/views/html-admin-points-table.php:69
+msgid "Note"
+msgstr ""
+
+#: includes/views/html-modal-tracking.php:30
+msgid "Now"
+msgstr ""
+
+#: includes/views/html-metabox.php:200
+msgid "Number of packages"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:46
+#: includes/views/html-admin-cod-fees.php:87
+#: includes/views/html-admin-automations.php:63
+#: includes/views/html-admin-automations.php:111
+#: includes/views/html-admin-weight-corrections.php:41
+#: includes/views/html-admin-weight-corrections.php:83
+#: includes/views/html-admin-notes.php:57
+#: includes/views/html-admin-notes.php:103
+#: includes/views/html-admin-pricing-table.php:54
+#: includes/views/html-admin-pricing-table.php:117
+msgid "of the following match"
+msgstr ""
+
+#: includes/class-helpers.php:60
+msgid "OMV"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:44
+#: includes/views/html-admin-cod-fees.php:85
+#: includes/views/html-admin-automations.php:61
+#: includes/views/html-admin-automations.php:109
+#: includes/views/html-admin-weight-corrections.php:39
+#: includes/views/html-admin-weight-corrections.php:81
+#: includes/views/html-admin-notes.php:55
+#: includes/views/html-admin-notes.php:101
+#: includes/views/html-admin-pricing-table.php:52
+#: includes/views/html-admin-pricing-table.php:115
+msgid "One"
+msgstr ""
+
+#: includes/providers/class-posta.php:83 includes/providers/class-posta.php:225
+msgid "One business day time guarantee"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:8
+msgid "One in total"
+msgstr ""
+
+#: includes/views/html-metabox-kvikk.php:61
+msgid "Open in Kvikk"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:73
+#: templates/checkout/pont-map.php:32
+msgid "Opening hours"
+msgstr ""
+
+#: includes/views/html-metabox.php:192
+msgid "Options"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:39
+msgid "Order"
+msgstr ""
+
+#: includes/settings/settings-labels.php:42
+#: includes/settings/settings-labels.php:69
+msgid "Order ID"
+msgstr ""
+
+#: templates/order/order-tracking.php:98
+msgid "Order information"
+msgstr ""
+
+#: includes/providers/class-dpd.php:40
+msgid "Order information has been transmitted to DPD."
+msgstr ""
+
+#: includes/providers/class-custom.php:263
+msgid "Order not found"
+msgstr ""
+
+#: includes/class-shipments.php:168
+msgid "Order not found."
+msgstr ""
+
+#: templates/shipments-table.php:94 templates/order/custom-label.php:95
+#: templates/order/order-tracking.php:101
+msgid "Order Number"
+msgstr ""
+
+#: includes/class-shipments-table.php:287
+#: includes/settings/settings-labels.php:41
+#: includes/settings/settings-labels.php:68
+msgid "Order number"
+msgstr ""
+
+#: includes/class-tracking.php:695
+msgid "Order Ready"
+msgstr ""
+
+#: templates/order/order-tracking.php:126
+msgid "Order Status"
+msgstr ""
+
+#: includes/class-tracking.php:223
+#, php-format
+msgid ""
+"Order status updated, because of the following tracking status event: %s"
+msgstr ""
+
+#: includes/class-shipments-table.php:290
+msgid "Order total"
+msgstr ""
+
+#: includes/class-conditions.php:25
+msgid "Order type"
+msgstr ""
+
+#: includes/class-tracking.php:689
+msgid "Ordered"
+msgstr ""
+
+#: includes/class-shipments-table.php:138
+msgid "Orders"
+msgstr ""
+
+#: includes/class-tracking.php:703 includes/providers/class-dpd.php:33
+#: includes/providers/class-dpd.php:65
+#: includes/emails/class-email-delivery.php:12
+msgid "Out for delivery"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:50
+msgid "out for delivery"
+msgstr ""
+
+#: includes/class-conditions.php:100
+msgid "Outside of the EU"
+msgstr ""
+
+#: includes/class-shipments-table.php:172
+#: includes/providers/class-sameday.php:93
+msgid "Package"
+msgstr ""
+
+#: includes/views/html-metabox.php:269
+msgid "Package contents"
+msgstr ""
+
+#: includes/settings/settings-labels.php:48
+msgid "Package contents text"
+msgstr ""
+
+#: includes/class-tracking.php:406 includes/class-tracking.php:591
+#: includes/views/html-metabox-tracking.php:45
+#: templates/order/order-tracking.php:63
+msgid "Package created. Tracking number:"
+msgstr ""
+
+#: includes/providers/class-custom.php:89
+msgid "Package delivered order status"
+msgstr ""
+
+#: index.php:1351
+msgid "Package details"
+msgstr ""
+
+#: includes/providers/class-custom.php:81
+msgid "Package in delivery order status"
+msgstr ""
+
+#: includes/class-conditions.php:56
+msgid "Package longest side"
+msgstr ""
+
+#: templates/order/order-tracking.php:68
+msgid "Package not shipped yet, waiting for tracking number."
+msgstr ""
+
+#: includes/providers/class-sameday.php:90
+msgid "Package type"
+msgstr ""
+
+#: includes/class-conditions.php:52
+msgid "Package volume"
+msgstr ""
+
+#: includes/class-conditions.php:48 includes/views/html-metabox.php:248
+msgid "Package weight"
+msgstr ""
+
+#: includes/class-shipments-table.php:173 templates/shipments-table.php:85
+msgid "Packages"
+msgstr ""
+
+#: includes/views/html-metabox.php:153 includes/views/html-metabox.php:253
+msgid "Packaging Quantity"
+msgstr ""
+
+#: includes/providers/class-packeta.php:25
+msgid "Packet has been accepted at our branch."
+msgstr ""
+
+#: includes/providers/class-packeta.php:33
+msgid "Packet has been cancelled."
+msgstr ""
+
+#: includes/providers/class-packeta.php:34
+msgid "Packet has been collected and is on its way."
+msgstr ""
+
+#: includes/providers/class-packeta.php:28
+msgid ""
+"Packet has been delivered to its destination, the customer has been informed "
+"via SMS."
+msgstr ""
+
+#: includes/providers/class-packeta.php:29
+msgid "Packet has been handed over to an external carrier for delivery."
+msgstr ""
+
+#: includes/providers/class-packeta.php:32
+msgid "Packet has been returned to the sender."
+msgstr ""
+
+#: includes/providers/class-packeta.php:31
+msgid "Packet is on the way back to the sender."
+msgstr ""
+
+#: includes/providers/class-packeta.php:27
+#: includes/providers/class-custom.php:18
+msgid "Packet is on the way."
+msgstr ""
+
+#: includes/providers/class-packeta.php:26
+msgid "Packet is waiting to be dispatched."
+msgstr ""
+
+#: includes/providers/class-packeta.php:30
+#: includes/providers/class-custom.php:19
+msgid "Packet was picked up by the customer."
+msgstr ""
+
+#: includes/class-settings.php:231 includes/class-helpers.php:39
+#: includes/class-helpers.php:62 includes/class-helpers.php:77
+msgid "Packeta"
+msgstr ""
+
+#: includes/providers/class-packeta.php:69
+msgid "Packeta API key"
+msgstr ""
+
+#: includes/providers/class-packeta.php:75
+msgid "Packeta API password"
+msgstr ""
+
+#: includes/providers/class-packeta.php:65
+msgid "Packeta settings"
+msgstr ""
+
+#: includes/class-settings.php:238 includes/providers/class-pactic.php:197
+msgid "Pactic"
+msgstr ""
+
+#: includes/providers/class-pactic.php:72
+msgid "Pactic settings"
+msgstr ""
+
+#: includes/settings/settings-labels.php:27
+msgid ""
+"Pair your existing shipping methods with home delivery providers. If you are "
+"using the automated label generation, it will use this provider to generate "
+"the label if the shipping method is a match."
+msgstr ""
+
+#: includes/providers/class-gls.php:77
+msgid "Parcel is excluded from General Terms and Conditions."
+msgstr ""
+
+#: includes/providers/class-gls.php:76
+msgid "Parcel is not to locate."
+msgstr ""
+
+#: includes/providers/class-gls.php:55
+msgid "Parcel is sent from the depot to sorting center."
+msgstr ""
+
+#: includes/providers/class-gls.php:84
+msgid "Parcel is stored in GLS ParcelShop."
+msgstr ""
+
+#: includes/providers/class-gls.php:62
+msgid "Parcel is under investigation."
+msgstr ""
+
+#: includes/providers/class-posta.php:201
+#: includes/providers/class-foxpost.php:98
+msgid "Parcel size"
+msgstr ""
+
+#: includes/providers/class-gls.php:64
+msgid "Parcel was completely damaged."
+msgstr ""
+
+#: includes/providers/class-gls.php:101
+msgid "Parcel was confiscated by the Customs authorities."
+msgstr ""
+
+#: includes/providers/class-gls.php:68
+msgid "Parcel was refused because the goods was not ordered."
+msgstr ""
+
+#: includes/class-helpers.php:64
+msgid "ParcelLocker"
+msgstr ""
+
+#: includes/class-helpers.php:63
+msgid "ParcelShop"
+msgstr ""
+
+#: includes/providers/class-sameday.php:63
+#: includes/providers/class-expressone.php:66
+msgid "Password"
+msgstr ""
+
+#: includes/class-conditions.php:21
+#: templates/emails/email-vp-woo-pont-order-details.php:9
+msgid "Payment method"
+msgstr ""
+
+#: includes/views/html-metabox.php:154
+msgid "pcs"
+msgstr ""
+
+#: includes/providers/class-posta.php:181
+msgid "PDF document"
+msgstr ""
+
+#: includes/providers/class-sameday.php:76
+msgid "Personal drop-off"
+msgstr ""
+
+#: includes/providers/class-gls.php:112
+msgid "Pick and Ship/Return cancelled"
+msgstr ""
+
+#: includes/class-helpers.php:40 includes/class-helpers.php:59
+msgid "Pick Pack Pont"
+msgstr ""
+
+#: includes/class-tracking.php:742
+msgid "Picked up"
+msgstr ""
+
+#: includes/views/html-metabox.php:204
+msgid "Pickup date"
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:75
+msgid "Pickup Point"
+msgstr ""
+
+#: includes/providers/class-sameday.php:68
+msgid "Pickup point"
+msgstr ""
+
+#: includes/compatibility/modules/class-vp-woo-pont-extra-fees.php:21
+msgid "Pickup point method"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:42
+msgid "Pickup point name"
+msgstr ""
+
+#: index.php:996 includes/class-settings.php:211
+#: includes/views/html-admin-points-title.php:7
+msgid "Pickup points"
+msgstr ""
+
+#. Description of the plugin
+msgid "Pickup points map for WooCommerce stores in the hungarian market"
+msgstr ""
+
+#: index.php:796 includes/block/pont-picker-block.php:83
+msgid "Please enter a valid phone number!"
+msgstr ""
+
+#: includes/providers/class-packeta.php:84
+msgid ""
+"Please enter your Indication that you can fund in your Packeta account under "
+"User Informations / Senders."
+msgstr ""
+
+#: includes/providers/class-packeta.php:72
+msgid ""
+"Please enter your Packeta API key if you plan to use it. This is required to "
+"get an up to date list of pickup points. Sign in into your Packeta account, "
+"click on your name top right and you can find the API key there."
+msgstr ""
+
+#: includes/providers/class-packeta.php:78
+msgid ""
+"Please enter your Packeta API password. This is required to generate labels "
+"for packages. Sign in into your Packeta account, click on your name top "
+"right and you can find the API key password there."
+msgstr ""
+
+#: index.php:771 includes/block/pont-picker-block.php:68
+msgid "Please select a pick-up point or choose a different shipping method."
+msgstr ""
+
+#: includes/providers/class-dpd.php:100
+msgid "Poland"
+msgstr ""
+
+#: includes/providers/class-pactic.php:41
+msgid "Poland Inpost"
+msgstr ""
+
+#: includes/views/html-modal-coordinates.php:22
+msgid "Position the location to the center of the map."
+msgstr ""
+
+#: includes/class-helpers.php:51 includes/class-helpers.php:90
+msgid "Posta"
+msgstr ""
+
+#: includes/providers/class-posta.php:92
+msgid "Posta settings"
+msgstr ""
+
+#: includes/class-helpers.php:38
+msgid "Postapont"
+msgstr ""
+
+#: includes/providers/class-packeta.php:345
+msgid "Postapont (MPL)"
+msgstr ""
+
+#: includes/class-helpers.php:53
+msgid "Postapontok"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:53
+msgid "Postcode"
+msgstr ""
+
+#: includes/providers/class-gls.php:130 includes/providers/class-gls.php:150
+msgid "Preadvice Service (SM2)"
+msgstr ""
+
+#: includes/views/html-admin-custom-label-template.php:47
+msgid "Preview template"
+msgstr ""
+
+#: includes/class-customizer.php:44
+msgid "Price color"
+msgstr ""
+
+#: includes/class-customizer.php:75
+msgid "Price font size"
+msgstr ""
+
+#: includes/class-customizer.php:36
+msgid "Primary color"
+msgstr ""
+
+#: includes/class-labels.php:715 includes/class-labels.php:735
+#: includes/views/html-modal-generate.php:63
+msgid "Print"
+msgstr ""
+
+#: includes/class-labels.php:75 includes/class-labels.php:119
+#: includes/views/html-modal-layout-selector.php:24
+msgid "Print shipping labels"
+msgstr ""
+
+#: index.php:425
+msgid "Pro version"
+msgstr ""
+
+#: includes/providers/class-transsped.php:192
+msgid "Product categories containing food"
+msgstr ""
+
+#: includes/class-conditions.php:32
+msgid "Product category"
+msgstr ""
+
+#: includes/emails/class-email.php:85
+msgid "Provider specific note"
+msgstr ""
+
+#: includes/views/html-admin-pro-notice.php:14
+#: includes/views/html-admin-walkthrough.php:125
+msgid "Purchase PRO version"
+msgstr ""
+
+#: includes/emails/class-email-pickup.php:12
+msgid "Ready for pickup"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:51
+msgid "ready for pickup"
+msgstr ""
+
+#: includes/emails/class-email-pickup.php:24
+msgid "Ready for pickup!"
+msgstr ""
+
+#: includes/providers/class-dpd.php:42 includes/providers/class-dpd.php:76
+msgid "Received by DPD from consignor (Drivers pickup)."
+msgstr ""
+
+#: includes/providers/class-dpd.php:34 includes/providers/class-dpd.php:67
+msgid "Received by DPD from consignor(Pickup scan)."
+msgstr ""
+
+#: templates/order/custom-label.php:64
+msgid "Recipient"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:116
+msgid "Recipient(s)"
+msgstr ""
+
+#: includes/settings/settings-labels.php:37
+msgid "Reference number"
+msgstr ""
+
+#: includes/class-background-generator.php:82
+msgid "Refresh"
+msgstr ""
+
+#: includes/views/html-admin-packeta-countries.php:33
+#: includes/views/html-admin-packeta-carriers.php:63
+msgid "Refresh providers"
+msgstr ""
+
+#: includes/class-tracking.php:600
+#, php-format
+msgid "Refreshed %s ago"
+msgstr ""
+
+#: templates/order/order-tracking.php:32
+msgid "Refreshed:"
+msgstr ""
+
+#: includes/views/html-metabox-tracking.php:55
+#: includes/views/html-modal-tracking.php:33
+msgid "Reload"
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:52
+msgid "Reload license"
+msgstr ""
+
+#: includes/views/html-metabox.php:101
+msgid "Remove selected point"
+msgstr ""
+
+#: includes/views/html-metabox.php:106
+msgid "Replace selected point"
+msgstr ""
+
+#: includes/providers/class-dpd.php:162
+msgid "Request the token from DPD Support."
+msgstr ""
+
+#: includes/views/html-modal-design.php:62
+msgid "Reset to default"
+msgstr ""
+
+#: includes/providers/class-posta.php:189
+msgid "Retention period"
+msgstr ""
+
+#: includes/providers/class-dpd.php:35 includes/providers/class-dpd.php:68
+msgid "Return to sender(System return)"
+msgstr ""
+
+#: includes/providers/class-packeta.php:36
+msgid "Reverse packet has been accepted at our branch."
+msgstr ""
+
+#: includes/providers/class-dpd.php:93 includes/providers/class-gls.php:139
+msgid "Romania"
+msgstr ""
+
+#: includes/providers/class-packeta.php:347
+msgid "Romania (Packeta)"
+msgstr ""
+
+#: includes/providers/class-pactic.php:29
+msgid "Romania Sameday"
+msgstr ""
+
+#: includes/providers/class-posta.php:255 includes/providers/class-gls.php:283
+msgid "Round cash on delivery amount"
+msgstr ""
+
+#: includes/providers/class-posta.php:257 includes/providers/class-gls.php:285
+msgid "Round the COD amount to 5."
+msgstr ""
+
+#: includes/views/html-admin-automations.php:58
+#: includes/views/html-admin-automations.php:106
+msgid "Run this automation, if"
+msgstr ""
+
+#: includes/providers/class-posta.php:204
+#: includes/providers/class-foxpost.php:102
+msgid "S"
+msgstr ""
+
+#: templates/checkout/pont-map.php:56
+msgid ""
+"Sadly there are no results for this keyword. Please try to look for another "
+"place, or select a nearby pickup point on the map."
+msgstr ""
+
+#: includes/class-settings.php:235 includes/class-helpers.php:44
+#: includes/class-helpers.php:80
+msgid "Sameday"
+msgstr ""
+
+#: includes/providers/class-sameday.php:31
+msgid "Sameday raktárában"
+msgstr ""
+
+#: includes/providers/class-sameday.php:54
+msgid "Sameday settings"
+msgstr ""
+
+#: index.php:510 includes/views/html-modal-design.php:12
+#: includes/views/html-admin-points-table.php:15
+msgid "Saturday"
+msgstr ""
+
+#: includes/providers/class-posta.php:82 includes/providers/class-posta.php:224
+msgid "Saturday delivery"
+msgstr ""
+
+#: includes/views/html-modal-design.php:73
+#: includes/views/html-modal-add-provider.php:22
+msgid "Save"
+msgstr ""
+
+#: includes/views/html-modal-coordinates.php:26
+msgid "Save coordinates"
+msgstr ""
+
+#: includes/views/html-modal-replace-point.php:21
+msgid "Search for a pickup point"
+msgstr ""
+
+#: templates/checkout/pont-map.php:14
+msgid "Search for an address"
+msgstr ""
+
+#: includes/views/html-modal-replace-point.php:12
+msgid "Select a new pick-up point"
+msgstr ""
+
+#: templates/checkout/pont.php:10
+msgid "Select a pick-up point"
+msgstr ""
+
+#: includes/views/html-metabox.php:121
+#: includes/block/pont-picker-block-integration.php:92
+msgid "Select a pickup point"
+msgstr ""
+
+#: includes/providers/class-posta.php:281
+msgid ""
+"Select a product attribute or shipping class that relates to fragile "
+"products, so the generated label will be marked as fragile by default."
+msgstr ""
+
+#: includes/providers/class-dpd.php:120
+msgid ""
+"Select if you are using the old Weblabel system or the new Shipping API."
+msgstr ""
+
+#: includes/views/html-admin-notes.php:36
+#: includes/views/html-admin-notes.php:82
+msgid "Select provider"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:117
+msgid "Select providers"
+msgstr ""
+
+#: includes/views/html-modal-coordinates.php:12
+msgid "Select the coordinates"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:45
+#, php-format
+msgid ""
+"Select the e-mails where you want to include the tracking number and "
+"tracking link. You can also set up separate %1$s, %2$s, and %3$s e-mails."
+msgstr ""
+
+#: includes/views/html-modal-import.php:19
+msgid "Select the file that you previously exported."
+msgstr ""
+
+#: includes/views/html-modal-layout-selector.php:19
+msgid "Select the starting position of your sticker"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:109
+msgid "Select which providers you want to show to your customers."
+msgstr ""
+
+#: includes/providers/class-kvikk.php:109
+msgid "Select your sender ID."
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:79
+msgid ""
+"Select your shipment's pickup point(available after you enter your API token)"
+msgstr ""
+
+#: includes/emails/class-email-shipped.php:13
+msgid "Send an e-mail to the customer when the carrier picked up the package."
+msgstr ""
+
+#: includes/emails/class-email-pickup.php:13
+msgid ""
+"Send an e-mail to the customer when the package can be picked up from the "
+"selected pickup point."
+msgstr ""
+
+#: includes/emails/class-email-delivery.php:13
+msgid "Send an e-mail to the customer when the package is out for delivery."
+msgstr ""
+
+#: includes/providers/class-expressone.php:73
+msgid "Send an SMS notification to the customer(extra service)."
+msgstr ""
+
+#: templates/order/custom-label.php:63
+msgid "Sender"
+msgstr ""
+
+#: includes/providers/class-posta.php:133
+#: includes/providers/class-transsped.php:166
+msgid "Sender address"
+msgstr ""
+
+#: includes/providers/class-dpd.php:173
+msgid "Sender Address ID"
+msgstr ""
+
+#: includes/providers/class-gls.php:203
+msgid "Sender address info(building, stairway, etc...)"
+msgstr ""
+
+#: includes/providers/class-gls.php:208
+msgid "Sender address(just the number)"
+msgstr ""
+
+#: includes/providers/class-gls.php:198
+msgid "Sender address(street)"
+msgstr ""
+
+#: includes/providers/class-posta.php:138 includes/providers/class-gls.php:213
+#: includes/providers/class-transsped.php:171
+msgid "Sender city"
+msgstr ""
+
+#: includes/providers/class-gls.php:234
+msgid "Sender country"
+msgstr ""
+
+#: includes/providers/class-custom.php:51
+msgid "Sender Details"
+msgstr ""
+
+#: includes/providers/class-posta.php:153 includes/providers/class-gls.php:228
+#: includes/providers/class-transsped.php:187
+msgid "Sender email address"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:105
+msgid "Sender ID"
+msgstr ""
+
+#: includes/providers/class-posta.php:128 includes/providers/class-gls.php:193
+#: includes/providers/class-foxpost.php:124
+#: includes/providers/class-transsped.php:156
+msgid "Sender name"
+msgstr ""
+
+#: includes/providers/class-posta.php:148 includes/providers/class-gls.php:223
+#: includes/providers/class-transsped.php:181
+msgid "Sender phone number"
+msgstr ""
+
+#: includes/providers/class-posta.php:143 includes/providers/class-gls.php:218
+#: includes/providers/class-transsped.php:176
+msgid "Sender postcode"
+msgstr ""
+
+#: includes/views/html-admin-posta-countries.php:25
+msgid "Service type"
+msgstr ""
+
+#: includes/providers/class-posta.php:261
+msgid "Service type to use for international deliveries"
+msgstr ""
+
+#: includes/emails/class-email.php:86
+msgid "Set an extra note based on the selected shipping provider."
+msgstr ""
+
+#: templates/checkout/pont-map.php:53
+msgid "Set as my pick-up point"
+msgstr ""
+
+#: includes/settings/settings-labels.php:56
+msgid "Set order status"
+msgstr ""
+
+#: index.php:408
+msgid "Settings"
+msgstr ""
+
+#: includes/settings/settings-labels.php:21
+msgid ""
+"Settings related to automations and labels. Every function in this section "
+"will only work if you have the PRO version activated."
+msgstr ""
+
+#: includes/settings/settings-tracking.php:21
+msgid ""
+"Settings related to shipment tracking. Every function in this section will "
+"only work if you have the PRO version activated."
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:158
+msgid "Setup custom points"
+msgstr ""
+
+#: includes/settings/settings-cod.php:20
+msgid "Setup fees based on various conditions for this payment method."
+msgstr ""
+
+#: includes/settings/settings-cod.php:8
+#, php-format
+msgid ""
+"Setup fees based on various conditions for this payment method. Available in "
+"the <a href=\"%s\">PRO version</a>."
+msgstr ""
+
+#: includes/class-wc-shipping-pont.php:14
+msgid ""
+"Setup parcel lockers and pickup points with various providers and prices. "
+msgstr ""
+
+#: includes/views/html-admin-pro-version.php:21
+msgid "Setup PRO version"
+msgstr ""
+
+#: includes/views/html-admin-pro-version.php:32
+msgid "Setup wizard"
+msgstr ""
+
+#: includes/settings/settings-points.php:8
+msgid "Setup your own pickup points, like store pickup."
+msgstr ""
+
+#: includes/class-labels.php:665 templates/shipments-table.php:96
+msgid "Shipment"
+msgstr ""
+
+#: templates/order/order-tracking.php:105
+#: templates/emails/email-vp-woo-pont-order-details.php:40
+msgid "Shipment Carrier"
+msgstr ""
+
+#: includes/class-shipments.php:91
+#, php-format
+msgid "Shipment closed. Generated delivery note ID: %s"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:432
+msgid "Shipment not found"
+msgstr ""
+
+#: templates/shipments-table.php:81
+msgid "Shipment Summary"
+msgstr ""
+
+#: includes/class-tracking.php:453 includes/settings/settings-tracking.php:19
+msgid "Shipment tracking"
+msgstr ""
+
+#: includes/class-shipments.php:179 includes/class-shipments.php:181
+#: includes/class-shipments.php:183
+msgid "Shipments"
+msgstr ""
+
+#: includes/class-tracking.php:699 includes/providers/class-dpd.php:31
+msgid "Shipped"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:49
+msgid "shipped"
+msgstr ""
+
+#: templates/shipments-table.php:95
+msgid "Shipping Address"
+msgstr ""
+
+#: includes/class-shipments-table.php:289
+#: includes/views/html-modal-generate.php:40
+#: templates/emails/email-vp-woo-pont-order-details.php:34
+msgid "Shipping address"
+msgstr ""
+
+#: includes/providers/class-dpd.php:117
+msgid "Shipping API"
+msgstr ""
+
+#: includes/class-conditions.php:64 includes/class-conditions.php:107
+#: includes/class-conditions.php:124
+msgid "Shipping class"
+msgstr ""
+
+#: includes/emails/class-email-shipped.php:12
+msgid "Shipping confirmation"
+msgstr ""
+
+#: index.php:693 index.php:889 includes/class-helpers.php:1192
+msgctxt "shipping cost summary on cart & checkout"
+msgid "free"
+msgstr ""
+
+#: index.php:708 includes/class-helpers.php:1207
+#, php-format
+msgctxt "shipping cost summary on cart & checkout(free & 1 shipping cost)"
+msgid "free or %s"
+msgstr ""
+
+#: index.php:713 includes/class-helpers.php:1212
+#, php-format
+msgctxt "shipping cost summary on cart & checkout(free & 1+ shipping cost)"
+msgid "free & from %s"
+msgstr ""
+
+#: index.php:703 includes/class-helpers.php:1202
+#, php-format
+msgctxt "shipping cost summary on cart & checkout(multiple shipping costs)"
+msgid "from %s"
+msgstr ""
+
+#: index.php:698 includes/class-helpers.php:1197
+#, php-format
+msgctxt "shipping cost summary on cart & checkout(one shipping cost only)"
+msgid "%s"
+msgstr ""
+
+#: includes/views/html-metabox-kvikk.php:33
+#: includes/views/html-admin-pricing-table.php:38
+#: includes/views/html-admin-pricing-table.php:101
+msgid "Shipping cost(net)"
+msgstr ""
+
+#: includes/class-labels.php:536
+msgid "Shipping informations"
+msgstr ""
+
+#: index.php:1354 includes/class-shipments-table.php:291
+#: includes/views/html-admin-automations.php:36
+#: includes/views/html-metabox.php:138
+msgid "Shipping label"
+msgstr ""
+
+#: includes/class-labels.php:246
+msgid "Shipping label generated successfully."
+msgstr ""
+
+#: includes/class-labels.php:241
+#, php-format
+msgid "Shipping label generated successfully. ID number: %s"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:38
+msgid "Shipping label generated!"
+msgstr ""
+
+#: includes/class-labels.php:316
+#, php-format
+msgid ""
+"Shipping label removed from the order only. You still need to remove it in "
+"the provider's system. ID number: %s"
+msgstr ""
+
+#: includes/class-labels.php:319
+msgid ""
+"Shipping label removed from WooCommerce. You still need to remove it in the "
+"provider's system."
+msgstr ""
+
+#: includes/class-labels.php:327
+msgid "Shipping label removed successfully."
+msgstr ""
+
+#: includes/class-labels.php:324
+#, php-format
+msgid "Shipping label removed successfully. ID number: %s"
+msgstr ""
+
+#: includes/class-conditions.php:112 includes/class-conditions.php:129
+msgid "Shipping method"
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:27
+msgid "Shipping methods"
+msgstr ""
+
+#: includes/providers/class-csomagpiac.php:68
+msgid "Shop ID"
+msgstr ""
+
+#: includes/providers/class-gls.php:133 includes/providers/class-gls.php:153
+msgid "Shop Return Service"
+msgstr ""
+
+#: includes/providers/class-transsped.php:145
+msgid "Short name"
+msgstr ""
+
+#: includes/class-shipments-table.php:71 includes/class-shipments-table.php:96
+msgid "Show %d more"
+msgstr ""
+
+#: includes/class-customizer.php:82
+msgid "Show checkboxes on provider filters"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:76
+msgid "Show in my orders"
+msgstr ""
+
+#: includes/class-customizer.php:94
+msgid "Show open hours on the map"
+msgstr ""
+
+#: includes/providers/class-dpd.php:144 includes/providers/class-gls.php:184
+msgid "Show pickup points in these countries as available options."
+msgstr ""
+
+#: includes/class-customizer.php:86
+msgid "Show provider icons below the shipping option"
+msgstr ""
+
+#: includes/settings/settings-labels.php:80
+msgid "Show settings on load"
+msgstr ""
+
+#: includes/class-customizer.php:98
+msgid "Show the map automatically on shipping method change"
+msgstr ""
+
+#: includes/class-customizer.php:90
+msgid "Show the selector on the cart page too"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:77
+msgid "Show tracking numbers in My Account / Orders"
+msgstr ""
+
+#: includes/providers/class-sameday.php:72
+msgid ""
+"Sign in on eawb.sameday.hu to create a new pickup point. This is where the "
+"carrier will collect your shipments."
+msgstr ""
+
+#: includes/providers/class-gls.php:114
+msgid "Signature confirmed"
+msgstr ""
+
+#: includes/providers/class-sameday.php:33
+msgid "Sikeresen kézbesítve"
+msgstr ""
+
+#: includes/views/html-admin-enabled-providers.php:103
+#, php-format
+msgid ""
+"Since you are using the block based checkout page, you need to enable Woo's "
+"local pickup feature to show these options during checkout. To learn more "
+"about this, %1$sclick here%2$s."
+msgstr ""
+
+#: includes/providers/class-dpd.php:97 includes/providers/class-gls.php:143
+msgid "Slovakia"
+msgstr ""
+
+#: includes/providers/class-packeta.php:348
+msgid "Slovakia (Packeta)"
+msgstr ""
+
+#: includes/providers/class-pactic.php:17
+msgid "Slovakia GLS"
+msgstr ""
+
+#: includes/providers/class-pactic.php:33
+msgid "Slovakia Post"
+msgstr ""
+
+#: includes/providers/class-dpd.php:96 includes/providers/class-gls.php:142
+msgid "Slovenia"
+msgstr ""
+
+#: includes/providers/class-pactic.php:25
+msgid "Slovenia GLS"
+msgstr ""
+
+#: includes/class-customizer.php:56
+msgid "Small cluster color"
+msgstr ""
+
+#: includes/providers/class-sameday.php:94
+msgid "Small package"
+msgstr ""
+
+#: includes/providers/class-gls.php:131 includes/providers/class-gls.php:151
+msgid "SMS Service (SM1)"
+msgstr ""
+
+#: includes/providers/class-gls.php:277
+msgid "SMS text for the SMS Service (SM1)"
+msgstr ""
+
+#: includes/class-shipments.php:107
+msgid "Some shipments failed to close. Please check the list below."
+msgstr ""
+
+#: includes/providers/class-packeta.php:619
+msgid "Something went wrong"
+msgstr ""
+
+#: includes/providers/class-gls.php:46
+msgid "Sorting error at the depot."
+msgstr ""
+
+#: includes/views/html-admin-carriers.php:26
+msgid "Status"
+msgstr ""
+
+#: includes/providers/class-posta.php:178
+msgid "Sticker format"
+msgstr ""
+
+#: includes/providers/class-posta.php:161 includes/providers/class-gls.php:249
+#: includes/providers/class-sameday.php:109
+#: includes/providers/class-foxpost.php:112
+#: includes/providers/class-kvikk.php:115
+#: includes/providers/class-expressone.php:78
+#: includes/providers/class-transsped.php:201
+#: includes/providers/class-custom.php:70
+msgid "Sticker size"
+msgstr ""
+
+#: includes/class-background-generator.php:81
+msgid "Stop"
+msgstr ""
+
+#: includes/class-helpers.php:68 includes/settings/settings-points.php:14
+#: includes/views/html-admin-enabled-providers.php:35
+msgid "Store Pickup"
+msgstr ""
+
+#: includes/settings/settings-points.php:18
+msgid "Store Pickup icon"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:124
+#: includes/emails/class-email.php:61
+msgid "Subject"
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:36
+msgid "Subscription"
+msgstr ""
+
+#: includes/class-shipments.php:165
+msgid "Successfully marked as not shipped."
+msgstr ""
+
+#: index.php:511 includes/views/html-modal-design.php:13
+#: includes/views/html-admin-points-table.php:16
+msgid "Sunday"
+msgstr ""
+
+#: includes/providers/class-packeta.php:96
+msgid "Supported address delivery options"
+msgstr ""
+
+#: includes/views/html-admin-posta-countries.php:26
+msgid "Supported countries"
+msgstr ""
+
+#: includes/views/html-admin-kvikk-api.php:34
+msgid "Supported couriers"
+msgstr ""
+
+#: includes/providers/class-packeta.php:88
+msgid "Supported pick up points"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:25
+msgid "Sync tracking info"
+msgstr ""
+
+#: includes/providers/class-sameday.php:37
+msgid "Szekrénybe behelyezve"
+msgstr ""
+
+#: includes/providers/class-sameday.php:34
+msgid "Szállítási folyamatban a futárnál"
+msgstr ""
+
+#: includes/settings/settings-global.php:27
+msgid "Tax status"
+msgstr ""
+
+#: includes/settings/settings-global.php:58
+msgctxt "Tax status"
+msgid "Highest"
+msgstr ""
+
+#: includes/settings/settings-global.php:33
+msgctxt "Tax status"
+msgid "None"
+msgstr ""
+
+#: includes/settings/settings-global.php:32
+msgid "Taxable"
+msgstr ""
+
+#: includes/providers/class-custom.php:97
+msgid "Template"
+msgstr ""
+
+#: includes/views/html-admin-kvikk-api.php:22
+msgid "Test"
+msgstr ""
+
+#: includes/class-customizer.php:40
+msgid "Text color"
+msgstr ""
+
+#: includes/class-customizer.php:71
+msgid "Text font size"
+msgstr ""
+
+#: includes/emails/class-email-generated.php:141
+#: includes/emails/class-email.php:78
+msgid "Text to appear as the main email content."
+msgstr ""
+
+#: includes/providers/class-gls.php:57
+msgid ""
+"The changed delivery option has been saved in the GLS system and will be "
+"implemented as requested."
+msgstr ""
+
+#: includes/providers/class-gls.php:81
+msgid "The COD data was entered into the GLS IT system."
+msgstr ""
+
+#: includes/providers/class-gls.php:88 includes/providers/class-gls.php:93
+msgid "The customs documents are being prepared."
+msgstr ""
+
+#: includes/providers/class-posta.php:94
+msgid ""
+"The developer representing the company can access these APIs on the "
+"Developer Portal by selecting the Applications menu item after logging in."
+msgstr ""
+
+#: includes/providers/class-gls.php:106
+msgid "The driver has received the order to pick up the parcel during the day."
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:61
+msgid "The following packages are waiting for closing and a delivery note."
+msgstr ""
+
+#: includes/providers/class-packeta.php:92
+msgid "The map will show pickup points from these providers."
+msgstr ""
+
+#: includes/providers/class-gls.php:67
+msgid ""
+"The parcel could not be delivered as acceptance has been refused due to "
+"delayed delivery."
+msgstr ""
+
+#: includes/providers/class-gls.php:51
+msgid ""
+"The parcel could not be delivered as further address information is needed."
+msgstr ""
+
+#: includes/providers/class-gls.php:49
+msgid ""
+"The parcel could not be delivered as the consignee had no cash "
+"available/suitable."
+msgstr ""
+
+#: includes/providers/class-gls.php:44
+msgid "The parcel could not be delivered as the consignee is on holidays."
+msgstr ""
+
+#: includes/providers/class-gls.php:94
+msgid ""
+"The parcel could not be delivered as the consignee refused to pay charges."
+msgstr ""
+
+#: includes/providers/class-gls.php:45
+msgid "The parcel could not be delivered as the consignee was absent."
+msgstr ""
+
+#: includes/providers/class-gls.php:47
+msgid "The parcel could not be delivered as the reception was closed."
+msgstr ""
+
+#: includes/providers/class-gls.php:50
+msgid "The parcel could not be delivered as the recipient refused acceptance."
+msgstr ""
+
+#: includes/providers/class-gls.php:66
+msgid "The parcel could not be delivered due to exceeded time frame."
+msgstr ""
+
+#: includes/providers/class-gls.php:71
+msgid "The parcel could not be delivered due to missing delivery note."
+msgstr ""
+
+#: includes/providers/class-gls.php:52
+msgid "The parcel could not be delivered due to the weather condition."
+msgstr ""
+
+#: includes/providers/class-gls.php:53
+msgid "The parcel could not be delivered due to wrong or incomplete address."
+msgstr ""
+
+#: includes/providers/class-gls.php:110
+msgid ""
+"The parcel could not be picked up as the customer was not informed about the "
+"pickup."
+msgstr ""
+
+#: includes/providers/class-gls.php:109
+msgid ""
+"The parcel could not be picked up as the goods to be picked up were not "
+"packed."
+msgstr ""
+
+#: includes/providers/class-gls.php:104
+msgid "The parcel data for Pickup-Service was entered into the GLS system."
+msgstr ""
+
+#: includes/providers/class-gls.php:80
+msgid ""
+"The parcel data was entered into the GLS IT system; the parcel was not yet "
+"handed over to GLS."
+msgstr ""
+
+#: includes/providers/class-gls.php:86
+msgid "The parcel has been delivered at the neighbour’s (see signature)"
+msgstr ""
+
+#: includes/providers/class-gls.php:83
+msgid ""
+"The parcel has been delivered at the ParcelShop (see ParcelShop information)."
+msgstr ""
+
+#: includes/providers/class-gls.php:82
+msgid "The parcel has been delivered to the parcel box."
+msgstr ""
+
+#: includes/providers/class-gls.php:39 includes/providers/class-gls.php:113
+msgid "The parcel has been delivered."
+msgstr ""
+
+#: includes/providers/class-gls.php:103
+msgid ""
+"The parcel has been forwarded to the desired address to be delivered there."
+msgstr ""
+
+#: includes/providers/class-gls.php:56 includes/providers/class-gls.php:73
+msgid "The parcel has been returned to sender."
+msgstr ""
+
+#: includes/providers/class-gls.php:36 includes/providers/class-gls.php:79
+msgid "The parcel has left the parcel center."
+msgstr ""
+
+#: includes/providers/class-gls.php:85
+msgid "The parcel has reached the maximum storage time in the ParcelShop."
+msgstr ""
+
+#: includes/providers/class-gls.php:37 includes/providers/class-gls.php:59
+#: includes/providers/class-gls.php:60
+msgid "The parcel has reached the parcel center(depo)."
+msgstr ""
+
+#: includes/providers/class-gls.php:107
+msgid "The parcel has reached the parcel center(pickup)."
+msgstr ""
+
+#: includes/providers/class-gls.php:38
+msgid "The parcel is expected to be delivered during the day."
+msgstr ""
+
+#: includes/providers/class-gls.php:42
+msgid ""
+"The parcel is stored in the GLS parcel center. The consignee has agreed to "
+"collect the goods himself."
+msgstr ""
+
+#: includes/providers/class-gls.php:43
+msgid ""
+"The parcel is stored in the parcel center to be delivered at a new delivery "
+"date."
+msgstr ""
+
+#: includes/providers/class-gls.php:40 includes/providers/class-gls.php:41
+msgid "The parcel is stored in the parcel center."
+msgstr ""
+
+#: includes/providers/class-gls.php:95
+msgid ""
+"The parcel is stored in the parcel center. It cannot be delivered as the "
+"consignment is not complete."
+msgstr ""
+
+#: includes/providers/class-gls.php:105
+msgid "The parcel label for the pickup has been produced."
+msgstr ""
+
+#: includes/providers/class-gls.php:75
+msgid "The parcel was disposed upon shipper's request."
+msgstr ""
+
+#: includes/providers/class-gls.php:35
+msgid "The parcel was handed over to GLS."
+msgstr ""
+
+#: includes/providers/class-gls.php:90
+msgid "The parcel was released by customs."
+msgstr ""
+
+#: includes/providers/class-gls.php:91
+msgid ""
+"The parcel was released by customs. Customs clearance is carried out by the "
+"consignee."
+msgstr ""
+
+#: includes/providers/class-gls.php:65
+msgid "The parcel will be delivered in the evening."
+msgstr ""
+
+#: includes/providers/class-gls.php:111
+msgid ""
+"The pickup request has been cancelled as the goods were sent by other means."
+msgstr ""
+
+#: includes/providers/class-gls.php:108
+msgid ""
+"The pickup request has been cancelled as there were no goods to be picked up."
+msgstr ""
+
+#: includes/views/html-admin-pro-version.php:12
+#: includes/views/html-modal-pro-version.php:14
+msgid "The PRO version is active"
+msgstr ""
+
+#: includes/views/html-admin-pro-version.php:16
+#: includes/views/html-modal-pro-version.php:16
+msgid "The PRO version is expired"
+msgstr ""
+
+#: includes/providers/class-posta.php:214
+msgid ""
+"The weight is a required parameter. If it is missing, this value will be "
+"used instead. Enter a value in gramms."
+msgstr ""
+
+#: includes/providers/class-sameday.php:103
+msgid ""
+"The weight is a required parameter. If it is missing, this value will be "
+"used instead. Enter a value in kg."
+msgstr ""
+
+#: includes/views/html-metabox.php:85
+#, php-format
+msgid ""
+"Theres no carrier paired with the order's shipping method. You can select "
+"one here for the order, or <a href=\"%s\" target=\"_blank\">pair it in "
+"settings</a>, so you don't have to do this the next time."
+msgstr ""
+
+#: includes/providers/class-gls.php:256
+msgid "Thermo"
+msgstr ""
+
+#: includes/settings/settings-global.php:88
+msgid ""
+"These provider related notes appear when the customer selects a pickup point "
+"on the map."
+msgstr ""
+
+#: includes/settings/settings-global.php:15
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: includes/class-settings.php:153
+msgid ""
+"This feature requires the ZipArchive function and by the looks of it, this "
+"is not enabled on your website. You can ask your hosting provider for help."
+msgstr ""
+
+#: includes/settings/settings-global.php:77
+msgid ""
+"This is the label that appears on the invoices for shipping. Default is the "
+"name of the provider. You can use the {provider} and {point} shortcode to "
+"display the selected pickup point provider and pickup point name."
+msgstr ""
+
+#: includes/settings/settings-global.php:70
+msgid ""
+"This is the label that appears on the invoices for shipping. Default is the "
+"name of this shipping method. You can use the {provider} shortcode to "
+"display the selected pickup point provider."
+msgstr ""
+
+#: includes/class-labels.php:545
+msgid ""
+"This order doesn't need shipping. Add a shipping line item to generate a "
+"label."
+msgstr ""
+
+#: includes/views/html-admin-custom-label-template.php:26
+#, php-format
+msgid ""
+"This template has been overridden by your theme and can be found in: %s."
+msgstr ""
+
+#: includes/settings/settings-tracking.php:71
+msgid ""
+"This text will be included in the selected e-mails. Use the {tracking_number}"
+" replacement code for the actual tracking link. This will be replaced with "
+"the package number as a link, redirecting to the providers tracking page."
+msgstr ""
+
+#: index.php:508 includes/views/html-modal-design.php:10
+#: includes/views/html-admin-points-table.php:13
+msgid "Thursday"
+msgstr ""
+
+#: includes/class-customizer.php:67
+msgid "Title font size"
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:56
+msgid "To add 1kg to the package weight, use +1"
+msgstr ""
+
+#: includes/class-labels.php:702
+msgid "To be closed"
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:59
+msgid "To increase the weight by 20%, use +20%"
+msgstr ""
+
+#: includes/views/html-admin-custom-label-template.php:43
+#, php-format
+msgid ""
+"To override and edit this label template copy %1$s to your theme folder: "
+"%2$s."
+msgstr ""
+
+#: includes/views/html-admin-home-delivery.php:79
+#, php-format
+msgid ""
+"To pair your carriers, configure them first by setting up your "
+"authentication details in the <a href=\"%s\">settings</a>."
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:58
+msgid "To set the package weight to fixed 1kg, use 1"
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:57
+msgid "To subtract 1kg from the package weight, use -1"
+msgstr ""
+
+#: templates/emails/customer-vp-woo-pont-delivery.php:19
+#: templates/emails/customer-vp-woo-pont-pickup.php:19
+#: templates/emails/customer-vp-woo-pont-shipped.php:19
+msgid "Track your order"
+msgstr ""
+
+#: includes/class-settings.php:19
+msgid "Tracking"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:83
+msgid "Tracking automations"
+msgstr ""
+
+#: templates/order/order-tracking.php:29
+msgid "Tracking details"
+msgstr ""
+
+#: includes/class-tracking.php:286
+#, php-format
+msgid "Tracking e-mail %s sent to the customer."
+msgstr ""
+
+#: includes/views/html-modal-tracking.php:34
+msgid "Tracking externally"
+msgstr ""
+
+#: includes/class-tracking.php:320
+msgid "Tracking info updated successfully"
+msgstr ""
+
+#: templates/emails/email-vp-woo-pont-section.php:9
+#: templates/emails/plain/email-vp-woo-pont-section.php:6
+msgid "Tracking Information"
+msgstr ""
+
+#: includes/class-tracking.php:431 includes/class-tracking.php:538
+#: includes/views/html-modal-tracking.php:13
+msgid "Tracking informations"
+msgstr ""
+
+#: templates/order/order-tracking.php:113
+msgid "Tracking Number"
+msgstr ""
+
+#: index.php:1352 includes/class-labels.php:691 includes/class-labels.php:697
+#: includes/class-tracking.php:524 includes/views/html-modal-tracking.php:29
+#: includes/views/html-metabox.php:159
+msgid "Tracking number"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:40
+msgid "Tracking number in e-mails"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:13
+msgid "Trans-Sped"
+msgstr ""
+
+#: includes/providers/class-transsped.php:146
+msgid "Trans-Sped client short name or client code"
+msgstr ""
+
+#: includes/providers/class-transsped.php:140
+msgid "Trans-Sped Password"
+msgstr ""
+
+#: includes/providers/class-transsped.php:135
+msgid "Trans-Sped Username"
+msgstr ""
+
+#: includes/class-settings.php:237 includes/class-helpers.php:83
+msgid "Trans-Sped ZERO"
+msgstr ""
+
+#: includes/providers/class-transsped.php:131
+msgid "Trans-Sped ZERO settings"
+msgstr ""
+
+#: includes/providers/class-sameday.php:32
+msgid "Tranzitban a raktár felé"
+msgstr ""
+
+#: includes/providers/class-sameday.php:36
+msgid "Tranzitban a raktár felé(Kilépés a hubból)"
+msgstr ""
+
+#: index.php:506 includes/views/html-modal-design.php:8
+#: includes/views/html-admin-points-table.php:11
+msgid "Tuesday"
+msgstr ""
+
+#: includes/providers/class-posta.php:166
+msgid "Two A5 landscape on an A4 page"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:120
+msgid "Two A5 on landscape A4"
+msgstr ""
+
+#: includes/class-labels.php:200
+#, php-format
+msgid "Unable to create shipping label. Error code: %s"
+msgstr ""
+
+#: includes/views/html-modal-generate.php:86
+msgid "Unable to generate label"
+msgstr ""
+
+#: includes/class-import.php:806
+msgid "Unable to run the import tool for some reason."
+msgstr ""
+
+#: includes/class-labels.php:298
+#, php-format
+msgid "Unable to void the shipping label. Error code: %s"
+msgstr ""
+
+#: includes/views/html-metabox.php:176
+msgid "Undo"
+msgstr ""
+
+#: includes/views/html-admin-points-table.php:37
+msgid "Unique ID"
+msgstr ""
+
+#: includes/providers/class-posta.php:634
+#: includes/providers/class-posta.php:699
+#: includes/providers/class-posta.php:710
+#: includes/providers/class-posta.php:714
+#: includes/providers/class-posta.php:838 includes/providers/class-dpd.php:447
+#: includes/providers/class-csomagpiac.php:419
+#: includes/providers/class-csomagpiac.php:464
+#: includes/providers/class-csomagpiac.php:474
+#: includes/providers/class-sameday.php:148
+#: includes/providers/class-sameday.php:301
+#: includes/providers/class-sameday.php:308
+#: includes/providers/class-sameday.php:398
+#: includes/providers/class-sameday.php:568
+#: includes/providers/class-sameday.php:580
+#: includes/providers/class-foxpost.php:314
+#: includes/providers/class-foxpost.php:358
+#: includes/providers/class-foxpost.php:370
+#: includes/providers/class-foxpost.php:427
+#: includes/providers/class-kvikk.php:322
+#: includes/providers/class-kvikk.php:593
+#: includes/providers/class-expressone.php:198
+#: includes/providers/class-transsped.php:438
+msgid "Unknown error"
+msgstr ""
+
+#: includes/providers/class-packeta.php:37
+msgid "Unknown packet status."
+msgstr ""
+
+#: includes/views/html-modal-pro-version.php:34
+msgid "Unlimited"
+msgstr ""
+
+#: index.php:54 includes/compatibility/class-compatibility.php:22
+msgid "Unserializing instances of this class is forbidden."
+msgstr ""
+
+#: includes/class-labels.php:187 includes/views/html-admin-pro-notice.php:10
+#: includes/views/html-metabox.php:46
+msgid ""
+"Upgrade to the PRO version to generate shipping labels and to track "
+"shipments."
+msgstr ""
+
+#: includes/class-shipments-table.php:137
+msgid "Uploaded"
+msgstr ""
+
+#: includes/providers/class-transsped.php:183
+msgid "Use the +36XXXXXXXXX format"
+msgstr ""
+
+#: includes/providers/class-sameday.php:58
+#: includes/providers/class-expressone.php:61
+msgid "Username"
+msgstr ""
+
+#: includes/settings/settings-global.php:81
+msgid "Validate phone numbers"
+msgstr ""
+
+#: includes/settings/settings-global.php:82
+msgid "Validate phone numbers on checkout"
+msgstr ""
+
+#: includes/providers/class-posta.php:232
+msgid "Value insurance limit"
+msgstr ""
+
+#. Author of the plugin
+msgid "Viszt Péter"
+msgstr ""
+
+#: index.php:421 includes/views/html-admin-pro-version.php:24
+msgid "VP Woo Pont Documentation"
+msgstr ""
+
+#: index.php:425
+msgid "VP Woo Pont Pro version"
+msgstr ""
+
+#: index.php:408
+msgid "VP Woo Pont Settings"
+msgstr ""
+
+#: includes/class-walkthrough.php:43 includes/class-walkthrough.php:44
+msgid "Vp Woo Pont Walkthrough"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:60
+msgid "Waiting for closing"
+msgstr ""
+
+#: includes/providers/class-packeta.php:24
+#: includes/providers/class-custom.php:17
+msgid "We have received the packet data. Freshly created packet."
+msgstr ""
+
+#: includes/providers/class-dpd.php:116
+msgid "Weblabel"
+msgstr ""
+
+#: includes/providers/class-dpd.php:132
+msgid "Weblabel Password"
+msgstr ""
+
+#: includes/providers/class-dpd.php:125
+msgid "Weblabel Username"
+msgstr ""
+
+#: index.php:507 includes/views/html-modal-design.php:9
+#: includes/views/html-admin-points-table.php:12
+msgid "Wednesday"
+msgstr ""
+
+#: templates/shipments-table.php:86 includes/views/html-metabox-kvikk.php:25
+#: templates/order/custom-label.php:96
+msgid "Weight"
+msgstr ""
+
+#: includes/settings/settings-labels.php:76
+#: includes/views/html-admin-weight-corrections.php:26
+#: includes/views/html-admin-weight-corrections.php:68
+msgid "Weight correction"
+msgstr ""
+
+#: includes/views/html-admin-automations.php:39
+#: includes/views/html-admin-automations.php:87
+msgid "when"
+msgstr ""
+
+#: includes/views/html-admin-tracking-automations.php:61
+#: includes/views/html-admin-tracking-automations.php:113
+msgid "When package status is one of the following"
+msgstr ""
+
+#: includes/settings/settings-tracking.php:59
+msgid "Where should the tracking numbers be included in the emails?"
+msgstr ""
+
+#: includes/providers/class-posta.php:243
+msgid "Wire transfer"
+msgstr ""
+
+#: includes/settings/settings-labels.php:65
+msgid ""
+"With DPD and GLS, theres an extra field where you can store a reference "
+"number specific to a COD order. You can select what value to use in this "
+"field."
+msgstr ""
+
+#: includes/settings/settings-labels.php:38
+msgid ""
+"With most providers, theres an extra field where you can store a reference "
+"number to connect the label with an order. You can select what value to use "
+"in this field."
+msgstr ""
+
+#: includes/providers/class-foxpost.php:105
+msgid "XL"
+msgstr ""
+
+#: includes/providers/class-foxpost.php:101
+msgid "XS"
+msgstr ""
+
+#: includes/views/html-admin-cod-fees.php:55
+msgid "You can add fees in the PRO version"
+msgstr ""
+
+#: includes/views/html-admin-weight-corrections.php:53
+#, php-format
+msgid ""
+"You can add, subtract or overwrite your package weight using this option. "
+"Your current unit of measurement is %s. Simply use math in the value, for "
+"example:"
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:48
+msgid ""
+"You can create delivery notes for Kvikk packages in the delivery notes menu "
+"of your app.kvikk.hu account."
+msgstr ""
+
+#: includes/views/html-admin-shipments.php:83
+msgid "You can find all your closed packages and delivery notes here."
+msgstr ""
+
+#: includes/providers/class-dpd.php:169 includes/providers/class-dpd.php:176
+msgid "You can find this in into your DPD Shipping dashboard."
+msgstr ""
+
+#: includes/settings/settings-points.php:20
+msgid ""
+"You can set a custom icon to be visible on the map markers for your own "
+"pickup points. For SVG files, please install the SVG Support extension first."
+msgstr ""
+
+#: includes/views/html-admin-instance.php:12
+msgid "You can setup this shipping method in the Pickup Points menu."
+msgstr ""
+
+#: includes/settings/settings-points.php:28
+msgid ""
+"You can setup your own pickup points too. Make sure you enter a unique "
+"ID(used internally only). These points will show up under the \"Custom "
+"Provider\" name."
+msgstr ""
+
+#: includes/class-tracking.php:457 includes/class-tracking.php:471
+#: includes/settings/settings-tracking.php:70
+msgid ""
+"You can track the order by clicking on the tracking number: {tracking_number}"
+msgstr ""
+
+#: includes/providers/class-gls.php:279
+msgid ""
+"You can use the following shortcodes: #ParcelNr#, #COD#, #PickupDate#, "
+"#From_Name#, #ClientRef#."
+msgstr ""
+
+#: includes/settings/settings-labels.php:50
+msgid ""
+"You can use the following shortcodes: {order_number}, {order_items}, "
+"{customer_note}, {products_sku}, {invoice_number}"
+msgstr ""
+
+#: includes/class-shipments.php:31 includes/class-shipments.php:127
+#: includes/class-shipments.php:155 includes/providers/class-packeta.php:612
+#: includes/providers/class-custom.php:251
+msgid "You do not have sufficient permissions to access this action."
+msgstr ""
+
+#: templates/emails/email-vp-woo-pont-order-details.php:52
+msgid "Your order"
+msgstr ""
+
+#: includes/emails/class-email-shipped.php:24
+msgid "Your order is on it's way!"
+msgstr ""
+
+#: includes/emails/class-email-delivery.php:24
+msgid "Your package is on it's way!"
+msgstr ""
+
+#: includes/emails/class-email-delivery.php:20
+msgid "Your {site_title} Order #{order_number} is out for delivery!"
+msgstr ""
+
+#: includes/emails/class-email-pickup.php:20
+msgid "Your {site_title} Order #{order_number} is ready for pickup!"
+msgstr ""
+
+#: includes/emails/class-email-shipped.php:20
+msgid "Your {site_title} Order #{order_number} just shipped!"
+msgstr ""
+
+#: includes/class-helpers.php:56
+msgid "Z-BOX"
+msgstr ""
+
+#: includes/class-helpers.php:55
+msgid "Z-Pont"
+msgstr ""
+
+#: includes/providers/class-posta.php:182
+msgid "ZPL document"
+msgstr ""

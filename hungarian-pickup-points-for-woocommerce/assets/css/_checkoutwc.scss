@@ -1,0 +1,52 @@
+.checkout-wc {
+	.vp-woo-pont-shipping-method-icons {
+		padding-top: 0;
+	}
+
+	@media(max-width: 991.98px) {
+		ul.cfw-shipping-methods-list li .cfw-shipping-method-inner label {
+			flex-wrap: wrap;
+
+			.vp-woo-pont-shipping-method {
+				&-icons {
+					margin-top: 10px;
+				}
+
+				&-label {
+					width: 100%;
+
+					&-price {
+						float: right;
+					}
+				}
+			}
+		}
+	}
+
+	.vp-woo-pont-review-order {
+		th {
+			display: none;
+		}
+
+		&-selected-info {
+			line-height: 1.4;
+		}
+
+		td {
+			border: 1px solid #ddd;
+			padding: 12px;
+			border-radius: 5px;
+			margin: 0 -2px 0 -2px;
+			display: block;
+		}
+	}
+
+	&.glass {
+		.vp-woo-pont-review-order {
+			td {
+				border-radius: 0;
+				display: block;
+			}
+		}
+	}
+}
