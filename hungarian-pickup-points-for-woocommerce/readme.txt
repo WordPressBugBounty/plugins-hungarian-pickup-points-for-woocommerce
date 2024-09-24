@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.6.2
-Stable tag: 3.4.1
+Stable tag: 3.4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.1.1
+* Duplikált címkegenerálás javítás
+* Kvikk címketörlés javítás(ha már az appon törölve lett, akkor engedi letörölni Woo-ból is)
 
 3.4.1
 * DPD Shipping API működik csomagpontra / AlzaBox-ra is

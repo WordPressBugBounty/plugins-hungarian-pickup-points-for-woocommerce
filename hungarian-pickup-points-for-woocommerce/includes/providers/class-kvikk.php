@@ -51,6 +51,7 @@ class VP_Woo_Pont_Kvikk {
 		);
 
 		$this->api_key = VP_Woo_Pont_Helpers::get_option('kvikk_api_key');
+		//$this->api_url = 'http://localhost:3001/v1/';
 
 		//Show promo
 		add_action( 'wp_ajax_vp_woo_pont_hide_kvikk_promo', array( $this, 'hide_ad' ) );
@@ -381,6 +382,11 @@ class VP_Woo_Pont_Kvikk {
 		//Check for errors
 		if(isset($response['status']) && $response['status'] == 'fail') {
 			VP_Woo_Pont()->log_error_messages($response, 'kvikk-void-label');
+			if($response['code'] == 'shipment_not_found') {
+				$label = array();
+				$label['success'] = true;
+				return $label;
+			}
 			return new WP_Error( 'bad_request', $response['message'] );
 		}
 

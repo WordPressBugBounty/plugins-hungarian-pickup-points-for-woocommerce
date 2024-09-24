@@ -189,6 +189,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				return $response;
 			}
 
+			//Check if already generated a label
+			if($this->is_label_generated($order)) {
+				$response['error'] = true;
+				$response['messages'][] = __('A shipping label was already generated for this order.', 'vp-woo-pont');
+				return $response;
+			}
+
 			//Try to generate the label with the provider class
 			$label = VP_Woo_Pont()->providers[$api_provider]->create_label($data);
 
