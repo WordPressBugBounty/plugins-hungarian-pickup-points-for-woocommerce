@@ -11,7 +11,7 @@ $order = $data['order'];
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style>
 	body {
-		font-family: Arial, sans-serif;
+		font-family: 'Roboto', sans-serif;
 		padding: 0;
 		margin: 0;
 	}
@@ -43,6 +43,10 @@ $order = $data['order'];
 		border-left: 1px solid black;
 		border-right: 1px solid black;
 		padding: 10px 10px 0;
+	}
+
+	strong {
+		font-weight: bold;
 	}
 </style>
 

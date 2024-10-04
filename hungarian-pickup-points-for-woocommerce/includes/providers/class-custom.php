@@ -109,8 +109,28 @@ class VP_Woo_Pont_Custom {
 		//Init mPDF
 		require_once plugin_dir_path(__FILE__) . '../../vendor/autoload.php';
 
+		$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+		$fontDirs = $defaultConfig['fontDir'];
+		
+		$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+		$fontData = $defaultFontConfig['fontdata'];		
+		
 		// Create a new mPDF object
-		$mpdf = new \Mpdf\Mpdf(['useSubstitutions' => true, 'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 'allow_charset_conversion' => true]);
+		$mpdf = new \Mpdf\Mpdf([
+			'useSubstitutions' => false, 
+			'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 
+			'allow_charset_conversion' => true,
+			'fontDir' => array_merge($fontDirs, [
+				VP_Woo_Pont::$plugin_path . '/assets/fonts/',
+			]),
+			'fontdata' => $fontData + [
+				'roboto' => [
+					'R' => 'Roboto-Regular.ttf',
+					'B' => 'Roboto-Bold.ttf',
+				]
+			],
+			'default_font' => 'roboto'
+		]);
 
 		//Setup tempalte data
 		$label_data = array(
@@ -124,7 +144,6 @@ class VP_Woo_Pont_Custom {
 
 		//Add the HTML content to the PDF document
 		$mpdf->WriteHTML($html);
-
 
 		//Output the PDF document
 		$pdf = $mpdf->Output('', 'S');

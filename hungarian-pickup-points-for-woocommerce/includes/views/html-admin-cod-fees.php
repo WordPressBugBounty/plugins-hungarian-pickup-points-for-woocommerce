@@ -29,6 +29,10 @@ $conditions = VP_Woo_Pont_Conditions::get_conditions('cod_fees');
 									<input type="radio" data-name="vp_woo_pont_cod_fee[X][type]" value="percentage" <?php checked( $automation['type'], 'percentage' ); ?>>
 									<small>%</small>
 								</label>
+								<label>
+									<input type="radio" data-name="vp_woo_pont_cod_fee[X][type]" value="mixed" <?php checked( $automation['type'], 'mixed' ); ?>>
+									<small>Ft + %</small>
+								</label>
 							</div>
 							<label class="conditional-toggle">
 								<input type="checkbox" data-name="vp_woo_pont_cod_fee[X][condition_enabled]" <?php checked( $automation['conditional'] ); ?> class="condition" value="yes">
@@ -69,6 +73,10 @@ $conditions = VP_Woo_Pont_Conditions::get_conditions('cod_fees');
 				<label>
 					<input type="radio" data-name="vp_woo_pont_cod_fee[X][type]" value="percentage">
 					<small>%</small>
+				</label>
+				<label>
+					<input type="radio" data-name="vp_woo_pont_cod_fee[X][type]" value="mixed">
+					<small>Ft + %</small>
 				</label>
 			</div>
 			<label class="conditional-toggle">

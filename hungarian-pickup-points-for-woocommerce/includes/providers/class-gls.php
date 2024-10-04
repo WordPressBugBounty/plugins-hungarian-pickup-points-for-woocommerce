@@ -366,7 +366,14 @@ class VP_Woo_Pont_GLS {
 
 			//If we need to round to cod amount
 			if(VP_Woo_Pont_Helpers::get_option('gls_cod_rounding', 'no') == 'yes') {
-				$parcel['CODAmount'] = round($data['package']['total']/5, 0) * 5;
+				$currency = $order->get_currency();
+				if ($currency == 'HUF') {
+					$parcel['CODAmount'] = round($data['package']['total'] / 5, 0) * 5;
+				} elseif ($currency == 'CZK') {
+					$parcel['CODAmount'] = round($data['package']['total']); // Round to nearest 1 CZK
+				} elseif ($currency == 'EUR') {
+					$parcel['CODAmount'] = round($data['package']['total'] * 20) / 20; // Round to nearest 0.05 EUR
+				}		
 			}
 		} else {
 			$parcel['CODAmount'] = null;

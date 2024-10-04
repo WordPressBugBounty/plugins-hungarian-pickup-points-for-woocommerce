@@ -516,7 +516,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                         $cost = wc_clean($cod_fee['cost']);
                         $type = wc_clean($cod_fee['type']);
                         $cod_fees[$cod_fee_id] = array(
-                            'cost' => (float)$cost,
+                            'cost' => $cost,
                             'type' => $type,
                             'conditional' => false
                         );

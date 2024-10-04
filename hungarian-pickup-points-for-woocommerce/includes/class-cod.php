@@ -104,7 +104,13 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 
 				//If price is a percentage, calculate it based on cart total
 				if($cod_fee['type'] == 'percentage') {
-				  $calculated_fee = $cart_details['cart_total_net'] * ($cod_fee['cost']/100);
+					$calculated_fee = $cart_details['cart_total_net'] * ((float)$cod_fee['cost']/100);
+				} elseif($cod_fee['type'] == 'mixed') {
+					$split = explode('+', $cod_fee['cost']);
+					$split = array_map('trim', $split);
+					$calculated_fee = (float)$split[0] + $cart_details['cart_total_net'] * ((float)$split[1]/100);
+				} else {
+					$calculated_fee = (float)$calculated_fee;
 				}
 
 			}

@@ -257,11 +257,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 		}
 
 		//Calculate shipping costs based on settings
-		public static function calculate_shipping_costs() {
+		public static function calculate_shipping_costs($cart_details = false) {
 
 			//Get weight
-			$cart_details = VP_Woo_Pont_Conditions::get_cart_details('pricings');
-
+			if(!$cart_details) {
+				$cart_details = VP_Woo_Pont_Conditions::get_cart_details('pricings');
+			}
+			
 			//Get default cost
 			$default_cost = self::get_option('cost', 0);
 			$default_cost = str_replace(',','.',$default_cost);

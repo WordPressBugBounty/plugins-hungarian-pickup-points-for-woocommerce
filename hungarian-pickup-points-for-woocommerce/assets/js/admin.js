@@ -848,6 +848,7 @@ jQuery(document).ready(function($) {
 				}
 			});
 
+			$( '.woocommerce-save-button' ).removeAttr( 'disabled' );
 		},
 		refresh_field: function(field, button) {
 			var $this = button;

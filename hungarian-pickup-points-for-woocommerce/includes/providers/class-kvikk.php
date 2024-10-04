@@ -57,6 +57,10 @@ class VP_Woo_Pont_Kvikk {
 		add_action( 'wp_ajax_vp_woo_pont_hide_kvikk_promo', array( $this, 'hide_ad' ) );
 		add_action('vp_woo_pont_metabox_before_content', array($this, 'display_ad'));
 		add_action('vp_woo_pont_providers_before_table', array($this, 'display_ad'));
+
+		//Process IPN request
+		add_action( 'init', array( __CLASS__, 'ipn_process' ), 11 );
+
 	}
 
 	public function load_admin_scripts() {
@@ -238,7 +242,7 @@ class VP_Woo_Pont_Kvikk {
 		$order = wc_get_order($data['order_id']);
 		$shipment = array(
 			//Customer info
-			'name' => $data['customer']['name_with_company'],
+			'name' => ($data['point_id']) ? $data['customer']['name'] : $data['customer']['name_with_company'],
 			'phone' => $data['customer']['phone'],
 			'email' => $data['customer']['email'],
 
@@ -739,6 +743,73 @@ class VP_Woo_Pont_Kvikk {
 		check_ajax_referer( 'vp_woo_pont_kvikk_promo', 'nonce' );
 		update_option('_vp_woo_pont_hide_kvikk_info', true);
 		wp_send_json_success();
+	}
+
+	public static function ipn_process() {
+		if(isset($_GET['vp_woo_pont_kvikk_ipn'])) {
+
+			// Retrieve API key from the request header
+			$headers = getallheaders();
+			$normalized_headers = array_change_key_case($headers, CASE_LOWER);
+			$api_key = isset($normalized_headers['x-api-key']) ? esc_html($normalized_headers['x-api-key']) : '';
+	
+			// Validate API key
+			if ($api_key != VP_Woo_Pont_Helpers::get_option('kvikk_api_key')) {
+				wp_send_json_error();
+			}
+
+			// Get the raw POST data
+			$raw_post_data = file_get_contents('php://input');
+			$post_data = json_decode($raw_post_data, true);
+
+			// Setup parameters
+			$ipn_parameters = array();
+			if (isset($post_data['orderID'])) $ipn_parameters['order_number'] = esc_html($post_data['orderID']);
+			if (isset($post_data['trackingNumber'])) $ipn_parameters['tracking_number'] = esc_html($post_data['trackingNumber']);
+
+			//Get order based on the tracking number meta
+			$args = array(
+				'meta_key' => '_vp_woo_pont_parcel_number',
+				'meta_value' => $ipn_parameters['tracking_number'],
+			);
+			
+			//Get orders
+			$orders = wc_get_orders( $args );
+			
+			//Check for orders
+			if(count($orders) == 0) {
+				wp_send_json_error();
+			}
+
+			//Get order
+			$order = $orders[0];
+
+			//Get order ID
+			$order_id = $order->get_order_number();
+
+			//Check for order ID
+			if($order_id != $ipn_parameters['order_number']) {
+				wp_send_json_error();
+			}
+
+			//Delete the label
+			$order->delete_meta_data('_vp_woo_pont_parcel_id');
+			$order->delete_meta_data('_vp_woo_pont_parcel_pdf');
+			$order->delete_meta_data('_vp_woo_pont_parcel_number');
+			$order->delete_meta_data('_vp_woo_pont_parcel_pending');
+			$order->delete_meta_data('_vp_woo_pont_parcel_info');
+			$order->delete_meta_data('_vp_woo_pont_parcel_count');
+			$order->delete_meta_data('_vp_woo_pont_kvikk_accounting');
+			$order->save();
+
+			//Add note
+			$order->add_order_note(sprintf(esc_html__("Shipping label removed from the order, because it was removed from Kvikk. Tracking number was: %s", 'vp-woo-pont'), $ipn_parameters['tracking_number']));
+
+			//Return success
+			wp_send_json_success();
+
+			exit();
+		}
 	}
 
 }
