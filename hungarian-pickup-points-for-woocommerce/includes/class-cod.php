@@ -108,7 +108,11 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 				} elseif($cod_fee['type'] == 'mixed') {
 					$split = explode('+', $cod_fee['cost']);
 					$split = array_map('trim', $split);
-					$calculated_fee = (float)$split[0] + $cart_details['cart_total_net'] * ((float)$split[1]/100);
+					if(count($split) == 2) {
+						$calculated_fee = (float)$split[0] + $cart_details['cart_total_net'] * ((float)$split[1]/100);
+					} else {
+						$calculated_fee = (float)$calculated_fee;
+					}
 				} else {
 					$calculated_fee = (float)$calculated_fee;
 				}
