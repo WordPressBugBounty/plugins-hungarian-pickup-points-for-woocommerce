@@ -366,6 +366,7 @@ class VP_Woo_Pont_GLS {
 
 			//If we need to round to cod amount
 			if(VP_Woo_Pont_Helpers::get_option('gls_cod_rounding', 'no') == 'yes') {
+				$order = wc_get_order($data['order_id']);
 				$currency = $order->get_currency();
 				if ($currency == 'HUF') {
 					$parcel['CODAmount'] = round($data['package']['total'] / 5, 0) * 5;
