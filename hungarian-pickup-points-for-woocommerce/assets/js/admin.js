@@ -10,6 +10,7 @@ jQuery(document).ready(function($) {
 		$tracking_automations_table: $('.vp-woo-pont-settings-tracking-automations'),
 		$cod_fees_table: $('.vp-woo-pont-settings-cod-fees'),
 		$weight_corrections_table: $('.vp-woo-pont-settings-weight-corrections'),
+		$packagings_table: $('.vp-woo-pont-settings-packagings'),
 		$notes_table: $('.vp-woo-pont-settings-notes'),
 		$packeta_carriers_table: $('.vp-woo-pont-settings-inline-table-packeta-carriers'),
 		$enabled_providers: $('.vp-woo-pont-providers'),
@@ -46,8 +47,8 @@ jQuery(document).ready(function($) {
 			});
 			
 			//Conditional logic controls
-			var conditional_fields = [this.$pricing_table, this.$automations_table, this.$tracking_automations_table, this.$cod_fees_table, this.$notes_table, this.$weight_corrections_table];
-			var conditional_fields_ids = ['pricings', 'automations', 'tracking_automations', 'cod_fees', 'notes', 'weight_corrections'];
+			var conditional_fields = [this.$pricing_table, this.$automations_table, this.$tracking_automations_table, this.$cod_fees_table, this.$notes_table, this.$weight_corrections_table, this.$packagings_table];
+			var conditional_fields_ids = ['pricings', 'automations', 'tracking_automations', 'cod_fees', 'notes', 'weight_corrections', 'packagings'];
 
 			//Setup conditional fields for pricing
 			conditional_fields.forEach(function(table, index){
@@ -479,6 +480,16 @@ jQuery(document).ready(function($) {
 			//Slightly different for weight corrections
 			if(group == 'weight_corrections' ) {
 				var automation = $(this).closest('.vp-woo-pont-settings-weight-correction').find('.vp-woo-pont-settings-weight-correction-if');
+				if(checked) {
+					automation.show();
+				} else {
+					automation.hide();
+				}
+			}
+
+			//Slightly different for weight corrections
+			if(group == 'packagings' ) {
+				var automation = $(this).closest('.vp-woo-pont-settings-packaging').find('.vp-woo-pont-settings-packaging-if');
 				if(checked) {
 					automation.show();
 				} else {
@@ -2091,7 +2102,7 @@ jQuery(document).ready(function($) {
 					vp_woo_pont_shipments_actions.$results.show();
 
 					//Update counters
-					vp_woo_pont_shipments_actions.update_counters();
+					//vp_woo_pont_shipments_actions.update_counters();
 
 				}
 

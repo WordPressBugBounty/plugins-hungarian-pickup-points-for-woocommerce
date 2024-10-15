@@ -987,6 +987,50 @@
       .vp-woo-pont-settings-weight-correction-option-complete input[type="text"] {
         width: 100px !important;
         margin-left: 8px !important; }
+.vp-woo-pont-settings-packaging {
+  max-width: 960px;
+  border-radius: 4px;
+  border: 1px solid #8D8F94;
+  background: #fff;
+  margin: 0 0 10px 0; }
+  .vp-woo-pont-settings-packaging-description {
+    color: #646970;
+    font-size: 14px;
+    list-style-type: disc;
+    padding-left: 20px; }
+  .vp-woo-pont-settings-packaging-add {
+    padding: 0 0 10px 0;
+    display: flex;
+    align-items: center; }
+  .vp-woo-pont-settings-packaging-type {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    align-items: center; }
+    .vp-woo-pont-settings-packaging-type .packaging-field:before {
+      content: attr(data-placeholder);
+      margin: 0 0 5px 0;
+      display: none; }
+    .vp-woo-pont-settings-packaging-type .packaging-field input {
+      width: 100% !important; }
+    .vp-woo-pont-settings-packaging-type .packaging-field-name input {
+      width: 200px !important; }
+    .vp-woo-pont-settings-packaging-type .packaging-field-default input {
+      width: auto !important; }
+    .vp-woo-pont-settings-packaging-type .packaging-field-default label {
+      display: flex;
+      align-items: center;
+      gap: 5px; }
+      .vp-woo-pont-settings-packaging-type .packaging-field-default label input {
+        margin: 0;
+        width: 1rem !important; }
+    .vp-woo-pont-settings-packaging-type a.delete-packaging {
+      color: #a00; }
+  .vp-woo-pont-settings-packaging:first-child .packaging-field::before {
+    display: block; }
+  .vp-woo-pont-settings-packaging:first-child .packaging-field-default,
+  .vp-woo-pont-settings-packaging:first-child .packaging-field-delete {
+    padding-top: 16px; }
 .vp-woo-pont-settings-note {
   margin: 0 0 10px 0;
   border-radius: 4px;
@@ -3097,6 +3141,14 @@ th .vp_woo_pont_pro_label,
     color: #72aee6; }
     .vp-woo-pont-order-column .vp-woo-pont-shipment-status.closed {
       color: #00a32a; }
+  .vp-woo-pont-order-column-packaging {
+    display: flex;
+    align-items: center; }
+    .vp-woo-pont-order-column-packaging .dashicons {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+      margin-right: 5px; }
 
 .vp-woo-pont-print {
   position: relative; }
@@ -3660,5 +3712,61 @@ th .vp_woo_pont_pro_label,
     color: #fff !important;
     font-weight: 600;
     border: none !important; }
+
+.vp-woo-pont-modal-packaging .wc-backbone-modal-content {
+  max-width: 480px !important; }
+.vp-woo-pont-modal-packaging-custom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px; }
+  .vp-woo-pont-modal-packaging-custom label {
+    display: block;
+    margin: 0 0 5px 0; }
+  .vp-woo-pont-modal-packaging-custom input[type="text"] {
+    width: 100%; }
+.vp-woo-pont-modal-packaging-dimensions {
+  margin: 0 0 20px 0; }
+  .vp-woo-pont-modal-packaging-dimensions p {
+    margin: 0 0 10px 0 !important; }
+.vp-woo-pont-modal-packaging-weight {
+  padding-bottom: 10px; }
+  .vp-woo-pont-modal-packaging-weight p {
+    margin: 0 0 10px 0 !important; }
+  .vp-woo-pont-modal-packaging-weight div {
+    position: relative; }
+    .vp-woo-pont-modal-packaging-weight div em {
+      opacity: 0.5; }
+.vp-woo-pont-modal-packaging-types {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; }
+  .vp-woo-pont-modal-packaging-types li {
+    list-style-type: none;
+    margin: 0 0 0 0;
+    padding: 0;
+    position: relative;
+    display: flex; }
+    .vp-woo-pont-modal-packaging-types li input {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0; }
+    .vp-woo-pont-modal-packaging-types li label {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px 5px 36px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid #8c8f94; }
+      .vp-woo-pont-modal-packaging-types li label:hover {
+        background: #f0f6fc80; }
+    .vp-woo-pont-modal-packaging-types li input:checked + label {
+      background: #f0f6fc; }
+    .vp-woo-pont-modal-packaging-types li.selected label {
+      background: #f0f6fc; }
 
 /*# sourceMappingURL=admin.css.map */

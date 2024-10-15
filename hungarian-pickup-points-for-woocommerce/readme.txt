@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.6.2
-Stable tag: 3.4.2.2
+Stable tag: 3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,14 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.3
+* Utánvét díj adókulcs osztály beállítható
+* DPD Weblabel esetében a cégnév is átküldésre kerül
+* DPD szállítólevél generálás javítás
+* PHP warning javítás rendelések oldalon
+* vp_woo_pont_label_generate_error action, ami hibás címkegeneráláskor fut le
+* A rendelésben el lehet menteni a "_vp_woo_pont_package_count" metában egy számot és akkor több csomagos címkét generál automatán
 
 3.4.2.2
 * GLS utánvét hibajavítás

@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-15 15:05+0000\n"
+"POT-Creation-Date: 2024-10-15 19:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: vp-woo-pont\n"
@@ -84,7 +84,7 @@ msgid "25x10"
 msgstr ""
 
 #: includes/views/html-admin-pro-notice.php:17
-#: includes/views/html-admin-walkthrough.php:128
+#: includes/views/html-admin-walkthrough.php:145
 msgid "35 EUR / year"
 msgstr ""
 
@@ -118,6 +118,10 @@ msgstr ""
 msgid ""
 "A new shipping label was generated for order {order_number}! Tracking number "
 "is {tracking_number}. The PDF file is attached to this e-mail."
+msgstr ""
+
+#: includes/class-labels.php:196
+msgid "A shipping label was already generated for this order."
 msgstr ""
 
 #: includes/providers/class-posta.php:164
@@ -157,7 +161,7 @@ msgstr ""
 
 #: includes/providers/class-posta.php:170
 #: includes/providers/class-foxpost.php:118
-#: includes/providers/class-kvikk.php:119
+#: includes/providers/class-kvikk.php:124
 msgid "A6"
 msgstr ""
 
@@ -165,7 +169,7 @@ msgstr ""
 #: includes/providers/class-packeta.php:109
 #: includes/providers/class-gls.php:253
 #: includes/providers/class-foxpost.php:117
-#: includes/providers/class-kvikk.php:118
+#: includes/providers/class-kvikk.php:123
 #: includes/providers/class-expressone.php:81
 #: includes/providers/class-custom.php:74
 msgid "A6 on A4(recommended)"
@@ -220,12 +224,16 @@ msgstr ""
 msgid "Add new cost"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:55
+#: includes/views/html-admin-cod-fees.php:59
 msgid "Add new fee"
 msgstr ""
 
 #: includes/views/html-admin-notes.php:66
 msgid "Add new note"
+msgstr ""
+
+#: includes/views/html-admin-packagings.php:52
+msgid "Add new packaging"
 msgstr ""
 
 #: includes/views/html-admin-notes.php:32
@@ -289,8 +297,8 @@ msgstr ""
 msgid "Agreement code"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:43
-#: includes/views/html-admin-cod-fees.php:84
+#: includes/views/html-admin-cod-fees.php:47
+#: includes/views/html-admin-cod-fees.php:92
 #: includes/views/html-admin-automations.php:60
 #: includes/views/html-admin-automations.php:108
 #: includes/views/html-admin-weight-corrections.php:38
@@ -312,7 +320,7 @@ msgstr ""
 
 #: includes/providers/class-posta.php:97
 #: includes/providers/class-foxpost.php:91
-#: includes/providers/class-kvikk.php:99
+#: includes/providers/class-kvikk.php:104
 msgid "API key"
 msgstr ""
 
@@ -346,8 +354,8 @@ msgstr ""
 msgid "Apply this correction, if"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:41
-#: includes/views/html-admin-cod-fees.php:82
+#: includes/views/html-admin-cod-fees.php:45
+#: includes/views/html-admin-cod-fees.php:90
 msgid "Apply this fee, if"
 msgstr ""
 
@@ -448,6 +456,10 @@ msgid ""
 "<strong>%s</strong>"
 msgstr ""
 
+#: includes/views/html-admin-walkthrough.php:160
+msgid "Bővebb infó"
+msgstr ""
+
 #: includes/views/html-metabox.php:79 includes/views/html-metabox.php:128
 msgid "Calculated cost(net)"
 msgstr ""
@@ -461,8 +473,8 @@ msgstr ""
 msgid "Carrier"
 msgstr ""
 
-#: index.php:1002 includes/class-settings.php:17
-#: includes/class-settings.php:192 includes/settings/settings-carriers.php:13
+#: index.php:1005 includes/class-settings.php:17
+#: includes/class-settings.php:193 includes/settings/settings-carriers.php:13
 #: includes/views/html-admin-home-delivery.php:46
 msgid "Carriers"
 msgstr ""
@@ -479,7 +491,7 @@ msgstr ""
 msgid "Cash"
 msgstr ""
 
-#: index.php:777 index.php:782
+#: index.php:780 index.php:785
 msgid ""
 "Cash on delivery is not available on the selected pick-up point. Please "
 "select a different payment method or pick-up point!"
@@ -532,7 +544,7 @@ msgstr ""
 msgid "Close modal panel"
 msgstr ""
 
-#: includes/class-labels.php:703
+#: includes/class-labels.php:734
 msgid "Closed"
 msgstr ""
 
@@ -544,7 +556,7 @@ msgstr ""
 msgid "Closed packages"
 msgstr ""
 
-#: templates/order/custom-label.php:82
+#: templates/order/custom-label.php:86
 msgid "COD"
 msgstr ""
 
@@ -552,12 +564,12 @@ msgstr ""
 msgid "COD % fee"
 msgstr ""
 
-#: includes/class-cod.php:120 includes/settings/settings-cod.php:25
+#: includes/class-cod.php:137 includes/settings/settings-cod.php:25
 msgid "COD Fee"
 msgstr ""
 
 #: includes/views/html-admin-cod-fees.php:23
-#: includes/views/html-admin-cod-fees.php:64
+#: includes/views/html-admin-cod-fees.php:68
 msgid "COD fee(net)"
 msgstr ""
 
@@ -585,8 +597,8 @@ msgstr ""
 msgid "Company ID"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:35
-#: includes/views/html-admin-cod-fees.php:76
+#: includes/views/html-admin-cod-fees.php:39
+#: includes/views/html-admin-cod-fees.php:84
 #: includes/views/html-admin-automations.php:52
 #: includes/views/html-admin-automations.php:100
 #: includes/views/html-admin-weight-corrections.php:30
@@ -648,7 +660,7 @@ msgstr ""
 msgid "Courier tracking #"
 msgstr ""
 
-#: includes/settings/settings-labels.php:94
+#: includes/settings/settings-labels.php:101
 msgid "Create a ZIP file"
 msgstr ""
 
@@ -676,7 +688,7 @@ msgstr ""
 msgid "Csomagok a raktárban"
 msgstr ""
 
-#: includes/class-settings.php:239 includes/providers/class-csomagpiac.php:178
+#: includes/class-settings.php:240 includes/providers/class-csomagpiac.php:178
 msgid "Csomagpiac"
 msgstr ""
 
@@ -705,8 +717,12 @@ msgstr ""
 msgid "Custom Label"
 msgstr ""
 
-#: includes/class-settings.php:240 includes/class-helpers.php:82
+#: includes/class-settings.php:241 includes/class-helpers.php:82
 msgid "Custom Labels"
+msgstr ""
+
+#: includes/views/html-modal-packaging.php:38
+msgid "Custom packaging"
 msgstr ""
 
 #: includes/settings/settings-points.php:6
@@ -797,6 +813,11 @@ msgstr ""
 msgid "Deactivate license"
 msgstr ""
 
+#: includes/views/html-admin-packagings.php:40
+#: includes/views/html-admin-packagings.php:81
+msgid "Default"
+msgstr ""
+
 #: includes/settings/settings-global.php:37
 msgid "Default cost"
 msgstr ""
@@ -829,8 +850,10 @@ msgstr ""
 
 #: includes/views/html-admin-tracking-automations.php:63
 #: includes/views/html-admin-tracking-automations.php:115
-#: includes/views/html-admin-cod-fees.php:37
-#: includes/views/html-admin-cod-fees.php:78
+#: includes/views/html-admin-cod-fees.php:41
+#: includes/views/html-admin-cod-fees.php:86
+#: includes/views/html-admin-packagings.php:44
+#: includes/views/html-admin-packagings.php:85
 #: includes/views/html-admin-automations.php:54
 #: includes/views/html-admin-automations.php:102
 #: includes/views/html-admin-weight-corrections.php:32
@@ -892,7 +915,7 @@ msgstr ""
 msgid "Detailed cost"
 msgstr ""
 
-#: includes/settings/settings-labels.php:87
+#: includes/settings/settings-labels.php:94
 #: includes/providers/class-csomagpiac.php:83
 msgid "Developer mode"
 msgstr ""
@@ -909,22 +932,22 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: includes/class-settings.php:182
+#: includes/class-settings.php:183
 msgid "Don't use custom page"
 msgstr ""
 
-#: includes/class-shipments-table.php:125 includes/class-labels.php:710
-#: includes/class-labels.php:731 includes/views/html-admin-shipments.php:97
+#: includes/class-shipments-table.php:125 includes/class-labels.php:741
+#: includes/class-labels.php:762 includes/views/html-admin-shipments.php:97
 #: includes/views/html-metabox.php:141
 #: includes/views/html-modal-generate.php:62
 msgid "Download"
 msgstr ""
 
-#: includes/class-labels.php:76 includes/class-labels.php:120
+#: includes/class-labels.php:77 includes/class-labels.php:121
 msgid "Download shipping labels"
 msgstr ""
 
-#: includes/class-settings.php:234 includes/class-helpers.php:43
+#: includes/class-settings.php:235 includes/class-helpers.php:43
 #: includes/class-helpers.php:79 includes/class-helpers.php:98
 #: includes/views/html-admin-shipments.php:12
 msgid "DPD"
@@ -973,9 +996,9 @@ msgstr ""
 msgid "Email type"
 msgstr ""
 
-#: includes/settings/settings-labels.php:82
-#: includes/settings/settings-labels.php:90
-#: includes/settings/settings-labels.php:98
+#: includes/settings/settings-labels.php:89
+#: includes/settings/settings-labels.php:97
+#: includes/settings/settings-labels.php:105
 msgid "Enable"
 msgstr ""
 
@@ -1060,7 +1083,7 @@ msgstr ""
 msgid "Enter recipients (comma separated) for this email. Defaults to %s."
 msgstr ""
 
-#: includes/providers/class-kvikk.php:101
+#: includes/providers/class-kvikk.php:106
 msgid "Enter your account's API key."
 msgstr ""
 
@@ -1088,6 +1111,13 @@ msgstr ""
 msgid "Enter your GLS customer number."
 msgstr ""
 
+#: includes/views/html-admin-packagings.php:55
+msgid ""
+"Enter your shipping box sizes that you usually use. Based on the volume of "
+"the order, it will pair with a packaging type automatically(some couriers "
+"require to have dimensions specified)."
+msgstr ""
+
 #: includes/class-conditions.php:157
 msgid "equal"
 msgstr ""
@@ -1109,7 +1139,7 @@ msgstr ""
 msgid "Export / Import cleared"
 msgstr ""
 
-#: includes/class-settings.php:236 includes/class-helpers.php:41
+#: includes/class-settings.php:237 includes/class-helpers.php:41
 #: includes/class-helpers.php:81 includes/views/html-admin-shipments.php:11
 msgid "Express One"
 msgstr ""
@@ -1130,8 +1160,12 @@ msgstr ""
 msgid "Fee name"
 msgstr ""
 
-#: includes/settings/settings-cod.php:6 includes/settings/settings-cod.php:18
 #: includes/settings/settings-cod.php:29
+msgid "Fee tax class"
+msgstr ""
+
+#: includes/settings/settings-cod.php:6 includes/settings/settings-cod.php:18
+#: includes/settings/settings-cod.php:40
 msgid "Fees"
 msgstr ""
 
@@ -1139,7 +1173,7 @@ msgstr ""
 msgid "Fetch tracking information automatically"
 msgstr ""
 
-#: index.php:995
+#: index.php:998
 msgid "Filter shipping providers"
 msgstr ""
 
@@ -1171,7 +1205,7 @@ msgstr ""
 msgid "Forwarded sorting error"
 msgstr ""
 
-#: includes/class-settings.php:230 includes/class-helpers.php:37
+#: includes/class-settings.php:231 includes/class-helpers.php:37
 #: includes/class-helpers.php:54 includes/class-helpers.php:78
 #: includes/views/html-admin-shipments.php:10
 msgid "Foxpost"
@@ -1203,11 +1237,11 @@ msgid "Friday"
 msgstr ""
 
 #: includes/views/html-admin-pro-notice.php:17
-#: includes/views/html-admin-walkthrough.php:127
+#: includes/views/html-admin-walkthrough.php:144
 msgid "from"
 msgstr ""
 
-#: index.php:1406 includes/settings/settings-global.php:16
+#: index.php:1412 includes/settings/settings-global.php:16
 #: templates/emails/email-vp-woo-pont-order-details.php:23
 #: templates/checkout/pont.php:22 templates/checkout/pont.php:23
 msgctxt "frontend"
@@ -1219,7 +1253,7 @@ msgstr ""
 msgid "Full container"
 msgstr ""
 
-#: includes/class-labels.php:737
+#: includes/class-labels.php:768
 msgid "Generate & print label"
 msgstr ""
 
@@ -1251,7 +1285,7 @@ msgstr ""
 msgid "Generate shipping label"
 msgstr ""
 
-#: includes/class-labels.php:74 includes/class-labels.php:118
+#: includes/class-labels.php:75 includes/class-labels.php:119
 msgid "Generate shipping labels"
 msgstr ""
 
@@ -1271,7 +1305,7 @@ msgstr ""
 msgid "Germany"
 msgstr ""
 
-#: includes/class-settings.php:232 includes/class-helpers.php:42
+#: includes/class-settings.php:233 includes/class-helpers.php:42
 #: includes/class-helpers.php:75
 msgid "GLS"
 msgstr ""
@@ -1300,6 +1334,7 @@ msgstr ""
 msgid "Go to settings"
 msgstr ""
 
+#: includes/views/html-modal-packaging.php:62
 #: includes/views/html-metabox.php:250
 msgid "gramms"
 msgstr ""
@@ -1319,6 +1354,17 @@ msgstr ""
 #: includes/providers/class-transsped.php:121
 #: includes/providers/class-transsped.php:217
 msgid "Half container"
+msgstr ""
+
+#: includes/views/html-modal-packaging.php:53
+msgid "Height"
+msgstr ""
+
+#: includes/views/html-admin-packagings.php:34
+#: includes/views/html-admin-packagings.php:35
+#: includes/views/html-admin-packagings.php:75
+#: includes/views/html-admin-packagings.php:76
+msgid "Height(cm)"
 msgstr ""
 
 #: includes/emails/class-email-pickup.php:51
@@ -1420,13 +1466,13 @@ msgid ""
 "highest cost."
 msgstr ""
 
-#: includes/settings/settings-labels.php:91
+#: includes/settings/settings-labels.php:98
 msgid ""
 "If turned on, the data sent to the provider during when createing a label "
 "will be logged in WooCommerce / Status / Logs. Can be used to debug issues."
 msgstr ""
 
-#: includes/settings/settings-labels.php:83
+#: includes/settings/settings-labels.php:90
 msgid ""
 "If turned on, the settings panel for generating the label manually will be "
 "visible by default."
@@ -1472,7 +1518,7 @@ msgid ""
 "deactivate it on this website."
 msgstr ""
 
-#: includes/settings/settings-labels.php:97
+#: includes/settings/settings-labels.php:104
 msgid ""
 "If you want to download multiple shipping labels at once, this option will "
 "create a ZIP file with separate PDF files(the default option will merge all "
@@ -1556,7 +1602,7 @@ msgstr ""
 msgid "Inverse MPL Europe Standard"
 msgstr ""
 
-#: templates/order/custom-label.php:99
+#: templates/order/custom-label.php:103
 msgid "Invoice"
 msgstr ""
 
@@ -1573,7 +1619,7 @@ msgstr ""
 msgid "Invoice number"
 msgstr ""
 
-#: templates/order/custom-label.php:97
+#: templates/order/custom-label.php:101
 msgid "Items"
 msgstr ""
 
@@ -1593,25 +1639,25 @@ msgstr ""
 msgid "Kiállított fuvarokmány"
 msgstr ""
 
-#: includes/class-settings.php:229 includes/providers/class-kvikk.php:79
-#: includes/providers/class-kvikk.php:188
+#: includes/class-settings.php:230 includes/providers/class-kvikk.php:84
+#: includes/providers/class-kvikk.php:193
 #: includes/views/html-admin-shipments.php:8
 msgid "Kvikk"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:194
+#: includes/providers/class-kvikk.php:199
 msgid "Kvikk Express One"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:195
+#: includes/providers/class-kvikk.php:200
 msgid "Kvikk FámaFutár"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:193
+#: includes/providers/class-kvikk.php:198
 msgid "Kvikk MPL"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:95
+#: includes/providers/class-kvikk.php:100
 msgid "Kvikk settings"
 msgstr ""
 
@@ -1676,6 +1722,17 @@ msgstr ""
 
 #: includes/views/html-metabox.php:48
 msgid "Learn More"
+msgstr ""
+
+#: includes/views/html-modal-packaging.php:45
+msgid "Length"
+msgstr ""
+
+#: includes/views/html-admin-packagings.php:28
+#: includes/views/html-admin-packagings.php:29
+#: includes/views/html-admin-packagings.php:69
+#: includes/views/html-admin-packagings.php:70
+msgid "Length(cm)"
 msgstr ""
 
 #: includes/class-conditions.php:160
@@ -1772,7 +1829,7 @@ msgstr ""
 msgid "Monday"
 msgstr ""
 
-#: includes/class-settings.php:233 includes/class-helpers.php:76
+#: includes/class-settings.php:234 includes/class-helpers.php:76
 #: includes/views/html-admin-shipments.php:9
 msgid "MPL"
 msgstr ""
@@ -1793,6 +1850,10 @@ msgstr ""
 msgid "Multiple cost logic"
 msgstr ""
 
+#: includes/views/html-admin-packagings.php:22
+#: includes/views/html-admin-packagings.php:23
+#: includes/views/html-admin-packagings.php:63
+#: includes/views/html-admin-packagings.php:64
 #: includes/views/html-admin-enabled-providers.php:125
 msgid "Name"
 msgstr ""
@@ -1835,8 +1896,8 @@ msgstr ""
 msgid "Number of packages"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:46
-#: includes/views/html-admin-cod-fees.php:87
+#: includes/views/html-admin-cod-fees.php:50
+#: includes/views/html-admin-cod-fees.php:95
 #: includes/views/html-admin-automations.php:63
 #: includes/views/html-admin-automations.php:111
 #: includes/views/html-admin-weight-corrections.php:41
@@ -1852,8 +1913,8 @@ msgstr ""
 msgid "OMV"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:44
-#: includes/views/html-admin-cod-fees.php:85
+#: includes/views/html-admin-cod-fees.php:48
+#: includes/views/html-admin-cod-fees.php:93
 #: includes/views/html-admin-automations.php:61
 #: includes/views/html-admin-automations.php:109
 #: includes/views/html-admin-weight-corrections.php:39
@@ -1882,6 +1943,12 @@ msgstr ""
 msgid "Opening hours"
 msgstr ""
 
+#: includes/settings/settings-cod.php:30
+msgid ""
+"Optionally control which tax class the COD fee gets, or leave it so tax is "
+"based on the cart items themselves."
+msgstr ""
+
 #: includes/views/html-metabox.php:192
 msgid "Options"
 msgstr ""
@@ -1903,7 +1970,7 @@ msgstr ""
 msgid "Order information has been transmitted to DPD."
 msgstr ""
 
-#: includes/providers/class-custom.php:263
+#: includes/providers/class-custom.php:282
 msgid "Order not found"
 msgstr ""
 
@@ -1911,7 +1978,7 @@ msgstr ""
 msgid "Order not found."
 msgstr ""
 
-#: templates/shipments-table.php:94 templates/order/custom-label.php:95
+#: templates/shipments-table.php:94 templates/order/custom-label.php:99
 #: templates/order/order-tracking.php:101
 msgid "Order Number"
 msgstr ""
@@ -1989,7 +2056,7 @@ msgstr ""
 msgid "Package delivered order status"
 msgstr ""
 
-#: index.php:1351
+#: index.php:1357
 msgid "Package details"
 msgstr ""
 
@@ -2019,6 +2086,10 @@ msgstr ""
 
 #: includes/class-shipments-table.php:173 templates/shipments-table.php:85
 msgid "Packages"
+msgstr ""
+
+#: includes/views/html-modal-packaging.php:23
+msgid "Packaging"
 msgstr ""
 
 #: includes/views/html-metabox.php:153 includes/views/html-metabox.php:253
@@ -2069,7 +2140,7 @@ msgstr ""
 msgid "Packet was picked up by the customer."
 msgstr ""
 
-#: includes/class-settings.php:231 includes/class-helpers.php:39
+#: includes/class-settings.php:232 includes/class-helpers.php:39
 #: includes/class-helpers.php:62 includes/class-helpers.php:77
 msgid "Packeta"
 msgstr ""
@@ -2086,7 +2157,7 @@ msgstr ""
 msgid "Packeta settings"
 msgstr ""
 
-#: includes/class-settings.php:238 includes/providers/class-pactic.php:197
+#: includes/class-settings.php:239 includes/providers/class-pactic.php:197
 msgid "Pactic"
 msgstr ""
 
@@ -2200,7 +2271,7 @@ msgstr ""
 msgid "Pickup point name"
 msgstr ""
 
-#: index.php:996 includes/class-settings.php:211
+#: index.php:999 includes/class-settings.php:212
 #: includes/views/html-admin-points-title.php:7
 msgid "Pickup points"
 msgstr ""
@@ -2209,7 +2280,7 @@ msgstr ""
 msgid "Pickup points map for WooCommerce stores in the hungarian market"
 msgstr ""
 
-#: index.php:796 includes/block/pont-picker-block.php:83
+#: index.php:799 includes/block/pont-picker-block.php:83
 msgid "Please enter a valid phone number!"
 msgstr ""
 
@@ -2233,7 +2304,7 @@ msgid ""
 "right and you can find the API key password there."
 msgstr ""
 
-#: index.php:771 includes/block/pont-picker-block.php:68
+#: index.php:774 includes/block/pont-picker-block.php:68
 msgid "Please select a pick-up point or choose a different shipping method."
 msgstr ""
 
@@ -2293,12 +2364,12 @@ msgstr ""
 msgid "Primary color"
 msgstr ""
 
-#: includes/class-labels.php:715 includes/class-labels.php:735
+#: includes/class-labels.php:746 includes/class-labels.php:766
 #: includes/views/html-modal-generate.php:63
 msgid "Print"
 msgstr ""
 
-#: includes/class-labels.php:75 includes/class-labels.php:119
+#: includes/class-labels.php:76 includes/class-labels.php:120
 #: includes/views/html-modal-layout-selector.php:24
 msgid "Print shipping labels"
 msgstr ""
@@ -2320,7 +2391,7 @@ msgid "Provider specific note"
 msgstr ""
 
 #: includes/views/html-admin-pro-notice.php:14
-#: includes/views/html-admin-walkthrough.php:125
+#: includes/views/html-admin-walkthrough.php:142
 msgid "Purchase PRO version"
 msgstr ""
 
@@ -2344,7 +2415,7 @@ msgstr ""
 msgid "Received by DPD from consignor(Pickup scan)."
 msgstr ""
 
-#: templates/order/custom-label.php:64
+#: templates/order/custom-label.php:68
 msgid "Recipient"
 msgstr ""
 
@@ -2447,7 +2518,7 @@ msgid ""
 "place, or select a nearby pickup point on the map."
 msgstr ""
 
-#: includes/class-settings.php:235 includes/class-helpers.php:44
+#: includes/class-settings.php:236 includes/class-helpers.php:44
 #: includes/class-helpers.php:80
 msgid "Sameday"
 msgstr ""
@@ -2469,6 +2540,7 @@ msgstr ""
 msgid "Saturday delivery"
 msgstr ""
 
+#: includes/views/html-modal-packaging.php:68
 #: includes/views/html-modal-design.php:73
 #: includes/views/html-modal-add-provider.php:22
 msgid "Save"
@@ -2542,7 +2614,7 @@ msgstr ""
 msgid "Select which providers you want to show to your customers."
 msgstr ""
 
-#: includes/providers/class-kvikk.php:109
+#: includes/providers/class-kvikk.php:114
 msgid "Select your sender ID."
 msgstr ""
 
@@ -2569,7 +2641,7 @@ msgstr ""
 msgid "Send an SMS notification to the customer(extra service)."
 msgstr ""
 
-#: templates/order/custom-label.php:63
+#: templates/order/custom-label.php:67
 msgid "Sender"
 msgstr ""
 
@@ -2612,7 +2684,7 @@ msgstr ""
 msgid "Sender email address"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:105
+#: includes/providers/class-kvikk.php:110
 msgid "Sender ID"
 msgstr ""
 
@@ -2700,7 +2772,7 @@ msgstr ""
 msgid "Setup your own pickup points, like store pickup."
 msgstr ""
 
-#: includes/class-labels.php:665 templates/shipments-table.php:96
+#: includes/class-labels.php:696 templates/shipments-table.php:96
 msgid "Shipment"
 msgstr ""
 
@@ -2714,7 +2786,7 @@ msgstr ""
 msgid "Shipment closed. Generated delivery note ID: %s"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:432
+#: includes/providers/class-kvikk.php:442
 msgid "Shipment not found"
 msgstr ""
 
@@ -2762,30 +2834,30 @@ msgstr ""
 msgid "Shipping confirmation"
 msgstr ""
 
-#: index.php:693 index.php:889 includes/class-helpers.php:1192
+#: index.php:696 index.php:892 includes/class-helpers.php:1194
 msgctxt "shipping cost summary on cart & checkout"
 msgid "free"
 msgstr ""
 
-#: index.php:708 includes/class-helpers.php:1207
+#: index.php:711 includes/class-helpers.php:1209
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(free & 1 shipping cost)"
 msgid "free or %s"
 msgstr ""
 
-#: index.php:713 includes/class-helpers.php:1212
+#: index.php:716 includes/class-helpers.php:1214
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(free & 1+ shipping cost)"
 msgid "free & from %s"
 msgstr ""
 
-#: index.php:703 includes/class-helpers.php:1202
+#: index.php:706 includes/class-helpers.php:1204
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(multiple shipping costs)"
 msgid "from %s"
 msgstr ""
 
-#: index.php:698 includes/class-helpers.php:1197
+#: index.php:701 includes/class-helpers.php:1199
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(one shipping cost only)"
 msgid "%s"
@@ -2797,21 +2869,21 @@ msgstr ""
 msgid "Shipping cost(net)"
 msgstr ""
 
-#: includes/class-labels.php:536
+#: includes/class-labels.php:553
 msgid "Shipping informations"
 msgstr ""
 
-#: index.php:1354 includes/class-shipments-table.php:291
+#: index.php:1360 includes/class-shipments-table.php:291
 #: includes/views/html-admin-automations.php:36
 #: includes/views/html-metabox.php:138
 msgid "Shipping label"
 msgstr ""
 
-#: includes/class-labels.php:246
+#: includes/class-labels.php:262
 msgid "Shipping label generated successfully."
 msgstr ""
 
-#: includes/class-labels.php:241
+#: includes/class-labels.php:257
 #, php-format
 msgid "Shipping label generated successfully. ID number: %s"
 msgstr ""
@@ -2820,24 +2892,31 @@ msgstr ""
 msgid "Shipping label generated!"
 msgstr ""
 
-#: includes/class-labels.php:316
+#: includes/class-labels.php:332
 #, php-format
 msgid ""
 "Shipping label removed from the order only. You still need to remove it in "
 "the provider's system. ID number: %s"
 msgstr ""
 
-#: includes/class-labels.php:319
+#: includes/providers/class-kvikk.php:806
+#, php-format
+msgid ""
+"Shipping label removed from the order, because it was removed from Kvikk. "
+"Tracking number was: %s"
+msgstr ""
+
+#: includes/class-labels.php:335
 msgid ""
 "Shipping label removed from WooCommerce. You still need to remove it in the "
 "provider's system."
 msgstr ""
 
-#: includes/class-labels.php:327
+#: includes/class-labels.php:343
 msgid "Shipping label removed successfully."
 msgstr ""
 
-#: includes/class-labels.php:324
+#: includes/class-labels.php:340
 #, php-format
 msgid "Shipping label removed successfully. ID number: %s"
 msgstr ""
@@ -2886,7 +2965,7 @@ msgstr ""
 msgid "Show provider icons below the shipping option"
 msgstr ""
 
-#: includes/settings/settings-labels.php:80
+#: includes/settings/settings-labels.php:87
 msgid "Show settings on load"
 msgstr ""
 
@@ -2922,6 +3001,17 @@ msgid ""
 "Since you are using the block based checkout page, you need to enable Woo's "
 "local pickup feature to show these options during checkout. To learn more "
 "about this, %1$sclick here%2$s."
+msgstr ""
+
+#: includes/views/html-modal-packaging.php:15
+msgid "Size & weight"
+msgstr ""
+
+#: includes/views/html-admin-packagings.php:25
+#: includes/views/html-admin-packagings.php:26
+#: includes/views/html-admin-packagings.php:66
+#: includes/views/html-admin-packagings.php:67
+msgid "SKU"
 msgstr ""
 
 #: includes/providers/class-dpd.php:97 includes/providers/class-gls.php:143
@@ -2987,7 +3077,7 @@ msgstr ""
 #: includes/providers/class-posta.php:161 includes/providers/class-gls.php:249
 #: includes/providers/class-sameday.php:109
 #: includes/providers/class-foxpost.php:112
-#: includes/providers/class-kvikk.php:115
+#: includes/providers/class-kvikk.php:120
 #: includes/providers/class-expressone.php:78
 #: includes/providers/class-transsped.php:201
 #: includes/providers/class-custom.php:70
@@ -3051,6 +3141,10 @@ msgstr ""
 
 #: includes/providers/class-sameday.php:34
 msgid "Szállítási folyamatban a futárnál"
+msgstr ""
+
+#: includes/settings/settings-cod.php:36
+msgid "Tax class based on cart items"
 msgstr ""
 
 #: includes/settings/settings-global.php:27
@@ -3349,7 +3443,7 @@ msgstr ""
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: includes/class-settings.php:153
+#: includes/class-settings.php:154
 msgid ""
 "This feature requires the ZipArchive function and by the looks of it, this "
 "is not enabled on your website. You can ask your hosting provider for help."
@@ -3369,7 +3463,7 @@ msgid ""
 "display the selected pickup point provider."
 msgstr ""
 
-#: includes/class-labels.php:545
+#: includes/class-labels.php:562
 msgid ""
 "This order doesn't need shipping. Add a shipping line item to generate a "
 "label."
@@ -3401,7 +3495,7 @@ msgstr ""
 msgid "To add 1kg to the package weight, use +1"
 msgstr ""
 
-#: includes/class-labels.php:702
+#: includes/class-labels.php:733
 msgid "To be closed"
 msgstr ""
 
@@ -3476,7 +3570,7 @@ msgstr ""
 msgid "Tracking Number"
 msgstr ""
 
-#: index.php:1352 includes/class-labels.php:691 includes/class-labels.php:697
+#: index.php:1358 includes/class-labels.php:722 includes/class-labels.php:728
 #: includes/class-tracking.php:524 includes/views/html-modal-tracking.php:29
 #: includes/views/html-metabox.php:159
 msgid "Tracking number"
@@ -3502,7 +3596,7 @@ msgstr ""
 msgid "Trans-Sped Username"
 msgstr ""
 
-#: includes/class-settings.php:237 includes/class-helpers.php:83
+#: includes/class-settings.php:238 includes/class-helpers.php:83
 msgid "Trans-Sped ZERO"
 msgstr ""
 
@@ -3527,11 +3621,11 @@ msgstr ""
 msgid "Two A5 landscape on an A4 page"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:120
+#: includes/providers/class-kvikk.php:125
 msgid "Two A5 on landscape A4"
 msgstr ""
 
-#: includes/class-labels.php:200
+#: includes/class-labels.php:213
 #, php-format
 msgid "Unable to create shipping label. Error code: %s"
 msgstr ""
@@ -3544,7 +3638,7 @@ msgstr ""
 msgid "Unable to run the import tool for some reason."
 msgstr ""
 
-#: includes/class-labels.php:298
+#: includes/class-labels.php:314
 #, php-format
 msgid "Unable to void the shipping label. Error code: %s"
 msgstr ""
@@ -3561,7 +3655,7 @@ msgstr ""
 #: includes/providers/class-posta.php:699
 #: includes/providers/class-posta.php:710
 #: includes/providers/class-posta.php:714
-#: includes/providers/class-posta.php:838 includes/providers/class-dpd.php:447
+#: includes/providers/class-posta.php:838 includes/providers/class-dpd.php:444
 #: includes/providers/class-csomagpiac.php:419
 #: includes/providers/class-csomagpiac.php:464
 #: includes/providers/class-csomagpiac.php:474
@@ -3575,8 +3669,8 @@ msgstr ""
 #: includes/providers/class-foxpost.php:358
 #: includes/providers/class-foxpost.php:370
 #: includes/providers/class-foxpost.php:427
-#: includes/providers/class-kvikk.php:322
-#: includes/providers/class-kvikk.php:593
+#: includes/providers/class-kvikk.php:327
+#: includes/providers/class-kvikk.php:603
 #: includes/providers/class-expressone.php:198
 #: includes/providers/class-transsped.php:438
 msgid "Unknown error"
@@ -3594,7 +3688,7 @@ msgstr ""
 msgid "Unserializing instances of this class is forbidden."
 msgstr ""
 
-#: includes/class-labels.php:187 includes/views/html-admin-pro-notice.php:10
+#: includes/class-labels.php:189 includes/views/html-admin-pro-notice.php:10
 #: includes/views/html-metabox.php:46
 msgid ""
 "Upgrade to the PRO version to generate shipping labels and to track "
@@ -3672,8 +3766,9 @@ msgstr ""
 msgid "Wednesday"
 msgstr ""
 
-#: templates/shipments-table.php:86 includes/views/html-metabox-kvikk.php:25
-#: templates/order/custom-label.php:96
+#: templates/shipments-table.php:86 includes/views/html-modal-packaging.php:59
+#: includes/views/html-metabox-kvikk.php:25
+#: templates/order/custom-label.php:100
 msgid "Weight"
 msgstr ""
 
@@ -3695,6 +3790,17 @@ msgstr ""
 
 #: includes/settings/settings-tracking.php:59
 msgid "Where should the tracking numbers be included in the emails?"
+msgstr ""
+
+#: includes/views/html-modal-packaging.php:49
+msgid "Width"
+msgstr ""
+
+#: includes/views/html-admin-packagings.php:31
+#: includes/views/html-admin-packagings.php:32
+#: includes/views/html-admin-packagings.php:72
+#: includes/views/html-admin-packagings.php:73
+msgid "Width(cm)"
 msgstr ""
 
 #: includes/providers/class-posta.php:243
@@ -3723,7 +3829,7 @@ msgstr ""
 msgid "XS"
 msgstr ""
 
-#: includes/views/html-admin-cod-fees.php:55
+#: includes/views/html-admin-cod-fees.php:59
 msgid "You can add fees in the PRO version"
 msgstr ""
 
@@ -3786,7 +3892,7 @@ msgstr ""
 
 #: includes/class-shipments.php:31 includes/class-shipments.php:127
 #: includes/class-shipments.php:155 includes/providers/class-packeta.php:612
-#: includes/providers/class-custom.php:251
+#: includes/providers/class-custom.php:270
 msgid "You do not have sufficient permissions to access this action."
 msgstr ""
 

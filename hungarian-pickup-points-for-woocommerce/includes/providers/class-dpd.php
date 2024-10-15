@@ -204,6 +204,7 @@ class VP_Woo_Pont_DPD {
 			'username' => $this->username,
 			'password' => $this->password,
 			'name1' => $data['customer']['name'],
+			'name2' => $data['customer']['company'],
 			'street' => implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),
 			'city' => $order->get_shipping_city(),
 			'country' => $order->get_shipping_country(),
@@ -683,7 +684,7 @@ class VP_Woo_Pont_DPD {
 		return $tracking_info;
 	}
 
-	public function close_shipments($packages = array()) {
+	public function close_shipments($packages = array(), $orders = array()) {
 
 		//Submit request
 		$request = wp_remote_post( $this->api_url.'parceldatasend.php', array(
@@ -701,6 +702,7 @@ class VP_Woo_Pont_DPD {
 			return $request;
 		}
 
+		/*
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 		$response = json_decode( $response, true );
@@ -710,6 +712,7 @@ class VP_Woo_Pont_DPD {
 			VP_Woo_Pont()->log_error_messages($response, 'dpd-create-label');
 			return new WP_Error( 'dpd_error', $response['errlog'] );
 		}
+		*/
 
 		//Init mPDF
 		require_once plugin_dir_path(__FILE__) . '../../vendor/autoload.php';
@@ -719,7 +722,7 @@ class VP_Woo_Pont_DPD {
 
 		//Setup tempalte data
 		$label_data = array(
-			'orders' => $packages,
+			'orders' => $orders,
 			'carrier' => 'dpd',
 			'icon' => VP_Woo_Pont()::$plugin_url.'/assets/images/icon-dpd.svg'
 		);
@@ -732,14 +735,16 @@ class VP_Woo_Pont_DPD {
 		$pdf = $mpdf->Output('', 'S');
 
 		//Try to save PDF file
-		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('dpd-manifest', $data['order_id']);
+		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('dpd-manifest', 0);
 		VP_Woo_Pont_Labels::save_pdf_file($pdf, $pdf_file);
 
 		//Return response in unified format
 		return array(
 			'shipments' => array(),
-			'orders' => $packages,
-			'pdf' => $pdf_file['name']
+			'orders' => $orders,
+			'pdf' => array(
+				'dpd' => $pdf_file['name']
+			)
 		);
 	}
 

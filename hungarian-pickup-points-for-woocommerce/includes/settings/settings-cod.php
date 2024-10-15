@@ -26,6 +26,17 @@ if(VP_Woo_Pont_Pro::is_pro_enabled()) {
 			'id' => 'cod_fee_name'
 		),
 		array(
+			'title'    => __( 'Fee tax class', 'vp-woo-pont' ),
+			'desc'     => __( 'Optionally control which tax class the COD fee gets, or leave it so tax is based on the cart items themselves.', 'vp-woo-pont' ),
+			'id'       => 'cod_tax_class',
+			'css'      => 'min-width:150px;',
+			'default'  => '',
+			'type'     => 'select',
+			'class'    => 'wc-enhanced-select',
+			'options'  => array( 'inherit' => __( 'Tax class based on cart items', 'vp-woo-pont' ) ) + wc_get_product_tax_class_options(),
+			'desc_tip' => true,
+		),
+		array(
 			'title' => __( 'Fees', 'vp-woo-pont' ),
 			'type' => 'vp_cod_fees',
 			'id' => 'cod_fees'

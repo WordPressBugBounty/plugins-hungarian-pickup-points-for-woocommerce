@@ -76,6 +76,13 @@ $settings = array(
 		'title' => __('Weight correction', 'vp-woo-pont'),
 		'id' => 'weight_corrections',
 	),
+	/*
+	array(
+		'type' => 'vp_packagings',
+		'title' => __('Packaging', 'vp-woo-pont'),
+		'id' => 'packagings',
+	),
+	*/
 	array(
 		'title' => __( 'Show settings on load', 'vp-woo-pont' ),
 		'type' => 'checkbox',

@@ -125,11 +125,19 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 				//Allow plugins to customize the fee
 				$calculated_fee = apply_filters('vp_woo_pont_cod_fee', $calculated_fee, $cart_details);
 
+				//Set tax class
+				$shipping_tax_rate = WC()->cart->get_cart_item_tax_classes_for_shipping();
+				$cod_tax_rate = VP_Woo_Pont_Helpers::get_option('cod_tax_class', '');
+				if($cod_tax_rate == 'inherit' && $shipping_tax_rate && is_array($shipping_tax_rate) && count($shipping_tax_rate) > 0) {
+					$cod_tax_rate = $shipping_tax_rate[0];
+				}
+				
 				//And create the fee
 				$cart->add_fee(
 					VP_Woo_Pont_Helpers::get_option('cod_fee_name', __('COD Fee', 'vp-woo-pont')),
 					$calculated_fee,
-					(VP_Woo_Pont_Helpers::get_option('tax_status', 'taxable') == 'taxable')
+					(VP_Woo_Pont_Helpers::get_option('tax_status', 'taxable') == 'taxable'),
+					$cod_tax_rate
 				);
 			}
 		}

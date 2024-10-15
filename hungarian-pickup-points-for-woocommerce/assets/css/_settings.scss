@@ -702,6 +702,78 @@
 		}
 	}
 
+	&-packaging {
+		max-width: 960px;
+		border-radius: 4px;
+		border: 1px solid #8D8F94;
+		background: #fff;
+		margin: 0 0 10px 0;
+
+		&-description {
+			color: #646970;
+			font-size: 14px;
+			list-style-type: disc;
+			padding-left: 20px;
+		}
+
+		&-add {
+			padding: 0 0 10px 0;
+			display: flex;
+			align-items: center;
+		}
+
+		&-type {
+			display: flex;
+			gap: 10px;
+			padding: 10px;
+			align-items: center;
+
+			.packaging-field:before {
+				content: attr(data-placeholder);
+				margin: 0 0 5px 0;
+				display: none;
+			}
+
+			.packaging-field input {
+				width: 100% !important;
+			}
+
+			.packaging-field-name input {
+				width: 200px !important;
+			}
+
+			.packaging-field-default input {
+				width: auto !important;
+			}
+
+			.packaging-field-default label {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+
+				input {
+					margin: 0;
+					width: 1rem !important;
+				}
+			}
+
+			a.delete-packaging {
+				color: #a00;
+			}
+		}
+
+		&:first-child {
+			.packaging-field::before {
+				display: block;
+			}
+
+			.packaging-field-default,
+			.packaging-field-delete {
+				padding-top: 16px;
+			}
+		}
+	}
+
 	&-note {
 		margin: 0 0 10px 0;
 		border-radius: 4px;

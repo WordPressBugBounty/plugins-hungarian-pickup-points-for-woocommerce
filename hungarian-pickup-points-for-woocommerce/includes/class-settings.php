@@ -38,7 +38,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 'pro_notice',
                 'custom_label_template',
                 'kvikk_api',
-                'weight_corrections'
+                'weight_corrections',
+                'packagings'
             );
 
             //Loop over the actions and add them
@@ -389,6 +390,30 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                     }
                 }
                 update_option( 'vp_woo_pont_weight_corrections', $weight_corrections );
+
+                $packagings = array();
+                if ( isset( $_POST['vp_woo_pont_packaging'] ) ) {
+                    foreach ($_POST['vp_woo_pont_packaging'] as $packaging_id => $packaging) {
+
+                        $name = wc_clean($packaging['name']);
+                        $sku = wc_clean($packaging['sku']);
+                        $length = intval($packaging['length']);
+                        $width = intval($packaging['width']);
+                        $height = intval($packaging['height']);
+                        $default = isset($packaging['default']) ? true : false;
+                        $packagings[$packaging_id] = array(
+                            'name' => sanitize_text_field($name),
+                            'sku' => sanitize_text_field($sku),
+                            'length' => $length,
+                            'width' => $width,
+                            'height' => $height,
+                            'default' => $default,
+                            'volume' => $length * $width * $height
+                        );
+
+                    }
+                }
+                update_option( 'vp_woo_pont_packagings', $packagings );
 
             }
 

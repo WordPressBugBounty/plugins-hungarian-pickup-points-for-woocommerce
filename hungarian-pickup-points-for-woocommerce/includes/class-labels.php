@@ -128,6 +128,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if ( in_array( $typenow, wc_get_order_types( 'order-meta-boxes' ), true ) || 'woocommerce_page_wc-orders' == $current_screen->id ) {
 				include( dirname( __FILE__ ) . '/views/html-modal-layout-selector.php' );
 				include( dirname( __FILE__ ) . '/views/html-modal-generate.php' );
+				include( dirname( __FILE__ ) . '/views/html-modal-packaging.php' );
 			}
 		}
 
@@ -193,6 +194,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if($this->is_label_generated($order)) {
 				$response['error'] = true;
 				$response['messages'][] = __('A shipping label was already generated for this order.', 'vp-woo-pont');
+
+				//So developers can hook in here
+				do_action('vp_woo_pont_label_generate_error', $order, 'duplicated_order', $api_provider);
+
 				return $response;
 			}
 
@@ -206,6 +211,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 				//Log error message
 				$order->add_order_note(sprintf(esc_html__('Unable to create shipping label. Error code: %s', 'vp-woo-pont'), urldecode($label->get_error_code())));
+
+				//So developers can hook in here
+				do_action('vp_woo_pont_label_generate_error', $order, $label, $api_provider);
 
 				return $response;
 			}
@@ -423,7 +431,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 					'weight_gramm' => VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order),
 					'cod' => ($order->get_payment_method() == VP_Woo_Pont_Helpers::get_option('cod_method', 'cod')),
 					'currency' => $order->get_currency(),
-					'qty' => $total_qty
+					'qty' => $total_qty,
+					'size' => $this->get_package_size($order),
 				),
 				'point_id' => $order->get_meta('_vp_woo_pont_point_id'),
 				'provider' => $order->get_meta('_vp_woo_pont_provider'),
@@ -443,7 +452,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 			//If custom options set(manual label generate)
 			$data['options'] = array();
-			if(isset($_POST['package_count'])) {
+			if(isset($_POST['package_count']) || $order->get_meta('_vp_woo_pont_package_count')) {
 				$package_count = sanitize_text_field($_POST['package_count']);
 				$data['options']['package_count'] = intval($package_count);
 			}
@@ -589,7 +598,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 		//Ajax function to update package
 		public function ajax_update_package_details() {
-			check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
+			check_ajax_referer( 'vp-woo-pont-generate', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
 				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
 			}
@@ -601,7 +610,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$order->update_meta_data('_vp_woo_pont_package_weight', $weight);
 			$order->save();
 
-			wp_send_json_success(array('weight' => $weight));
+			//Update packaging sizes too
+			$packaging = array();
+			if(isset($_POST['packaging_name'])) {
+				$packaging = array(
+					'name' => sanitize_text_field($_POST['packaging_name']),
+					'sku' => sanitize_text_field($_POST['packaging_sku']),
+					'length' => intval($_POST['packaging_length']),
+					'width' => intval($_POST['packaging_width']),
+					'height' => intval($_POST['packaging_height']),
+				);
+				$order->update_meta_data('_vp_woo_pont_packaging', $packaging);
+				$order->save();
+			}
+
+			wp_send_json_success(array('weight' => $weight, 'packaging' => $packaging));
 		}
 
 		//Save PDF file
@@ -749,6 +772,25 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 								<?php endif; ?>
 							</div>
 						<?php endif; ?>
+						
+						<?php $weight = VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order); ?>
+						<?php $packaging = $this->get_best_box_for_order($order); ?>
+						<?php if($order->get_meta('_vp_woo_pont_packaging')): ?>
+							<?php $packaging = $order->get_meta('_vp_woo_pont_packaging'); ?>
+						<?php endif; ?>
+						<?php if($packaging): ?>
+							<?php $json_packaging_details = json_encode($packaging); ?>
+							<a href="#" class="vp-woo-pont-order-column-packaging" data-weight="<?php echo esc_attr($weight); ?>" data-packaging="<?php echo esc_attr(htmlspecialchars($json_packaging_details, ENT_QUOTES, 'UTF-8')); ?>">
+								<span class="dashicons dashicons-archive"></span>
+								<span class="vp-woo-pont-order-column-packaging-label">
+									<?php if($packaging): ?>
+										<?php echo esc_html($packaging['name']); ?>, 
+									<?php endif; ?>
+									<?php echo esc_html($weight); ?>g
+								</span>
+							</a>
+						<?php endif; ?>
+
 					</div>
 				<?php
 				}
@@ -939,6 +981,79 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				fclose($output);
 				exit;
 			}
+		}
+
+		//Get the best box for the order
+		public function get_best_box_for_order($order) {
+
+			//Get available box sizes from settings
+			$boxes = get_option('vp_woo_pont_packagings');
+		
+			//Get dimensions of all products in the order
+			$items = $order->get_items();
+			$total_volume = 0;
+			$max_length = 0;
+			$max_width = 0;
+			$max_height = 0;
+		
+			//Calculate total volume and find the largest product
+			foreach ($items as $item) {
+				$product = $item->get_product();
+				if(!$product) continue;
+
+				$length = $product->get_length();
+				$width = $product->get_width();
+				$height = $product->get_height();
+				$quantity = $item->get_quantity();
+				if(!$length || !$width || !$height) continue;
+
+				$total_volume += $length * $width * $height * $quantity;
+				$max_length = max($max_length, $length);
+				$max_width = max($max_width, $width);
+				$max_height = max($max_height, $height);
+			}
+		
+			//Find the smallest box that can fit the order if we have volume
+			$best_box = null;
+			if($total_volume) {
+				foreach ($boxes as $box) {
+					if ($box['volume'] >= $total_volume &&
+						$box['length'] >= $max_length &&
+						$box['width'] >= $max_width &&
+						$box['height'] >= $max_height) {
+						if (is_null($best_box) || $box['volume'] < $best_box['volume']) {
+							$best_box = $box;
+						}
+					}
+				}
+			} else {
+				//Check if we have a default box
+				foreach ($boxes as $box) {
+					if($box['default']) {
+						$best_box = $box;
+					}
+				}
+			}
+		
+			return $best_box;
+		}
+
+		public function get_package_size($order) {
+			$packaging = $this->get_best_box_for_order($order);
+			if($order->get_meta('_vp_woo_pont_packaging')) {
+				$packaging = $order->get_meta('_vp_woo_pont_packaging');
+			}
+			
+			if($packaging) {
+				return array(
+					'length' => $packaging['length'],
+					'width' => $packaging['width'],
+					'height' => $packaging['height']
+				);
+			} else {
+				return array();
+			}
+
 		}
 
 	}
