@@ -203,8 +203,8 @@ class VP_Woo_Pont_DPD {
 		$item = array(
 			'username' => $this->username,
 			'password' => $this->password,
-			'name1' => $data['customer']['name'],
-			'name2' => $data['customer']['company'],
+			'name1' => substr($data['customer']['name'],0,40),
+			'name2' => substr($data['customer']['company'],0,40),
 			'street' => implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),
 			'city' => $order->get_shipping_city(),
 			'country' => $order->get_shipping_country(),

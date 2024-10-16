@@ -988,7 +988,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 			//Get available box sizes from settings
 			$boxes = get_option('vp_woo_pont_packagings');
-		
+			if(!$boxes) return null;
 			//Get dimensions of all products in the order
 			$items = $order->get_items();
 			$total_volume = 0;

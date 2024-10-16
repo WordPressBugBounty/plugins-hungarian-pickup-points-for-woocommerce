@@ -105,6 +105,12 @@ $settings = array(
 		'desc' => self::get_bulk_zip_error(__('Enable', 'vp-woo-pont')),
 		'id' => 'bulk_download_zip',
 	),
+	array(
+		'title' => __( 'Custom order statuses', 'vp-woo-pont' ),
+		'type' => 'text',
+		'id' => 'custom_order_statues',
+		'desc' => __( "If you are using a custom order status extension and the automation you setup for that status won't trigger, try to add the slug of your custom status. You can add multiple, separated with a comma.", 'vp-woo-pont' ),
+	),
     array(
 		'type' => 'sectionend',
 	),

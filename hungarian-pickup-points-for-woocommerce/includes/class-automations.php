@@ -38,7 +38,20 @@ if ( ! class_exists( 'VP_Woo_Pont_Automations', false ) ) :
 				}
 				return $filtered_statuses;
 			} else {
-				return apply_filters('vp_woo_pont_get_order_statuses', wc_get_order_statuses());
+				$statues = wc_get_order_statuses();
+				if(VP_Woo_Pont_Helpers::get_option('custom_order_statues', '') != '') {
+					$custom_statuses = VP_Woo_Pont_Helpers::get_option('custom_order_statues', '');
+					$custom_statuses = explode(',', $custom_statuses); //Split at commas
+					$custom_statuses = array_map('trim', $custom_statuses); //Remove whitespace
+
+					foreach ($custom_statuses as $custom_status) {
+						if(!isset($statues[$custom_status])) {
+							$statues[$custom_status] = $custom_status;
+						}
+					}
+				}
+
+				return apply_filters('vp_woo_pont_get_order_statuses', $statues);
 			}
 		}
 
@@ -122,6 +135,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Automations', false ) ) :
 
 			//Don't defer if we are just changing one or two order status using bulk actions
 			if(is_admin() && isset($_GET['_wp_http_referer']) && isset($_GET['post']) && count($_GET['post']) < 3) {
+				$deferred = false;
+			}
+
+			//Don't defer if we are just changing one or two order status using bulk actions
+			if(is_admin() && isset($_GET['id']) && $_GET['id'] == $order_id) {
 				$deferred = false;
 			}
 

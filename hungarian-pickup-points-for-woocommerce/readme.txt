@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.6.2
-Stable tag: 3.4.3
+Stable tag: 3.4.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.3.1
+* Automatizálás javítás
+* DPD Weblabel név 40 karakter limit
+* PHP warning javítás címkegenerálás közben
 
 3.4.3
 * Utánvét díj adókulcs osztály beállítható
