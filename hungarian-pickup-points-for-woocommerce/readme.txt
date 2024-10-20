@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.6.2
-Stable tag: 3.4.3.1
+Stable tag: 3.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.4
+* Kvikk QR kód beolvasás csomagoláshoz
+* vp_woo_pont_trigger_tracking_email_* filter, amivel kóddal kikapcsolható a csomagkövetéses e-mail
 
 3.4.3.1
 * Automatizálás javítás

@@ -61,6 +61,9 @@ class VP_Woo_Pont_Kvikk {
 		//Process IPN request
 		add_action( 'init', array( __CLASS__, 'ipn_process' ), 11 );
 
+		//Handle QR scan
+		add_action('rest_api_init', array(__CLASS__, 'register_api_endpoints'));
+
 	}
 
 	public function load_admin_scripts() {
@@ -125,6 +128,14 @@ class VP_Woo_Pont_Kvikk {
 					'A5_LANDSCAPE' => __( 'Two A5 on landscape A4', 'vp-woo-pont' ),
 				),
 				'id' => 'kvikk_sticker_size'
+			),
+			array(
+				'type' => 'select',
+				'class' => 'wc-enhanced-select',
+				'title' => __( 'Packaged order status', 'vp-woo-pont' ),
+				'options' => VP_Woo_Pont_Settings::get_order_statuses(__('None', 'Order status after scanning', 'vp-woo-pont')),
+				'desc_tip' => __( 'If you scan the label in the Kvikk App, you can mark the order to be in this status.', 'vp-woo-pont' ),
+				'id' => 'kvikk_packaged_order_status',
 			),
 			array(
 				'type' => 'sectionend'
@@ -810,6 +821,158 @@ class VP_Woo_Pont_Kvikk {
 
 			exit();
 		}
+	}
+
+	public static function register_api_endpoints() {
+		register_rest_route('kvikk', '/order-details', array(
+			'methods' => 'POST',
+			'callback' => array(__CLASS__, 'get_order_details'),
+			'permission_callback' => '__return_true',
+		));
+
+		register_rest_route('kvikk', '/update-order', array(
+			'methods' => 'POST',
+			'callback' => array(__CLASS__, 'update_order_status'),
+			'permission_callback' => '__return_true',
+		));
+	}
+
+	public static function validate_api_endpoint(WP_REST_Request $request) {
+
+		//Get api key from header
+		$api_key = $request->get_header('authorization');
+
+		//Check if valid
+		if ($api_key !== VP_Woo_Pont_Helpers::get_option('kvikk_api_key')) {
+			return new WP_Error('invalid_api_key', 'Invalid API Key', array('status' => 401));
+		}
+
+		//Get JSON body params
+		$params = $request->get_json_params();
+		$order_id = isset($params['orderID']) ? $params['orderID'] : null;
+		$tracking_number = isset($params['trackingNumber']) ? $params['trackingNumber'] : null;
+		$billing_email = isset($params['email']) ? $params['email'] : null;
+
+		//Validate parameters
+		if (empty($order_id) || empty($tracking_number) || empty($billing_email)) {
+			return new WP_Error('missing_params', 'Missing parameters', array('status' => 400));
+		}
+
+		//Get order
+		$order = wc_get_order($order_id);
+		if (!$order) {
+			return new WP_Error('order_not_found', 'Order not found', array('status' => 404));
+		}
+
+		//Verify order details
+		if ($order->get_meta('_vp_woo_pont_parcel_number') !== $tracking_number || $order->get_billing_email() != $billing_email) {
+			return new WP_Error('invalid_order', 'Invalid order details', array('status' => 404));
+		}
+
+		return $order;
+	}
+
+	public static function get_order_details(WP_REST_Request $request) {		
+
+		//Validate request
+		$order = self::validate_api_endpoint($request);
+
+		//If its an error
+		if(is_wp_error($order)) {
+			return $order;
+		}
+		
+		//Generate response
+		$data = array(
+			'id' => $order->get_id(),
+			'order_number' => $order->get_order_number(),
+			'note' => $order->get_customer_note(),
+			'items' => array(),
+			'first_order' => false,
+			'target_status' => (VP_Woo_Pont_Helpers::get_option('kvikk_packaged_order_status', 'no') != 'no'),
+			'meta' => array(),
+		);
+
+		//Check if this is the user's first order
+		$customer_orders = wc_get_orders(array(
+			'billing_email' => $order->get_billing_email(),
+			'exclude' => array($order->get_id()),
+			'limit' => 1, 
+		));
+
+		//If theres no more orders, it is the first order for the customer
+		if (empty($customer_orders)) {
+			$data['is_first_order'] = true;
+		}
+
+		//Setup line items
+		foreach($order->get_items() as $order_item) {
+			$item = array(
+				'name' => $order_item->get_name(),
+				'qty' => $order_item->get_quantity(),
+				'thumbnail' => '',
+				'meta' => array(),
+			);
+
+			//Get product
+			$product_object = is_callable( array( $order_item, 'get_product' ) ) ? $order_item->get_product() : null;
+			if ( $product_object ) {
+
+				//Get product image
+				if($product_object->get_image_id()) {
+					$thumbnail = wp_get_attachment_image_src( $product_object->get_image_id(), 'woocommerce_thumbnail' )[0];
+					$item['thumbnail'] = $thumbnail;
+				}
+
+				//Add sku to meta
+				$item['meta'][] = array(
+					'label' => 'SKU',
+					'value' => $product_object->get_sku()
+				);				
+			}
+
+			//Additional meta data
+			$meta_data = $order_item->get_formatted_meta_data();
+			foreach ( $meta_data as $meta_id => $meta ) {
+				$item['meta'][] = array(
+					'label' => wp_kses_post( $meta->display_key ),
+					'value' => wp_kses_post( force_balance_tags( $meta->display_value ) )
+				);
+			}
+
+			//Append product
+			$data['items'][] = $item;
+
+		}
+
+		//Allow developers to modify the response
+		$data = apply_filters('vp_woo_pont_kvikk_order_details', $data, $order);
+	
+		// Return order details
+		return new WP_REST_Response($data, 200);
+	}
+
+	public static function update_order_status(WP_REST_Request $request) {		
+		
+		//Validate request
+		$order = self::validate_api_endpoint($request);
+
+		//If its an error
+		if(is_wp_error($order)) {
+			return $order;
+		}
+
+		//Change order status
+		$target_status = VP_Woo_Pont_Helpers::get_option('kvikk_packaged_order_status', 'no');
+		if($target_status != 'no') {
+			$order->update_status($target_status, __( 'Order status updated, because it was marked as packaged in the Kvikk App.', 'vp_woo_pont' ));
+			$order->save();
+		} else {
+			$order->add_order_note(esc_html__("Shipment was marked as packaged in the Kvikk App.", 'vp-woo-pont'));
+		}
+	
+		// Return order details
+		return new WP_REST_Response(array(), 200);
 	}
 
 }

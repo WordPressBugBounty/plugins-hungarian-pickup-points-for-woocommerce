@@ -26,6 +26,9 @@ class Vp_Woo_Pont_Szamlazz_Compatibility {
 		add_filter( 'vp_woo_pont_tracking_automation_target_status', array( __CLASS__, 'change_target_status'));
 		add_action( 'vp_woo_pont_tracking_automation_after_status_change', array( __CLASS__, 'mark_as_paid'), 10, 4);
 
+		//Add invoice to Kvikk order details
+		add_filter( 'vp_woo_pont_kvikk_order_details', array( __CLASS__, 'add_invoice_to_kvikk_order_details'), 10, 2);
+
 	}
 
 	public static function add_condition($conditions) {
@@ -109,6 +112,17 @@ class Vp_Woo_Pont_Szamlazz_Compatibility {
 		if($automation['order_status'] == 'wc-szamlazz-mark-as-paid') {
 			WC_Szamlazz()->generate_invoice_complete($order->get_id());
 		}
+	}
+
+	public static function add_invoice_to_kvikk_order_details($data, $order) {
+		$pdf_url = WC_Szamlazz()->generate_download_link($order);
+		if($pdf_url) {
+			$data['invoice'] = array(
+				'number' =>$order->get_meta( '_wc_szamlazz_invoice' ),
+				'pdf' => $pdf_url
+			);
+		}
+		return $data;
 	}
 
 }

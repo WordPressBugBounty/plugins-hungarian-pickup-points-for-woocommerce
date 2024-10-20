@@ -452,8 +452,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 			//If custom options set(manual label generate)
 			$data['options'] = array();
-			if(isset($_POST['package_count']) || $order->get_meta('_vp_woo_pont_package_count')) {
+			if(isset($_POST['package_count'])) {
 				$package_count = sanitize_text_field($_POST['package_count']);
+				$data['options']['package_count'] = intval($package_count);
+			}
+			
+			if($order->get_meta('_vp_woo_pont_package_count')) {
+				$package_count = $order->get_meta('_vp_woo_pont_package_count');
 				$data['options']['package_count'] = intval($package_count);
 			}
 

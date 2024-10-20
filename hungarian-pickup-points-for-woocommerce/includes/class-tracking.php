@@ -279,7 +279,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 
 		public function trigger_tracking_email($order, $class, $name, $emails_sent) {
 			$email = WC()->mailer()->emails['VP_Woo_Pont_Email_'.$class];
-			if($email->is_enabled()) {
+			if($email->is_enabled() && apply_filters('vp_woo_pont_trigger_tracking_email_'.$name, true, $order)) {
 				$email->trigger( $order->get_id() );
 				$emails_sent[] = $name;
 				$order->update_meta_data('_vp_woo_pont_tracking_emails_sent', $emails_sent);

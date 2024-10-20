@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Hungarian Pickup Points for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-10 14:45+0000\n"
-"PO-Revision-Date: 2024-10-15 19:50+0000\n"
+"PO-Revision-Date: 2024-10-20 11:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: Magyar\n"
 "Language: hu_HU\n"
@@ -160,7 +160,7 @@ msgstr "A5 méretű, álló"
 
 #: includes/providers/class-posta.php:170
 #: includes/providers/class-foxpost.php:118
-#: includes/providers/class-kvikk.php:124
+#: includes/providers/class-kvikk.php:127
 msgid "A6"
 msgstr "A6"
 
@@ -168,7 +168,7 @@ msgstr "A6"
 #: includes/providers/class-packeta.php:109
 #: includes/providers/class-gls.php:253
 #: includes/providers/class-foxpost.php:117
-#: includes/providers/class-kvikk.php:123
+#: includes/providers/class-kvikk.php:126
 #: includes/providers/class-expressone.php:81
 #: includes/providers/class-custom.php:74
 msgid "A6 on A4(recommended)"
@@ -265,14 +265,14 @@ msgstr "A vonalkód alatt megjelenített extra szöveg"
 msgid "Address"
 msgstr "Cím"
 
-#: includes/compatibility/modules/class-vp-woo-pont-szamlazz.php:97
+#: includes/compatibility/modules/class-vp-woo-pont-szamlazz.php:100
 msgctxt "admin"
 msgid "Mark as paid"
 msgstr "Fizetettnek jelölés(Számlázz.hu)"
 
 #: includes/class-conditions.php:92
 #: includes/compatibility/modules/class-vp-woo-pont-woo-billingo.php:28
-#: includes/compatibility/modules/class-vp-woo-pont-szamlazz.php:33
+#: includes/compatibility/modules/class-vp-woo-pont-szamlazz.php:36
 msgctxt "admin"
 msgid "Pickup point"
 msgstr "Csomagpont"
@@ -319,7 +319,7 @@ msgstr "AlzaBox"
 
 #: includes/providers/class-posta.php:97
 #: includes/providers/class-foxpost.php:91
-#: includes/providers/class-kvikk.php:104
+#: includes/providers/class-kvikk.php:107
 msgid "API key"
 msgstr "API kulcs"
 
@@ -545,7 +545,7 @@ msgstr "Cloning this object is forbidden."
 msgid "Close modal panel"
 msgstr "Bezárás"
 
-#: includes/class-labels.php:734
+#: includes/class-labels.php:739
 msgid "Closed"
 msgstr "Lezárva"
 
@@ -721,6 +721,10 @@ msgstr "Egyedi címke"
 #: includes/class-settings.php:241 includes/class-helpers.php:82
 msgid "Custom Labels"
 msgstr "Egyedi címkék"
+
+#: includes/settings/settings-labels.php:109
+msgid "Custom order statuses"
+msgstr "Egyedi rendelés állapotok"
 
 #: includes/views/html-modal-packaging.php:38
 msgid "Custom packaging"
@@ -940,8 +944,8 @@ msgstr "Dokumentáció"
 msgid "Don't use custom page"
 msgstr "Nem használok egyedi oldalt"
 
-#: includes/class-shipments-table.php:125 includes/class-labels.php:741
-#: includes/class-labels.php:762 includes/views/html-admin-shipments.php:97
+#: includes/class-shipments-table.php:125 includes/class-labels.php:746
+#: includes/class-labels.php:767 includes/views/html-admin-shipments.php:97
 #: includes/views/html-metabox.php:141
 #: includes/views/html-modal-generate.php:62
 msgid "Download"
@@ -1095,7 +1099,7 @@ msgid "Enter recipients (comma separated) for this email. Defaults to %s."
 msgstr ""
 "Adjuk meg a címzetteket (vesszővel elválasztva). Az alapértelmezés: %s."
 
-#: includes/providers/class-kvikk.php:106
+#: includes/providers/class-kvikk.php:109
 msgid "Enter your account's API key."
 msgstr "Add meg a fiókod API kulcsát."
 
@@ -1267,7 +1271,7 @@ msgstr "Átvételi hely"
 msgid "Full container"
 msgstr "Láda"
 
-#: includes/class-labels.php:768
+#: includes/class-labels.php:773
 msgid "Generate & print label"
 msgstr "Címke nyomtatása"
 
@@ -1549,9 +1553,27 @@ msgstr ""
 "Ha biztosítasz házhozszállítást a Packeta-n keresztül, akkor válaszd ki az "
 "országokat és a hozzájuk tartozó szolgáltatót. "
 
+#: includes/settings/settings-labels.php:112
+msgid ""
+"If you are using a custom order status extension and the automation you "
+"setup for that status won't trigger, try to add the slug of your custom "
+"status. You can add multiple, separated with a comma."
+msgstr ""
+"Ha használsz valamilyen extra rendelés státuszt és a beállított "
+"automatizálás nem fut le, itt megadhatod manuálisan a státusz azonosítókat. "
+"Vesszővel elválasztva többet is megadhatsz."
+
 #: includes/providers/class-foxpost.php:126
 msgid "If you generate a delivery note, this name will be on it as sender."
 msgstr "Ez lesz a feladó neve a szállítólevélen"
+
+#: includes/providers/class-kvikk.php:137
+msgid ""
+"If you scan the label in the Kvikk App, you can mark the order to be in this "
+"status."
+msgstr ""
+"Ha beolvastad a címkét a Kvikk App-ban, akkor meg tudod jelölni a rendelést "
+"ebbe az állapotba."
 
 #: includes/settings/settings-points.php:13
 msgid ""
@@ -1705,25 +1727,25 @@ msgstr "JWT Token"
 msgid "Kiállított fuvarokmány"
 msgstr "Kiállított fuvarokmány"
 
-#: includes/class-settings.php:230 includes/providers/class-kvikk.php:84
-#: includes/providers/class-kvikk.php:193
+#: includes/class-settings.php:230 includes/providers/class-kvikk.php:87
+#: includes/providers/class-kvikk.php:204
 #: includes/views/html-admin-shipments.php:8
 msgid "Kvikk"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:199
+#: includes/providers/class-kvikk.php:210
 msgid "Kvikk Express One"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:200
+#: includes/providers/class-kvikk.php:211
 msgid "Kvikk FámaFutár"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:198
+#: includes/providers/class-kvikk.php:209
 msgid "Kvikk MPL"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:100
+#: includes/providers/class-kvikk.php:103
 msgid "Kvikk settings"
 msgstr "Kvikk beállítások"
 
@@ -2158,6 +2180,10 @@ msgstr "Csomag térfogat"
 msgid "Package weight"
 msgstr "Csomag súly"
 
+#: includes/providers/class-kvikk.php:135
+msgid "Packaged order status"
+msgstr "Csomagolt rendelés állapot"
+
 #: includes/class-shipments-table.php:173 templates/shipments-table.php:85
 msgid "Packages"
 msgstr "Csomagok"
@@ -2453,7 +2479,7 @@ msgstr "Ár betűméret"
 msgid "Primary color"
 msgstr "Elsődleges szín"
 
-#: includes/class-labels.php:746 includes/class-labels.php:766
+#: includes/class-labels.php:751 includes/class-labels.php:771
 #: includes/views/html-modal-generate.php:63
 msgid "Print"
 msgstr "Nyomtatás"
@@ -2715,7 +2741,7 @@ msgstr ""
 "Állítsd be, hogy melyik szolgáltatók csomagpontjait választhatják ki a "
 "vásárlók."
 
-#: includes/providers/class-kvikk.php:114
+#: includes/providers/class-kvikk.php:117
 msgid "Select your sender ID."
 msgstr "Válaszd ki a feladási címet."
 
@@ -2792,7 +2818,7 @@ msgstr "Feladó adatai"
 msgid "Sender email address"
 msgstr "Feladó e-mail címe"
 
-#: includes/providers/class-kvikk.php:110
+#: includes/providers/class-kvikk.php:113
 msgid "Sender ID"
 msgstr "Feladó azonosító"
 
@@ -2886,7 +2912,7 @@ msgstr "Beállítás varázsló"
 msgid "Setup your own pickup points, like store pickup."
 msgstr "Állítsd be a saját csomagpontjaidat, például bolti átvételhez."
 
-#: includes/class-labels.php:696 templates/shipments-table.php:96
+#: includes/class-labels.php:701 templates/shipments-table.php:96
 msgid "Shipment"
 msgstr "Csomag"
 
@@ -2901,7 +2927,7 @@ msgstr "Futárszolgálat"
 msgid "Shipment closed. Generated delivery note ID: %s"
 msgstr "Csomag feladás lezárva. Szállítólevél azonosító: %s "
 
-#: includes/providers/class-kvikk.php:442
+#: includes/providers/class-kvikk.php:453
 msgid "Shipment not found"
 msgstr "Csomag nem található"
 
@@ -2912,6 +2938,10 @@ msgstr "Szállítólevél"
 #: includes/class-tracking.php:453 includes/settings/settings-tracking.php:19
 msgid "Shipment tracking"
 msgstr "Csomagkövetés"
+
+#: includes/providers/class-kvikk.php:971
+msgid "Shipment was marked as packaged in the Kvikk App."
+msgstr "Csomagoltnak jelölve a Kvikk App-ban"
 
 #: includes/class-shipments.php:179 includes/class-shipments.php:181
 #: includes/class-shipments.php:183
@@ -2985,7 +3015,7 @@ msgstr "%s"
 msgid "Shipping cost(net)"
 msgstr "Szállítási költség(nettó)"
 
-#: includes/class-labels.php:553
+#: includes/class-labels.php:558
 msgid "Shipping informations"
 msgstr "Szállítás és csomag"
 
@@ -3017,7 +3047,7 @@ msgstr ""
 "A címke törölve lett a rendelésből, de a szolgáltató felületén is törölnöd "
 "kell. Azonosító: %s"
 
-#: includes/providers/class-kvikk.php:806
+#: includes/providers/class-kvikk.php:817
 #, php-format
 msgid ""
 "Shipping label removed from the order, because it was removed from Kvikk. "
@@ -3205,7 +3235,7 @@ msgstr "Címke fájltípus"
 #: includes/providers/class-posta.php:161 includes/providers/class-gls.php:249
 #: includes/providers/class-sameday.php:109
 #: includes/providers/class-foxpost.php:112
-#: includes/providers/class-kvikk.php:120
+#: includes/providers/class-kvikk.php:123
 #: includes/providers/class-expressone.php:78
 #: includes/providers/class-transsped.php:201
 #: includes/providers/class-custom.php:70
@@ -3638,7 +3668,7 @@ msgstr ""
 "a szállítási módnak a neve. Használhatod a {provider} és a {point} "
 "cserekódot a szolgáltató és az átvételi pont nevének a megjelenítéséhez. "
 
-#: includes/class-labels.php:562
+#: includes/class-labels.php:567
 msgid ""
 "This order doesn't need shipping. Add a shipping line item to generate a "
 "label."
@@ -3675,7 +3705,7 @@ msgstr "Cím betűméret"
 msgid "To add 1kg to the package weight, use +1"
 msgstr "1kg hozzáadása a csomag súlyához: +1"
 
-#: includes/class-labels.php:733
+#: includes/class-labels.php:738
 msgid "To be closed"
 msgstr "Lezárandó"
 
@@ -3754,7 +3784,7 @@ msgstr "Csomagkövetés"
 msgid "Tracking Number"
 msgstr "Követési szám"
 
-#: index.php:1358 includes/class-labels.php:722 includes/class-labels.php:728
+#: index.php:1358 includes/class-labels.php:727 includes/class-labels.php:733
 #: includes/class-tracking.php:524 includes/views/html-modal-tracking.php:29
 #: includes/views/html-metabox.php:159
 msgid "Tracking number"
@@ -3806,7 +3836,7 @@ msgstr "Kedd"
 msgid "Two A5 landscape on an A4 page"
 msgstr "Két A5-ös fekvő egy A4-es lapon"
 
-#: includes/providers/class-kvikk.php:125
+#: includes/providers/class-kvikk.php:128
 msgid "Two A5 on landscape A4"
 msgstr "Két A5 egy fekvő A4-es lapon"
 
@@ -3854,8 +3884,8 @@ msgstr "Egyedi azonosító"
 #: includes/providers/class-foxpost.php:358
 #: includes/providers/class-foxpost.php:370
 #: includes/providers/class-foxpost.php:427
-#: includes/providers/class-kvikk.php:327
-#: includes/providers/class-kvikk.php:603
+#: includes/providers/class-kvikk.php:338
+#: includes/providers/class-kvikk.php:614
 #: includes/providers/class-expressone.php:198
 #: includes/providers/class-transsped.php:438
 msgid "Unknown error"
