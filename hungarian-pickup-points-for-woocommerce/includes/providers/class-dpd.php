@@ -277,6 +277,11 @@ class VP_Woo_Pont_DPD {
 		VP_Woo_Pont()->log_debug_messages($response, 'dpd-create-label-response');
 
 		//Check for errors
+		if (is_null($response) || !isset($response['status'])) {
+            VP_Woo_Pont()->log_error_messages($response, 'dpd-create-label');
+            return new WP_Error('dpd_error', 'Invalid response from DPD API');
+        }
+		
 		if($response['status'] == 'err') {
 			VP_Woo_Pont()->log_error_messages($response, 'dpd-create-label');
 			return new WP_Error( 'dpd_error', $response['errlog'] );

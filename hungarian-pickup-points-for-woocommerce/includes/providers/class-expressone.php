@@ -139,7 +139,7 @@ class VP_Woo_Pont_ExpressOne {
 			),
 			'labels' => array(
 				'data_type' => 'PDF',
-				'size' => 'A4',
+				'size' => (VP_Woo_Pont_Helpers::get_option('expressone_sticker_size', 'A6') == 'A6') ? 'A4' : '100x150',
 				'pdf_etiket_position' => 0
 			)
 		);

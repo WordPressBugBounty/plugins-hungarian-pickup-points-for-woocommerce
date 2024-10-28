@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.6.2
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,12 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.5
+* Express One címkeméret javítás
+* DPD Weblabel hibakezelés javítás
+* Ha egyedi rendelés státuszokat használsz és nem fut le az automatizálás, megadható a beállításokban a rendelés állapot azonosítója
+* Utánvét elrejtés javítás pénztár blokk esetében
 
 3.4.4
 * Kvikk QR kód beolvasás csomagoláshoz

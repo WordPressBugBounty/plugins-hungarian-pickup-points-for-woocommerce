@@ -894,12 +894,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 					$positions['y'] = array(0, 0, 148, 148);
 					$positions['layout'] = 'grid';
 					$positions['sticker'] = 'A6';
-				} else {
-					$positions['sections'] = 6;
-					$positions['format'] = 'A4';
-					$positions['x'] = array(0, 105, 0, 105, 0, 105);
-					$positions['y'] = array(0, 0, 98, 98, 195, 195);
-					$positions['layout'] = 'grid';
 				}
 
 			}
