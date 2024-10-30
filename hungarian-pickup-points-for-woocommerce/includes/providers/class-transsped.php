@@ -252,6 +252,7 @@ class VP_Woo_Pont_TransSped {
 		//Create item
 		$comment = VP_Woo_Pont()->labels->get_package_contents_label($data, 'transsped');
 		$order = wc_get_order($data['order_id']);
+		$log = array();
 		
 		$item = array(
 			'waybill' => $data['order_number'],
@@ -287,6 +288,10 @@ class VP_Woo_Pont_TransSped {
 				)
 			)
 		);
+
+		//Logging
+		$log['start'] = current_time('mysql');
+		$log['req'] = $item;
 
 		//If theres a closed shipment list from today, move the import date to tomorrow at least
 		if($this->is_shipment_closed_today()) {
@@ -335,6 +340,9 @@ class VP_Woo_Pont_TransSped {
 		//Logging
 		VP_Woo_Pont()->log_debug_messages($options, 'transsped-create-label');
 
+		//Logging
+		$log['shipments-api-start'] = current_time('mysql');
+
 		//Submit request
 		$request = wp_remote_post( $this->api_url.'shipments', array(
 			'body'    => json_encode($options),
@@ -350,6 +358,10 @@ class VP_Woo_Pont_TransSped {
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 		$response = json_decode( $response, true );
+
+		//Logging
+		$log['shipments-api-response'] = $response;
+		$log['shipments-api-end'] = current_time('mysql');
 
 		//Check for API errors
 		if($response['failCount'] > 0) {
@@ -383,6 +395,9 @@ class VP_Woo_Pont_TransSped {
 			))
 		);
 
+		$log['stickers-api-start'] = current_time('mysql');
+		$log['stickers-api-req'] = $label_options;
+
 		$request = wp_remote_post($this->api_url.'download-stickers/', array(
 			'body'    => json_encode($label_options),
 			'headers' => $this->get_auth_header($data['order']),
@@ -397,16 +412,26 @@ class VP_Woo_Pont_TransSped {
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 
+		$log['stickers-api-end'] = current_time('mysql');
+
 		//Now we have the PDF as base64, save it
 		$pdf = $response;
+
+		$log['save-sticker-start'] = current_time('mysql');
+
 
 		//Try to save PDF file
 		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('transsped', $data['order_id']);
 		VP_Woo_Pont_Labels::save_pdf_file($pdf, $pdf_file);
 
+		$log['save-sticker-end'] = current_time('mysql');
+
 		//Create response
 		$label['pdf'] = $pdf_file['name'];
 		$label['needs_closing'] = true;
+
+		$log['end'] = current_time('mysql');
+		VP_Woo_Pont()->log_debug_messages($log, 'transsped-create-label-log');
 
 		//Return file name, package ID, tracking number which will be stored in order meta
 		return $label;

@@ -20,6 +20,7 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 
 		public static function hide_cod($available_gateways) {
 			if ( is_admin() ) return $available_gateways;
+			if(!WC()->session) return $available_gateways;
 			if(!class_exists( 'Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils' ) || !CartCheckoutUtils::is_checkout_block_default()){
 				if ( ! is_checkout() ) return $available_gateways;
 			}
