@@ -7,9 +7,9 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 3.4.5.1
+Version: 3.4.5.2
 WC requires at least: 7.0
-WC tested up to: 9.3.3
+WC tested up to: 9.4.1
 Requires Plugins: woocommerce
 */
 
@@ -83,9 +83,6 @@ class VP_Woo_Pont {
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-update.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-cod.php' );
 
-		//Load settings
-		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-settings.php' );
-
 		//Check if pro enabled
 		$is_pro = VP_Woo_Pont_Pro::is_pro_enabled();
 
@@ -98,7 +95,13 @@ class VP_Woo_Pont {
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-background-generator.php' );
 
 		//Load provider classes
-		$this->load_provider_classes();
+		add_action('init', function(){
+
+			//Load settings
+			require_once( plugin_dir_path( __FILE__ ) . 'includes/class-settings.php' );
+			$this->load_provider_classes();
+
+		});
 
 		//Init label generators
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-labels.php' );

@@ -71,11 +71,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$is_pro = VP_Woo_Pont_Pro::is_pro_enabled();
 
 			//Set bulk action values
-			$this->bulk_actions = array(
-				'vp_woo_pont_generate_labels' => __( 'Generate shipping labels', 'vp-woo-pont' ),
-				'vp_woo_pont_print_labels' => __( 'Print shipping labels', 'vp-woo-pont' ),
-				'vp_woo_pont_download_labels' => __( 'Download shipping labels', 'vp-woo-pont' ),
-			);
+			add_action('init', function(){
+				$this->bulk_actions = array(
+					'vp_woo_pont_generate_labels' => __( 'Generate shipping labels', 'vp-woo-pont' ),
+					'vp_woo_pont_print_labels' => __( 'Print shipping labels', 'vp-woo-pont' ),
+					'vp_woo_pont_download_labels' => __( 'Download shipping labels', 'vp-woo-pont' ),
+				);
+			});
 
 			//Add bulk action to print labels
 			if($is_pro) {
