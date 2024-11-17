@@ -60,6 +60,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			'kvikk_expressone_omv',
 			'kvikk_packeta_zbox',
 			'kvikk_packeta_zpont',
+			'kvikk_packeta_foxpost',
+			'kvikk_foxpost',
 			'kvikk_expressone',
 			'kvikk_mpl',
 			'kvikk_famafutar'

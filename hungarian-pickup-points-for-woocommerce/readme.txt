@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.4.5.2
+Stable tag: 3.4.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.6
+* Kvikk Foxpost támogatás(Packetán keresztül)
 
 3.4.5.2
 * WP 6.7 és WC 9.4 kompatibilitás

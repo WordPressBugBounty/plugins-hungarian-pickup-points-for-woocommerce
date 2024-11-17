@@ -262,16 +262,26 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					$pagecount = $mpdf->setSourceFile($pdf_file);
 					$template_id = $mpdf->importPage($pagecount);
 					$mpdf->UseTemplate($template_id, $sticker_parameters['x'][$position_id], $sticker_parameters['y'][$position_id]);
-					header("Content-type:application/pdf");
-					$mpdf->Output();
-					exit();
-				} else {
-					//Set headers for PDF return
-					header("Content-type:application/pdf");
 
-					//Display PDF file, so it can be printed
-					readfile($pdf_file);
-					exit();
+					//If we need to return a file
+					if($output == 'file') {
+						header("Content-type:application/pdf");
+						$mpdf->Output();
+						exit();
+					} else {
+						return $mpdf->Output('file.pdf', 'S');
+					}
+				} else {
+					if($output == 'file') {
+						//Set headers for PDF return
+						header("Content-type:application/pdf");
+
+						//Display PDF file, so it can be printed
+						readfile($pdf_file);
+						exit();
+					} else {
+						return file_get_contents($pdf_file);
+					}
 				}
 
 			}

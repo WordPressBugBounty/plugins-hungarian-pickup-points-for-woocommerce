@@ -171,7 +171,7 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//Create a new json
-		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'alzabox' => array(), 'expressone_omv' => array());
+		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'foxpost' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'alzabox' => array(), 'expressone_omv' => array());
 
 		//Loop through points
 		foreach ($json['data'] as $point) {
@@ -225,13 +225,14 @@ class VP_Woo_Pont_Kvikk {
         $providers['kvikk_mpl_automata'] = 'MPL Csomagautomata';
         $providers['kvikk_packeta_zpont'] = 'Packeta Z-Pont';
         $providers['kvikk_packeta_zbox'] = 'Packeta Z-Box';
+        $providers['kvikk_foxpost'] = 'Foxpost';
         $providers['kvikk_expressone_omv'] = 'OMV';
         $providers['kvikk_alzabox'] = 'Alzabox';
         return $providers;
     }
 
     public function add_provider_subgroups($subgroups) {
-		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'alzabox', 'expressone_omv');
+		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'alzabox', 'expressone_omv');
         return $subgroups;
     }
 
@@ -243,6 +244,11 @@ class VP_Woo_Pont_Kvikk {
 		//Fix for alzabox
 		if($courier == 'kvikk_alzabox') {
 			$courier = 'kvikk_expressone_alzabox';
+		}
+
+		//Fix for foxpost
+		if($courier == 'kvikk_foxpost') {
+			$courier = 'kvikk_packeta_foxpost';
 		}
 
 		//Parse courier details
@@ -296,7 +302,7 @@ class VP_Woo_Pont_Kvikk {
 
 		//So developers can modify
 		$shipment = apply_filters('vp_woo_pont_kvikk_label', $shipment, $data);
-
+		
 		//Build request params
 		$remote_url = $this->api_url . 'shipment';
 

@@ -2906,6 +2906,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   background-image: url(../images/icon-packeta.svg); }
 .vp-woo-pont-provider-icon-kvikk_packeta_zbox {
   background-image: url(../images/icon-packeta-zbox.svg); }
+.vp-woo-pont-provider-icon-kvikk_foxpost {
+  background-image: url(../images/icon-foxpost.svg); }
 .vp-woo-pont-provider-icon-kvikk_alzabox {
   background-image: url(../images/icon-expressone-alzabox.svg); }
 .vp-woo-pont-provider-icon-kvikk_expressone_omv {
@@ -2917,6 +2919,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   background-size: 100% !important; }
 .wp-admin .vp-woo-pont-provider-icon-kvikk_packeta_zbox {
   background-image: url(../images/icon-kvikk-packeta-zbox.svg);
+  width: 72px !important;
+  background-size: 100% !important; }
+.wp-admin .vp-woo-pont-provider-icon-kvikk_foxpost, .wp-admin .vp-woo-pont-provider-icon-kvikk_packeta_foxpost {
+  background-image: url(../images/icon-kvikk-packeta-foxpost.svg);
   width: 72px !important;
   background-size: 100% !important; }
 .wp-admin .vp-woo-pont-provider-icon-kvikk_alzabox, .wp-admin .vp-woo-pont-provider-icon-kvikk_expressone_alzabox {
