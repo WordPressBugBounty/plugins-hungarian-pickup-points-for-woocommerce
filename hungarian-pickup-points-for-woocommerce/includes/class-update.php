@@ -58,6 +58,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 					WC()->queue()->add( 'vp_woo_pont_update_postapont_list', array(), 'vp_woo_pont' );
 				}
 
+				//Re-init scheduled actions, because Kvikk was missing from the list due to a priority bug
+				if(version_compare('3.4.6.1', $existing_version, '>')) {
+					VP_Woo_Pont_Import_Database::schedule_actions();
+				}
+
 			}
 			
 		}

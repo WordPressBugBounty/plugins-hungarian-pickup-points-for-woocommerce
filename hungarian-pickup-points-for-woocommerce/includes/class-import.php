@@ -10,7 +10,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 		private static $skip_check = false;
 
 		public static function get_pont_types() {
-			return apply_filters('vp_woo_pont_import_database_providers', array('foxpost', 'postapont', 'packeta', 'sprinter', 'expressone', 'gls', 'dpd', 'sameday'));
+			return apply_filters('vp_woo_pont_import_database_providers', array('foxpost', 'postapont', 'packeta', 'sprinter', 'expressone', 'gls', 'dpd', 'sameday', 'kvikk'));
 		}
 
 		public static function init() {
