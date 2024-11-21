@@ -17,7 +17,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 			//Setup daily scheduled action to refresh databases
 			foreach (self::get_pont_types() as $pont_type) {
-				add_action( 'vp_woo_pont_update_'.$pont_type.'_list', array( __CLASS__, 'get_'.$pont_type.'_json' ) );
+				if($pont_type == 'kvikk') {
+					//
+				} else {
+					add_action( 'vp_woo_pont_update_'.$pont_type.'_list', array( __CLASS__, 'get_'.$pont_type.'_json' ) );
+				}
 			}
 
 			//Ajax function to trigger import manually

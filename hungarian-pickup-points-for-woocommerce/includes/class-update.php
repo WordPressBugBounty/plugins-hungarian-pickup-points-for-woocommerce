@@ -59,7 +59,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 				}
 
 				//Re-init scheduled actions, because Kvikk was missing from the list due to a priority bug
-				if(version_compare('3.4.6.1', $existing_version, '>')) {
+				if(version_compare('3.4.6.2', $existing_version, '>')) {
 					VP_Woo_Pont_Import_Database::schedule_actions();
 				}
 
