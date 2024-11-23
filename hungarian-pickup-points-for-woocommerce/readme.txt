@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.4.6.2
+Stable tag: 3.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,13 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.7
+* Packeta Foxpost kezelés külön csomagpontként
+* Utánvét összeg javítás részben visszatérített rendelés esetén
+* DPD sima A6-os címkeméret támogatás
+* YayCurrency kompatibilitás
+* MPL csomagfeladás automatából opció
 
 3.4.6.1 & 3.4.6.2
 * Csomagpont import bug javítás

@@ -35,6 +35,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			'packeta_zbox',
 			'packeta_mpl_postapont',
 			'packeta_mpl_automata',
+			'packeta_foxpost',
 			'expressone_omv',
 			'expressone_alzabox',
 			'expressone_packeta',
@@ -399,6 +400,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$total_weight = 0;
 			$total_qty = 0;
 			$order_items = $order->get_items();
+			$order_total = $order->get_total();
+			$total_refunded = $order->get_total_refunded();
+			$package_total = $order_total - $total_refunded;
 			foreach ( $order_items as $item_id => $product_item ) {
 				$product = $product_item->get_product();
 				$total_qty = $total_qty + $product_item->get_quantity();
@@ -429,8 +433,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 					'name_with_company' => $order->get_formatted_shipping_full_name()
 				),
 				'package' => array(
-					'total' => $order->get_total(),
-					'total_rounded' => 5 * round($order->get_total() / 5),
+					'total' => $package_total,
+					'total_rounded' => 5 * round($package_total / 5),
 					'weight' => $total_weight,
 					'weight_gramm' => VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order),
 					'cod' => ($order->get_payment_method() == VP_Woo_Pont_Helpers::get_option('cod_method', 'cod')),

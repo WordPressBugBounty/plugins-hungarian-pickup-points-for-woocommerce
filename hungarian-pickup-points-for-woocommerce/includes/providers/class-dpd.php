@@ -183,6 +183,17 @@ class VP_Woo_Pont_DPD {
 				'class' => 'vp-woo-pont-select-group-dpd-item vp-woo-pont-select-group-dpd-item-shipping-api',
 			),
 			array(
+				'type' => 'select',
+				'class' => 'wc-enhanced-select vp-woo-pont-select-group-dpd-item vp-woo-pont-select-group-dpd-item-weblabel vp-woo-pont-select-group-dpd-item-shipping-api',
+				'title' => __( 'Sticker size', 'vp-woo-pont' ),
+				'default' => 'A6',
+				'options' => array(
+					'A6' => __( 'A6 on A4(recommended)', 'vp-woo-pont' ),
+					'A6_SINGLE' => __( 'A6', 'vp-woo-pont' ),
+				),
+				'id' => 'dpd_sticker_size'
+			),
+			array(
 				'type' => 'sectionend'
 			)
 		);
@@ -321,6 +332,12 @@ class VP_Woo_Pont_DPD {
 		//Now we have the PDF as base64, save it
 		$pdf = $response;
 
+		//Crop to A6 if needed, but only if it doesn't contain a return label
+		$label_size = VP_Woo_Pont_Helpers::get_option('dpd_sticker_size', 'A6');
+		if($label_size == 'A6_SINGLE' && $item['num_of_parcel'] == 1) {
+			$pdf = VP_Woo_Pont_Print::fit_to_a6($pdf);
+		}
+
 		//Try to save PDF file
 		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('dpd', $data['order_id']);
 		VP_Woo_Pont_Labels::save_pdf_file($pdf, $pdf_file);
@@ -361,7 +378,7 @@ class VP_Woo_Pont_DPD {
 					),
 					'parcels' => array(
 						array(
-							'weight' => wc_get_weight($data['package']['weight'], 'kg')
+							'weight' => $data['package']['weight_gramm']/1000
 						)
 					),
 					'service' => array(

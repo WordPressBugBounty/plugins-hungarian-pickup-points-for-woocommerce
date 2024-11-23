@@ -56,6 +56,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'packeta_zbox' => __('Z-BOX', 'vp-woo-pont'),
 				'packeta_mpl_automata' => __('MPL Csomagautomata', 'vp-woo-pont'),
 				'packeta_mpl_postapont' => __('MPL Postapont', 'vp-woo-pont'),
+				'packeta_foxpost' => __('Foxpost', 'vp-woo-pont'),
 				'sprinter' => __('Pick Pack Pont', 'vp-woo-pont'),
 				'expressone_omv' => __('OMV', 'vp-woo-pont'),
 				'expressone_alzabox' => __('AlzaBox', 'vp-woo-pont'),
@@ -428,7 +429,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			}
 			$sortedProviders += $provider_costs;
 			$provider_costs = $sortedProviders;
-			
+
 			return apply_filters( 'vp_woo_pont_provider_costs', $provider_costs);
 		}
 
@@ -841,12 +842,14 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			if($provider == 'dpd') {
 
 				//Portrait with 4 labels on a grid
-				$positions['sections'] = 4;
-				$positions['format'] = 'A4';
-				$positions['x'] = array(0, 105, 0, 105);
-				$positions['y'] = array(0, 0, 148, 148);
-				$positions['layout'] = 'grid';
-				$positions['sticker'] = 'A6';
+				if($label_size == '' || $label_size == 'A6') {
+					$positions['sections'] = 4;
+					$positions['format'] = 'A4';
+					$positions['x'] = array(0, 105, 0, 105);
+					$positions['y'] = array(0, 0, 148, 148);
+					$positions['layout'] = 'grid';
+					$positions['sticker'] = 'A6';
+				}
 
 			}
 
@@ -1112,6 +1115,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			//Compatibility with X-Currency
 			if(function_exists('x_currency_exchange')) {
 				$value = x_currency_exchange($value);
+			}
+
+			//Compatibility with YayCurrency
+			if(defined( 'YAY_CURRENCY_VERSION' ) && class_exists('Yay_Currency\Helpers\YayCurrencyHelper')) {
+				$currency = Yay_Currency\Helpers\YayCurrencyHelper::detect_current_currency();		
+				$value = Yay_Currency\Helpers\YayCurrencyHelper::calculate_price_by_currency( $value, true, $currency );
 			}
 			
 			return apply_filters('vp_woo_pont_exchange_currency', $value);

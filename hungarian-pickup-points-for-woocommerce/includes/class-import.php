@@ -221,10 +221,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			$open_days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
 
 			//For packeta branded pickup points
-			if(in_array('HU', $enabled_countries) || in_array('RO', $enabled_countries) || in_array('SK', $enabled_countries) || in_array('CZ', $enabled_countries) || in_array('MPL_POSTAPONT', $enabled_countries) || in_array('MPL_AUTOMATA', $enabled_countries)) {
+			if(in_array('HU', $enabled_countries) || in_array('RO', $enabled_countries) || in_array('SK', $enabled_countries) || in_array('CZ', $enabled_countries) || in_array('MPL_POSTAPONT', $enabled_countries) || in_array('MPL_AUTOMATA', $enabled_countries) || in_array('FOXPOST', $enabled_countries)) {
 
 				//Make request for branches json file
-				$request = wp_remote_get('https://points-api.kvikk.hu/points?search=packeta,mpl&country=HU,SK,CZ,RO', array(
+				$request = wp_remote_get('https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost&country=HU,SK,CZ,RO', array(
 					'timeout' => 100,
 				));
 
@@ -267,6 +267,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 						$results['mpl_postapont'][] = $result;
 					} elseif($type == 'automata') {
 						$results['mpl_automata'][] = $result;
+					} elseif($type == 'foxpost') {
+						$results['foxpost'][] = $result;
 					}
 
 				}

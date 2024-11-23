@@ -183,6 +183,11 @@ class VP_Woo_Pont_Packeta {
 				$attributes->addChild('carrierPickupPoint', $data['point_id']);
 			}
 
+			if($data['provider'] == 'packeta_foxpost') {
+				$attributes->addressId = 32970;
+				$attributes->addChild('carrierPickupPoint', $data['point_id']);
+			}
+
 			if($data['provider'] == 'packeta_mpl_automata') {
 				$attributes->addressId = 29760;
 				$attributes->addChild('carrierPickupPoint', $data['point_id']);
@@ -347,6 +352,7 @@ class VP_Woo_Pont_Packeta {
 			'RO' => __('Romania (Packeta)', 'vp-woo-pont'),
 			'SK' => __('Slovakia (Packeta)', 'vp-woo-pont'),
 			'CZ' => __('Czech Republic (Packeta)', 'vp-woo-pont'),
+			'FOXPOST' => __('Foxpost', 'vp-woo-pont'),
 		);
 
 		//Get the JSON file based on the provider type
@@ -582,7 +588,7 @@ class VP_Woo_Pont_Packeta {
 			} else {
 
 				//Exclude MPL
-				if($carrier['id'] == 29760 || $carrier['id'] == 4539) continue;
+				if($carrier['id'] == 29760 || $carrier['id'] == 4539 || $carrier['id'] == 32970) continue;
 
 				$pickup_point_carriers[$carrier['id']] = array(
 					'name' => $carrier['name'],

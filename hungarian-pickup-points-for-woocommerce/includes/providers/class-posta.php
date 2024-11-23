@@ -281,6 +281,12 @@ class VP_Woo_Pont_Posta {
 				'desc_tip' => __('Select a product attribute or shipping class that relates to fragile products, so the generated label will be marked as fragile by default.', 'vp-woo-pont'),
 			),
 			array(
+				'title' => __('Dispatch from Csomagautomata', 'vp-woo-pont'),
+				'type'     => 'checkbox',
+				'desc' => __('If checked, the shipment will be marked to be shipped from MPL Csomagautomata.', 'vp-woo-pont'),
+				'id' => 'posta_dispatch_from_automata'
+			),
+			array(
 				'type' => 'sectionend'
 			)
 		);
@@ -382,6 +388,11 @@ class VP_Woo_Pont_Posta {
 			'paymentMode' => VP_Woo_Pont_Helpers::get_option('posta_payment_type', 'UV_AT'),
 			'packageRetention' => VP_Woo_Pont_Helpers::get_option('posta_retention', '5')
 		);
+
+		//Check dispatch mode
+		if(VP_Woo_Pont_Helpers::get_option('posta_dispatch_from_automata', 'no') == 'yes') {
+			$parcel['sender']['parcelTerminal'] = true;
+		}
 
 		//If its a pont shipping method
 		if($data['point_id']) {

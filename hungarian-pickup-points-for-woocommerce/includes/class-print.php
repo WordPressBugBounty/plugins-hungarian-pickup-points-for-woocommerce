@@ -27,6 +27,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 			add_action( 'admin_init', array( __CLASS__, 'load_pdf_file') );
 
 		}
+		
+		public static function fit_to_a6($pdf) {
+			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
+			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A6', 'orientation' => 'P'));
+			$stream = StreamReader::createByString($pdf);
+			$mpdf->AddPage();
+			$mpdf->setSourceFile($stream);
+			$label = $mpdf->ImportPage(1);
+			$mpdf->UseTemplate($label, 0, 0);
+			return $mpdf->Output('file.pdf', 'S');
+		}
 
 		public static function crop_to_a6($pdf) {
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
