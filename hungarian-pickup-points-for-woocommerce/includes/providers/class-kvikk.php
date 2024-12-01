@@ -300,6 +300,13 @@ class VP_Woo_Pont_Kvikk {
 			$shipment['note'] =VP_Woo_Pont()->labels->get_package_contents_label($data, 'kvikk', 100);
 		}
 
+		//If we have a package size set
+		if(isset($data['package']['size'])) {
+			$shipment['width'] = $data['package']['width'];
+			$shipment['height'] = $data['package']['height'];
+			$shipment['length'] = $data['package']['length'];
+		}
+		
 		//So developers can modify
 		$shipment = apply_filters('vp_woo_pont_kvikk_label', $shipment, $data);
 		

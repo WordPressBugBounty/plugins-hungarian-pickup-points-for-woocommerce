@@ -389,11 +389,6 @@ class VP_Woo_Pont_Posta {
 			'packageRetention' => VP_Woo_Pont_Helpers::get_option('posta_retention', '5')
 		);
 
-		//Check dispatch mode
-		if(VP_Woo_Pont_Helpers::get_option('posta_dispatch_from_automata', 'no') == 'yes') {
-			$parcel['sender']['parcelTerminal'] = true;
-		}
-
 		//If its a pont shipping method
 		if($data['point_id']) {
 			$parcel['recipient']['address'] = array(
@@ -498,6 +493,32 @@ class VP_Woo_Pont_Posta {
 					$new_item['services']['extra'] = array_values($new_item['services']['extra']); //Reindex array
 				}
 				$parcel['item'][] = $new_item;
+			}
+
+		}
+
+		//Check dispatch mode, if its automata and below 20kg, we can mark it as automata dispatch
+		if(VP_Woo_Pont_Helpers::get_option('posta_dispatch_from_automata', 'no') == 'yes' && $data['package']['weight_gramm'] < 20000) {
+			$parcel['sender']['parcelTerminal'] = true;
+
+			//Set default size
+			$parcel['item'][0]['size'] = VP_Woo_Pont_Helpers::get_option('posta_size', 'M');
+
+			print_r( $data['package']['size']);
+			
+			//Overwrite if we have a package size set
+			if(isset($data['package']['size'])) {
+
+				//Calculate size
+				$box_type = $this->get_box_size($data['package']['size']['width'], $data['package']['size']['height'], $data['package']['size']['length']);
+
+				//Set size, of not, its not suitable to dispatch via automata
+				if($box_type) {
+					$parcel['item'][0]['size'] = $box_type;
+				} else {
+					$parcel['sender']['parcelTerminal'] = false;
+				}
+
 			}
 
 		}
@@ -938,6 +959,47 @@ class VP_Woo_Pont_Posta {
 		}
 
 		return false;
+	}
+
+	public function get_box_size($width, $height, $length) {
+		$box_sizes = array(
+			array(
+				'width' => 25,
+				'height' => 7,
+				'length' => 31,
+				'type' => 'S'
+			),
+			array(
+				'width' => 31,
+				'height' => 16,
+				'length' => 50,
+				'type' => 'M'
+			),
+			array(
+				'width' => 31,
+				'height' => 35,
+				'length' => 50,
+				'type' => 'L'
+			),
+		);
+
+		$product_dimensions = array($width, $height, $length);
+		sort($product_dimensions);
+	
+		foreach ($box_sizes as $box) {
+			$box_dimensions = array($box['width'], $box['height'], $box['length']);
+			sort($box_dimensions);
+	
+			if (
+				$product_dimensions[0] <= $box_dimensions[0] &&
+				$product_dimensions[1] <= $box_dimensions[1] &&
+				$product_dimensions[2] <= $box_dimensions[2]
+			) {
+				return $box['type'];
+			}
+		}
+	
+		return null;
 	}
 
 }

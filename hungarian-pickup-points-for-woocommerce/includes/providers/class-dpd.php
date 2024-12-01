@@ -378,7 +378,7 @@ class VP_Woo_Pont_DPD {
 					),
 					'parcels' => array(
 						array(
-							'weight' => $data['package']['weight_gramm']/1000
+							'weight' => wc_get_weight($data['package']['weight'], 'kg')
 						)
 					),
 					'service' => array(

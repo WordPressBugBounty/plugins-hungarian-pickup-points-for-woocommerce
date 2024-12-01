@@ -1,4 +1,3 @@
-@charset "UTF-8";
 #vp_woo_pont_metabox .inside,
 #vp_woo_pont_metabox_tracking .inside {
   padding: 0;
@@ -264,7 +263,7 @@
       .vp-woo-pont-metabox-generate-options li select {
         min-height: 30px;
         max-width: none; }
-      .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-weight em  {
+      .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-weight em {
         display: block; }
       .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-weight em:after {
         position: absolute;
@@ -284,6 +283,41 @@
         opacity: 1; }
         .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-weight.saved em:after {
           opacity: 1; }
+      .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size ul {
+        border: 1px solid #8c8f94;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column; }
+        .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size ul li {
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid #8c8f94;
+          margin: 0; }
+          .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size ul li input {
+            margin: 0;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%); }
+          .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size ul li label {
+            padding: 10px 10px 10px 36px;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; }
+          .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size ul li:last-child {
+            border: none; }
+      .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size .vp-woo-pont-package-size-custom {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-top: 10px; }
+        .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size .vp-woo-pont-package-size-custom label {
+          display: block;
+          margin: 0 0 5px 0; }
+        .vp-woo-pont-metabox-generate-options li.vp-woo-pont-package-size .vp-woo-pont-package-size-custom input[type="text"] {
+          width: 100%; }
     .vp-woo-pont-metabox-generate-options-type label {
       margin: 0 0 5px 0; }
     .vp-woo-pont-metabox-generate-options-group ul {

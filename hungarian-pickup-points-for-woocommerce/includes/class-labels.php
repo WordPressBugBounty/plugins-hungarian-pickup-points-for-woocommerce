@@ -619,20 +619,36 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$order = wc_get_order($order_id);
 
 			//For now, this function only updates/stores the package weight
-			$weight = intval($_POST['weight']);
-			$order->update_meta_data('_vp_woo_pont_package_weight', $weight);
-			$order->save();
+			if(isset($_POST['weight'])) {
+				$weight = intval($_POST['weight']);
+				$order->update_meta_data('_vp_woo_pont_package_weight', $weight);
+				$order->save();
+			}
 
 			//Update packaging sizes too
 			$packaging = array();
 			if(isset($_POST['packaging_name'])) {
+
+				//Get the packaging data
 				$packaging = array(
 					'name' => sanitize_text_field($_POST['packaging_name']),
-					'sku' => sanitize_text_field($_POST['packaging_sku']),
-					'length' => intval($_POST['packaging_length']),
-					'width' => intval($_POST['packaging_width']),
-					'height' => intval($_POST['packaging_height']),
+					'sku' => sanitize_text_field($_POST['packaging_sku'])
 				);
+
+				//If its not a custom size, replace it with the default one
+				if($packaging['sku'] != 'custom') {
+					$packagings = get_option('vp_woo_pont_packagings');
+					foreach ($packagings as $key => $packagings_type) {
+						if($packaging['sku'] == $packagings_type['sku']) {
+							$packaging = $packagings_type;
+						}
+					}
+				} else {
+					$packaging['length'] = intval($_POST['packaging_length']);
+					$packaging['width'] = intval($_POST['packaging_width']);
+					$packaging['height'] = intval($_POST['packaging_height']);
+				}
+
 				$order->update_meta_data('_vp_woo_pont_packaging', $packaging);
 				$order->save();
 			}

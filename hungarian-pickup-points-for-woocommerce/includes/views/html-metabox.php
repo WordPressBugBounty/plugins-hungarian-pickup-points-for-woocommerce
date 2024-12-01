@@ -24,6 +24,10 @@ if(!empty($shipping_method)) {
 //Get COD details
 $cod = ($order->get_payment_method() == 'cod') ? $order->get_total() : 0;
 
+//Packaging types
+$packaging_types = get_option('vp_woo_pont_packagings');
+$packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_vp_woo_pont_packaging') : VP_Woo_Pont()->labels->get_best_box_for_order($order);
+
 ?>
 
 	<?php if(!in_array($provider_id, $this->supported_providers) && $order->get_meta('_vp_woo_pont_point_name')): //TODO: check for api keys for labels ?>
@@ -249,6 +253,46 @@ $cod = ($order->get_payment_method() == 'cod') ? $order->get_total() : 0;
 					<input type="text" id="vp_woo_pont_package_weight" value="<?php echo VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order); ?>">
 					<em><?php esc_html_e('gramms', 'vp-woo-pont'); ?></em>
 				</li>
+
+				<?php if($packaging_types): ?>
+					<li class="vp-woo-pont-package-size vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk]">
+						<label><?php esc_html_e('Csomagolás', 'vp-woo-pont'); ?></label>
+						<ul>
+							<?php foreach ( $packaging_types as $packaging_id => $packaging_type ): ?>
+								<li>
+									<input type="radio" id="vp_woo_pont_packaging_type_<?php echo esc_attr($packaging_type['sku']); ?>" <?php checked($packaging_type['sku'], (isset($packaging['sku'])) ? $packaging['sku'] : ''); ?> data-name="<?php echo esc_attr($packaging_type['name']); ?>" name="vp_woo_pont_packaging_type" value="<?php echo esc_attr($packaging_type['sku']); ?>">
+									<label for="vp_woo_pont_packaging_type_<?php echo esc_attr($packaging_type['sku']); ?>">
+										<?php echo esc_html($packaging_type['name']); ?>
+										<small>
+											<?php echo esc_html($packaging_type['length']); ?>x<?php echo esc_html($packaging_type['width']); ?>x<?php echo esc_html($packaging_type['height']); ?>cm
+										</small>
+									</label>
+								</li>
+							<?php endforeach; ?>
+							<li>
+								<input type="radio" id="vp_woo_pont_packaging_type_custom" name="vp_woo_pont_packaging_type" <?php checked('custom', (isset($packaging['sku'])) ? $packaging['sku'] : ''); ?> value="custom" data-name="<?php esc_attr_e('Custom packaging', 'vp-woo-pont'); ?>">
+								<label for="vp_woo_pont_packaging_type_custom">
+									<?php esc_html_e('Custom packaging', 'vp-woo-pont'); ?>
+								</label>
+							</li>
+						</ul>
+						<div class="vp-woo-pont-package-size-custom" style="display:none;">
+							<div>
+								<label><?php esc_html_e('Length', 'vp-woo-pont'); ?></label>
+								<input type="text" name="vp_woo_pont_packaging_length" value="<?php echo esc_attr((isset($packaging['length'])) ? $packaging['length'] : ''); ?>">
+							</div>
+							<div>
+								<label><?php esc_html_e('Width', 'vp-woo-pont'); ?></label>
+								<input type="text" name="vp_woo_pont_packaging_width" value="<?php echo esc_attr((isset($packaging['width'])) ? $packaging['width'] : ''); ?>">
+							</div>
+							<div>
+								<label><?php esc_html_e('Height', 'vp-woo-pont'); ?></label>
+								<input type="text" name="vp_woo_pont_packaging_height" value="<?php echo esc_attr((isset($packaging['height'])) ? $packaging['height'] : ''); ?>">
+							</div>
+						</div>
+					</li>
+				<?php endif; ?>
+
 				<li data-providers="[transsped]" class="vp-woo-pont-transsped-packaging vp-woo-pont-metabox-generate-options-item">
 					<label><?php esc_html_e('Packaging Quantity', 'vp-woo-pont'); ?> <i class="total-qty">1</i></label>
 					<ul>

@@ -428,7 +428,7 @@
 				}
 
 				&.vp-woo-pont-package-weight {
-					em {
+					em {
 						display: block;
 					}
 
@@ -455,6 +455,59 @@
 							&:after {
 								opacity: 1;
 							}
+						}
+					}
+				}
+
+				&.vp-woo-pont-package-size {
+					ul {
+						border: 1px solid #8c8f94;
+						border-radius: 4px;
+						display: flex;
+						flex-direction: column;
+	
+						li {
+							display: flex;
+							align-items: center;
+							border-bottom: 1px solid #8c8f94;
+							margin: 0;
+
+							input {
+								margin: 0;
+								position: absolute;
+								left: 10px;
+								top: 50%;
+								transform: translateY(-50%);
+							}
+
+							label {
+								padding: 10px 10px 10px 36px;
+								width: 100%;
+								margin: 0;
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+							}
+
+							&:last-child {
+								border: none;
+							}
+						}
+					}
+
+					.vp-woo-pont-package-size-custom {
+						display: flex;
+						align-items: center;
+						gap: 10px;
+						padding-top: 10px;
+				
+						label {
+							display: block;
+							margin: 0 0 5px 0;
+						}
+				
+						input[type="text"] {
+							width: 100%;
 						}
 					}
 				}

@@ -2216,6 +2216,89 @@ jQuery(document).ready(function($) {
 			this.$transspedPackages.find('.qty a').on('click', this.transsped.qty_change);
 			this.transsped.set_global_qty();
 
+			//Setup packaging options
+			if($('.vp-woo-pont-package-size').length) {
+				this.packaging.init();
+			}
+
+		},
+		packaging: {
+			init: function() {
+
+				//Show by default
+				if($('#vp_woo_pont_packaging_type_custom').is(':checked')) {
+					$('.vp-woo-pont-package-size-custom').show();
+				}
+
+				//Handle package size change
+				$(document).on( 'change', '.vp-woo-pont-package-size input[name="vp_woo_pont_packaging_type"]', this.on_change);
+
+				//Handle custom size change
+				$(document).on( 'blur', '.vp-woo-pont-package-size-custom input', this.on_custom_size_change);
+
+			},
+			toggle_custom: function(packagingType) {
+				if(packagingType == 'custom') {
+					$('.vp-woo-pont-package-size-custom').show();
+				} else {
+					$('.vp-woo-pont-package-size-custom').hide();
+				}
+			},
+			on_change: function() {
+				var packagingType = $(this).val();
+
+				//Hide custom packaging
+				vp_woo_pont_metabox.packaging.toggle_custom(packagingType);
+				
+				//If its not custom, save it
+				if(packagingType != 'custom') {
+					vp_woo_pont_metabox.packaging.update_packaging_details();
+				} else {
+					vp_woo_pont_metabox.packaging.on_custom_size_change();
+				}
+
+			},
+			on_custom_size_change: function() {
+				var $container = $('.vp-woo-pont-package-size-custom');
+				var length = $container.find('input[name="vp_woo_pont_packaging_length"]').val();
+				var width = $container.find('input[name="vp_woo_pont_packaging_width"]').val();
+				var height = $container.find('input[name="vp_woo_pont_packaging_height"]').val();
+
+				if(length && width && height) {
+					vp_woo_pont_metabox.packaging.update_packaging_details();
+				}
+			},
+			update_packaging_details: function() {
+
+				//Show loading indicator
+				var $container = $('.vp-woo-pont-package-size');
+				vp_woo_pont_metabox.loading_indicator($container, '#fff');
+				
+				//Get selected packaging type
+				var $selectedPackaging = $container.find('input[name="vp_woo_pont_packaging_type"]:checked');
+
+				//Get data
+				var data = {
+					action: vp_woo_pont_metabox.prefix+'update_package_details',
+					nonce: vp_woo_pont_params.nonces.generate,
+					order: vp_woo_pont_metabox.order,
+					packaging_name: $selectedPackaging.data('name'),
+					packaging_sku: $selectedPackaging.val(),
+
+					//Custom packaging
+					packaging_length: $container.find('input[name="vp_woo_pont_packaging_length"]').val(),
+					packaging_width: $container.find('input[name="vp_woo_pont_packaging_width"]').val(),
+					packaging_height: $container.find('input[name="vp_woo_pont_packaging_height"]').val(),
+				};
+
+				//Make request
+				$.post(ajaxurl, data, function(response) {
+
+					//Hide loading indicator
+					$container.unblock();
+
+				});
+			}
 		},
 		transsped: {
 			qty_change: function() {
@@ -2273,7 +2356,7 @@ jQuery(document).ready(function($) {
 		save_weight: function() {
 			var data = {
 				action: vp_woo_pont_metabox.prefix+'update_package_details',
-				nonce: vp_woo_pont_metabox.nonce,
+				nonce: vp_woo_pont_params.nonces.generate,
 				order: vp_woo_pont_metabox.order,
 				weight: vp_woo_pont_metabox.$weightField.val(),
 			};
