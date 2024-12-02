@@ -409,6 +409,13 @@ class VP_Woo_Pont_DPD {
 			$options['shipments'][0]['parcels'][0]['dimensionWidth'] = 1;
 			$options['shipments'][0]['parcels'][0]['dimensionHeight'] = 1;
 			$options['shipments'][0]['parcels'][0]['dimensionLength'] = 1;
+		} else {
+			
+			//International packages
+			if($order->get_shipping_country() != 'HU') {
+				$options['shipments'][0]['service']['mainServiceCode'] = '101'; 
+			}
+			
 		}
 
 		//Check for COD
