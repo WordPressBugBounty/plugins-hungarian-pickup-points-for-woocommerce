@@ -301,7 +301,7 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//If we have a package size set
-		if(isset($data['package']['size'])) {
+		if(isset($data['package']['size']) && isset($data['package']['size']['width']) && isset($data['package']['size']['height']) && isset($data['package']['size']['length'])) {
 			$shipment['width'] = $data['package']['width'];
 			$shipment['height'] = $data['package']['height'];
 			$shipment['length'] = $data['package']['length'];
