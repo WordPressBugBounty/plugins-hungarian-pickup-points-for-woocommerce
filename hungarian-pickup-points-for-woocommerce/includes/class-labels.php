@@ -682,10 +682,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function format_phone_number($order) {
 			$number = $order->get_billing_phone();
 			$country = $order->get_shipping_country();
-			$number = preg_replace( '/[^0-9]/', '', $number );
 
 			//Fix hungarian format
 			if(!$country || $country == 'HU') {
+				$number = preg_replace( '/[^0-9]/', '', $number );
 				$number = str_replace('+36', '', $number);
 				$prefixes = array('+36', '36', '06', '0036');
 				foreach ($prefixes as $prefix) {

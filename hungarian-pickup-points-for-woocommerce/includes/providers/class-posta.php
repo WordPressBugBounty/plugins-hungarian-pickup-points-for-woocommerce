@@ -503,8 +503,6 @@ class VP_Woo_Pont_Posta {
 
 			//Set default size
 			$parcel['item'][0]['size'] = VP_Woo_Pont_Helpers::get_option('posta_size', 'M');
-
-			print_r( $data['package']['size']);
 			
 			//Overwrite if we have a package size set
 			if(isset($data['package']['size']) && isset($data['package']['size']['width']) && isset($data['package']['size']['height']) && isset($data['package']['size']['length'])) {
