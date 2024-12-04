@@ -14,7 +14,7 @@ $saved_values = get_option('vp_woo_pont_packagings');
 				<header class="wc-backbone-modal-header">
 					<h1><?php echo esc_html_e('Size & weight', 'vp-woo-pont'); ?></h1>
 					<button class="modal-close modal-close-link dashicons dashicons-no-alt">
-						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'woocommerce' ); ?></span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'vp-woo-pont' ); ?></span>
 					</button>
 				</header>
 				<article>

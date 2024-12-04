@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<header class="wc-backbone-modal-header">
 					<h1><?php echo esc_html_e('Label position', 'vp-woo-pont'); ?></h1>
 					<button class="modal-close modal-close-link dashicons dashicons-no-alt">
-						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'woocommerce' ); ?></span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'vp-woo-pont' ); ?></span>
 					</button>
 				</header>
 				<article>

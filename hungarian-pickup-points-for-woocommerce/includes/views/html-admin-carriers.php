@@ -15,9 +15,9 @@ $shipping_methods = VP_Woo_Pont_Helpers::get_available_shipping_methods();
                                 <?php
                                 $columns = array(
                                     'icon'        => '',
-                                    'name'        => __( 'Carrier', 'woocommerce' ),
-                                    'api_status' => __( 'Status', 'woocommerce' ),
-                                    'shipping_methods' => __( 'Shipping methods', 'woocommerce' ),
+                                    'name'        => __( 'Carrier', 'vp-woo-pont' ),
+                                    'api_status' => __( 'Status', 'vp-woo-pont' ),
+                                    'shipping_methods' => __( 'Shipping methods', 'vp-woo-pont' ),
                                     'action'      => '',
                                 );
                                 ?>

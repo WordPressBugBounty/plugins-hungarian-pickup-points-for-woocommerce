@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.4.8.2
+Stable tag: 3.4.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.8.3
+* Kvikk csomagméret javítás
+* DPD Shipping API esetén cím 2. sor külön mezőben, hogy ne legyen gond a karakterlimittel
+* Vásárlónak küldött levélben a szállítási címnél látszik a szolgáltató neve is, nem csak a csomagpont típusa
 
 3.4.8.2
 * DPD Shipping API külföldi szállítás esetén 101-es szerviz kód használata

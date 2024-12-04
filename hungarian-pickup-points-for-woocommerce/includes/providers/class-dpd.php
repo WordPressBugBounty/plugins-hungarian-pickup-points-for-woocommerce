@@ -372,7 +372,8 @@ class VP_Woo_Pont_DPD {
 						'contactMobile' => substr($data['customer']['phone'], 1),
 						'countryCode' => $order->get_shipping_country(),
 						'name' => $data['customer']['name'],
-						'street' => implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),
+						'street' => $order->get_shipping_address_1(),
+						'address2' => $order->get_shipping_address_2(),
 						'zipCode' => $order->get_shipping_postcode(),
 		
 					),
@@ -409,6 +410,14 @@ class VP_Woo_Pont_DPD {
 			$options['shipments'][0]['parcels'][0]['dimensionWidth'] = 1;
 			$options['shipments'][0]['parcels'][0]['dimensionHeight'] = 1;
 			$options['shipments'][0]['parcels'][0]['dimensionLength'] = 1;
+
+			//If we have a package size set
+			if(isset($data['package']['size']) && isset($data['package']['size']['width']) && isset($data['package']['size']['height']) && isset($data['package']['size']['length'])) {
+				$options['shipments'][0]['parcels'][0]['dimensionWidth'] = $data['package']['size']['width'];
+				$options['shipments'][0]['parcels'][0]['dimensionHeight'] = $data['package']['size']['height'];
+				$options['shipments'][0]['parcels'][0]['dimensionLength'] = $data['package']['size']['length'];
+			}
+
 		} else {
 			
 			//International packages
