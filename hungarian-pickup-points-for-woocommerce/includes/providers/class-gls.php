@@ -143,6 +143,9 @@ class VP_Woo_Pont_GLS {
 			'SK' => __( 'Slovakia', 'vp-woo-pont' )
 		);
 
+		//Smallf ix for tracking automation, since the return shipment has the same delivered status as the normal one
+		add_filter('vp_woo_pont_tracking_automation_target_status', array($this, 'tracking_automation_target_status'), 10, 6);
+
 	}
 
 	public function get_settings($settings) {
@@ -780,6 +783,25 @@ class VP_Woo_Pont_GLS {
 			$enabled['gls_'.strtolower($enabled_country)] = $supported[$enabled_country].' (GLS)';
 		}
 		return $enabled;
+	}
+
+	public function tracking_automation_target_status($target_status, $order, $provider, $tracking_info, $automation, $event_status) {
+		if($provider == 'gls' && (in_array('delivered', $automation[$provider]) && $event_status == 'delivered')) {
+			$existing_tracking_info = $order->get_meta('_vp_woo_pont_parcel_info');
+			if($existing_tracking_info && $this->has_shipment_returned($existing_tracking_info)) {
+				return false;
+			}
+		}
+		return $target_status;
+	}
+
+	private function has_shipment_returned($tracking_info) {
+		foreach ($tracking_info as $info) {
+			if (isset($info['event']) && $info['event'] == '23') {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

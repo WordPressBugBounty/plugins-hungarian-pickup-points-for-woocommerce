@@ -135,15 +135,6 @@ class VP_Woo_Pont_DPD {
 				'desc' => __("Enter your DPD account's Weblabel password.", 'vp-woo-pont'),
 				'id' => 'dpd_password'
 			),
-            array(
-                'type' => 'vp_checkboxes',
-				'class' => 'vp-woo-pont-select-group-dpd-item vp-woo-pont-select-group-dpd-item-weblabel',
-                'title' => __( 'Enabled countries', 'vp-woo-pont' ),
-				'options' => $this->supported_countries,
-                'default' => array('HU'),
-				'desc' => __('Show pickup points in these countries as available options.', 'vp-woo-pont'),
-				'id' => 'dpd_countries'
-            ),
 			array(
 				'type' => 'select',
 				'title' => __( 'Default service', 'vp-woo-pont' ),
@@ -193,6 +184,14 @@ class VP_Woo_Pont_DPD {
 				),
 				'id' => 'dpd_sticker_size'
 			),
+            array(
+                'type' => 'vp_checkboxes',
+                'title' => __( 'Enabled countries', 'vp-woo-pont' ),
+				'options' => $this->supported_countries,
+                'default' => array('HU'),
+				'desc' => __('Show pickup points in these countries as available options.', 'vp-woo-pont'),
+				'id' => 'dpd_countries'
+            ),
 			array(
 				'type' => 'sectionend'
 			)
@@ -223,7 +222,7 @@ class VP_Woo_Pont_DPD {
 			'phone' => $data['customer']['phone'],
 			'email' => $data['customer']['email'],
 			'remark' => $comment,
-			'weight' => wc_get_weight($data['package']['weight'], 'kg'),
+			'weight' => round($data['package']['weight_gramm']/1000, 2),
 			'num_of_parcel' => 1,
 			'order_number' => $data['reference_number'],
 			'parcel_type' => VP_Woo_Pont_Helpers::get_option('dpd_default_service', 'D')
@@ -257,7 +256,7 @@ class VP_Woo_Pont_DPD {
 		//If package count set
 		if(isset($data['options']) && isset($data['options']['package_count']) && $data['options']['package_count'] > 1) {
 			$item['num_of_parcel'] = $data['options']['package_count'];
-			$item['weight'] = wc_get_weight($data['package']['weight']/$data['options']['package_count'], 'kg');
+			$item['weight'] = round($data['package']['weight_gramm']/1000/$data['options']['package_count'], 2);
 		}
 
 		//So developers can modify
@@ -372,14 +371,15 @@ class VP_Woo_Pont_DPD {
 						'contactMobile' => substr($data['customer']['phone'], 1),
 						'countryCode' => $order->get_shipping_country(),
 						'name' => $data['customer']['name'],
-						'street' => $order->get_shipping_address_1(),
-						'address2' => $order->get_shipping_address_2(),
-						'zipCode' => $order->get_shipping_postcode(),
+						'street' => substr($order->get_shipping_address_1(),0,35),
+						'address2' => substr($order->get_shipping_address_2(),0,35),
+						'zipCode' => str_replace(array('-', ' '), '', $order->get_shipping_postcode()),
+						'additionalAddressInfo' => substr($order->get_customer_note(),0,35),
 		
 					),
 					'parcels' => array(
 						array(
-							'weight' => wc_get_weight($data['package']['weight'], 'kg')
+							'weight' => round($data['package']['weight_gramm']/1000, 2)
 						)
 					),
 					'service' => array(
@@ -395,7 +395,7 @@ class VP_Woo_Pont_DPD {
 					),
 					'reference1' => $data['order_id'],
 					'reference2' => $data['reference_number'],
-					'reference3' => $comment,
+					'reference3' => substr($comment,0,35),
 					'saveMode' => "printed",
 					'printFormat' => "PDF",
 					'labelSize' => "A6"
@@ -442,7 +442,7 @@ class VP_Woo_Pont_DPD {
 		if(isset($data['options']) && isset($data['options']['package_count']) && $data['options']['package_count'] > 1) {
 			$options['shipments'][0]['parcels'] = array();
 			for ($i = 0; $i < $data['options']['package_count']; $i++) {
-				$weight = wc_get_weight($data['package']['weight'] / $data['options']['package_count'], 'kg');
+				$weight = round($data['package']['weight_gramm']/1000/$data['options']['package_count'], 2);
 				$options['shipments'][0]['parcels'][] = array(
 					'weight' => $weight,
 				);

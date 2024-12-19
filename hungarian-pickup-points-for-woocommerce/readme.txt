@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.4.8.4
+Stable tag: 3.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,14 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.4.9
+* Csomagpiac bugfix(cím hossz limit)
+* DPD csomagsúly javítás és egyéb shipping api javítások(külföldi irányítószám, futár megjegyzés)
+* Apróbb térkép teljesítmény javítás
+* GLS-nél a csomagkövetés automatizálásnál ha a kézbesítve van kijelölve, de a csoamg visszaszállítás után kerül kézbesítésre, akkor nem fut le az automatizálás
+* Pénztár blokk javítás WC 9.5-el
+* WC 9.5 kompatibilitás megjelölés
 
 3.4.8.4
 * Telefonszám javítás külföldi szállítási cím esetén

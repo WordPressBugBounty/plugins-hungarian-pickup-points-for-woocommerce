@@ -17,14 +17,18 @@ if ( ! class_exists( 'VP_Woo_Pont_Automations', false ) ) :
 			//On successful payment
 			add_action( 'woocommerce_payment_complete', array( __CLASS__, 'on_payment_complete' ), 12 );
 
-			//On status change
-			$statuses = self::get_order_statuses();
-			foreach ($statuses as $status => $label) {
-				$status = str_replace( 'wc-', '', $status );
-				add_action( 'woocommerce_order_status_'.$status, function($order_id) use ($status) {
-					self::on_status_change($order_id, $status);
-				});
-			}
+			add_action('init', function(){
+
+				//On status change
+				$statuses = self::get_order_statuses();
+				foreach ($statuses as $status => $label) {
+					$status = str_replace( 'wc-', '', $status );
+					add_action( 'woocommerce_order_status_'.$status, function($order_id) use ($status) {
+						self::on_status_change($order_id, $status);
+					});
+				}
+
+			});
 
 		}
 
@@ -148,6 +152,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Automations', false ) ) :
 
 				//Check if it was already generated
 				$generated = ($order->get_meta('_vp_woo_pont_parcel_pdf'));
+
+				//On order created, we will always generate the document
+				if($automation['trigger'] == 'order_created') {
+					$deferred = false;
+				}
 
 				//Skip, if already generated
 				if($generated) continue;

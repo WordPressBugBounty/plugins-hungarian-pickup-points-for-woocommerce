@@ -203,7 +203,7 @@ class VP_Woo_Pont_Csomagpiac {
 			'recipientCountryCode' => $order->get_shipping_country(),
 			'recipientZip' => $order->get_shipping_postcode(),
 			'recipientCity' => substr($order->get_shipping_city(), 0, 40),
-			'recipientAddress' => implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),
+			'recipientAddress' => substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())), 0, 40),
 			'recipientPhone' => $data['customer']['phone'],
 			'recipientEmail' => $data['customer']['email'],
 			'packageCount' => 1,

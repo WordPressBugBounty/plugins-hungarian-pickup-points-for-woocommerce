@@ -1032,7 +1032,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				return wc_get_weight($total_weight, 'g', 'g');
 			}
 
-			return wc_get_weight($total_weight, 'g', get_option('woocommerce_weight_unit'));
+			return round(wc_get_weight($total_weight, 'g', get_option('woocommerce_weight_unit')));
 		}
 
 		public static function get_carrier_logo($order) {

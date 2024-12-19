@@ -378,14 +378,9 @@ jQuery(document).ready(function($) {
 		process_provider: function(provider, data) {
 			var allDocuments = [];
 
-			console.log(data);
-
-
 			//Loop through json results and create a marker on the map
 			for (var i = 0; i < data.length; i++) {
-				var a = vp_woo_pont_frontend.find_custom_point_override(data[i], provider);
-				if(!a) continue;
-
+				var a = data[i];
 				var marker = L.marker(new L.LatLng(a.lat, a.lon), { data: a });
 				a.marker_id = L.stamp(marker);
 
@@ -393,8 +388,13 @@ jQuery(document).ready(function($) {
 				marker.on('click', vp_woo_pont_frontend.select_in_map);
 
 				//Remove accents from place name
-				a.city_nfd = a.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-				a.addr_nfd = a.addr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+				if(a.country && a.county != 'HU') {
+					a.city_nfd = a.city;
+					a.addr_nfd = a.addr;
+				} else {
+					a.city_nfd = a.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+					a.addr_nfd = a.addr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");	
+				}
 
 				//Create markers and create local db for autocomplete search
 				if(provider == 'postapont') {
@@ -568,8 +568,6 @@ jQuery(document).ready(function($) {
 			//// TODO: do this with vanilla js, so its a little faster
 			var list_item = $('#vp-woo-pont-modal-list-item-sample').clone();
 			var provider_price = vp_woo_pont_frontend.providers[provider];
-
-			console.log(provider);
 
 			//Change price for packeta and gls based on countries
 			if((provider == 'packeta_shop' || provider == 'packeta_zbox' || provider == 'gls_shop' || provider == 'gls_locker') && item.country && vp_woo_pont_frontend.providers[provider+'_'+item.country]) {
@@ -854,7 +852,6 @@ jQuery(document).ready(function($) {
 				//Center billing country
 				if(selected_country && zipCodes.vp_woo_pont_country_coordinates[selected_country] !== undefined) {
 					default_center_position = zipCodes.vp_woo_pont_country_coordinates[selected_country];
-					console.log(default_center_position);
 				}
 
 				vp_woo_pont_frontend.$map.setView(default_center_position, 8);

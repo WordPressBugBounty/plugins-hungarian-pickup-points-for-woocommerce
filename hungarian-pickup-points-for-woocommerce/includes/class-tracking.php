@@ -218,7 +218,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 							}
 
 							//Change order status otherwise
-							$target_status = apply_filters('vp_woo_pont_tracking_automation_target_status', $target_status, $order, $provider, $tracking_info);
+							$target_status = apply_filters('vp_woo_pont_tracking_automation_target_status', $target_status, $order, $provider, $tracking_info, $automation, $event_status);
 							if($target_status) {
 								$order->update_status($target_status, sprintf(__( 'Order status updated, because of the following tracking status event: %s', 'vp-woo-pont' ), $tracking_statuses[$provider][$tracking_info['event']]));
 								$order->save();
@@ -233,7 +233,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			}
 
 			//Also run e-mail automations
-			$this->run_email_automation($order, $provider, $new_events);
+			if(apply_filters('vp_woo_pont_trigger_tracking_email_automation_enabled', true, $order, $provider, $new_events)) {
+				$this->run_email_automation($order, $provider, $new_events);
+			}
 
 		}
 
