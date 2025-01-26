@@ -115,6 +115,13 @@ class VP_Woo_Pont_Sameday {
 				'id' => 'sameday_sticker_size',
 			),
 			array(
+				'type' => 'text',
+				'title' => __('Insurance maximum limit', 'vp-woo-pont'),
+				'desc_tip' => __('Leve it empty if theres no max limit(it will use the order total).', 'vp-woo-pont'),
+				'default' => '',
+				'id' => 'sameday_insurance_limit'
+			),
+			array(
 				'type' => 'sectionend'
 			)
 		);
@@ -231,6 +238,11 @@ class VP_Woo_Pont_Sameday {
 			'geniusOrder' => 0,
 			'orderNumber' => $data['order_number']
 		);
+
+		//Insurance limit
+		if(VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit') && $data['package']['total'] > VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit')) {
+			$item['insuredValue'] = VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit');
+		}
 
 		//If package count set
 		if(isset($data['options']) && isset($data['options']['package_count']) && $data['options']['package_count'] > 1) {

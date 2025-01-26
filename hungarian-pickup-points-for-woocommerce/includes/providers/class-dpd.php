@@ -99,6 +99,21 @@ class VP_Woo_Pont_DPD {
 			'AT' => __( 'Austria', 'vp-woo-pont' ),
 			'PL' => __( 'Poland', 'vp-woo-pont' ),
 			'GR' => __( 'Greece', 'vp-woo-pont' ),
+			'IT' => __( 'Italy', 'vp-woo-pont' ),
+			'FR' => __( 'France', 'vp-woo-pont' ),
+			'DK' => __( 'Denmark', 'vp-woo-pont' ),
+			'NL' => __( 'Netherlands', 'vp-woo-pont' ),
+			'BE' => __( 'Belgium', 'vp-woo-pont' ),
+			'BG' => __( 'Bulgaria', 'vp-woo-pont' ),
+			'LV' => __( 'Latvia', 'vp-woo-pont' ),
+			'LT' => __( 'Lithuania', 'vp-woo-pont' ),
+			'EE' => __( 'Estonia', 'vp-woo-pont' ),
+			'IE' => __( 'Ireland', 'vp-woo-pont' ),
+			'SE' => __( 'Sweden', 'vp-woo-pont' ),
+			'LU' => __( 'Luxembourg', 'vp-woo-pont' ),
+			'PT' => __( 'Portugal', 'vp-woo-pont' ),
+			'FI' => __( 'Finland', 'vp-woo-pont' ),
+			'ES' => __( 'Spain', 'vp-woo-pont' ),
 		);
 
 	}

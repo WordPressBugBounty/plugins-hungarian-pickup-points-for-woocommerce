@@ -354,12 +354,13 @@ class VP_Woo_Pont_GLS {
 			$parcel['DeliveryAddress']['ZipCode'] = $order->get_shipping_postcode();
 			$parcel['DeliveryAddress']['CountryIsoCode'] = $order->get_shipping_country();
 		} else {
+			$order = wc_get_order($data['order_id']);
 			$parcel['DeliveryAddress']['Name'] = $data['customer']['name_with_company'];
 			$parcel['DeliveryAddress']['Street'] = '';
 			$parcel['DeliveryAddress']['HouseNumberInfo'] = '';
 			$parcel['DeliveryAddress']['City'] = '';
 			$parcel['DeliveryAddress']['ZipCode'] = '';
-			$parcel['DeliveryAddress']['CountryIsoCode'] = 'HU';
+			$parcel['DeliveryAddress']['CountryIsoCode'] = ($order->get_shipping_country()) ? $order->get_shipping_country() : 'HU';
 		}
 
 		//Check for COD
@@ -381,7 +382,7 @@ class VP_Woo_Pont_GLS {
 					$parcel['CODAmount'] = round($data['package']['total']); // Round to nearest 1 CZK
 				} elseif ($currency == 'EUR') {
 					$parcel['CODAmount'] = round($data['package']['total'] * 20) / 20; // Round to nearest 0.05 EUR
-				}		
+				}
 			}
 		} else {
 			$parcel['CODAmount'] = null;
@@ -478,7 +479,7 @@ class VP_Woo_Pont_GLS {
 
 		//Logging
 		VP_Woo_Pont()->log_debug_messages($options, 'gls-create-label');
-
+		
 		//Submit request
 		$request = wp_remote_post( $api_url, array(
 			'body'    => json_encode($options),
