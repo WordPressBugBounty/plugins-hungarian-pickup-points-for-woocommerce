@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.4.10
+Stable tag: 3.4.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,9 +56,12 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 
 == Changelog ==
 
+3.4.11
+* Sameday biztosítás javítás
+
 3.4.10
 * GLS külföldi csomagpot utánvét kerekítés javítás
-* Sameday-nél megadható a maximum biztosítési összeg a beállításokban
+* Sameday-nél megadható a maximum biztosítási összeg a beállításokban
 * Összes külföldi DPD pont támogatása
 
 3.4.9

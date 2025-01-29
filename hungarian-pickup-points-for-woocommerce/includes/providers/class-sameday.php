@@ -242,6 +242,10 @@ class VP_Woo_Pont_Sameday {
 		//Insurance limit
 		if(VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit') && $data['package']['total'] > VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit')) {
 			$item['insuredValue'] = VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit');
+
+			if(VP_Woo_Pont_Helpers::get_option('sameday_insurance_limit') == 1) {
+				$item['insuredValue'] = 0;
+			}
 		}
 
 		//If package count set
