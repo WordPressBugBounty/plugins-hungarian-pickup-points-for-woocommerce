@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class VP_Woo_Pont_DPD {
 	protected $api_type = '';
-	protected $api_url = 'https://weblabel.dpd.hu/dpd_wow/';
+	protected $api_url = 'https://middleware.dpd.hu/api/';
 	protected $api_url_v2 = 'https://shipping.dpdgroup.com/api/v1.1/';
 	protected $username = '';
 	protected $password = '';
@@ -274,6 +274,10 @@ class VP_Woo_Pont_DPD {
 			$item['weight'] = round($data['package']['weight_gramm']/1000/$data['options']['package_count'], 2);
 		}
 
+		//Unset name2 and remark if empty
+		if($item['name2'] == '') unset($item['name2']);
+		if($item['remark'] == '') unset($item['remark']);
+
 		//So developers can modify
 		$item = apply_filters('vp_woo_pont_dpd_label', $item, $data);
 
@@ -281,7 +285,7 @@ class VP_Woo_Pont_DPD {
 		VP_Woo_Pont()->log_debug_messages($item, 'dpd-create-label');
 
 		//Submit request
-		$request = wp_remote_post( $this->api_url.'parcel_import.php', array(
+		$request = wp_remote_post( $this->api_url.'parcel-import', array(
 			'body'    => $item,
 			'headers'  => array(
 				'Content-Type: application/x-www-form-urlencoded'
@@ -307,9 +311,13 @@ class VP_Woo_Pont_DPD {
             return new WP_Error('dpd_error', 'Invalid response from DPD API');
         }
 		
-		if($response['status'] == 'err') {
+		if($response['status'] == 'err' || $response['status'] == 'error') {
 			VP_Woo_Pont()->log_error_messages($response, 'dpd-create-label');
-			return new WP_Error( 'dpd_error', $response['errlog'] );
+			if(is_array($response['errlog'])) {
+				return new WP_Error( 'dpd_error', json_encode($response['errlog']));
+			} else {
+				return new WP_Error( 'dpd_error', $response['errlog'] );
+			}
 		}
 
 		//Else, it was successful
@@ -317,7 +325,7 @@ class VP_Woo_Pont_DPD {
 		$parcel_numbers = $response['pl_number'];
 
 		//Next, generate the PDF label
-		$request = wp_remote_post( $this->api_url.'parcel_print.php', array(
+		$request = wp_remote_post( $this->api_url.'parcel-print', array(
 			'body'    => array(
 				'username' => $this->username,
 				'password' => $this->password,
@@ -338,14 +346,23 @@ class VP_Woo_Pont_DPD {
 		$response = wp_remote_retrieve_body( $request );
 
 		//Check if its json, if so, thats an error
-		$json = json_decode( $response );
-		if($json !== null) {
+		$json = json_decode( $response, true );
+
+		if($json['status'] == 'error') {
 			return new WP_Error( 'dpd_error', $json['errlog'] );
 		}
 
-		//Now we have the PDF as base64, save it
-		$pdf = $response;
+        //Now we have the PDF as base64, save it
+        $pdf_base64 = $json['pdf'];
 
+        // Remove the prefix if it exists
+        if (strpos($pdf_base64, 'data:application/pdf;base64,') === 0) {
+            $pdf_base64 = str_replace('data:application/pdf;base64,', '', $pdf_base64);
+        }
+
+        // Decode the base64 string
+        $pdf = base64_decode($pdf_base64);
+		
 		//Crop to A6 if needed, but only if it doesn't contain a return label
 		$label_size = VP_Woo_Pont_Helpers::get_option('dpd_sticker_size', 'A6');
 		if($label_size == 'A6_SINGLE' && $item['num_of_parcel'] == 1) {
@@ -538,7 +555,7 @@ class VP_Woo_Pont_DPD {
 		VP_Woo_Pont()->log_debug_messages($data, 'dpd-void-label-request');
 
 		//Submit request
-		$request = wp_remote_post( $this->api_url.'parcel_delete.php', array(
+		$request = wp_remote_post( $this->api_url.'parcel-delete', array(
 			'body'    => array(
 				'username' => $this->username,
 				'password' => $this->password,
@@ -559,7 +576,7 @@ class VP_Woo_Pont_DPD {
 		$response = json_decode( $response, true );
 
 		//Check for errors
-		if($response['status'] == 'err') {
+		if($response['status'] == 'err' || $response['status'] == 'error') {
 			VP_Woo_Pont()->log_error_messages($response, 'dpd-create-label');
 			return new WP_Error( 'dpd_error', $response['errlog'] );
 		}
@@ -631,7 +648,7 @@ class VP_Woo_Pont_DPD {
 		$parcel_number = $order->get_meta('_vp_woo_pont_parcel_number');
 
 		//Submit request
-		$request = wp_remote_post( $this->api_url.'parcel_status.php', array(
+		$request = wp_remote_post( $this->api_url.'parcel-status', array(
 			'body'    => array(
 				'secret' => 'FcJyN7vU7WKPtUh7m1bx', //Fixed secret based on the Weblabel documentation
 				'parcel_number' => $parcel_number
@@ -651,7 +668,7 @@ class VP_Woo_Pont_DPD {
 		$response = json_decode( $response, true );
 
 		//Check for errors
-		if($response['status'] == 'err') {
+		if($response['status'] == 'err' || $response['status'] == 'error') {
 			VP_Woo_Pont()->log_error_messages($response, 'dpd-create-label');
 			return new WP_Error( 'dpd_error', $response['errlog'] );
 		}
@@ -740,7 +757,7 @@ class VP_Woo_Pont_DPD {
 	public function close_shipments($packages = array(), $orders = array()) {
 
 		//Submit request
-		$request = wp_remote_post( $this->api_url.'parceldatasend.php', array(
+		$request = wp_remote_post( $this->api_url.'parcel-data-send', array(
 			'body'    => array(
 				'username' => $this->username,
 				'password' => $this->password
