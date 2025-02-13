@@ -248,14 +248,14 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 						<?php endforeach; ?>
 					</ul>
 				</li>
-				<li class="vp-woo-pont-package-weight vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, sameday]">
+				<li class="vp-woo-pont-package-weight vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, sameday, dpd]">
 					<label for="vp_woo_pont_package_weight"><?php esc_html_e('Package weight','vp-woo-pont'); ?></label>
 					<input type="text" id="vp_woo_pont_package_weight" value="<?php echo VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order); ?>">
 					<em><?php esc_html_e('gramms', 'vp-woo-pont'); ?></em>
 				</li>
 
 				<?php if($packaging_types): ?>
-					<li class="vp-woo-pont-package-size vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk]">
+					<li class="vp-woo-pont-package-size vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, dhl, dpd]">
 						<label><?php esc_html_e('Csomagolás', 'vp-woo-pont'); ?></label>
 						<ul>
 							<?php foreach ( $packaging_types as $packaging_id => $packaging_type ): ?>

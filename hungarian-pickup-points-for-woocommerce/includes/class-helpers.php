@@ -1269,6 +1269,15 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			return $results;
 		}
 
+		public static function get_user_roles() {
+			$roles = get_editable_roles();
+			$available_roles = array();
+			foreach ($roles as $role_id => $role) {
+				$available_roles[$role_id] = $role['name'];
+			}
+			return $available_roles;
+		}
+
 	}
 
 endif;

@@ -49,6 +49,14 @@ add_action('woocommerce_blocks_loaded', function() {
 			#shipping-method-2 .wc-block-checkout__shipping-method-option-price:after {
 				content: "'.$min_cost_label.'";
 			}
+			
+			.wp-block-woocommerce-cart-order-summary-shipping-block .wc-block-components-totals-item__value:not(.wc-block-formatted-money-amount) strong {
+				display: none;
+			}
+
+			.wp-block-woocommerce-checkout[data--vp-shipping-method*="vp_pont"][data--vp-selected-point=""] .wp-block-woocommerce-checkout-order-summary-shipping-block .wc-block-components-totals-shipping .wc-block-components-totals-item__value:not(.wc-block-formatted-money-amount) strong {
+				display: none;
+			}
 		';
 
 		//Add custom CSS

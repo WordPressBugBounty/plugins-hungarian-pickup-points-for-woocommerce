@@ -75,6 +75,37 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 					'options' => array()
 				);
 
+				$conditions['current_time'] = array(
+					'label' => __('Current time', 'vp-woo-pont'),
+					'options' => array()
+				);
+
+				$conditions['current_day'] = array(
+					'label' => __('Current day', 'vp-woo-pont'),
+					'options' => array(
+						1 => __('Monday', 'vp-woo-pont'),
+						2 => __('Tuesday', 'vp-woo-pont'),
+						3 => __('Wednesday', 'vp-woo-pont'),
+						4 => __('Thursday', 'vp-woo-pont'),
+						5 => __('Friday', 'vp-woo-pont'),
+						6 => __('Saturday', 'vp-woo-pont'),
+						7 => __('Sunday', 'vp-woo-pont'),
+					)
+				);
+
+				$conditions['user_logged_in'] = array(
+					'label' => __('User logged in', 'vp-woo-pont'),
+					'options' => array(
+						'yes' => __('Yes', 'vp-woo-pont'),
+						'no' => __('No', 'vp-woo-pont'),
+					)
+				);
+
+				$conditions['user_role'] = array(
+					'label' => __('User role', 'vp-woo-pont'),
+					'options' => VP_Woo_Pont_Helpers::get_user_roles()
+				);
+
 			}
 
 			if($group != 'pricings') {
@@ -157,7 +188,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 						<option value="equal"><?php _e('equal', 'vp-woo-pont'); ?></option>
 						<option value="not_equal"><?php _e('not equal', 'vp-woo-pont'); ?></option>
 						<option value="greater"><?php _e('greater than', 'vp-woo-pont'); ?></option>
+						<option value="greater_or_equal"><?php _e('greater or equal', 'vp-woo-pont'); ?></option>
 						<option value="less"><?php _e('less than', 'vp-woo-pont'); ?></option>
+						<option value="less_or_equal"><?php _e('less or equal', 'vp-woo-pont'); ?></option>
 					</select>
 					<?php foreach ($conditions as $condition_id => $condition): ?>
 						<?php if($condition['options']): ?>
@@ -320,7 +353,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 				'cart_count' => WC()->cart->get_cart_contents_count(),
 				'longest_side' => $longest_side,
 				'provider' => $provider,
-				'current_date' => strtotime( wp_date( 'Y-m-d' ) )
+				'current_date' => strtotime( wp_date( 'Y-m-d' ) ),
+				'current_time' => strtotime( wp_date( 'H:i' ) ),
+				'current_day' => wp_date('N'),
+				'user_logged_in' => (is_user_logged_in()) ? 'yes' : 'no',
+				'user_role' => (is_user_logged_in()) ? wp_get_current_user()->roles[0] : '',
 			);
 
 			//Custom conditions
@@ -379,6 +416,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 									$items[$item_id]['conditions'][$condition_id]['match'] = true;
 								}
 								break;
+							case 'greater_or_equal':
+								if((float)$condition['value'] <= $order_details[$condition['category']]) {
+									$items[$item_id]['conditions'][$condition_id]['match'] = true;
+								}
+								break;
+							case 'less':
+								if((float)$condition['value'] > $order_details[$condition['category']]) {
+									$items[$item_id]['conditions'][$condition_id]['match'] = true;
+								}
+								break;
+							case 'less_or_equal':
+								if((float)$condition['value'] >= $order_details[$condition['category']]) {
+									$items[$item_id]['conditions'][$condition_id]['match'] = true;
+								}
+								break;		
 							default:
 								if((float)$condition['value'] > $order_details[$condition['category']]) {
 									$items[$item_id]['conditions'][$condition_id]['match'] = true;

@@ -117,7 +117,7 @@ class VP_Woo_Pont_Sameday {
 			array(
 				'type' => 'text',
 				'title' => __('Insurance maximum limit', 'vp-woo-pont'),
-				'desc_tip' => __('Leve it empty if theres no max limit(it will use the order total).', 'vp-woo-pont'),
+				'desc_tip' => __('Leave it empty if theres no max limit(it will use the order total).', 'vp-woo-pont'),
 				'default' => '',
 				'id' => 'sameday_insurance_limit'
 			),

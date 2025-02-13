@@ -117,7 +117,6 @@ class VP_Woo_Pont_DPD {
 		);
 
 	}
-
 	public function get_settings($settings) {
 		$dpd_settings = array(
 			array(
@@ -247,6 +246,12 @@ class VP_Woo_Pont_DPD {
 		if($data['point_id']) {
 			$item['parcelshop_id'] = $data['point_id'];
 			$item['parcel_type'] = 'PS';
+
+			//If we don't have a weight, set it to 1
+			if($item['weight'] == 0) {
+				$item['weight'] = 1;
+			}
+
 		}
 
 		//Check for COD
@@ -301,6 +306,8 @@ class VP_Woo_Pont_DPD {
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 		$response = json_decode( $response, true );
+
+		print_r($response);
 
 		//Logging
 		VP_Woo_Pont()->log_debug_messages($response, 'dpd-create-label-response');
@@ -402,12 +409,12 @@ class VP_Woo_Pont_DPD {
 						'contactPhone' => $data['customer']['phone'],
 						'contactMobile' => substr($data['customer']['phone'], 1),
 						'countryCode' => $order->get_shipping_country(),
-						'name' => $data['customer']['name'],
+						'name' => substr($data['customer']['name'],0,35),
+						'name2' => substr($data['customer']['company'],0,35),
 						'street' => substr($order->get_shipping_address_1(),0,35),
 						'address2' => substr($order->get_shipping_address_2(),0,35),
 						'zipCode' => str_replace(array('-', ' '), '', $order->get_shipping_postcode()),
 						'additionalAddressInfo' => substr($order->get_customer_note(),0,35),
-		
 					),
 					'parcels' => array(
 						array(
@@ -425,7 +432,7 @@ class VP_Woo_Pont_DPD {
 							)
 						)
 					),
-					'reference1' => $data['order_id'],
+					'reference1' => $data['order_number'],
 					'reference2' => $data['reference_number'],
 					'reference3' => substr($comment,0,35),
 					'saveMode' => "printed",
@@ -464,7 +471,7 @@ class VP_Woo_Pont_DPD {
 			$options['shipments'][0]['service']['additionalService']['cod'] = array(
 				'currency' => $order->get_currency(),
 				'paymentType' => 'cash',
-				'reference' => $data['cod_reference_number'],
+				'reference' => substr($data['cod_reference_number'],0,14),
 				'amount' => $data['package']['total'],
 				'split' => 'First parcel'
 			);
