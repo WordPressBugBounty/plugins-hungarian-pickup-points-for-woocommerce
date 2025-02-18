@@ -464,6 +464,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 				//If point is not selected yet, and only one price set, use that
 				$shipping_costs = self::calculate_shipping_costs();
+
 				if(count($shipping_costs) == 1) {
 					$shipping_cost = current($shipping_costs);
 				}

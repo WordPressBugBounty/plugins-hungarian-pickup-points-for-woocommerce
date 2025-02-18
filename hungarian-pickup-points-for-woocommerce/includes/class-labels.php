@@ -874,7 +874,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 			//Set character limit
 			if($limit) {
-				$note = substr($note, 0, $limit);
+				$note = mb_substr($note, 0, $limit);
 			}
 
 			return $note;

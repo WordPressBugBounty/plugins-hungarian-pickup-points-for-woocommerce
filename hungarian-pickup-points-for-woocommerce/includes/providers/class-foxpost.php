@@ -139,7 +139,7 @@ class VP_Woo_Pont_Foxpost {
 		//Create item
 		$comment = VP_Woo_Pont()->labels->get_package_contents_label($data, 'foxpost');
 		$item = array(
-			'comment' => substr($comment,0,50), //50 character limit
+			'comment' => mb_substr($comment,0,50), //50 character limit
 			'deliveryNote' => mb_substr($data['order']->get_customer_note(),0,50),
 			'orderId' => $data['order_id'],
 			'recipientName' => $data['customer']['name'],

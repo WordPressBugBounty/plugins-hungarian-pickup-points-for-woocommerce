@@ -227,11 +227,11 @@ class VP_Woo_Pont_DPD {
 		$item = array(
 			'username' => $this->username,
 			'password' => $this->password,
-			'name1' => substr($data['customer']['name'],0,40),
-			'name2' => substr($data['customer']['company'],0,40),
-			'street' => implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),
+			'name1' => mb_substr($data['customer']['name'],0,35),
+			'name2' => mb_substr($data['customer']['company'],0,35),
+			'street' => mb_substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),0,35),
 			'city' => $order->get_shipping_city(),
-			'country' => $order->get_shipping_country(),
+			'country' => $order->get_shipping_country() || 'HU',
 			'pcode' => $order->get_shipping_postcode(),
 			'phone' => $data['customer']['phone'],
 			'email' => $data['customer']['email'],
@@ -407,14 +407,14 @@ class VP_Woo_Pont_DPD {
 						'contactEmail' => $data['customer']['email'],
 						'contactName' => $data['customer']['name'],
 						'contactPhone' => $data['customer']['phone'],
-						'contactMobile' => substr($data['customer']['phone'], 1),
+						'contactMobile' => mb_substr($data['customer']['phone'], 1),
 						'countryCode' => $order->get_shipping_country(),
-						'name' => substr($data['customer']['name'],0,35),
-						'name2' => substr($data['customer']['company'],0,35),
-						'street' => substr($order->get_shipping_address_1(),0,35),
-						'address2' => substr($order->get_shipping_address_2(),0,35),
+						'name' => mb_substr($data['customer']['name'],0,35),
+						'name2' => mb_substr($data['customer']['company'],0,35),
+						'street' => mb_substr($order->get_shipping_address_1(),0,35),
+						'address2' => mb_substr($order->get_shipping_address_2(),0,35),
 						'zipCode' => str_replace(array('-', ' '), '', $order->get_shipping_postcode()),
-						'additionalAddressInfo' => substr($order->get_customer_note(),0,35),
+						'additionalAddressInfo' => mb_substr($order->get_customer_note(),0,35),
 					),
 					'parcels' => array(
 						array(
@@ -434,7 +434,7 @@ class VP_Woo_Pont_DPD {
 					),
 					'reference1' => $data['order_number'],
 					'reference2' => $data['reference_number'],
-					'reference3' => substr($comment,0,35),
+					'reference3' => mb_substr($comment,0,35),
 					'saveMode' => "printed",
 					'printFormat' => "PDF",
 					'labelSize' => "A6"
@@ -471,7 +471,7 @@ class VP_Woo_Pont_DPD {
 			$options['shipments'][0]['service']['additionalService']['cod'] = array(
 				'currency' => $order->get_currency(),
 				'paymentType' => 'cash',
-				'reference' => substr($data['cod_reference_number'],0,14),
+				'reference' => mb_substr($data['cod_reference_number'],0,14),
 				'amount' => $data['package']['total'],
 				'split' => 'First parcel'
 			);

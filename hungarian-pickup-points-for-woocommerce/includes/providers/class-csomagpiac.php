@@ -199,11 +199,11 @@ class VP_Woo_Pont_Csomagpiac {
 		$order = wc_get_order($data['order_id']);
 		$item = array(
 			'pickupPointId' => VP_Woo_Pont_Helpers::get_option('csomagpiac_pickup_point'),
-			'recipientName' => substr($data['customer']['name_with_company'], 0, 40),
+			'recipientName' => mb_substr($data['customer']['name_with_company'], 0, 40),
 			'recipientCountryCode' => $order->get_shipping_country(),
 			'recipientZip' => $order->get_shipping_postcode(),
-			'recipientCity' => substr($order->get_shipping_city(), 0, 40),
-			'recipientAddress' => substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())), 0, 40),
+			'recipientCity' => mb_substr($order->get_shipping_city(), 0, 40),
+			'recipientAddress' => mb_substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())), 0, 40),
 			'recipientPhone' => $data['customer']['phone'],
 			'recipientEmail' => $data['customer']['email'],
 			'packageCount' => 1,
