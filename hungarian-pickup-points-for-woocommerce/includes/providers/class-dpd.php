@@ -231,7 +231,7 @@ class VP_Woo_Pont_DPD {
 			'name2' => mb_substr($data['customer']['company'],0,35),
 			'street' => mb_substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())),0,35),
 			'city' => $order->get_shipping_city(),
-			'country' => $order->get_shipping_country() || 'HU',
+			'country' => $order->get_shipping_country() ? $order->get_shipping_country() : 'HU',
 			'pcode' => $order->get_shipping_postcode(),
 			'phone' => $data['customer']['phone'],
 			'email' => $data['customer']['email'],
@@ -306,8 +306,6 @@ class VP_Woo_Pont_DPD {
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 		$response = json_decode( $response, true );
-
-		print_r($response);
 
 		//Logging
 		VP_Woo_Pont()->log_debug_messages($response, 'dpd-create-label-response');
