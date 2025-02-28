@@ -453,7 +453,8 @@ class VP_Woo_Pont_GLS {
 			'ParcelList' => array($parcel),
 			'PrintPosition' => 1,
 			'ShowPrintDialog' => 0,
-			'TypeOfPrinter' => $label_size
+			'TypeOfPrinter' => $label_size,
+			'WebshopEngine' => 'WooCommerce'
 		);
 
 		//If its A6, still use A4_2x2, we just need to rotate it later to fit A6
@@ -473,7 +474,8 @@ class VP_Woo_Pont_GLS {
 			$options = array(
 				'Username' => $this->api_username,
 				'Password' => array_values(unpack('C*', hash('sha512', $this->api_password, true))),
-				'ParcelList' => array($parcel)
+				'ParcelList' => array($parcel),
+				'WebshopEngine' => 'WooCommerce'
 			);
 		}
 
