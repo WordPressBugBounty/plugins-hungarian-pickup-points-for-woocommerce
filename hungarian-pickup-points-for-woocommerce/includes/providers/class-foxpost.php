@@ -69,6 +69,9 @@ class VP_Woo_Pont_Foxpost {
 			'delivered' => array('RECEIVE', 'COLLECTSENT', 'HDRECEIVE'),
 			'errors' => array('BACKLOGINFAIL', 'BACKLOGINFULL', 'MISSORT', 'EMPTYSLOT', 'HDUNDELIVERABLE', 'BACKTOSENDER', 'HDRETURN', 'OVERTIMEOUT', 'RETURNED')
 		);
+
+		//Packeta support
+		add_filter('vp_woo_pont_get_carrier_from_order', array($this, 'add_packeta_support'), 10, 2);
 	}
 
 	public function get_settings($settings) {
@@ -120,11 +123,18 @@ class VP_Woo_Pont_Foxpost {
 				),
 				'id' => 'foxpost_sticker_size'
 			),
+			
 			array(
 				'title' => __('Sender name', 'vp-woo-pont'),
 				'type' => 'text',
 				'desc' => __( 'If you generate a delivery note, this name will be on it as sender.', 'vp-woo-pont' ),
 				'id' => 'foxpost_sender'
+			),
+			array(
+				'title'    => __( 'Packeta Support', 'vp-woo-pont' ),
+				'type'     => 'checkbox',
+				'desc' => __('Use Foxpost to generate Packeta labels', 'vp-woo-pont'),
+				'id' => 'foxpost_packeta_support'
 			),
 			array(
 				'type' => 'sectionend'
@@ -193,7 +203,7 @@ class VP_Woo_Pont_Foxpost {
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 		$response = json_decode( $response, true );
-
+		
 		//Check for HTTP errors
 		if(wp_remote_retrieve_response_code( $request ) != 201) {
 			VP_Woo_Pont()->log_error_messages($response, 'foxpost-create-label');
@@ -480,6 +490,17 @@ class VP_Woo_Pont_Foxpost {
 			'data' => array($header, $csv_row),
 			'separator' => ',',
 		);
+	}
+
+	//If packeta support is checked, change the provider to foxpost, so it will use the foxpost api instead of packeta
+	public function add_packeta_support($provider, $order) {
+		if($provider == 'packeta' && VP_Woo_Pont_Helpers::get_option('foxpost_packeta_support', 'no') == 'yes' && $order->get_shipping_country() == 'HU') {
+			$provider_type = VP_Woo_Pont_Helpers::get_provider_from_order($order);
+			if($provider_type == 'packeta_zbox' || $provider_type == 'packeta_shop') {
+				return 'foxpost';
+			}
+		}
+		return $provider;
 	}
 
 }

@@ -63,6 +63,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 					VP_Woo_Pont_Import_Database::schedule_actions();
 				}
 
+				//Run Foxpost list update
+				if(version_compare('3.5.1', $existing_version, '>')) {
+					WC()->queue()->add( 'vp_woo_pont_update_foxpost_list', array(), 'vp_woo_pont' );
+				}
+
 			}
 			
 		}

@@ -157,6 +157,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 			//Simplify json, so its smaller to store, faster to load
 			foreach ($json as $foxpost) {
+
+				//Skip if its not a Foxpost
+				if($foxpost['apmType'] != 'Rollkon') {
+					continue;
+				}
+
 				$result = array(
 					'id' => $foxpost['place_id'],
 					'lat' => number_format($foxpost['geolat'], 5, '.', ''),
@@ -204,13 +210,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 				$api_key = VP_Woo_Pont_Helpers::get_option('packeta_api_key');
 			}
 
-			//If theres no api key, return error
-			if(!$api_key) {
-				return false;
-			}
-
 			//Get supported countries
 			$enabled_countries = get_option('vp_woo_pont_packeta_countries', array('HU'));
+
+			//Extra points for the rest of the countries
+			$extra_point_ids = array();
+			foreach ($enabled_countries as $carrier_id) {
+				if(intval($carrier_id) > 0) {
+					$extra_point_ids[] = $carrier_id;
+				}
+			}
+
+			//If we have extra points, but no api key, return error
+			if(!empty($extra_point_ids) && !$api_key) {
+				return false;
+			}
 
 			//Download address delivery list too
 			$download_folder = VP_Woo_Pont_Helpers::get_download_folder('packeta');
@@ -273,14 +287,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 				}
 
-			}
-
-			//Extra points for the rest of the countries
-			$extra_point_ids = array();
-			foreach ($enabled_countries as $carrier_id) {
-				if(intval($carrier_id) > 0) {
-					$extra_point_ids[] = $carrier_id;
-				}
 			}
 
 			//Download extra pickup points
