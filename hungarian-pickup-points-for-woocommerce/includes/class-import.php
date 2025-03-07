@@ -158,16 +158,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			//Simplify json, so its smaller to store, faster to load
 			foreach ($json as $foxpost) {
 
-				//Skip if its not a Foxpost
-				if($foxpost['apmType'] != 'Rollkon') {
+				// Skip if the name does not start with "FOXPOST "
+				if(strpos($foxpost['name'], 'FOXPOST ') !== 0) {
 					continue;
 				}
+
+				// Remove "FOXPOST " from the beginning of the name
+				$name = str_replace('FOXPOST ', '', $foxpost['name']);
 
 				$result = array(
 					'id' => $foxpost['place_id'],
 					'lat' => number_format($foxpost['geolat'], 5, '.', ''),
 					'lon' => number_format($foxpost['geolng'], 5, '.', ''),
-					'name' => $foxpost['name'],
+					'name' => $name,
 					'zip' => $foxpost['zip'],
 					'addr' => $foxpost['street'],
 					'city' => $foxpost['city'],
