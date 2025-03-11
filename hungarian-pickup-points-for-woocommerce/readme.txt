@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7.2
-Stable tag: 3.5.1.1
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.5.2
+* Kvikk GLS és DPD támogatás
+* Foxpost-al generált Packeta címke javítása A4-es etiketten
+* Csomagpiac címkeméret beállítás
 
 3.5.1.1
 * Foxpost csomagpont adatbázis import bugfix

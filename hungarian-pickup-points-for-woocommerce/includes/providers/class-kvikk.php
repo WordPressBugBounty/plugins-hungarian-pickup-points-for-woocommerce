@@ -134,7 +134,7 @@ class VP_Woo_Pont_Kvikk {
 				'class' => 'wc-enhanced-select',
 				'title' => __( 'Packaged order status', 'vp-woo-pont' ),
 				'options' => VP_Woo_Pont_Settings::get_order_statuses(__('None', 'Order status after scanning', 'vp-woo-pont')),
-				'desc_tip' => __( 'If you scan the label in the Kvikk App, you can mark the order to be in this status.', 'vp-woo-pont' ),
+				'desc' => __( 'If you scan the label in the Kvikk App, you can mark the order to be in this status.', 'vp-woo-pont' ),
 				'id' => 'kvikk_packaged_order_status',
 			),
 			array(
@@ -148,7 +148,7 @@ class VP_Woo_Pont_Kvikk {
     public function get_kvikk_db() {
 
 		//URL of the database
-		$url = 'https://api.kvikk.hu/delivery-points/';
+		$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls&country=HU';
 
 		//Get XML file
 		$request = wp_remote_get($url);
@@ -171,7 +171,7 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//Create a new json
-		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'foxpost' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'alzabox' => array(), 'expressone_omv' => array());
+		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'foxpost' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'gls_locker' => array(), 'gls_shop' => array());
 
 		//Loop through points
 		foreach ($json['data'] as $point) {
@@ -207,8 +207,11 @@ class VP_Woo_Pont_Kvikk {
 
     public function add_provider_group_home_delivery($groups) {
         $groups['kvikk_mpl'] = __('Kvikk MPL', 'vp-woo-pont');
-        $groups['kvikk_expressone'] = __('Kvikk Express One', 'vp-woo-pont');
+        //$groups['kvikk_expressone'] = __('Kvikk Express One', 'vp-woo-pont');
         $groups['kvikk_famafutar'] = __('Kvikk FámaFutár', 'vp-woo-pont');
+        $groups['kvikk_gls'] = __('Kvikk GLS', 'vp-woo-pont');
+        $groups['kvikk_dpd'] = __('Kvikk DPD', 'vp-woo-pont');
+        //$groups['kvikk_dhl'] = __('Kvikk DHL', 'vp-woo-pont');
         return $groups;
     }
 
@@ -226,13 +229,13 @@ class VP_Woo_Pont_Kvikk {
         $providers['kvikk_packeta_zpont'] = 'Packeta Z-Pont';
         $providers['kvikk_packeta_zbox'] = 'Packeta Z-Box';
         $providers['kvikk_foxpost'] = 'Foxpost';
-        $providers['kvikk_expressone_omv'] = 'OMV';
-        $providers['kvikk_alzabox'] = 'Alzabox';
+        $providers['kvikk_gls_locker'] = 'GLS Automata';
+        $providers['kvikk_gls_shop'] = 'GLS Csomagpont';
         return $providers;
     }
 
     public function add_provider_subgroups($subgroups) {
-		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'alzabox', 'expressone_omv');
+		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'gls_shop', 'gls_locker');
         return $subgroups;
     }
 
@@ -240,11 +243,6 @@ class VP_Woo_Pont_Kvikk {
 
 		//Get courier
 		$courier = $data['provider']; 
-
-		//Fix for alzabox
-		if($courier == 'kvikk_alzabox') {
-			$courier = 'kvikk_expressone_alzabox';
-		}
 
 		//Fix for foxpost
 		if($courier == 'kvikk_foxpost') {

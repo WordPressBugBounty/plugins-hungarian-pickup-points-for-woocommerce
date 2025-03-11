@@ -63,14 +63,18 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 			return $mpdf->Output('file.pdf', 'S');
 		}
 
-		public static function rotate_to_a6($pdf) {
+		public static function rotate_to_a6($pdf, $position = false) {
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
 			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A6', 'orientation' => 'P'));
 			$mpdf->AddPage();
 			$mpdf->setSourceFile($pdf);
 			$mpdf->Rotate(-90);
 			$label = $mpdf->ImportPage(1);
-			$mpdf->UseTemplate($label, -10, -74);
+			if($position) {
+				$mpdf->UseTemplate($label, $position[0], $position[1]);
+			} else {
+				$mpdf->UseTemplate($label, -10, -74);
+			}
 			return $mpdf->Output('file.pdf', 'S');
 		}
 
@@ -194,7 +198,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					$grouped_by_providers = $merged_grouped_by_providers;
 
 				}
-
+				
 				if($sticker_parameter) {
 
 					//Merge onto A4 pages

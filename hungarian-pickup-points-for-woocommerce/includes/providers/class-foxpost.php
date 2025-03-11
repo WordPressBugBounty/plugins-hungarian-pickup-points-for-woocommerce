@@ -265,7 +265,16 @@ class VP_Woo_Pont_Foxpost {
 
 		//Crop to A6 portrait if needed
 		if(VP_Woo_Pont_Helpers::get_option('foxpost_sticker_size', 'A6') == 'A6') {
-			$rotated_pdf = VP_Woo_Pont_Print::rotate_to_a6($pdf_file['path']);
+			$order = $data['order'];
+			$provider = $order->get_meta('_vp_woo_pont_provider');
+			$position = false;
+
+			//If provider contains packeta, we need to modify it slightly
+			if(strpos($provider, 'packeta') !== false) {
+				$position = array(-2, -72);
+			}
+
+			$rotated_pdf = VP_Woo_Pont_Print::rotate_to_a6($pdf_file['path'], $position);			
 			VP_Woo_Pont_Labels::save_pdf_file($rotated_pdf, $pdf_file);
 		}
 

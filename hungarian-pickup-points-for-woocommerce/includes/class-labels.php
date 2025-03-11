@@ -56,16 +56,15 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			'kvikk_mpl_postapont',
 			'kvikk_mpl_posta',
 			'kvikk_mpl_automata',
-			'kvikk_expressone_alzabox',
-			'kvikk_alzabox',
-			'kvikk_expressone_omv',
 			'kvikk_packeta_zbox',
 			'kvikk_packeta_zpont',
 			'kvikk_packeta_foxpost',
 			'kvikk_foxpost',
-			'kvikk_expressone',
 			'kvikk_mpl',
-			'kvikk_famafutar'
+			'kvikk_famafutar',
+			'kvikk_gls',
+			'kvikk_gls_shop',
+			'kvikk_gls_locker',
 		);
 		public $supports_bulk_printing = array();
 

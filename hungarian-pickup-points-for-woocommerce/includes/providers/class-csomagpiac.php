@@ -96,6 +96,17 @@ class VP_Woo_Pont_Csomagpiac {
 				'id' => 'csomagpiac_extra_services'
 			),
 			array(
+				'type' => 'select',
+				'class' => 'wc-enhanced-select',
+				'title' => __( 'Sticker size', 'vp-woo-pont' ),
+				'default' => 'A6',
+				'options' => array(
+					'A6' => __( 'A6 on A4(recommended)', 'vp-woo-pont' ),
+					'a6' => __( 'A6', 'vp-woo-pont' ),
+				),
+				'id' => 'csomagpiac_sticker_size'
+			),
+			array(
 				'type' => 'sectionend'
 			)
 		);
@@ -294,7 +305,8 @@ class VP_Woo_Pont_Csomagpiac {
 				'Accept' => 'application/json',
 				'Content-Type' => 'application/json',
 				'Authorization' => 'Bearer '.$this->api_token
-			)
+			),
+			'timeout' => 60
 		));
 
 		//Check for errors
@@ -341,7 +353,7 @@ class VP_Woo_Pont_Csomagpiac {
 		}
 
 		//Next, generate the PDF label
-		$label_size = VP_Woo_Pont_Helpers::get_option('csomagpiac_sticker_size', 'a6');
+		$label_size = 'a6';
 		$request = wp_remote_get( $this->api_url.'shipment/download/'.$parcel_number.'/'.$label_size, array(
 			'headers' => array(
 				'Accept' => 'application/json',
