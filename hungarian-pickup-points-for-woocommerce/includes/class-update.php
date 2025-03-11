@@ -27,8 +27,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 			$existing_version = get_option('vp_woo_pont_version_number');
 			$new_version = VP_Woo_Pont()::$version;
 
-			self::vp_woo_pont_update_352();
-
 			//If plugin is updated, schedule imports(maybe a new provider was added for example)
 			if(!$existing_version || ($existing_version != $new_version)) {
 				update_option('vp_woo_pont_version_number', $new_version);
@@ -384,27 +382,29 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 
 			//Remove expressone from enabled providers
 			$enabled_providers = get_option('vp_woo_pont_enabled_providers');
-			$enabled_providers = array_filter($enabled_providers, function($provider) {
-				return $provider !== 'kvikk_expressone_omv' && $provider !== 'kvikk_expressone_alzabox';
-			});
+			if($enabled_providers) {
+				$enabled_providers = array_filter($enabled_providers, function($provider) {
+					return $provider !== 'kvikk_expressone_omv' && $provider !== 'kvikk_expressone_alzabox';
+				});
+				update_option('vp_woo_pont_enabled_providers', $enabled_providers);
+			}
 
 			//Replace in pricing options
 			$pricings = get_option('vp_woo_pont_pricing');
-			foreach($pricings as $pricing_id => $pricing) {
+			if($pricings) {
+				foreach($pricings as $pricing_id => $pricing) {
 
-				//If contains old providers, replace them
-				$providers = $pricing['providers'];
-				$providers = array_filter($providers, function($provider) {
-					return $provider !== 'kvikk_expressone_omv' && $provider !== 'kvikk_expressone_alzabox';
-				});	
+					//If contains old providers, replace them
+					$providers = $pricing['providers'];
+					$providers = array_filter($providers, function($provider) {
+						return $provider !== 'kvikk_expressone_omv' && $provider !== 'kvikk_expressone_alzabox';
+					});	
 
-				//Update the pricing
-				$pricings[$pricing_id]['providers'] = $providers;
+					//Update the pricing
+					$pricings[$pricing_id]['providers'] = $providers;
+				}
+				update_option('vp_woo_pont_pricing', $pricings);
 			}
-
-			//Save new values
-			update_option('vp_woo_pont_enabled_providers', $enabled_providers);
-			update_option('vp_woo_pont_pricing', $pricings);
 
 		}
 
