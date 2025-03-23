@@ -521,6 +521,11 @@ class VP_Woo_Pont_Posta {
 
 		}
 
+		//Use A6 size for A6inA4, because we will merge it into an A4 page
+		if($parcel['labelType'] == 'A6inA4') {
+			$parcel['labelType'] = 'A6';
+		}
+
 		//Get auth token
 		$token = $this->get_access_token();
 
@@ -687,7 +692,7 @@ class VP_Woo_Pont_Posta {
 		}
 
 		//So developers can modify
-		$auth_header = apply_filters('vp_woo_pont_posta_auth_header', 'Bearer ' . $token, $data);
+		$auth_header = apply_filters('vp_woo_pont_posta_auth_header', 'Bearer ' . $token);
 
 		//Set package numbers if needed
 		$options = [];
@@ -712,9 +717,6 @@ class VP_Woo_Pont_Posta {
 		if(is_wp_error($request)) {
 			return $request;
 		}
-
-		//Log if development mode enabled
-		VP_Woo_Pont()->log_debug_messages($request, 'posta-close-shipments');
 
 		//Check for API errors
 		if(wp_remote_retrieve_response_code( $request ) != 200) {

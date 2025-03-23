@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.7.2
-Stable tag: 3.5.2.1
+Stable tag: 3.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,17 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.5.4
+* Pénztár blokk fejlesztések
+* DPD árazás javítás
+* Pénztár blokk utánvét díj javítás
+
+3.5.3
+* Többcsomagos címke esetén a csoportos nyomtatás működik
+* Pénztár blokk utánvét díj javítás
+* GLS INS szolgáltatás
+* WC 9.7 kompatibilitás megjelölés
 
 3.5.2.1
 * Kvikk GLS és DPD támogatás

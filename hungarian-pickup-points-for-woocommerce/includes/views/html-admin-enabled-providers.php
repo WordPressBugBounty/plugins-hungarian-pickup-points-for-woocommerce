@@ -196,6 +196,7 @@ $sortedProviders += $providers;
 					<td colspan="7">
 						<div class="vp-woo-pont-providers-add">
 							<a href="#" class="vp-woo-pont-providers-add-button button button-primary" data-providers="<?php echo $providers_attr; ?>"><?php esc_html_e('Enable more providers', 'vp-woo-pont'); ?></a>
+							<a href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/mukodik-hazhozszallitassal-is/" target="_blank" class="vp-woo-pont-providers-add-button button button-secondary"><?php esc_html_e('Setup home delivery', 'vp-woo-pont'); ?></a>
 							<div class="vp-woo-pont-providers-add-list">
 								<?php foreach ( $random_disabled_providers as $provider_id ): ?>
 									<i class="vp-woo-pont-provider-icon vp-woo-pont-provider-icon-<?php echo esc_attr($disabled_providers[$provider_id]); ?>"></i>

@@ -1148,6 +1148,49 @@ th .vp_woo_pont_pro_label,
 		border: none !important;
 	}
 
+	&-pricing {
+		li {
+			display: flex;
+			align-items: center;
+
+			i {
+				width: 24px;
+				height: 24px;
+				background-position: center;
+				background-size: 100% auto;
+				background-repeat: no-repeat;
+				margin-right: 10px;
+			}
+
+			strong {
+				color: #2C3F56;
+				margin-left: auto;
+				min-width: 50px;
+				text-align: right;
+				min-height: 18px;
+				background: rgba(0,0,0,0.1);
+			}
+		}
+	}
+
+	&.loaded .kvikk-promo-pricing strong {
+		background: none;
+	}
+
+	&-footnote {
+		font-size: 11px;
+		color: rgba(0,0,0,0.5);
+
+		strong {
+			color: #2C3F56;
+		}
+	}
+
+}
+
+.vp-woo-pont-modal-generate .kvikk-promo-pricing strong {
+	margin-left: 10px;
+	text-align: left;
 }
 
 .vp-woo-pont-modal-packaging {

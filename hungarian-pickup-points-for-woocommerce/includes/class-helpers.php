@@ -334,7 +334,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 					}
 
 					//Create categories based on target countires(for dpd)
-					if(($provider == 'dpd' && isset($cost['countries']) && count($cost['countries']) > 0)) {
+					if(($provider == 'dpd_parcelshop' && isset($cost['countries']) && count($cost['countries']) > 0)) {
 						foreach ($cost['countries'] as $country) {
 							if(substr( $country, 0, 4 ) === "dpd_") {
 								$country_code = substr($country, 4);
@@ -448,10 +448,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				//Find the related provider to the selected point
 				if(isset($shipping_costs[$selected_pont['provider']])) {
 					$shipping_cost = $shipping_costs[$selected_pont['provider']];
+					$country = (isset($selected_pont['country'])) ? $selected_pont['country'] : '';
+					$country = strtolower($country);
 
 					//Check for country pricing for packeta
-					if(($selected_pont['provider'] == 'packeta_shop' || $selected_pont['provider'] == 'gls_shop' || $selected_pont['provider'] == 'gls_locker') && isset($selected_pont['country']) && isset($shipping_costs[$selected_pont['provider'].'_'.$selected_pont['country']])) {
-						$shipping_cost = $shipping_costs[$selected_pont['provider'].'_'.$selected_pont['country']];
+					if(($selected_pont['provider'] == 'packeta_shop' || $selected_pont['provider'] == 'gls_shop' || $selected_pont['provider'] == 'gls_locker' || $selected_pont['provider'] == 'dpd_parcelshop') && $country && isset($shipping_costs[$selected_pont['provider'].'_'.$country])) {
+						$shipping_cost = $shipping_costs[$selected_pont['provider'].'_'.$country];
 					}
 
 					//Check for country pricing for packeta

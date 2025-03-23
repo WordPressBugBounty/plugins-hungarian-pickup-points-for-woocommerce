@@ -145,7 +145,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 								<strong><?php esc_html_e('Download','vp-woo-pont'); ?></strong>
 							</a>
 						</div>
-						<div class="vp-woo-pont-metabox-rows-label-print <?php if($order->get_meta('_vp_woo_pont_parcel_count')): ?>multiple_parcels<?php endif; ?>">
+						<div class="vp-woo-pont-metabox-rows-label-print">
 							<a target="_blank" class="vp-woo-pont-print-label" href="<?php echo $this->generate_download_link($order); ?>">
 								<span class="dashicons dashicons-printer"></span>
 							</a>

@@ -2,6 +2,7 @@
 
 use Automattic\WooCommerce\StoreApi\Exceptions\InvalidCartException;
 use Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils;
+use Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -38,16 +39,25 @@ add_action('woocommerce_blocks_loaded', function() {
 		$shipping_cost = VP_Woo_Pont_Helpers::calculate_shipping_costs();
 		$min_cost_label = VP_Woo_Pont_Helpers::get_price_display($shipping_cost);
 		$min_cost_label = html_entity_decode(wp_strip_all_tags($min_cost_label));
+		$local_pickup_method_ids  = LocalPickupUtils::get_local_pickup_method_ids();
+		$local_pickup_locations = get_option( 'pickup_location_pickup_locations', [] );
+
 		$custom_css = '
 			.wc-block-cart__sidebar span.wc-block-components-radio-control__description[id*="vp_pont"] span,
-			#shipping-method-2 .wc-block-checkout__shipping-method-option-price span,
-			#shipping-method-2 .wc-block-checkout__shipping-method-option-price em {
+			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price,
+			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price span,
+			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"] .wc-block-formatted-money-amount {
 				font-size:0;
 			}
 			
 			.wc-block-cart__sidebar span.wc-block-components-radio-control__description[id*="vp_pont"]:after,
-			#shipping-method-2 .wc-block-checkout__shipping-method-option-price:after {
+			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price:after,
+			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"]:after {
 				content: "'.$min_cost_label.'";
+			}
+
+			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price:after {
+				font-size: .875rem;
 			}
 			
 			.wp-block-woocommerce-cart-order-summary-shipping-block .wc-block-components-totals-item__value:not(.wc-block-formatted-money-amount) strong {
@@ -58,6 +68,15 @@ add_action('woocommerce_blocks_loaded', function() {
 				display: none;
 			}
 		';
+
+		//If we only have one local pickup method, we can hide the shipping method selection
+		if(count($local_pickup_method_ids) == 2 && count($local_pickup_locations) == 0) {
+			$custom_css .= '
+				.wc-block-components-local-pickup-rates-control {
+					display: none;
+				}
+			';
+		}
 
 		//Add custom CSS
 		wp_add_inline_style( 'vp-woo-pont-picker-block', $custom_css );
@@ -139,19 +158,18 @@ add_action('woocommerce_blocks_loaded', function() {
 					continue;
 				}
 
-				//Check if we have a selected pickup point
-				$selected_pont = WC()->session->get( 'selected_vp_pont' );
-				if($selected_pont) {
-					//$rate->add_meta_data('pickup_location', $selected_pont['name']);
-					$rate->add_meta_data('pickup_address', $selected_pont['name'].', '.$selected_pont['zip'].' '.$selected_pont['city'].', '.$selected_pont['addr']);					
-				}
-
 				//Get shipping costs
 				$shipping_cost = VP_Woo_Pont_Helpers::calculate_shipping_costs();
 				$min_cost_label = VP_Woo_Pont_Helpers::get_price_display($shipping_cost);
 
-				//Set label that shows up as shipping cost
-				$rate->add_meta_data('pickup_details', $min_cost_label);
+				//Check if we have a selected pickup point
+				$selected_pont = WC()->session->get( 'selected_vp_pont' );
+				if($selected_pont) {
+					$rate->add_meta_data('pickup_location', $rate->label);
+					if(is_checkout()) {
+						$rate->label = VP_Woo_Pont_Helpers::get_provider_name($selected_pont['provider'], true).', '.$selected_pont['name'].', '.$selected_pont['zip'].' '.$selected_pont['city'].', '.$selected_pont['addr'];
+					}
+				}
 
 				//And if empty, remove option
 				if(empty($shipping_cost)) {

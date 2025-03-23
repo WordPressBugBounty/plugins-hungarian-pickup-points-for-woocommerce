@@ -131,7 +131,8 @@ class VP_Woo_Pont_GLS {
 			'SM1' => __('SMS Service (SM1)', 'vp-woo-pont'),
 			'24H' => __('Guaranteed delivery in 24 Hours', 'vp-woo-pont'),
 			'SRS' => __('Shop Return Service', 'vp-woo-pont'),
-			'XS' => __('Exchange Service', 'vp-woo-pont')
+			'XS' => __('Exchange Service', 'vp-woo-pont'),
+			'INS' => __('Declared Value Insurance Service (INS)', 'vp-woo-pont')
 		);
 
 		$this->supported_countries = array(
@@ -429,6 +430,10 @@ class VP_Woo_Pont_GLS {
 				$value = $data['customer']['phone'];
 			}
 
+			if($service_id == 'INS') {
+				$value = $data['package']['total'];
+			}
+
 			if($value) {
 				$parcel['ServiceList'][] = array(
 					'Code' => $service_id,
@@ -457,9 +462,9 @@ class VP_Woo_Pont_GLS {
 			'WebshopEngine' => 'WooCommerce'
 		);
 
-		//If its A6, still use A4_2x2, we just need to rotate it later to fit A6
+		//If its A6, use the Connect one, which will give us a landscape A6 that we can rotate
 		if($label_size == 'A6') {
-			$options['TypeOfPrinter'] = 'A4_2x2';
+			$options['TypeOfPrinter'] = 'Connect';
 		}
 
 		//So developers can modify
@@ -523,12 +528,8 @@ class VP_Woo_Pont_GLS {
 			$pdf = implode(array_map('chr', $response['Labels']));
 
 			//Crop to A6 if needed, but only if it doesn't contain a return label
-			if($label_size == 'A6' && !isset($parcel['Count'])) {
-				if(in_array('SRS', $enabled_services) || in_array('XS', $enabled_services)) {
-					$pdf = VP_Woo_Pont_Print::crop_to_a6_two($pdf);
-				} else {
-					$pdf = VP_Woo_Pont_Print::crop_to_a6($pdf);
-				}
+			if($label_size == 'A6') {
+				$pdf = VP_Woo_Pont_Print::crop_to_a6($pdf);
 			}
 
 			//Try to save PDF file

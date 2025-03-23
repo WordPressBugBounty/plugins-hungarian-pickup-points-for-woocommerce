@@ -57,6 +57,7 @@ class VP_Woo_Pont_Kvikk {
 		add_action( 'wp_ajax_vp_woo_pont_hide_kvikk_promo', array( $this, 'hide_ad' ) );
 		add_action('vp_woo_pont_metabox_before_content', array($this, 'display_ad'));
 		add_action('vp_woo_pont_providers_before_table', array($this, 'display_ad'));
+		add_action('vp_woo_pont_modal_generate_before_table', array($this, 'display_ad'));
 
 		//Process IPN request
 		add_action( 'init', array( __CLASS__, 'ipn_process' ), 11 );
@@ -732,17 +733,7 @@ class VP_Woo_Pont_Kvikk {
 	public function display_ad() {
 
 		//If Kvikk already activated, or opted to hide the ad, return false
-		if(VP_Woo_Pont_Helpers::get_option('kvikk_api_key') || get_option('_vp_woo_pont_hide_kvikk_info', false)) {
-			return false;
-		}
-
-		//Only show to a small percentage of users
-		if(!get_option('_vp_woo_pont_hide_kvikk_info_rnd')) {
-			update_option('_vp_woo_pont_hide_kvikk_info_rnd', rand(1, 100));
-		}
-
-		//If not in the range, return false
-		if(get_option('_vp_woo_pont_hide_kvikk_info_rnd') >= 100) {
+		if(VP_Woo_Pont_Helpers::get_option('kvikk_api_key') || get_option('_vp_woo_pont_hide_kvikk_info_v2', false)) {
 			return false;
 		}
 
@@ -752,10 +743,17 @@ class VP_Woo_Pont_Kvikk {
 				<div class="kvikk-promo-logo"></div>
 				<a href="#" class="kvikk-promo-close"><span class="dashicons dashicons-no-alt"></span></a>
 			</div>
-			<p>A Kvikk rendszerével nettó 750 Ft-tól szállíthatsz a népszerű futárcégekkel egy egyszerű regisztráció után</p>
+			<p>A Kvikk-en keresztül ennyibe kerülne egy 1kg-os csomagnak a házhozszállítása:</p>
+			<ul class="kvikk-promo-pricing">
+				<li><i class="vp-woo-pont-provider-icon-posta"></i> MPL <strong data-kvikk-promo-price="mpl"> </strong></li>
+				<li><i class="vp-woo-pont-provider-icon-gls"></i> GLS <strong data-kvikk-promo-price="gls"> </strong></li>
+				<li><i class="vp-woo-pont-provider-icon-dpd"></i> DPD <strong data-kvikk-promo-price="dpd"> </strong></li>
+				<li><i class="vp-woo-pont-provider-icon-famafutar"></i> FámaFutár <strong data-kvikk-promo-price="famafutar"> </strong></li>
+			</ul>
+			<p class="kvikk-promo-footnote">Nettó árak, <strong>tartalmazza az útdíjat és az üzemanyagköltséget</strong>.</p>
 			<div class="kvikk-promo-buttons">
-				<a href="https://kvikk.hu/?source=plugin" target="_blank" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_kvikk_promo" ); ?>" class="button kvikk-promo-cta">Bővebben</a>
-				<a href="#" class="button kvikk-promo-hide">Nem érdekel</a>
+				<a href="https://kvikk.hu/?source=plugin" target="_blank" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_kvikk_promo" ); ?>" class="button kvikk-promo-cta">Érdekel</a>
+				<a href="#" class="button kvikk-promo-hide">Elrejtés</a>
 			</div>
 		</div>
 		<?php
@@ -763,7 +761,7 @@ class VP_Woo_Pont_Kvikk {
 
 	public function hide_ad() {
 		check_ajax_referer( 'vp_woo_pont_kvikk_promo', 'nonce' );
-		update_option('_vp_woo_pont_hide_kvikk_info', true);
+		update_option('_vp_woo_pont_hide_kvikk_info_v2', true);
 		wp_send_json_success();
 	}
 

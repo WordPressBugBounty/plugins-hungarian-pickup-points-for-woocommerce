@@ -59,10 +59,10 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 			$chosen_gateway = WC()->session->get( 'chosen_payment_method' );
 
 			//Check for block version too
-			if(!$chosen_gateway) {
+			if(WC()->session->get( 'vp_selected_payment_method')) {
 				$chosen_gateway = WC()->session->get( 'vp_selected_payment_method');
 			}
-
+			
 			//Check if selected payment method is cod
 			$cod_id = VP_Woo_Pont_Helpers::get_option('cod_method', 'cod');
 			if ( $chosen_gateway != $cod_id )

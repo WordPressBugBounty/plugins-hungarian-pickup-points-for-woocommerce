@@ -457,7 +457,7 @@ jQuery(document).ready(function($) {
 			//Loop throguh providers and create list items
 			Object.keys(providers).forEach(function(provider_id){
 				var provider = providers[provider_id];
-				if(provider_id.indexOf('packeta_shop_') !== -1 || provider_id.indexOf('packeta_zbox_') !== -1 || provider_id.indexOf('gls_shop_') !== -1 || provider_id.indexOf('gls_locker_') !== -1 || !provider.formatted_net) {
+				if(provider_id.indexOf('packeta_shop_') !== -1 || provider_id.indexOf('packeta_zbox_') !== -1 || provider_id.indexOf('gls_shop_') !== -1 || provider_id.indexOf('gls_locker_') !== -1 || provider_id.indexOf('dpd_parcelshop_') !== -1 || !provider.formatted_net) {
 					return;
 				}
 				var cost = provider.formatted_net;
@@ -568,10 +568,12 @@ jQuery(document).ready(function($) {
 			//// TODO: do this with vanilla js, so its a little faster
 			var list_item = $('#vp-woo-pont-modal-list-item-sample').clone();
 			var provider_price = vp_woo_pont_frontend.providers[provider];
+			var country = (item.country) ? item.country.toLowerCase() : '';
 
 			//Change price for packeta and gls based on countries
-			if((provider == 'packeta_shop' || provider == 'packeta_zbox' || provider == 'gls_shop' || provider == 'gls_locker') && item.country && vp_woo_pont_frontend.providers[provider+'_'+item.country]) {
-				provider_price = vp_woo_pont_frontend.providers[provider+'_'+item.country]
+			if((provider == 'packeta_shop' || provider == 'packeta_zbox' || provider == 'gls_shop' || provider == 'gls_locker' || provider == 'dpd_parcelshop') && country && vp_woo_pont_frontend.providers[provider+'_'+country]) {
+				console.log(vp_woo_pont_frontend.providers[provider+'_'+country], provider+'_'+country);
+				provider_price = vp_woo_pont_frontend.providers[provider+'_'+country]
 			}
 
 			//Change price for packeta

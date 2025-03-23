@@ -1916,7 +1916,8 @@
       font-weight: bold; }
   .woocommerce .vp-woo-pont-providers-add {
     display: flex;
-    align-items: center; }
+    align-items: center;
+    gap: 10px; }
     .woocommerce .vp-woo-pont-providers-add-list {
       display: flex; }
     .woocommerce .vp-woo-pont-providers-add i.vp-woo-pont-provider-icon {
@@ -2922,6 +2923,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   background-image: url(../images/icon-postapont-csomagautomata.svg); }
 .vp-woo-pont-provider-icon-dhl {
   background-image: url(../images/icon-dhl.svg); }
+.vp-woo-pont-provider-icon-famafutar {
+  background-image: url(../images/icon-famafutar.svg); }
 .vp-woo-pont-provider-icon-kvikk {
   background-image: url(../images/icon-kvikk.svg); }
 .vp-woo-pont-provider-icon-kvikk_packeta {
@@ -3784,6 +3787,34 @@ th .vp_woo_pont_pro_label,
     color: #fff !important;
     font-weight: 600;
     border: none !important; }
+  .kvikk-promo-pricing li {
+    display: flex;
+    align-items: center; }
+    .kvikk-promo-pricing li i {
+      width: 24px;
+      height: 24px;
+      background-position: center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      margin-right: 10px; }
+    .kvikk-promo-pricing li strong {
+      color: #2C3F56;
+      margin-left: auto;
+      min-width: 50px;
+      text-align: right;
+      min-height: 18px;
+      background: rgba(0, 0, 0, 0.1); }
+  .kvikk-promo.loaded .kvikk-promo-pricing strong {
+    background: none; }
+  .kvikk-promo-footnote {
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.5); }
+    .kvikk-promo-footnote strong {
+      color: #2C3F56; }
+
+.vp-woo-pont-modal-generate .kvikk-promo-pricing strong {
+  margin-left: 10px;
+  text-align: left; }
 
 .vp-woo-pont-modal-packaging .wc-backbone-modal-content {
   max-width: 480px !important; }

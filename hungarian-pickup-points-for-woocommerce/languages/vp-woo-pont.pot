@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-06 12:20+0000\n"
+"POT-Creation-Date: 2025-03-22 10:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: vp-woo-pont\n"
@@ -120,7 +120,7 @@ msgid ""
 "is {tracking_number}. The PDF file is attached to this e-mail."
 msgstr ""
 
-#: includes/class-labels.php:201
+#: includes/class-labels.php:200
 msgid "A shipping label was already generated for this order."
 msgstr ""
 
@@ -129,11 +129,11 @@ msgstr ""
 msgid "A4"
 msgstr ""
 
-#: includes/providers/class-gls.php:255
+#: includes/providers/class-gls.php:256
 msgid "A4_2x2 (Landscape)"
 msgstr ""
 
-#: includes/providers/class-gls.php:257
+#: includes/providers/class-gls.php:258
 msgid "A4_4x1"
 msgstr ""
 
@@ -170,7 +170,7 @@ msgstr ""
 #: includes/providers/class-packeta.php:109
 #: includes/providers/class-dpd.php:196
 #: includes/providers/class-csomagpiac.php:104
-#: includes/providers/class-gls.php:256
+#: includes/providers/class-gls.php:257
 #: includes/providers/class-foxpost.php:120
 #: includes/providers/class-kvikk.php:126
 #: includes/providers/class-expressone.php:81
@@ -319,10 +319,6 @@ msgstr ""
 
 #: includes/class-helpers.php:62 includes/class-helpers.php:67
 msgid "AlzaBox"
-msgstr ""
-
-#: includes/providers/class-kvikk.php:143
-msgid "AlzaBox courier"
 msgstr ""
 
 #: includes/providers/class-posta.php:97
@@ -563,7 +559,7 @@ msgstr ""
 msgid "Close modal panel"
 msgstr ""
 
-#: includes/class-labels.php:763
+#: includes/class-labels.php:762
 msgid "Closed"
 msgstr ""
 
@@ -633,7 +629,7 @@ msgstr ""
 msgid "Configured"
 msgstr ""
 
-#: includes/providers/class-gls.php:258
+#: includes/providers/class-gls.php:259
 msgid "Connect"
 msgstr ""
 
@@ -649,7 +645,7 @@ msgstr ""
 msgid "Consignee was not in, contact card couldn't be left."
 msgstr ""
 
-#: includes/providers/class-gls.php:245
+#: includes/providers/class-gls.php:246
 #: includes/providers/class-transsped.php:161
 msgid "Contact name"
 msgstr ""
@@ -687,7 +683,7 @@ msgstr ""
 msgid "Create API key"
 msgstr ""
 
-#: includes/providers/class-dpd.php:94 includes/providers/class-gls.php:140
+#: includes/providers/class-dpd.php:94 includes/providers/class-gls.php:141
 msgid "Croatia"
 msgstr ""
 
@@ -837,7 +833,7 @@ msgstr ""
 msgid "Czech Republic (Packeta)"
 msgstr ""
 
-#: includes/providers/class-dpd.php:95 includes/providers/class-gls.php:141
+#: includes/providers/class-dpd.php:95 includes/providers/class-gls.php:142
 msgid "Czechia"
 msgstr ""
 
@@ -847,6 +843,10 @@ msgstr ""
 
 #: includes/views/html-modal-pro-version.php:51
 msgid "Deactivate license"
+msgstr ""
+
+#: includes/providers/class-gls.php:135
+msgid "Declared Value Insurance Service (INS)"
 msgstr ""
 
 #: includes/views/html-admin-packagings.php:40
@@ -960,10 +960,6 @@ msgstr ""
 msgid "Developer mode"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:146
-msgid "DHL"
-msgstr ""
-
 #: includes/views/html-admin-enabled-providers.php:128
 msgid "Disable COD"
 msgstr ""
@@ -984,14 +980,14 @@ msgstr ""
 msgid "Don't use custom page"
 msgstr ""
 
-#: includes/class-shipments-table.php:125 includes/class-labels.php:770
-#: includes/class-labels.php:791 includes/views/html-admin-shipments.php:97
+#: includes/class-shipments-table.php:125 includes/class-labels.php:769
+#: includes/class-labels.php:790 includes/views/html-admin-shipments.php:97
 #: includes/views/html-metabox.php:145
 #: includes/views/html-modal-generate.php:62
 msgid "Download"
 msgstr ""
 
-#: includes/class-labels.php:81 includes/class-labels.php:126
+#: includes/class-labels.php:80 includes/class-labels.php:125
 msgid "Download shipping labels"
 msgstr ""
 
@@ -1075,7 +1071,7 @@ msgstr ""
 msgid "Enable more providers"
 msgstr ""
 
-#: includes/providers/class-gls.php:191
+#: includes/providers/class-gls.php:192
 msgid "Enable sandbox mode"
 msgstr ""
 
@@ -1090,7 +1086,7 @@ msgstr ""
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/providers/class-dpd.php:203 includes/providers/class-gls.php:184
+#: includes/providers/class-dpd.php:203 includes/providers/class-gls.php:185
 msgid "Enabled countries"
 msgstr ""
 
@@ -1104,11 +1100,11 @@ msgstr ""
 msgid "Enabled services"
 msgstr ""
 
-#: includes/providers/class-gls.php:265
+#: includes/providers/class-gls.php:266
 msgid "Enabled services for home delivery"
 msgstr ""
 
-#: includes/providers/class-gls.php:273
+#: includes/providers/class-gls.php:274
 msgid "Enabled services for point delivery"
 msgstr ""
 
@@ -1147,15 +1143,15 @@ msgstr ""
 msgid "Enter your DPD account's Weblabel username."
 msgstr ""
 
-#: includes/providers/class-gls.php:167
+#: includes/providers/class-gls.php:168
 msgid "Enter your GLS account's e-mail address."
 msgstr ""
 
-#: includes/providers/class-gls.php:173
+#: includes/providers/class-gls.php:174
 msgid "Enter your GLS account's password."
 msgstr ""
 
-#: includes/providers/class-gls.php:179
+#: includes/providers/class-gls.php:180
 msgid "Enter your GLS customer number."
 msgstr ""
 
@@ -1192,8 +1188,7 @@ msgid "Export / Import cleared"
 msgstr ""
 
 #: includes/class-settings.php:237 includes/class-helpers.php:41
-#: includes/class-helpers.php:82 includes/providers/class-kvikk.php:145
-#: includes/views/html-admin-shipments.php:11
+#: includes/class-helpers.php:82 includes/views/html-admin-shipments.php:11
 msgid "Express One"
 msgstr ""
 
@@ -1316,7 +1311,7 @@ msgstr ""
 msgid "Full container"
 msgstr ""
 
-#: includes/class-labels.php:797
+#: includes/class-labels.php:796
 msgid "Generate & print label"
 msgstr ""
 
@@ -1348,7 +1343,7 @@ msgstr ""
 msgid "Generate shipping label"
 msgstr ""
 
-#: includes/class-labels.php:79 includes/class-labels.php:124
+#: includes/class-labels.php:78 includes/class-labels.php:123
 msgid "Generate shipping labels"
 msgstr ""
 
@@ -1373,19 +1368,19 @@ msgstr ""
 msgid "GLS"
 msgstr ""
 
-#: includes/providers/class-gls.php:177
+#: includes/providers/class-gls.php:178
 msgid "GLS Customer Number"
 msgstr ""
 
-#: includes/providers/class-gls.php:171
+#: includes/providers/class-gls.php:172
 msgid "GLS Password"
 msgstr ""
 
-#: includes/providers/class-gls.php:161
+#: includes/providers/class-gls.php:162
 msgid "GLS settings"
 msgstr ""
 
-#: includes/providers/class-gls.php:165
+#: includes/providers/class-gls.php:166
 msgid "GLS Username"
 msgstr ""
 
@@ -1414,7 +1409,7 @@ msgstr ""
 msgid "Greece"
 msgstr ""
 
-#: includes/providers/class-gls.php:132 includes/providers/class-gls.php:155
+#: includes/providers/class-gls.php:132 includes/providers/class-gls.php:156
 msgid "Guaranteed delivery in 24 Hours"
 msgstr ""
 
@@ -1481,7 +1476,7 @@ msgstr ""
 msgid "Hungarian Pickup Points & Shipping Labels for WooCommerce"
 msgstr ""
 
-#: includes/providers/class-dpd.php:92 includes/providers/class-gls.php:138
+#: includes/providers/class-dpd.php:92 includes/providers/class-gls.php:139
 msgid "Hungary"
 msgstr ""
 
@@ -1633,7 +1628,7 @@ msgstr ""
 msgid "Import failed or not finished yet"
 msgstr ""
 
-#: includes/class-import.php:812 includes/providers/class-packeta.php:608
+#: includes/class-import.php:815 includes/providers/class-packeta.php:608
 msgid "Import run successfully."
 msgstr ""
 
@@ -1739,24 +1734,24 @@ msgid "Kiállított fuvarokmány"
 msgstr ""
 
 #: includes/class-settings.php:230 includes/providers/class-kvikk.php:87
-#: includes/providers/class-kvikk.php:223
+#: includes/providers/class-kvikk.php:204
 #: includes/views/html-admin-shipments.php:8
 msgid "Kvikk"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:231
-msgid "Kvikk DHL"
+#: includes/providers/class-kvikk.php:213
+msgid "Kvikk DPD"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:229
-msgid "Kvikk Express One"
-msgstr ""
-
-#: includes/providers/class-kvikk.php:230
+#: includes/providers/class-kvikk.php:211
 msgid "Kvikk FámaFutár"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:228
+#: includes/providers/class-kvikk.php:212
+msgid "Kvikk GLS"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:209
 msgid "Kvikk MPL"
 msgstr ""
 
@@ -2490,7 +2485,7 @@ msgstr ""
 msgid "Postcode"
 msgstr ""
 
-#: includes/providers/class-gls.php:130 includes/providers/class-gls.php:153
+#: includes/providers/class-gls.php:130 includes/providers/class-gls.php:154
 msgid "Preadvice Service (SM2)"
 msgstr ""
 
@@ -2510,12 +2505,12 @@ msgstr ""
 msgid "Primary color"
 msgstr ""
 
-#: includes/class-labels.php:775 includes/class-labels.php:795
+#: includes/class-labels.php:774 includes/class-labels.php:794
 #: includes/views/html-modal-generate.php:63
 msgid "Print"
 msgstr ""
 
-#: includes/class-labels.php:80 includes/class-labels.php:125
+#: includes/class-labels.php:79 includes/class-labels.php:124
 #: includes/views/html-modal-layout-selector.php:24
 msgid "Print shipping labels"
 msgstr ""
@@ -2628,7 +2623,7 @@ msgstr ""
 msgid "Reverse packet has been accepted at our branch."
 msgstr ""
 
-#: includes/providers/class-dpd.php:93 includes/providers/class-gls.php:139
+#: includes/providers/class-dpd.php:93 includes/providers/class-gls.php:140
 msgid "Romania"
 msgstr ""
 
@@ -2640,11 +2635,11 @@ msgstr ""
 msgid "Romania Sameday"
 msgstr ""
 
-#: includes/providers/class-posta.php:255 includes/providers/class-gls.php:286
+#: includes/providers/class-posta.php:255 includes/providers/class-gls.php:287
 msgid "Round cash on delivery amount"
 msgstr ""
 
-#: includes/providers/class-posta.php:257 includes/providers/class-gls.php:288
+#: includes/providers/class-posta.php:257 includes/providers/class-gls.php:289
 msgid "Round the COD amount to 5."
 msgstr ""
 
@@ -2757,12 +2752,6 @@ msgstr ""
 msgid "Select the starting position of your sticker"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:149
-msgid ""
-"Select which courier you are going to use to send shipments to AlzaBox "
-"delivery points."
-msgstr ""
-
 #: includes/views/html-admin-enabled-providers.php:109
 msgid "Select which providers you want to show to your customers."
 msgstr ""
@@ -2807,24 +2796,24 @@ msgstr ""
 msgid "Sender Address ID"
 msgstr ""
 
-#: includes/providers/class-gls.php:206
+#: includes/providers/class-gls.php:207
 msgid "Sender address info(building, stairway, etc...)"
 msgstr ""
 
-#: includes/providers/class-gls.php:211
+#: includes/providers/class-gls.php:212
 msgid "Sender address(just the number)"
 msgstr ""
 
-#: includes/providers/class-gls.php:201
+#: includes/providers/class-gls.php:202
 msgid "Sender address(street)"
 msgstr ""
 
-#: includes/providers/class-posta.php:138 includes/providers/class-gls.php:216
+#: includes/providers/class-posta.php:138 includes/providers/class-gls.php:217
 #: includes/providers/class-transsped.php:171
 msgid "Sender city"
 msgstr ""
 
-#: includes/providers/class-gls.php:237
+#: includes/providers/class-gls.php:238
 msgid "Sender country"
 msgstr ""
 
@@ -2832,7 +2821,7 @@ msgstr ""
 msgid "Sender Details"
 msgstr ""
 
-#: includes/providers/class-posta.php:153 includes/providers/class-gls.php:231
+#: includes/providers/class-posta.php:153 includes/providers/class-gls.php:232
 #: includes/providers/class-transsped.php:187
 msgid "Sender email address"
 msgstr ""
@@ -2841,18 +2830,18 @@ msgstr ""
 msgid "Sender ID"
 msgstr ""
 
-#: includes/providers/class-posta.php:128 includes/providers/class-gls.php:196
+#: includes/providers/class-posta.php:128 includes/providers/class-gls.php:197
 #: includes/providers/class-foxpost.php:128
 #: includes/providers/class-transsped.php:156
 msgid "Sender name"
 msgstr ""
 
-#: includes/providers/class-posta.php:148 includes/providers/class-gls.php:226
+#: includes/providers/class-posta.php:148 includes/providers/class-gls.php:227
 #: includes/providers/class-transsped.php:181
 msgid "Sender phone number"
 msgstr ""
 
-#: includes/providers/class-posta.php:143 includes/providers/class-gls.php:221
+#: includes/providers/class-posta.php:143 includes/providers/class-gls.php:222
 #: includes/providers/class-transsped.php:176
 msgid "Sender postcode"
 msgstr ""
@@ -2908,6 +2897,10 @@ msgid ""
 "the <a href=\"%s\">PRO version</a>."
 msgstr ""
 
+#: includes/views/html-admin-enabled-providers.php:199
+msgid "Setup home delivery"
+msgstr ""
+
 #: includes/class-wc-shipping-pont.php:14
 msgid ""
 "Setup parcel lockers and pickup points with various providers and prices. "
@@ -2925,7 +2918,7 @@ msgstr ""
 msgid "Setup your own pickup points, like store pickup."
 msgstr ""
 
-#: includes/class-labels.php:725 templates/shipments-table.php:96
+#: includes/class-labels.php:724 templates/shipments-table.php:96
 msgid "Shipment"
 msgstr ""
 
@@ -2939,7 +2932,7 @@ msgstr ""
 msgid "Shipment closed. Generated delivery note ID: %s"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:486
+#: includes/providers/class-kvikk.php:464
 msgid "Shipment not found"
 msgstr ""
 
@@ -2951,7 +2944,7 @@ msgstr ""
 msgid "Shipment tracking"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:1004
+#: includes/providers/class-kvikk.php:982
 msgid "Shipment was marked as packaged in the Kvikk App."
 msgstr ""
 
@@ -2991,30 +2984,30 @@ msgstr ""
 msgid "Shipping confirmation"
 msgstr ""
 
-#: index.php:699 index.php:895 includes/class-helpers.php:1200
+#: index.php:699 index.php:895 includes/class-helpers.php:1202
 msgctxt "shipping cost summary on cart & checkout"
 msgid "free"
 msgstr ""
 
-#: index.php:714 includes/class-helpers.php:1215
+#: index.php:714 includes/class-helpers.php:1217
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(free & 1 shipping cost)"
 msgid "free or %s"
 msgstr ""
 
-#: index.php:719 includes/class-helpers.php:1220
+#: index.php:719 includes/class-helpers.php:1222
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(free & 1+ shipping cost)"
 msgid "free & from %s"
 msgstr ""
 
-#: index.php:709 includes/class-helpers.php:1210
+#: index.php:709 includes/class-helpers.php:1212
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(multiple shipping costs)"
 msgid "from %s"
 msgstr ""
 
-#: index.php:704 includes/class-helpers.php:1205
+#: index.php:704 includes/class-helpers.php:1207
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(one shipping cost only)"
 msgid "%s"
@@ -3026,7 +3019,7 @@ msgstr ""
 msgid "Shipping cost(net)"
 msgstr ""
 
-#: includes/class-labels.php:566
+#: includes/class-labels.php:565
 msgid "Shipping informations"
 msgstr ""
 
@@ -3036,11 +3029,11 @@ msgstr ""
 msgid "Shipping label"
 msgstr ""
 
-#: includes/class-labels.php:267
+#: includes/class-labels.php:266
 msgid "Shipping label generated successfully."
 msgstr ""
 
-#: includes/class-labels.php:262
+#: includes/class-labels.php:261
 #, php-format
 msgid "Shipping label generated successfully. ID number: %s"
 msgstr ""
@@ -3049,31 +3042,31 @@ msgstr ""
 msgid "Shipping label generated!"
 msgstr ""
 
-#: includes/class-labels.php:337
+#: includes/class-labels.php:336
 #, php-format
 msgid ""
 "Shipping label removed from the order only. You still need to remove it in "
 "the provider's system. ID number: %s"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:850
+#: includes/providers/class-kvikk.php:828
 #, php-format
 msgid ""
 "Shipping label removed from the order, because it was removed from Kvikk. "
 "Tracking number was: %s"
 msgstr ""
 
-#: includes/class-labels.php:340
+#: includes/class-labels.php:339
 msgid ""
 "Shipping label removed from WooCommerce. You still need to remove it in the "
 "provider's system."
 msgstr ""
 
-#: includes/class-labels.php:348
+#: includes/class-labels.php:347
 msgid "Shipping label removed successfully."
 msgstr ""
 
-#: includes/class-labels.php:345
+#: includes/class-labels.php:344
 #, php-format
 msgid "Shipping label removed successfully. ID number: %s"
 msgstr ""
@@ -3091,7 +3084,7 @@ msgstr ""
 msgid "Shop ID"
 msgstr ""
 
-#: includes/providers/class-gls.php:133 includes/providers/class-gls.php:156
+#: includes/providers/class-gls.php:133 includes/providers/class-gls.php:157
 msgid "Shop Return Service"
 msgstr ""
 
@@ -3115,7 +3108,7 @@ msgstr ""
 msgid "Show open hours on the map"
 msgstr ""
 
-#: includes/providers/class-dpd.php:206 includes/providers/class-gls.php:187
+#: includes/providers/class-dpd.php:206 includes/providers/class-gls.php:188
 msgid "Show pickup points in these countries as available options."
 msgstr ""
 
@@ -3172,7 +3165,7 @@ msgstr ""
 msgid "SKU"
 msgstr ""
 
-#: includes/providers/class-dpd.php:97 includes/providers/class-gls.php:143
+#: includes/providers/class-dpd.php:97 includes/providers/class-gls.php:144
 msgid "Slovakia"
 msgstr ""
 
@@ -3188,7 +3181,7 @@ msgstr ""
 msgid "Slovakia Post"
 msgstr ""
 
-#: includes/providers/class-dpd.php:96 includes/providers/class-gls.php:142
+#: includes/providers/class-dpd.php:96 includes/providers/class-gls.php:143
 msgid "Slovenia"
 msgstr ""
 
@@ -3204,11 +3197,11 @@ msgstr ""
 msgid "Small package"
 msgstr ""
 
-#: includes/providers/class-gls.php:131 includes/providers/class-gls.php:154
+#: includes/providers/class-gls.php:131 includes/providers/class-gls.php:155
 msgid "SMS Service (SM1)"
 msgstr ""
 
-#: includes/providers/class-gls.php:280
+#: includes/providers/class-gls.php:281
 msgid "SMS text for the SMS Service (SM1)"
 msgstr ""
 
@@ -3239,7 +3232,7 @@ msgstr ""
 
 #: includes/providers/class-posta.php:161 includes/providers/class-dpd.php:193
 #: includes/providers/class-csomagpiac.php:101
-#: includes/providers/class-gls.php:252
+#: includes/providers/class-gls.php:253
 #: includes/providers/class-sameday.php:109
 #: includes/providers/class-foxpost.php:115
 #: includes/providers/class-kvikk.php:123
@@ -3599,7 +3592,7 @@ msgid ""
 "settings</a>, so you don't have to do this the next time."
 msgstr ""
 
-#: includes/providers/class-gls.php:259
+#: includes/providers/class-gls.php:260
 msgid "Thermo"
 msgstr ""
 
@@ -3633,7 +3626,7 @@ msgid ""
 "display the selected pickup point provider."
 msgstr ""
 
-#: includes/class-labels.php:575
+#: includes/class-labels.php:574
 msgid ""
 "This order doesn't need shipping. Add a shipping line item to generate a "
 "label."
@@ -3666,7 +3659,7 @@ msgstr ""
 msgid "To add 1kg to the package weight, use +1"
 msgstr ""
 
-#: includes/class-labels.php:762
+#: includes/class-labels.php:761
 msgid "To be closed"
 msgstr ""
 
@@ -3741,7 +3734,7 @@ msgstr ""
 msgid "Tracking Number"
 msgstr ""
 
-#: index.php:1361 includes/class-labels.php:751 includes/class-labels.php:757
+#: index.php:1361 includes/class-labels.php:750 includes/class-labels.php:756
 #: includes/class-tracking.php:526 includes/views/html-modal-tracking.php:29
 #: includes/views/html-metabox.php:163
 msgid "Tracking number"
@@ -3797,7 +3790,7 @@ msgstr ""
 msgid "Two A5 on landscape A4"
 msgstr ""
 
-#: includes/class-labels.php:218
+#: includes/class-labels.php:217
 #, php-format
 msgid "Unable to create shipping label. Error code: %s"
 msgstr ""
@@ -3806,11 +3799,11 @@ msgstr ""
 msgid "Unable to generate label"
 msgstr ""
 
-#: includes/class-import.php:818
+#: includes/class-import.php:821
 msgid "Unable to run the import tool for some reason."
 msgstr ""
 
-#: includes/class-labels.php:319
+#: includes/class-labels.php:318
 #, php-format
 msgid "Unable to void the shipping label. Error code: %s"
 msgstr ""
@@ -3823,11 +3816,11 @@ msgstr ""
 msgid "Unique ID"
 msgstr ""
 
-#: includes/providers/class-posta.php:664
-#: includes/providers/class-posta.php:729
-#: includes/providers/class-posta.php:740
+#: includes/providers/class-posta.php:671
+#: includes/providers/class-posta.php:733
 #: includes/providers/class-posta.php:744
-#: includes/providers/class-posta.php:868 includes/providers/class-dpd.php:519
+#: includes/providers/class-posta.php:748
+#: includes/providers/class-posta.php:872 includes/providers/class-dpd.php:519
 #: includes/providers/class-csomagpiac.php:431
 #: includes/providers/class-csomagpiac.php:476
 #: includes/providers/class-csomagpiac.php:486
@@ -3837,12 +3830,12 @@ msgstr ""
 #: includes/providers/class-sameday.php:414
 #: includes/providers/class-sameday.php:584
 #: includes/providers/class-sameday.php:596
-#: includes/providers/class-foxpost.php:324
-#: includes/providers/class-foxpost.php:368
-#: includes/providers/class-foxpost.php:380
-#: includes/providers/class-foxpost.php:437
-#: includes/providers/class-kvikk.php:371
-#: includes/providers/class-kvikk.php:647
+#: includes/providers/class-foxpost.php:333
+#: includes/providers/class-foxpost.php:377
+#: includes/providers/class-foxpost.php:389
+#: includes/providers/class-foxpost.php:446
+#: includes/providers/class-kvikk.php:349
+#: includes/providers/class-kvikk.php:625
 #: includes/providers/class-expressone.php:198
 #: includes/providers/class-transsped.php:463
 msgid "Unknown error"
@@ -3860,7 +3853,7 @@ msgstr ""
 msgid "Unserializing instances of this class is forbidden."
 msgstr ""
 
-#: includes/class-labels.php:194 includes/views/html-admin-pro-notice.php:10
+#: includes/class-labels.php:193 includes/views/html-admin-pro-notice.php:10
 #: includes/views/html-metabox.php:50
 msgid ""
 "Upgrade to the PRO version to generate shipping labels and to track "
@@ -4068,7 +4061,7 @@ msgid ""
 "You can track the order by clicking on the tracking number: {tracking_number}"
 msgstr ""
 
-#: includes/providers/class-gls.php:282
+#: includes/providers/class-gls.php:283
 msgid ""
 "You can use the following shortcodes: #ParcelNr#, #COD#, #PickupDate#, "
 "#From_Name#, #ClientRef#."

@@ -43,11 +43,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
 			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A6', 'orientation' => 'P'));
 			$stream = StreamReader::createByString($pdf);
-			$mpdf->AddPage();
-			$mpdf->setSourceFile($stream);
-			$mpdf->Rotate(-90);
-			$label = $mpdf->ImportPage(1);
-			$mpdf->UseTemplate($label, -4, -74);
+			$pagecount = $mpdf->setSourceFile($stream);
+			for ($i = 1; $i <= $pagecount; $i++) {
+				$mpdf->AddPage();
+				$mpdf->Rotate(-90);
+				$label = $mpdf->ImportPage($i);
+				$mpdf->UseTemplate($label, -4, -74);
+			}
 			return $mpdf->Output('file.pdf', 'S');
 		}
 
@@ -210,16 +212,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					$pdf_files = $grouped_by_providers;
 
 					foreach ($pdf_files as $key => $pdf_file) {
-						$label_counter++;
 						$mpdf->setSourceFile($pdf_file);
-						$label = $mpdf->ImportPage(1);
-						$mpdf->UseTemplate($label, $sticker_parameter['x'][$label_counter-1], $sticker_parameter['y'][$label_counter-1]);
-						if($label_counter == $sticker_parameter['sections'] && $key !== array_key_last($pdf_files)) {
-							$label_counter = 0;
-							$mpdf->AddPage();
+						$pagecount = $mpdf->setSourceFile($pdf_file);
+				
+						for ($i = 1; $i <= $pagecount; $i++) {
+							$label_counter++;
+							$label = $mpdf->ImportPage($i);
+							$mpdf->UseTemplate($label, $sticker_parameter['x'][$label_counter-1], $sticker_parameter['y'][$label_counter-1]);
+				
+							if ($label_counter == $sticker_parameter['sections'] && $key !== array_key_last($pdf_files)) {
+								$label_counter = 0;
+								$mpdf->AddPage();
+							}
 						}
 					}
-
+				
 					if($output == 'file') {
 						header("Content-type:application/pdf");
 						$mpdf->Output();
@@ -268,18 +275,29 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 				//Get sticker parameters
 				$provider_id = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 				$sticker_parameters = VP_Woo_Pont_Helpers::get_pdf_label_positions($provider_id);
-				$parcel_count = $order->get_meta('_vp_woo_pont_parcel_count');
 
 				//If we have sticker parameters, we need to modify the label print layout
-				if($sticker_parameters && $sticker_parameters['layout'] && !$parcel_count) {
+				if ($sticker_parameters && $sticker_parameters['layout']) {
 					require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
-					$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => $sticker_parameters['format']));
+					$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A4', 'orientation' => 'P'));
 					$pagecount = $mpdf->setSourceFile($pdf_file);
-					$template_id = $mpdf->importPage($pagecount);
-					$mpdf->UseTemplate($template_id, $sticker_parameters['x'][$position_id], $sticker_parameters['y'][$position_id]);
-
-					//If we need to return a file
-					if($output == 'file') {
+				
+					$label_counter = $position_id;
+				
+					for ($i = 1; $i <= $pagecount; $i++) {
+						if ($label_counter == 0 || $label_counter % $sticker_parameters['sections'] == 0) {
+							if ($label_counter != 0) {
+								$mpdf->AddPage();
+							}
+							$label_counter = 0;
+						}
+				
+						$label = $mpdf->ImportPage($i);
+						$mpdf->UseTemplate($label, $sticker_parameters['x'][$label_counter], $sticker_parameters['y'][$label_counter]);
+						$label_counter++;
+					}
+				
+					if ($output == 'file') {
 						header("Content-type:application/pdf");
 						$mpdf->Output();
 						exit();

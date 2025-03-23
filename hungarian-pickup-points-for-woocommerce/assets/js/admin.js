@@ -1587,12 +1587,13 @@ jQuery(document).ready(function($) {
                 }
             });
 
-			console.log(selected_orders);
-
             //Show modal
             $(this).WCBackboneModal({
                 template: 'vp-woo-pont-modal-generate'
             });
+
+			//Call action
+			$( document.body ).trigger( 'vp_woo_pont_generate_modal_shown' );
 
             //Reset content
             var $table = $('.vp-woo-pont-modal-generate table');
@@ -2462,9 +2463,6 @@ jQuery(document).ready(function($) {
 						vp_woo_pont_metabox.$parcelCountRow.slideDown();
 						var qty = vp_woo_pont_metabox.$parcelCountRow.find('strong').data('qty');
 						vp_woo_pont_metabox.$parcelCountRow.find('strong').text(data.package_count+' '+qty);
-						$('.vp-woo-pont-metabox-rows-label-print').addClass('multiple_parcels');
-					} else {
-						$('.vp-woo-pont-metabox-rows-label-print').removeClass('multiple_parcels');
 					}
 
 					//Regenerate print layout
@@ -3203,5 +3201,5 @@ jQuery(document).ready(function($) {
 		vp_woo_pont_customizer.init();
 	}
 
-
 });
+

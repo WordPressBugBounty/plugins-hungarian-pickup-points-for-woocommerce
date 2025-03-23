@@ -162,10 +162,18 @@ jQuery(document).ready(function($) {
 	}
 
     var vp_woo_pont_kvikk_promo = {
+        apiUrl: 'https://api.kvikk.hu/public',
         init: function() {
             $(document).on('click', '.kvikk-promo-close', this.hide_promo.bind(this));
             $(document).on('click', '.kvikk-promo-hide', this.hide_promo.bind(this));
             $(document).on('click', '.kvikk-promo-cta', this.cta_click.bind(this));
+            if($('.kvikk-promo').length) {
+                this.get_pricing();
+            } else {
+                $(document.body).on('vp_woo_pont_generate_modal_shown', function() {
+                    vp_woo_pont_kvikk_promo.get_pricing()
+                });
+            }
         },
         hide_promo: function() {
             $('.kvikk-promo').slideUp();
@@ -178,6 +186,90 @@ jQuery(document).ready(function($) {
         },
         cta_click: function() {
             vp_woo_pont_kvikk_promo.hide_promo();
+        },
+        get_pricing: function() {
+
+            console.log('get_pricing');
+
+            //Check if pricing is in local storage(stored for 30 days)
+            var pricing = localStorage.getItem('vp_woo_pont_kvikk_promo_pricing');
+            if(pricing) {
+
+                //Parse and return pricing
+                const kvikk_pricing_data = JSON.parse(pricing);
+
+                //Check if we have data
+                if(!kvikk_pricing_data) {
+                    vp_woo_pont_kvikk_promo.fetch_pricing();
+                    return;
+                }
+
+                //Check if data is still valid
+                const expiration = new Date(kvikk_pricing_data.expiration);
+                const now = new Date();
+                if(now > expiration) {
+                    vp_woo_pont_kvikk_promo.fetch_pricing();
+                    return;
+                }
+
+                //Show the price list
+                vp_woo_pont_kvikk_promo.display_pricing(kvikk_pricing_data.data);
+                return;
+
+            } else {
+
+                //Fetch pricing
+                vp_woo_pont_kvikk_promo.fetch_pricing();
+
+            }
+        },
+        fetch_pricing: function() {
+
+            //Fetch pricing
+            fetch(vp_woo_pont_kvikk_promo.apiUrl+'/pricing?latest=1')
+            .then(response => response.json())
+            .then(data => {
+
+                //Check if we have data
+                if(!data.data.shipping) {
+                    console.error('No pricing data found');
+                    return;
+                }
+
+                //Get pricing data
+                const kvikk_pricing_data = data.data.shipping;
+                const expDate = new Date();
+                expDate.setDate(expDate.getDate() + 30);
+
+                //Create a new object with only the necessary data
+                const kvikk_pricing_data_filtered = kvikk_pricing_data.map(courier => {
+                    return {
+                        courier: courier.courier,
+                        price: courier.prices[0].cost
+                    }
+                });
+
+                //Store pricing in local storage
+                localStorage.setItem('vp_woo_pont_kvikk_promo_pricing', JSON.stringify({expiration: expDate, data: kvikk_pricing_data_filtered}));
+                vp_woo_pont_kvikk_promo.get_pricing();
+            })
+            .catch(error => {
+                console.error('Error fetching price list:', error);
+            });
+
+        },
+        display_pricing: function(pricing) {
+            const couriers = ['mpl', 'gls', 'dpd', 'famafutar'];
+            $('.kvikk-promo').addClass('loaded');
+            for (const courier of couriers) {
+                const courier_data = pricing.find(c => c.courier === courier);
+                if(courier_data) {
+                    let price = courier_data.price;
+                    price = new Intl.NumberFormat('hu-HU', { style: 'currency', currency: 'HUF', minimumFractionDigits: 0, maximumFractionDigits: 0}).format(price);
+                    $(`strong[data-kvikk-promo-price="${courier}"]`).text(price);
+                }
+            }
+
         }
     }
 
