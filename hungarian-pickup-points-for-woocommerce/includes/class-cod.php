@@ -59,7 +59,7 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 			$chosen_gateway = WC()->session->get( 'chosen_payment_method' );
 
 			//Check for block version too
-			if(WC()->session->get( 'vp_selected_payment_method')) {
+			if(class_exists( 'Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils' ) && CartCheckoutUtils::is_checkout_block_default() && WC()->session->get( 'vp_selected_payment_method')){
 				$chosen_gateway = WC()->session->get( 'vp_selected_payment_method');
 			}
 			
