@@ -279,7 +279,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 				//If we have sticker parameters, we need to modify the label print layout
 				if ($sticker_parameters && $sticker_parameters['layout']) {
 					require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
-					$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A4', 'orientation' => 'P'));
+					$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => $sticker_parameters['format']));
 					$pagecount = $mpdf->setSourceFile($pdf_file);
 				
 					$label_counter = $position_id;
