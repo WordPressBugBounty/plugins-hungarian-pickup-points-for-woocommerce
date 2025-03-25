@@ -65,6 +65,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			'kvikk_gls',
 			'kvikk_gls_shop',
 			'kvikk_gls_locker',
+			'kvikk_dpd',
+			'kvikk_dpd_parcelshop'
 		);
 		public $supports_bulk_printing = array();
 
