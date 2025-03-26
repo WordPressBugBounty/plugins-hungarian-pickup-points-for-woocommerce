@@ -388,7 +388,7 @@ jQuery(document).ready(function($) {
 				marker.on('click', vp_woo_pont_frontend.select_in_map);
 
 				//Remove accents from place name
-				if(a.country && a.county != 'HU') {
+				if(a.country && a.country != 'HU') {
 					a.city_nfd = a.city;
 					a.addr_nfd = a.addr;
 				} else {

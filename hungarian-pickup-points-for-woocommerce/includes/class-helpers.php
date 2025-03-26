@@ -369,6 +369,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				//Allow plugins to customize
 				$cost = apply_filters( 'vp_woo_pont_shipping_cost', $cost, $matched_provider_prices, $provider_id);
 
+				//Calculate based on gross total
+				if(apply_filters('vp_woo_pont_shipping_cost_based_on_gross_total', false)) {
+					$taxes = WC_Tax::calc_inclusive_tax( $cost, WC_Tax::get_shipping_tax_rates() );
+					$cost -= reset($taxes);	
+				}
+
 				//Calculate taxes, if enabled
 				$tax = array();
 				if(wc_tax_enabled() && VP_Woo_Pont_Helpers::get_option('tax_status', 'taxable') == 'taxable') {
@@ -940,7 +946,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 					$positions['sticker'] = 'A6';
 				}
 
-			}		
+			}
 
 			return apply_filters('vp_woo_pont_merged_pdf_parameters', $positions, $provider, $label_size);
 
