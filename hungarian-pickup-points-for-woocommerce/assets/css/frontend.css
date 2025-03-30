@@ -806,6 +806,10 @@ html body .marker-cluster {
   background-image: url(../images/icon-gls-locker.svg); }
 .vp-woo-pont-provider-icon-kvikk_dpd {
   background-image: url(../images/icon-dpd.svg); }
+.vp-woo-pont-provider-icon-kvikk_dpd_parcelshop {
+  background-image: url(../images/icon-dpd.svg); }
+.vp-woo-pont-provider-icon-kvikk_dpd_alzabox {
+  background-image: url(../images/icon-alzabox.svg); }
 
 .wp-admin .vp-woo-pont-provider-icon-kvikk_packeta_zpont {
   background-image: url(../images/icon-kvikk-packeta-zpont.svg);
@@ -873,6 +877,14 @@ html body .marker-cluster {
   background-size: 100% !important; }
 .wp-admin .vp-woo-pont-provider-icon-kvikk_dpd {
   background-image: url(../images/icon-kvikk-dpd.svg);
+  width: 72px !important;
+  background-size: 100% !important; }
+.wp-admin .vp-woo-pont-provider-icon-kvikk_dpd_parcelshop {
+  background-image: url(../images/icon-kvikk-dpd.svg);
+  width: 72px !important;
+  background-size: 100% !important; }
+.wp-admin .vp-woo-pont-provider-icon-kvikk_dpd_alzabox {
+  background-image: url(../images/icon-kvikk-expressone-alzabox.svg);
   width: 72px !important;
   background-size: 100% !important; }
 

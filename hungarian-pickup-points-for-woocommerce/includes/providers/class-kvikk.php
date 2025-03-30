@@ -149,7 +149,7 @@ class VP_Woo_Pont_Kvikk {
     public function get_kvikk_db() {
 
 		//URL of the database
-		$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls&country=HU';
+		$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls,dpd&country=HU';
 
 		//Get XML file
 		$request = wp_remote_get($url);
@@ -172,7 +172,7 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//Create a new json
-		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'foxpost' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'gls_locker' => array(), 'gls_shop' => array());
+		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'foxpost' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'gls_locker' => array(), 'gls_shop' => array(), 'dpd_parcelshop' => array(), 'dpd_alzabox' => array());
 
 		//Loop through points
 		foreach ($json['data'] as $point) {
@@ -232,11 +232,13 @@ class VP_Woo_Pont_Kvikk {
         $providers['kvikk_foxpost'] = 'Foxpost';
         $providers['kvikk_gls_locker'] = 'GLS Automata';
         $providers['kvikk_gls_shop'] = 'GLS Csomagpont';
+        $providers['kvikk_dpd_parcelshop'] = 'DPD Csomagpont';
+        $providers['kvikk_dpd_alzabox'] = 'DPD AlzaBox';
         return $providers;
     }
 
     public function add_provider_subgroups($subgroups) {
-		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'gls_shop', 'gls_locker');
+		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'gls_shop', 'gls_locker', 'dpd_parcelshop', 'dpd_alzabox');
         return $subgroups;
     }
 
