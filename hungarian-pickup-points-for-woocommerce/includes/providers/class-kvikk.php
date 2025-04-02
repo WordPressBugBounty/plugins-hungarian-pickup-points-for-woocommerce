@@ -35,7 +35,7 @@ class VP_Woo_Pont_Kvikk {
 			'booked' => 'Csomag létrehozva',
 			'sent' =>'Csomag átadva a futárnak',
 			'in_transit' => 'Csomag szállítás alatt',
-			'out_for_delivery' => 'Csoamag kiszállítás alatt(címzettnek vagy csomagpontra)',
+			'out_for_delivery' => 'Csomag kiszállítás alatt(címzettnek vagy csomagpontra)',
 			'ready_for_pickup' => 'Csomag kézbesítve csomagpontba vagy automatába',
 			'delivered' => 'Csomag kézbesítve / átvéve',
 			'failed' => 'Sikertelen kézbesítés',

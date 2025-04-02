@@ -208,13 +208,16 @@ class VP_Woo_Pont_Csomagpiac {
 
 		//Create item
 		$order = wc_get_order($data['order_id']);
+		$limit = apply_filters('vp_woo_pont_csomagpiac_label_character_limit', 40, $data);
+
+		//Set package data
 		$item = array(
 			'pickupPointId' => VP_Woo_Pont_Helpers::get_option('csomagpiac_pickup_point'),
-			'recipientName' => mb_substr($data['customer']['name_with_company'], 0, 40),
+			'recipientName' => mb_substr($data['customer']['name_with_company'], 0, $limit),
 			'recipientCountryCode' => $order->get_shipping_country(),
 			'recipientZip' => $order->get_shipping_postcode(),
-			'recipientCity' => mb_substr($order->get_shipping_city(), 0, 40),
-			'recipientAddress' => mb_substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())), 0, 40),
+			'recipientCity' => mb_substr($order->get_shipping_city(), 0, $limit),
+			'recipientAddress' => mb_substr(implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2())), 0, $limit),
 			'recipientPhone' => $data['customer']['phone'],
 			'recipientEmail' => $data['customer']['email'],
 			'packageCount' => 1,
