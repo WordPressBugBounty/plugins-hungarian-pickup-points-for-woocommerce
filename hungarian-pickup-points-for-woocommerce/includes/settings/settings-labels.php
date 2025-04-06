@@ -33,7 +33,7 @@ $settings = array(
 	),
 	array(
 		'type' => 'select',
-		'class' => 'wc-enhanced-select',
+		'class' => 'wc-enhanced-select vp-woo-pont-toggle-select-field',
 		'title' => __( 'Reference number', 'vp-woo-pont' ),
 		'desc_tip' => __( 'With most providers, theres an extra field where you can store a reference number to connect the label with an order. You can select what value to use in this field.', 'vp-woo-pont' ),
 		'default' => 'order_number',
@@ -41,8 +41,15 @@ $settings = array(
 			'order_number' => __( 'Order number', 'vp-woo-pont' ),
 			'order_id' => __( 'Order ID', 'vp-woo-pont' ),
 			'invoice_number' => __( 'Invoice number', 'vp-woo-pont' ),
+			'custom' => __( 'Custom meta', 'vp-woo-pont' ),
 		),
 		'id' => 'label_reference_number',
+	),
+	array(
+		'title' => __( 'Reference number meta key', 'vp-woo-pont' ),
+		'type' => 'text',
+		'id' => 'label_reference_number_custom',
+		'desc' => __( "Enter a custom order meta key and it will use that value as the reference number.", 'vp-woo-pont' ),
 	),
 	array(
 		'title' => __('Package contents text', 'vp-woo-pont'),
@@ -60,7 +67,7 @@ $settings = array(
 	),
 	array(
 		'type' => 'select',
-		'class' => 'wc-enhanced-select',
+		'class' => 'wc-enhanced-select vp-woo-pont-toggle-select-field',
 		'title' => __( 'COD Reference number', 'vp-woo-pont' ),
 		'desc_tip' => __( 'With DPD and GLS, theres an extra field where you can store a reference number specific to a COD order. You can select what value to use in this field.', 'vp-woo-pont' ),
 		'default' => 'order_number',
@@ -68,8 +75,15 @@ $settings = array(
 			'order_number' => __( 'Order number', 'vp-woo-pont' ),
 			'order_id' => __( 'Order ID', 'vp-woo-pont' ),
 			'invoice_number' => __( 'Invoice number', 'vp-woo-pont' ),
+			'custom' => __( 'Custom meta', 'vp-woo-pont' ),
 		),
 		'id' => 'cod_reference_number'
+	),
+	array(
+		'title' => __( 'COD Reference number meta key', 'vp-woo-pont' ),
+		'type' => 'text',
+		'id' => 'cod_reference_number_custom',
+		'desc' => __( "Enter a custom order meta key and it will use that value as the COD reference number.", 'vp-woo-pont' ),
 	),
 	array(
 		'type' => 'vp_weight_corrections',

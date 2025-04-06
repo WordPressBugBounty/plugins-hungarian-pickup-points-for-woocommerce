@@ -661,6 +661,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 		public static function order_has_free_shipping_coupon() {
 			$has_free_shipping = false;
+			if (!WC()->cart) return $has_free_shipping;
 			$applied_coupons = WC()->cart->get_applied_coupons();
 			foreach( $applied_coupons as $coupon_code ){
 				$coupon = new WC_Coupon($coupon_code);

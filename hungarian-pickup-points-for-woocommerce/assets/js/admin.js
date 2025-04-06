@@ -150,6 +150,18 @@ jQuery(document).ready(function($) {
 			//Validate kvikk API key
 			$('.vp-woo-pont-kvikk-api-key-test').on('click', this.validate_kvikk_api_key);
 
+			//Toggle field based on select value
+			$('.vp-woo-pont-toggle-select-field').on('change', function(){
+				var selected = $(this).val();
+				var id = $(this).attr('id');
+				var $field = $("[id^='" + id + "_']");
+				var $selectedField = $('#'+id+'_'+selected);
+				$field.parents('tr').hide();
+				if($selectedField) {
+					$selectedField.parents('tr').show();
+				}
+			}).trigger('change');
+
 		},
 		check_if_provider_selected: function() {
 			$( '.vp-woo-pont-providers-wrapper' ).addClass('provider-selected');

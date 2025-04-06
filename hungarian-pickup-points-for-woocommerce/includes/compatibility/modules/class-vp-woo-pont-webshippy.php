@@ -24,6 +24,15 @@ class Vp_Woo_Pont_Woo_Webshippy_Compatibility {
 
 		//Get order
 		$order = wc_get_order($body['order']['order_id']);
+
+		//Check for sequential order numbers compatibility
+		if(!$order && function_exists('wc_sequential_order_numbers')) {
+			$order_id = wc_sequential_order_numbers()->find_order_by_order_number( $body['order']['order_id'] );
+			if($order_id) {
+				$order = wc_get_order($order_id);
+			}
+		}
+		
 		if($order && $order->get_meta('_vp_woo_pont_point_id')) {
 			$carrier = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 			$point_id = $order->get_meta('_vp_woo_pont_point_id');
@@ -51,7 +60,6 @@ class Vp_Woo_Pont_Woo_Webshippy_Compatibility {
 			$body['order']['shipping_address_name'] = $order->get_formatted_billing_full_name();
 			
 		}
-
 
 		//Set body again
 		$parsed_args['body'] = json_encode($body);

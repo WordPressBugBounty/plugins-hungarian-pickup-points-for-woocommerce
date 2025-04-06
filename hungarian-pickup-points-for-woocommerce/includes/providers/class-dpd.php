@@ -21,6 +21,9 @@ class VP_Woo_Pont_DPD {
 		//Load settings
 		add_filter('vp_woo_pont_carrier_settings_dpd', array($this, 'get_settings'));
 
+		//Smallf ix for tracking automation, since the return shipment has the same delivered status as the normal one
+		add_filter('vp_woo_pont_tracking_automation_target_status', array($this, 'tracking_automation_target_status'), 10, 6);
+
 		//If dev mode, use a different API url
 		if(VP_Woo_Pont_Helpers::get_option('dpd_dev_mode_shipping_api', 'no') == 'yes') {
 			$this->api_url_v2 = 'https://nst-preprod.dpsin.dpdgroup.com/api/v1.1/';
@@ -756,6 +759,7 @@ class VP_Woo_Pont_DPD {
 			);
 		}
 
+
 		return $tracking_info;
 	}
 
@@ -870,6 +874,25 @@ class VP_Woo_Pont_DPD {
 			$enabled['dpd_'.strtolower($enabled_country)] = $supported[$enabled_country].' (DPD)';
 		}
 		return $enabled;
+	}
+
+	public function tracking_automation_target_status($target_status, $order, $provider, $tracking_info, $automation, $event_status) {
+		if($provider == 'dpd' && (in_array('delivered', $automation[$provider]) && $event_status == 'delivered')) {
+			$existing_tracking_info = $order->get_meta('_vp_woo_pont_parcel_info');
+			if($existing_tracking_info && $this->has_shipment_returned($existing_tracking_info)) {
+				return false;
+			}
+		}
+		return $target_status;
+	}
+
+	private function has_shipment_returned($tracking_info) {
+		foreach ($tracking_info as $info) {
+			if (isset($info['event']) && $info['event'] == 'SA06') {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -26,6 +26,12 @@ if(VP_Woo_Pont_Pro::is_pro_enabled()) {
 			'id' => 'cod_fee_name'
 		),
 		array(
+			'title' => __( 'Shipping in % calculation', 'vp-woo-pont' ),
+			'desc' => __( 'Add the shipping cost to the cart total when calculating the % fee', 'vp-woo-pont' ),
+			'type' => 'checkbox',
+			'id' => 'cod_fee_include_shipping',
+		),
+		array(
 			'title'    => __( 'Fee tax class', 'vp-woo-pont' ),
 			'desc'     => __( 'Optionally control which tax class the COD fee gets, or leave it so tax is based on the cart items themselves.', 'vp-woo-pont' ),
 			'id'       => 'cod_tax_class',

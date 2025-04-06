@@ -3,6 +3,12 @@
 		padding-top: 0;
 	}
 
+	.vp-woo-pont-shipping-method-label-price {
+		span {
+			margin-left: 0 !important;
+		}
+	}
+
 	@media(max-width: 991.98px) {
 		ul.cfw-shipping-methods-list li .cfw-shipping-method-inner label {
 			flex-wrap: wrap;
@@ -39,6 +45,11 @@
 			margin: 0 -2px 0 -2px;
 			display: block;
 		}
+
+	}
+
+	#cfw-after-shipping {
+		margin: -10px 0 1.8em 0;
 	}
 
 	&.glass {

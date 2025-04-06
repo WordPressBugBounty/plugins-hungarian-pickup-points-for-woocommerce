@@ -909,6 +909,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				return $invoice_number_billingo;
 			}
 
+			//If we need to check for a custom meta
+			if($custom_meta = VP_Woo_Pont_Helpers::get_option($field.'_custom')) {
+				return $order->get_meta($custom_meta);
+			}
+
 			//If invoice is missing, return the order number as a default
 			return $order_number;
 		}

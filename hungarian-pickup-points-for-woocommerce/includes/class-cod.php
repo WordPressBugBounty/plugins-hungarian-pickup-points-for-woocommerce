@@ -81,6 +81,9 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 
 			//Get cart details
 			$cart_details = VP_Woo_Pont_Conditions::get_cart_details('cod_fees');
+			if(VP_Woo_Pont_Helpers::get_option('cod_fee_include_shipping', 'no') == 'yes') {
+				$cart_details['cart_total_net'] += $cart->get_shipping_total();
+			}
 
 			//Get selected shipping methd
 			$cart_details['shipping_method'] = '';

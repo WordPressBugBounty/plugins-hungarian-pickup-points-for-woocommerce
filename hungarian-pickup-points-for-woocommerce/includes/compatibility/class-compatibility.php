@@ -71,6 +71,11 @@ class VP_Woo_Pont_Compatibility {
 			$module_paths['vp_extra_fees'] = 'modules/class-vp-woo-pont-extra-fees.php';
 		}
 
+		//Checkout WC compatibility
+		if ( defined('CFW_NAME') ) {
+			$module_paths['checkoutwc'] = 'modules/class-vp-woo-pont-checkoutwc.php';
+		}
+
 		$module_paths = apply_filters( 'vp_woo_pont_compatibility_modules', $module_paths );
 		foreach ( $module_paths as $name => $path ) {
 			require_once $path;

@@ -643,6 +643,8 @@ html body .marker-cluster {
 
 .checkout-wc .vp-woo-pont-shipping-method-icons {
   padding-top: 0; }
+.checkout-wc .vp-woo-pont-shipping-method-label-price span {
+  margin-left: 0 !important; }
 @media (max-width: 991.98px) {
   .checkout-wc ul.cfw-shipping-methods-list li .cfw-shipping-method-inner label {
     flex-wrap: wrap; }
@@ -662,6 +664,8 @@ html body .marker-cluster {
   border-radius: 5px;
   margin: 0 -2px 0 -2px;
   display: block; }
+.checkout-wc #cfw-after-shipping {
+  margin: -10px 0 1.8em 0; }
 .checkout-wc.glass .vp-woo-pont-review-order td {
   border-radius: 0;
   display: block; }
