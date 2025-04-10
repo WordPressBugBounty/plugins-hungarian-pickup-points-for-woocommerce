@@ -234,7 +234,7 @@ class VP_Woo_Pont_Foxpost {
 
 		//Next, generate the PDF label
 		$label_size = VP_Woo_Pont_Helpers::get_option('foxpost_sticker_size', 'A6');
-		if($label_size == 'A6') $label_size = 'a6';
+		if($label_size == 'A6') $label_size = '_85X85';
 		$request = wp_remote_post( $this->api_url.'label/'.strtoupper($label_size), array(
 			'body'    => json_encode(array($parcel_number)),
 			'headers' => $this->get_auth_header($data['order'], 'label'),
@@ -274,8 +274,8 @@ class VP_Woo_Pont_Foxpost {
 				$position = array(-2, -72);
 			}
 
-			$rotated_pdf = VP_Woo_Pont_Print::rotate_to_a6($pdf_file['path'], $position);			
-			VP_Woo_Pont_Labels::save_pdf_file($rotated_pdf, $pdf_file);
+			//$rotated_pdf = VP_Woo_Pont_Print::rotate_to_a6($pdf_file['path'], $position);			
+			//VP_Woo_Pont_Labels::save_pdf_file($rotated_pdf, $pdf_file);
 		}
 
 		//Create response
