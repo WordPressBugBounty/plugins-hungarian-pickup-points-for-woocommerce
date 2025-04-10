@@ -67,6 +67,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 
 		public static function rotate_to_a6($pdf, $position = false) {
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
+			require_once plugin_dir_path(__FILE__) . '../vendor/setasign/fpdi-parser/src/autoload.php'; //Required because Foxpost uses v1.6 PDF files
 			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A6', 'orientation' => 'P'));
 			$mpdf->AddPage();
 			$mpdf->setSourceFile($pdf);

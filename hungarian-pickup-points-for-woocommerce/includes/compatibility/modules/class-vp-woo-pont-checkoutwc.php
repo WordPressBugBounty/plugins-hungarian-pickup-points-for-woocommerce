@@ -26,6 +26,12 @@ class Vp_Woo_Pont_CheckoutWC_Compatibility {
 			parse_str( wp_unslash( $_POST['post_data'] ), $post_data );
 			if(isset($post_data['cfw_delivery_method'])) {
 				$selected = $post_data['cfw_delivery_method'] == 'pickup';
+				if($selected && isset($post_data['shipping_method']) && is_array($post_data['shipping_method'])) {
+					$method = $post_data['shipping_method'][0];
+					if(strpos($method, 'vp_pont') === false) {
+						$selected = false;
+					}
+				}
 			}
 		}
 		return $selected;

@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 3.5.6
+Version: 3.5.7
 WC requires at least: 7.0
 WC tested up to: 9.7.1
 Requires Plugins: woocommerce
@@ -67,7 +67,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '3.5.6';
+		self::$version = '3.5.7';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -762,6 +762,11 @@ class VP_Woo_Pont {
 
 	public function validate_checkout($fields, $errors) {
 
+		//Skip if we don't need to ship
+		if(!WC()->cart->needs_shipping_address()) {
+			return;
+		}
+
 		//If its the vp_pont shippign method
 		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
 		$selected_pont = WC()->session->get( 'selected_vp_pont' );
@@ -776,7 +781,7 @@ class VP_Woo_Pont {
 		}
 
 		//Check if a a vp_pont is selected
-		if($vp_pont_chosen && !$selected_pont && WC()->cart->needs_shipping()) {
+		if($vp_pont_chosen && !$selected_pont) {
 			$errors->add( 'validation', apply_filters('vp_woo_pont_required_pont_message', esc_html__( 'Please select a pick-up point or choose a different shipping method.', 'vp-woo-pont'), $fields) );
 		} else {
 
@@ -810,14 +815,19 @@ class VP_Woo_Pont {
 
 	public function save_checkout( $order_id ) {
 
+		//Skip if we don't need to ship
+		$order = wc_get_order( $order_id );
+		if(!$order->needs_shipping_address()) {
+			return;
+		}
+
 		//If we have a pont selected, that means we need to save it
 		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
 		$selected_pont = WC()->session->get( 'selected_vp_pont' );
 		$chosen_method = $chosen_methods[0];
-		$order = wc_get_order( $order_id );
 
 		//If shipping is vp_pont and a pont was selected, save its data as the shipping address(and some custom meta too)
-		if(strpos($chosen_method, 'vp_pont') !== false && $selected_pont && $order->needs_shipping_address()) {
+		if(strpos($chosen_method, 'vp_pont') !== false && $selected_pont) {
 
 			//Save custom meta and replace shipping address
 			$this->update_order_with_selected_point($order, $selected_pont);
