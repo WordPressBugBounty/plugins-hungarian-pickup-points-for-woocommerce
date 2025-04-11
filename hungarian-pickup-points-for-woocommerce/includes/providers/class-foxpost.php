@@ -146,6 +146,11 @@ class VP_Woo_Pont_Foxpost {
 
 	public function create_label($data) {
 
+		// Check if Imagick is installed
+		if (!class_exists('Imagick')) {
+			return new WP_Error( 'foxpost_imagick_error', __('Please make sure Imagick is enabled in your PHP settings.', 'vp-woo-pont') );
+		}
+
 		//Create item
 		$comment = VP_Woo_Pont()->labels->get_package_contents_label($data, 'foxpost');
 		$item = array(
@@ -234,7 +239,7 @@ class VP_Woo_Pont_Foxpost {
 
 		//Next, generate the PDF label
 		$label_size = VP_Woo_Pont_Helpers::get_option('foxpost_sticker_size', 'A6');
-		if($label_size == 'A6') $label_size = '_85X85';
+		if($label_size == 'A6') $label_size = 'a6';
 		$request = wp_remote_post( $this->api_url.'label/'.strtoupper($label_size), array(
 			'body'    => json_encode(array($parcel_number)),
 			'headers' => $this->get_auth_header($data['order'], 'label'),
@@ -259,9 +264,10 @@ class VP_Woo_Pont_Foxpost {
 		//Now we have the PDF as base64, save it
 		$pdf = trim($response);
 
-		//Try to save PDF file
+		//Convert to PNG(fix for v1.6 PDF parsing issue)
 		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('foxpost', $data['order_id']);
-		VP_Woo_Pont_Labels::save_pdf_file($pdf, $pdf_file);
+		$converted_pdf_file = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);
+		VP_Woo_Pont_Labels::save_pdf_file($converted_pdf_file, $pdf_file);
 
 		//Crop to A6 portrait if needed
 		if(VP_Woo_Pont_Helpers::get_option('foxpost_sticker_size', 'A6') == 'A6') {
@@ -274,8 +280,8 @@ class VP_Woo_Pont_Foxpost {
 				$position = array(-2, -72);
 			}
 
-			//$rotated_pdf = VP_Woo_Pont_Print::rotate_to_a6($pdf_file['path'], $position);			
-			//VP_Woo_Pont_Labels::save_pdf_file($rotated_pdf, $pdf_file);
+			$rotated_pdf = VP_Woo_Pont_Print::rotate_to_a6($pdf_file['path'], $position);			
+			VP_Woo_Pont_Labels::save_pdf_file($rotated_pdf, $pdf_file);
 		}
 
 		//Create response

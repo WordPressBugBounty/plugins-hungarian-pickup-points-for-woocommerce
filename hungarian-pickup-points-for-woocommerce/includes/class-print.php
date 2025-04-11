@@ -80,6 +80,48 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 			return $mpdf->Output('file.pdf', 'S');
 		}
 
+		public static function pdf_to_png_pdf($pdf) {
+			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
+
+			//Load PDF with Imagick at specified DPI
+			$dpi = 200;
+			$imagick = new \Imagick();
+			$imagick->setResolution($dpi, $dpi);
+			$imagick->readImageBlob($pdf); // First page only
+			$imagick->setImageFormat('png');
+
+			//Get original dimensions in pixels
+			$widthPx = $imagick->getImageWidth();
+			$heightPx = $imagick->getImageHeight();
+
+			//Convert pixels to millimeters: mm = pixels * 25.4 / DPI
+			$widthMM = $widthPx * 25.4 / $dpi;
+			$heightMM = $heightPx * 25.4 / $dpi;
+
+			// Save image temporarily
+			$tmp_img = tempnam(sys_get_temp_dir(), 'label_') . '.png';
+			$imagick->writeImage($tmp_img);
+			$imagick->clear();
+			$imagick->destroy();
+
+			//Create a new PDF with the same dimensions
+			$mpdf = new \Mpdf\Mpdf([
+				'mode' => 'c',
+				'format' => [$widthMM, $heightMM],
+				'orientation' => 'P',
+				'img_dpi' => $dpi,
+			]);
+
+			//Add the image to the PDF
+			$mpdf->AddPage();
+			$mpdf->Image($tmp_img, 0, 0, $widthMM, $heightMM, 'png', '', true, false);
+
+			// Clean up
+			unlink($tmp_img);
+
+			return $mpdf->Output('file.pdf', 'S');
+		}
+
 		public static function load_pdf_file($orders = false, $output = 'file') {
 
 			//Check for parameters

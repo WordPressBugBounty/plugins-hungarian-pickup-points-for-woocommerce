@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Hungarian Pickup Points for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-10 14:45+0000\n"
-"PO-Revision-Date: 2025-04-05 12:33+0000\n"
+"PO-Revision-Date: 2025-04-11 08:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: Magyar\n"
 "Language: hu_HU\n"
@@ -15,8 +15,8 @@ msgstr ""
 "X-Loco-Version: 2.7.1; wp-6.7.2\n"
 "X-Domain: vp-woo-pont"
 
-#: includes/class-tracking.php:339 includes/class-tracking.php:399
-#: includes/class-tracking.php:601 includes/views/html-metabox-tracking.php:37
+#: includes/class-tracking.php:341 includes/class-tracking.php:401
+#: includes/class-tracking.php:603 includes/views/html-metabox-tracking.php:37
 #: templates/order/order-tracking.php:33 templates/order/order-tracking.php:43
 #, php-format
 msgid "%1$s at %2$s"
@@ -30,7 +30,7 @@ msgstr "%d összesen"
 msgid "%d labels generated"
 msgstr "%d címke létrehozva"
 
-#: includes/class-tracking.php:417
+#: includes/class-tracking.php:419
 #, php-format
 msgid "%s ago"
 msgstr "%s telt el"
@@ -410,7 +410,7 @@ msgstr "Rendelés létrehozásakor"
 msgid "Automations"
 msgstr "Automatizálás"
 
-#: includes/class-tracking.php:742
+#: includes/class-tracking.php:744
 msgid "Available for pickup"
 msgstr "Átvehető az átvételi ponton"
 
@@ -488,7 +488,7 @@ msgstr "Mégse"
 msgid "Carrier"
 msgstr "Szolgáltató"
 
-#: index.php:1011 includes/class-settings.php:17
+#: index.php:1021 includes/class-settings.php:17
 #: includes/class-settings.php:193 includes/settings/settings-carriers.php:13
 #: includes/views/html-admin-home-delivery.php:46
 msgid "Carriers"
@@ -506,7 +506,7 @@ msgstr "Kosár végösszeg(kedvezménnyel)"
 msgid "Cash"
 msgstr "Készpénz"
 
-#: index.php:786 index.php:791
+#: index.php:791 index.php:796
 msgid ""
 "Cash on delivery is not available on the selected pick-up point. Please "
 "select a different payment method or pick-up point!"
@@ -934,7 +934,7 @@ msgctxt "Delete point"
 msgid "Are you sure?"
 msgstr "Biztos törlöd?"
 
-#: includes/class-tracking.php:709 includes/providers/class-dpd.php:35
+#: includes/class-tracking.php:711 includes/providers/class-dpd.php:35
 #: includes/views/html-admin-tracking-automations.php:74
 #: includes/views/html-admin-tracking-automations.php:126
 msgid "Delivered"
@@ -1264,7 +1264,7 @@ msgstr "Díjak"
 msgid "Fetch tracking information automatically"
 msgstr "Csomagkövetési adatok automata szinkronizálása"
 
-#: index.php:1004
+#: index.php:1014
 msgid "Filter shipping providers"
 msgstr "Szűrés csomagpont szerint"
 
@@ -1342,11 +1342,11 @@ msgstr "Péntek"
 msgid "from"
 msgstr "nettó"
 
-#: index.php:1418 includes/settings/settings-global.php:16
+#: index.php:1428 includes/settings/settings-global.php:16
 #: templates/emails/email-vp-woo-pont-order-details.php:23
 #: templates/checkout/pont.php:22 templates/checkout/pont.php:23
-#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:72
-#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:73
+#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:77
+#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:78
 msgctxt "frontend"
 msgid "Pickup point"
 msgstr "Átvételi hely"
@@ -2230,7 +2230,7 @@ msgstr "Rendelésszám"
 msgid "Order number"
 msgstr "Rendelés száma"
 
-#: includes/class-tracking.php:697
+#: includes/class-tracking.php:699
 msgid "Order Ready"
 msgstr "Csomag előkészítve"
 
@@ -2252,7 +2252,7 @@ msgstr "Rendelés összesen"
 msgid "Order type"
 msgstr "Rendelés típusa"
 
-#: includes/class-tracking.php:691
+#: includes/class-tracking.php:693
 msgid "Ordered"
 msgstr "Rögzített rendelés"
 
@@ -2260,7 +2260,7 @@ msgstr "Rögzített rendelés"
 msgid "Orders"
 msgstr "Rendelések"
 
-#: includes/class-tracking.php:705 includes/providers/class-dpd.php:36
+#: includes/class-tracking.php:707 includes/providers/class-dpd.php:36
 #: includes/providers/class-dpd.php:68
 #: includes/emails/class-email-delivery.php:12
 msgid "Out for delivery"
@@ -2287,7 +2287,7 @@ msgstr "Csomag tartalma"
 msgid "Package contents text"
 msgstr "Csomag tartalma szöveg"
 
-#: includes/class-tracking.php:408 includes/class-tracking.php:593
+#: includes/class-tracking.php:410 includes/class-tracking.php:595
 #: includes/views/html-metabox-tracking.php:45
 #: templates/order/order-tracking.php:63
 msgid "Package created. Tracking number:"
@@ -2297,7 +2297,7 @@ msgstr "Címke létrehozva. Követési szám:"
 msgid "Package delivered order status"
 msgstr "Csomag kiszállítva rendelés státusz"
 
-#: index.php:1363
+#: index.php:1373
 msgid "Package details"
 msgstr "Csomag adatai"
 
@@ -2500,7 +2500,7 @@ msgstr "Pick and Ship/Return törölve"
 msgid "Pick Pack Pont"
 msgstr "Pick Pack Pont"
 
-#: includes/class-tracking.php:744
+#: includes/class-tracking.php:746
 msgid "Picked up"
 msgstr "Átvéve"
 
@@ -2524,7 +2524,7 @@ msgstr "Csomagpont szolgáltató"
 msgid "Pickup point name"
 msgstr "Átvételi hely neve"
 
-#: index.php:1005 includes/class-settings.php:212
+#: index.php:1015 includes/class-settings.php:212
 #: includes/views/html-admin-points-title.php:7
 #| msgid "Pickup point list"
 msgid "Pickup points"
@@ -2535,7 +2535,7 @@ msgid "Pickup points map for WooCommerce stores in the hungarian market"
 msgstr ""
 "Csomagpont választás, címke nyomtatás és csomagkövetés WooCommerce boltokhoz"
 
-#: index.php:805 includes/block/pont-picker-block.php:110
+#: index.php:810 includes/block/pont-picker-block.php:110
 msgid "Please enter a valid phone number!"
 msgstr "Kérlek, ellenőrizd a megadott telefonszámot!"
 
@@ -2569,7 +2569,12 @@ msgstr ""
 "generálni. Lépj be a Packeta fiókodba, kattints a nevedre jobb felül és ott "
 "megtalálod az API jelszót."
 
-#: index.php:780 includes/block/pont-picker-block.php:95
+#: includes/providers/class-foxpost.php:151
+msgid "Please make sure Imagick is enabled in your PHP settings."
+msgstr ""
+"Győződj meg róla, hogy a PHP beállításokban engedélyezve van e az Imagick. "
+
+#: index.php:785 includes/block/pont-picker-block.php:95
 msgid "Please select a pick-up point or choose a different shipping method."
 msgstr "Válassz egy átvételi helyet, vagy egy másik szállítási módot."
 
@@ -2709,7 +2714,7 @@ msgstr "Frissítés"
 msgid "Refresh providers"
 msgstr "Szolgáltatók frissítése"
 
-#: includes/class-tracking.php:602
+#: includes/class-tracking.php:604
 #, php-format
 msgid "Refreshed %s ago"
 msgstr "Frissítés óta eltelt %s"
@@ -3098,7 +3103,7 @@ msgstr "Csomag nem található"
 msgid "Shipment Summary"
 msgstr "Szállítólevél"
 
-#: includes/class-tracking.php:455 includes/settings/settings-tracking.php:19
+#: includes/class-tracking.php:457 includes/settings/settings-tracking.php:19
 msgid "Shipment tracking"
 msgstr "Csomagkövetés"
 
@@ -3111,7 +3116,7 @@ msgstr "Csomagoltnak jelölve a Kvikk App-ban"
 msgid "Shipments"
 msgstr "Szállítólevelek"
 
-#: includes/class-tracking.php:701 includes/providers/class-dpd.php:34
+#: includes/class-tracking.php:703 includes/providers/class-dpd.php:34
 msgid "Shipped"
 msgstr "Csomag úton van"
 
@@ -3143,7 +3148,7 @@ msgstr "Szállítási osztály"
 msgid "Shipping confirmation"
 msgstr "Futárnak átadva"
 
-#: index.php:702 index.php:898 includes/class-helpers.php:1209
+#: index.php:702 index.php:908 includes/class-helpers.php:1209
 msgctxt "shipping cost summary on cart & checkout"
 msgid "free"
 msgstr "ingyenes"
@@ -3186,7 +3191,7 @@ msgstr "Szállítási díj a % számításban"
 msgid "Shipping informations"
 msgstr "Szállítás és csomag"
 
-#: index.php:1366 includes/class-shipments-table.php:291
+#: index.php:1376 includes/class-shipments-table.php:291
 #: includes/views/html-admin-automations.php:36
 #: includes/views/html-metabox.php:142
 msgid "Shipping label"
@@ -3938,7 +3943,7 @@ msgstr "Csomagkövetés automatizálás"
 msgid "Tracking details"
 msgstr "Csomagkövetési adatok"
 
-#: includes/class-tracking.php:288
+#: includes/class-tracking.php:290
 #, php-format
 msgid "Tracking e-mail %s sent to the customer."
 msgstr "Csomagkövetési e-mail elküldve a vásárlónak: %s"
@@ -3947,7 +3952,7 @@ msgstr "Csomagkövetési e-mail elküldve a vásárlónak: %s"
 msgid "Tracking externally"
 msgstr "Követés a szolgáltató oldalán"
 
-#: includes/class-tracking.php:322
+#: includes/class-tracking.php:324
 msgid "Tracking info updated successfully"
 msgstr "Csomagkövetés sikeresen frissítve"
 
@@ -3956,7 +3961,7 @@ msgstr "Csomagkövetés sikeresen frissítve"
 msgid "Tracking Information"
 msgstr "Csomag követése"
 
-#: includes/class-tracking.php:433 includes/class-tracking.php:540
+#: includes/class-tracking.php:435 includes/class-tracking.php:542
 #: includes/views/html-modal-tracking.php:13
 msgid "Tracking informations"
 msgstr "Csomagkövetés"
@@ -3965,8 +3970,8 @@ msgstr "Csomagkövetés"
 msgid "Tracking Number"
 msgstr "Követési szám"
 
-#: index.php:1364 includes/class-labels.php:753 includes/class-labels.php:759
-#: includes/class-tracking.php:526 includes/views/html-modal-tracking.php:29
+#: index.php:1374 includes/class-labels.php:753 includes/class-labels.php:759
+#: includes/class-tracking.php:528 includes/views/html-modal-tracking.php:29
 #: includes/views/html-metabox.php:163
 msgid "Tracking number"
 msgstr "Követési szám"
@@ -4062,10 +4067,10 @@ msgstr "Egyedi azonosító"
 #: includes/providers/class-sameday.php:414
 #: includes/providers/class-sameday.php:584
 #: includes/providers/class-sameday.php:596
-#: includes/providers/class-foxpost.php:333
-#: includes/providers/class-foxpost.php:377
-#: includes/providers/class-foxpost.php:389
-#: includes/providers/class-foxpost.php:446
+#: includes/providers/class-foxpost.php:339
+#: includes/providers/class-foxpost.php:383
+#: includes/providers/class-foxpost.php:395
+#: includes/providers/class-foxpost.php:452
 #: includes/providers/class-kvikk.php:352
 #: includes/providers/class-kvikk.php:628
 #: includes/providers/class-expressone.php:198
@@ -4308,7 +4313,7 @@ msgstr ""
 "átvételi helyek elnevezése\" mezőben lévő kategória alatt fognak megjelenni. "
 "A kategóriához a Testreszabás menüben állíthatsz be saját ikont is. "
 
-#: includes/class-tracking.php:459 includes/class-tracking.php:473
+#: includes/class-tracking.php:461 includes/class-tracking.php:475
 #: includes/settings/settings-tracking.php:70
 msgid ""
 "You can track the order by clicking on the tracking number: {tracking_number}"
