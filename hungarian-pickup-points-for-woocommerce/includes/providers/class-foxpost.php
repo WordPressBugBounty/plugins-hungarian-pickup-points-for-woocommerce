@@ -259,14 +259,21 @@ class VP_Woo_Pont_Foxpost {
 		//Now we have the PDF as base64, save it
 		$pdf = trim($response);
 		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('foxpost', $data['order_id']);
+		$imagick_processed = false;
 
 		//Convert to PNG(fix for v1.6 PDF parsing issue)
-		if (extension_loaded('imagick') && class_exists('Imagick') && in_array('PDF', \Imagick::queryFormats())) {
+		if (extension_loaded('imagick') && class_exists('Imagick')) {
 
 			//Use Imagick to convert the PDF to PNG if supported by the hosting
-			$pdf = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);
+			$imagick_processed = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);
+			if($imagick_processed) {
+				$pdf = $imagick_processed;
+			}
 
-		} else {
+		} 
+
+		//If not supported, use a cloudflare worker to convert the PDF to a version we can process
+		if(!$imagick_processed) {
 
 			//If not supported, use a cloudflare worker to convert the PDF to a version we can process
 			//Submit the PDF to an external service which returns it as a modified PDF file(base64)

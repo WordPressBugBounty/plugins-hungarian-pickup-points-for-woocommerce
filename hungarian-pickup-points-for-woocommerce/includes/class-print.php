@@ -83,43 +83,50 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 		public static function pdf_to_png_pdf($pdf) {
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
 
-			//Load PDF with Imagick at specified DPI
-			$dpi = 200;
-			$imagick = new \Imagick();
-			$imagick->setResolution($dpi, $dpi);
-			$imagick->readImageBlob($pdf); // First page only
-			$imagick->setImageFormat('png');
+			try {
 
-			//Get original dimensions in pixels
-			$widthPx = $imagick->getImageWidth();
-			$heightPx = $imagick->getImageHeight();
+				//Load PDF with Imagick at specified DPI
+				$dpi = 200;
+				$imagick = new \Imagick();
+				$imagick->setResolution($dpi, $dpi);
+				$imagick->readImageBlob($pdf); // First page only
+				$imagick->setImageFormat('png');
 
-			//Convert pixels to millimeters: mm = pixels * 25.4 / DPI
-			$widthMM = $widthPx * 25.4 / $dpi;
-			$heightMM = $heightPx * 25.4 / $dpi;
+				//Get original dimensions in pixels
+				$widthPx = $imagick->getImageWidth();
+				$heightPx = $imagick->getImageHeight();
 
-			// Save image temporarily
-			$tmp_img = tempnam(sys_get_temp_dir(), 'label_') . '.png';
-			$imagick->writeImage($tmp_img);
-			$imagick->clear();
-			$imagick->destroy();
+				//Convert pixels to millimeters: mm = pixels * 25.4 / DPI
+				$widthMM = $widthPx * 25.4 / $dpi;
+				$heightMM = $heightPx * 25.4 / $dpi;
 
-			//Create a new PDF with the same dimensions
-			$mpdf = new \Mpdf\Mpdf([
-				'mode' => 'c',
-				'format' => [$widthMM, $heightMM],
-				'orientation' => 'P',
-				'img_dpi' => $dpi,
-			]);
+				// Save image temporarily
+				$tmp_img = tempnam(sys_get_temp_dir(), 'label_') . '.png';
+				$imagick->writeImage($tmp_img);
+				$imagick->clear();
+				$imagick->destroy();
 
-			//Add the image to the PDF
-			$mpdf->AddPage();
-			$mpdf->Image($tmp_img, 0, 0, $widthMM, $heightMM, 'png', '', true, false);
+				//Create a new PDF with the same dimensions
+				$mpdf = new \Mpdf\Mpdf([
+					'mode' => 'c',
+					'format' => [$widthMM, $heightMM],
+					'orientation' => 'P',
+					'img_dpi' => $dpi,
+				]);
 
-			// Clean up
-			unlink($tmp_img);
+				//Add the image to the PDF
+				$mpdf->AddPage();
+				$mpdf->Image($tmp_img, 0, 0, $widthMM, $heightMM, 'png', '', true, false);
 
-			return $mpdf->Output('file.pdf', 'S');
+				// Clean up
+				unlink($tmp_img);
+
+				return $mpdf->Output('file.pdf', 'S');
+				
+			} catch (\ImagickException $e) {
+				return false;
+			}
+
 		}
 
 		public static function load_pdf_file($orders = false, $output = 'file') {
