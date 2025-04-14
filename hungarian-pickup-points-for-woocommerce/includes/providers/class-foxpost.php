@@ -146,11 +146,6 @@ class VP_Woo_Pont_Foxpost {
 
 	public function create_label($data) {
 
-		// Check if Imagick is installed
-		if (!class_exists('Imagick')) {
-			return new WP_Error( 'foxpost_imagick_error', __('Please make sure Imagick is enabled in your PHP settings.', 'vp-woo-pont') );
-		}
-
 		//Create item
 		$comment = VP_Woo_Pont()->labels->get_package_contents_label($data, 'foxpost');
 		$item = array(
@@ -263,11 +258,55 @@ class VP_Woo_Pont_Foxpost {
 
 		//Now we have the PDF as base64, save it
 		$pdf = trim($response);
+		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('foxpost', $data['order_id']);
 
 		//Convert to PNG(fix for v1.6 PDF parsing issue)
-		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('foxpost', $data['order_id']);
-		$converted_pdf_file = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);
-		VP_Woo_Pont_Labels::save_pdf_file($converted_pdf_file, $pdf_file);
+		if (extension_loaded('imagick') && class_exists('Imagick') && in_array('PDF', \Imagick::queryFormats())) {
+
+			//Use Imagick to convert the PDF to PNG if supported by the hosting
+			$pdf = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);
+
+		} else {
+
+			//If not supported, use a cloudflare worker to convert the PDF to a version we can process
+			//Submit the PDF to an external service which returns it as a modified PDF file(base64)
+			$cf_worker_response = wp_remote_post('https://vp-woo-pont-foxpost-converter.divine-bird-a050.workers.dev', array(
+				'method'    => 'POST',
+				'headers'   => array(
+					'Content-Type' => 'application/pdf',
+				),
+				'body'      => $pdf, // $pdf contains the raw PDF content
+				'timeout'   => 60,
+			));
+
+			// Check for errors
+			if (is_wp_error($cf_worker_response)) {
+				VP_Woo_Pont()->log_error_messages($response, 'foxpost-external-service');
+				return new WP_Error('external_service_error', __('Failed to submit the PDF to the external service.', 'vp-woo-pont'));
+			}
+
+			// Parse the response
+			$cf_worker_response_body = wp_remote_retrieve_body($cf_worker_response);
+			$cf_worker_response_code = wp_remote_retrieve_response_code($cf_worker_response);
+
+			// Check for HTTP errors
+			if ($cf_worker_response_code !== 200) {
+				VP_Woo_Pont()->log_error_messages($cf_worker_response_body, 'foxpost-external-service');
+				return new WP_Error('external_service_error', __('The external service returned an error.', 'vp-woo-pont'));
+			}
+
+			// Process the response (if needed)
+			VP_Woo_Pont()->log_debug_messages($cf_worker_response_body, 'foxpost-external-service');
+
+			// Save the modified PDF (if the service returns a modified PDF)
+			if (!empty($cf_worker_response_body)) {
+				$pdf = base64_decode($cf_worker_response_body);
+			}
+
+		}
+
+		//Save the PDF file
+		VP_Woo_Pont_Labels::save_pdf_file($pdf, $pdf_file);
 
 		//Crop to A6 portrait if needed
 		if(VP_Woo_Pont_Helpers::get_option('foxpost_sticker_size', 'A6') == 'A6') {
