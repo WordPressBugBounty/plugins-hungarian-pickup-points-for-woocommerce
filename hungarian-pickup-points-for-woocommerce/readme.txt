@@ -2,8 +2,8 @@
 Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
-Tested up to: 6.7.2
-Stable tag: 3.5.7.5
+Tested up to: 6.8
+Stable tag: 3.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.5.8
+* Kvikk Foxpsot csomagfeladás támogatás
+* DPD referenciaszám javítás
+* Kompatibilitás megjelölése legújabb WP/WC verzióval
 
 3.5.7.5
 * Alternatív megoldás Foxpost címkékhez, ha az Imagick nem működik a tárhelyen megfelelően

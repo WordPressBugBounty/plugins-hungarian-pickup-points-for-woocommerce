@@ -419,7 +419,10 @@ class VP_Woo_Pont_DPD {
 					),
 					'parcels' => array(
 						array(
-							'weight' => round($data['package']['weight_gramm']/1000, 2)
+							'weight' => round($data['package']['weight_gramm']/1000, 2),
+							'reference1' => $data['order_number'],
+							'reference2' => $data['reference_number'],
+							'reference3' => mb_substr($comment,0,35),
 						)
 					),
 					'service' => array(

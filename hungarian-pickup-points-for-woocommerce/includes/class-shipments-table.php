@@ -184,7 +184,7 @@ class VP_Woo_Pont_Pending_Table extends WP_List_Table {
 
 		if(get_option( 'woocommerce_feature_custom_order_tables_enabled', 'no' ) == 'yes' || get_option( 'woocommerce_custom_orders_table_enabled', 'no' ) == 'yes') {
 
-			$meta_query = array(
+			$meta_query = apply_filters('vp_woo_pont_shipments_table_meta_query', array(
 				'relation' => 'AND',
 				array(
 					'key'     => '_vp_woo_pont_closed',
@@ -195,7 +195,7 @@ class VP_Woo_Pont_Pending_Table extends WP_List_Table {
 					'value'   => self::$carrier_id,
 					'compare' => 'LIKE',
 				),
-			);
+			), self::$carrier_id);
 
 			$orders = wc_get_orders( array(
 				'limit' => -1,

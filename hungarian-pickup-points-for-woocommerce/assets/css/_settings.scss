@@ -2561,6 +2561,115 @@
 			}
 		}
 	}
-
 	
+}
+
+.vp-woo-pont-carrier-settings-kvikk {
+
+	.forminp-radio fieldset {
+		display: flex;
+		flex-direction: column;
+
+		ul {
+			order: 0;
+		}
+
+		p {
+			order: 1;
+			color: #646970;
+		}
+	}
+
+}
+
+.vp-woo-pont-kvikk-foxpost-packeta-notice {
+	border-left-color: #35C287 !important;
+	padding-bottom: 12px !important;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: flex-start;
+	position: relative;
+
+	&:after {
+		transition: all ease 0.3s;
+		position: absolute;
+		inset: 0;
+		content: '';
+		background: rgba(255, 255, 255, 0.5);
+		opacity: 0;
+		visibility: hidden;
+		cursor: progress;
+	}
+	
+	&.loading {
+		&:after {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	&-buttons {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	p.desc {
+		color: #646970 !important;
+	}
+
+	p {
+		max-width: 800px;
+		margin: 0 !important;
+	}
+
+	&-logo {
+		background: url(../images/icon-kvikk-packeta-foxpost.svg) no-repeat left center;
+		background-size: contain;
+		width: 138px;
+		height: 40px;
+		margin: 20px 0 0 0;
+	}
+
+	&-options {
+		display: flex;
+		flex-direction: column;
+		max-width: 480px;
+		gap: 10px;
+
+		div {
+			border: 1px solid #c3c4c7;
+			border-radius: 5px;
+			display: flex;
+			align-items: center;
+			padding: 10px;
+			gap: 10px;
+			cursor: pointer;
+
+			&:hover {
+				background: #F7FCFA;
+			}
+
+			&:before {
+				content: '';
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				border: 1px solid #c3c4c7;
+				display: block;
+				flex-shrink: 0;
+				flex-grow: 0;
+			}
+
+			&.selected {
+				background: #F7FCFA;
+
+				&:before {
+					background: #35C287 url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" color=\"%23ffffff\" fill=\"none\"><path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /></svg>") no-repeat center;
+					border-color: #35C287;
+				}
+			}
+		}
+	}
 }

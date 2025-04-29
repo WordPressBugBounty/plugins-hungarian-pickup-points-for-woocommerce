@@ -200,7 +200,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 echo wp_kses_post( wpautop( wptexturize( $value['desc'] ) ) );
                 echo '</div>';
             }
-            echo '<table class="form-table">' . "\n\n";
+            $section = (isset($value['class']) ? $value['class'] : 'default');
+            echo '<table class="form-table vp-woo-pont-carrier-settings-'.esc_attr( $section ).'">' . "\n\n";
             if ( ! empty( $value['id'] ) ) {
                 do_action( 'woocommerce_settings_' . sanitize_title( $value['id'] ) );
             }

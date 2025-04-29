@@ -113,6 +113,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 				$response['message'] = esc_html__('All shipments closed successfully.', 'vp-woo-pont');
 			}
 
+			//Plugins can add their own custom messages
+			do_action('vp_woo_pont_after_close_shipments', $provider, $results, $response);
+
 			//Success
 			wp_send_json_success($response);
 

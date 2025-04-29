@@ -65,6 +65,11 @@ class VP_Woo_Pont_Kvikk {
 		//Handle QR scan
 		add_action('rest_api_init', array(__CLASS__, 'register_api_endpoints'));
 
+		//Show Foxpost & Packeta notice
+		add_action( 'woocommerce_update_options_shipping', array( $this, 'save_settings') );
+		add_action('admin_notices', array($this, 'show_foxpost_packeta_notice'));
+		add_action( 'wp_ajax_vp_woo_pont_kvikk_foxpost_packeta_notice', array( $this, 'hide_foxpost_packeta_notice' ) );
+
 	}
 
 	public function load_admin_scripts() {
@@ -103,6 +108,7 @@ class VP_Woo_Pont_Kvikk {
 			array(
 				'title' => __( 'Kvikk settings', 'vp-woo-pont' ),
 				'type' => 'vp_carrier_title',
+				'class' => 'kvikk'
 			),
 			array(
 				'title' => __('API key', 'vp-woo-pont'),
@@ -984,6 +990,88 @@ class VP_Woo_Pont_Kvikk {
 	
 		// Return order details
 		return new WP_REST_Response(array(), 200);
+	}
+
+	public static function save_settings() {
+		if(isset($_GET['carrier']) && $_GET['carrier'] == 'kvikk') {
+			update_option('vp_woo_pont_kvikk_foxpost_type_selected', true);
+		}
+	}
+
+	public static function show_foxpost_packeta_notice() {
+
+		//Get current screen
+		$screen = get_current_screen();
+		$screen_id = $screen ? $screen->id : '';
+
+		//Check if we are on the right screen
+		if(in_array($screen_id, wc_get_screen_ids())) {
+
+			//Check if we need to show the notice
+			if(VP_Woo_Pont_Helpers::get_option('kvikk_api_key') && !VP_Woo_Pont_Helpers::get_option('kvikk_foxpost_type_selected')) {
+
+				//Get enabled providers
+				$providers = get_option('vp_woo_pont_enabled_providers');
+
+				//Check if we have either kvikk_packeta_zpont, kvikk_packeta_zbox or kvikk_foxpost enabled
+				$packeta_providers = array('kvikk_packeta_zpont', 'kvikk_packeta_zbox', 'kvikk_foxpost');
+				$packeta_enabled = false;
+				foreach ($providers as $provider) {
+					if(in_array($provider, $packeta_providers)) {
+						$packeta_enabled = true;
+						break;
+					}
+				}
+
+				//If we have packeta enabled, show the notice
+				if(!$packeta_enabled) {
+					return;
+				}
+
+				//Only show after 2025 may 1st
+				if(strtotime('2025-05-01') > time()) {
+					return;
+				}				
+
+			?>
+			<div class="notice notice-warning vp-woo-pont-kvikk-foxpost-packeta-notice is-dismissible">
+				<div class="vp-woo-pont-kvikk-foxpost-packeta-notice-logo"></div>
+
+				<p>Mostantól a <strong>Foxpost és Packeta csomagokat</strong> is feladhatod <strong>Foxpost automatában</strong>, nem csak Packeta Z-Pont átvevőhelyen.</p>
+				<p>Ha szeretnéd ezt használni, lépj be a <a href="https://app.kvikk.hu" target="_blank">Kvikk fiókodba</a>, és a <strong>Fiók beállításoknál</strong> válaszd ki, hogy melyik feladási módot szeretnéd használni: továbbra is Z-Pont átvevőhelyen adod fel, vagy váltasz Foxpost automatában történő feladásra.</p>
+				<p><a href="https://support.kvikk.hu/docs/shipments/couriers/foxpost-information/" target="_blank">További információ és segítség a beállításhoz &rarr;</a></p>
+				
+				<div class="vp-woo-pont-kvikk-foxpost-packeta-notice-buttons">
+					<a href="https://app.kvikk.hu" target="_blank" class="button button-primary" id="vp-woo-pont-foxpost-packeta-notice-close">Fiók beállítások</a>
+					<a href="https://support.kvikk.hu/docs/shipments/couriers/foxpost-information/" target="_blank" class="button" id="vp-woo-pont-foxpost-packeta-notice-close">Bővebb infó</a>
+				</div>
+			</div>
+
+			<script>
+				jQuery(document).ready(function($) {
+					$( document ).on( 'click', '.vp-woo-pont-kvikk-foxpost-packeta-notice a, .vp-woo-pont-kvikk-foxpost-packeta-notice .notice-dismiss', function () {
+						$('.vp-woo-pont-kvikk-foxpost-packeta-notice').addClass('loading');
+						var data = {
+							action: 'vp_woo_pont_kvikk_foxpost_packeta_notice',
+							nonce: '<?php echo wp_create_nonce( "vp_woo_pont_kvikk_foxpost_packeta_notice" ); ?>'
+						};
+						$.post(ajaxurl, data, function(response) {
+							$('.vp-woo-pont-kvikk-foxpost-packeta-notice').slideUp();
+						});
+					});
+				});
+
+			</script>
+			<?php
+			}
+		}
+
+	}
+
+	public function hide_foxpost_packeta_notice() {
+		check_ajax_referer( 'vp_woo_pont_kvikk_foxpost_packeta_notice', 'nonce' );
+		update_option('vp_woo_pont_kvikk_foxpost_type_selected', true);
+		wp_send_json_success();
 	}
 
 }

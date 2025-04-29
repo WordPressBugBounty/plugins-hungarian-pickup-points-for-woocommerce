@@ -72,6 +72,7 @@ class VP_Woo_Pont_Foxpost {
 
 		//Packeta support
 		add_filter('vp_woo_pont_get_carrier_from_order', array($this, 'add_packeta_support'), 10, 2);
+		add_filter('vp_woo_pont_shipments_table_meta_query', array($this, 'add_delivery_note_packeta_support'), 10, 2);
 	}
 
 	public function get_settings($settings) {
@@ -260,9 +261,10 @@ class VP_Woo_Pont_Foxpost {
 		$pdf = trim($response);
 		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('foxpost', $data['order_id']);
 		$imagick_processed = false;
+		$needs_convert = apply_filters('vp_woo_pont_convert_foxpost_pdf_for_bulk_printing', true);
 
 		//Convert to PNG(fix for v1.6 PDF parsing issue)
-		if (extension_loaded('imagick') && class_exists('Imagick')) {
+		if (extension_loaded('imagick') && class_exists('Imagick') && $needs_convert) {
 
 			//Use Imagick to convert the PDF to PNG if supported by the hosting
 			$imagick_processed = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);
@@ -273,7 +275,7 @@ class VP_Woo_Pont_Foxpost {
 		} 
 
 		//If not supported, use a cloudflare worker to convert the PDF to a version we can process
-		if(!$imagick_processed) {
+		if(!$imagick_processed && $needs_convert) {
 
 			//If not supported, use a cloudflare worker to convert the PDF to a version we can process
 			//Submit the PDF to an external service which returns it as a modified PDF file(base64)
@@ -562,6 +564,32 @@ class VP_Woo_Pont_Foxpost {
 			}
 		}
 		return $provider;
+	}
+
+	public function add_delivery_note_packeta_support($query, $provider) {
+		if($provider == 'foxpost' && VP_Woo_Pont_Helpers::get_option('foxpost_packeta_support', 'no') == 'yes') {
+			$query = array(
+				'relation' => 'AND',
+				array(
+					'key'     => '_vp_woo_pont_closed',
+					'value'   => 'no',
+				),
+				array(
+					'relation' => 'OR',
+					array(
+						'key'     => '_vp_woo_pont_provider',
+						'value'   => 'foxpost',
+						'compare' => 'LIKE',
+					),
+					array(
+						'key'     => '_vp_woo_pont_provider',
+						'value'   => 'packeta',
+						'compare' => 'LIKE',
+					),
+				),
+			);
+		}
+		return $query;
 	}
 
 }
