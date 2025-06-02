@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 3.5.8
+Stable tag: 3.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,15 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.5.9
+* Express One automaták
+* Felhasználó szerepkör feltétel javítás
+* Belépett vásárló adataiban elmentett, de közben törölt csomagpont bug javítva
+* Variálható terméknél is megy a kategória / szállítási osztály feltétel
+
+3.5.8.1
+* Beállítások hibajavítás
 
 3.5.8
 * Kvikk Foxpsot csomagfeladás támogatás

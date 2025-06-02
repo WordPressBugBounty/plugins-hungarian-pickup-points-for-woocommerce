@@ -61,6 +61,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'expressone_omv' => __('OMV', 'vp-woo-pont'),
 				'expressone_alzabox' => __('AlzaBox', 'vp-woo-pont'),
 				'expressone_packeta' => __('Packeta', 'vp-woo-pont'),
+				'expressone_exobox' => __('Automata', 'vp-woo-pont'),
 				'gls_shop' => __('ParcelShop', 'vp-woo-pont'),
 				'gls_locker' => __('ParcelLocker', 'vp-woo-pont'),
 				'dpd_parcelshop' => __('Csomagpont', 'vp-woo-pont'),

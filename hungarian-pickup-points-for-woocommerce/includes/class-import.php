@@ -489,10 +489,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			}
 
 			//Create a new json
-			$results = array('alzabox' => array(), 'packeta' => array(), 'omv' => array());
+			$results = array('alzabox' => array(), 'packeta' => array(), 'omv' => array(), 'exobox' => array());
 
 			//Valod groups, so only sync what we really need
-			$enabled_groups = array('omv', 'alzabox', 'packeta');
+			$enabled_groups = array('omv', 'alzabox', 'packeta', 'exobox');
 
 			//Simplify json, so its smaller to store, faster to load
 			foreach ($response['response'] as $place) {

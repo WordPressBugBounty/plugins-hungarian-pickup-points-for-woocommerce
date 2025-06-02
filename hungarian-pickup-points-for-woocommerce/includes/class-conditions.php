@@ -55,6 +55,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 				'longest_side' => array(
 					'label' => __('Package longest side', 'vp-woo-pont'),
 					'options' => array()
+				),
+				'user_role' => array(
+					'label' => __('User role', 'vp-woo-pont'),
+					'options' => VP_Woo_Pont_Helpers::get_user_roles()
 				)
 			);
 
@@ -99,11 +103,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 						'yes' => __('Yes', 'vp-woo-pont'),
 						'no' => __('No', 'vp-woo-pont'),
 					)
-				);
-
-				$conditions['user_role'] = array(
-					'label' => __('User role', 'vp-woo-pont'),
-					'options' => VP_Woo_Pont_Helpers::get_user_roles()
 				);
 
 			}
@@ -231,12 +230,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 			$shipping_classes = array();
 			$order_items = $order->get_items();
 			foreach ($order_items as $order_item) {
-				if($order_item->get_product() && $order_item->get_product()->get_category_ids()) {
-					$product_categories = $product_categories+$order_item->get_product()->get_category_ids();
-				}
-
-				if($order_item->get_product() && $order_item->get_product()->get_shipping_class()) {
-					$shipping_classes[] = $order_item->get_product()->get_shipping_class();
+				$product = $order_item->get_product();
+				if ($product) {
+					if ($product->is_type('variation')) {
+						$product = wc_get_product($product->get_parent_id());
+					}
+			
+					if ($product && $product->get_category_ids()) {
+						$product_categories = array_merge($product_categories, $product->get_category_ids());
+					}
+			
+					if ($product && $product->get_shipping_class()) {
+						$shipping_classes[] = $product->get_shipping_class();
+					}
 				}
 			}
 
@@ -259,8 +265,18 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 				'provider' => $order->get_meta('_vp_woo_pont_provider'),
 				'shipping_classes' => $shipping_classes,
 				'shipping_method' => $shipping_method,
-				'products_quantity' => $order->get_item_count()
+				'products_quantity' => $order->get_item_count(),
+				'user_role' => '',
 			);
+
+			//Get order customer user role
+			$user_id = $order->get_user_id();
+			if($user_id) {
+				$user = get_userdata($user_id);
+				if($user && $user->roles) {
+					$order_details['user_role'] = $user->roles[0];
+				}
+			}
 
 			//Custom conditions
 			$order_details = apply_filters('vp_woo_pont_'.$group.'_conditions_values', $order_details, $order);

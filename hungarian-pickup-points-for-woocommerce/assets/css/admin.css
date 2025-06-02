@@ -581,6 +581,69 @@
 #vp_woo_pont_metabox_kvikk li:last-child {
   border: none; }
 
+.vp-woo-pont-kvikk-parcel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; }
+  .vp-woo-pont-kvikk-parcel-main-fields {
+    display: flex;
+    gap: 5px; }
+  .vp-woo-pont-kvikk-parcel-unit {
+    position: relative; }
+    .vp-woo-pont-kvikk-parcel-unit span {
+      height: 30px;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      margin-top: -15px;
+      line-height: 30px;
+      opacity: 0.5;
+      font-style: normal;
+      transition: all ease 0.3s;
+      display: block; }
+  .vp-woo-pont-kvikk-parcel-package-size {
+    display: flex;
+    gap: 5px; }
+  .vp-woo-pont-kvikk-parcel-packaging-types {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #8c8f94;
+    border-radius: 4px; }
+    .vp-woo-pont-kvikk-parcel-packaging-types li {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #8c8f94;
+      margin: 0 !important;
+      padding: 0; }
+      .vp-woo-pont-kvikk-parcel-packaging-types li input {
+        margin: 0;
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%); }
+      .vp-woo-pont-kvikk-parcel-packaging-types li label {
+        padding: 10px 10px 10px 36px;
+        width: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; }
+      .vp-woo-pont-kvikk-parcel-packaging-types li:last-child {
+        border: none; }
+  .vp-woo-pont-kvikk-parcel-boxes-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border: 1px solid #2271b1;
+    background: #f6f7f7;
+    border-radius: 3px; }
+
 .vp-woo-pont-settings-inline-table {
   background: #fff;
   width: 100%;
@@ -2947,6 +3010,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   background-image: url(../images/icon-expressone-omv.svg); }
 .vp-woo-pont-provider-icon-expressone_packeta {
   background-image: url(../images/icon-expressone-packeta.svg); }
+.vp-woo-pont-provider-icon-expressone_exobox {
+  background-image: url(../images/icon-expressone.svg); }
 .vp-woo-pont-provider-icon-gls {
   background-image: url(../images/icon-gls.svg); }
 .vp-woo-pont-provider-icon-gls_locker {

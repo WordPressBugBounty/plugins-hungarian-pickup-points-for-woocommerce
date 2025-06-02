@@ -19,7 +19,7 @@ $all_provider_types = array_keys($providers);
 $disabled_providers = array_diff($all_provider_types, $saved_values);
 
 //Get 5 random providers from the disabled providers
-$random_disabled_providers = array_rand($disabled_providers, 5);
+$random_disabled_providers = array_rand($disabled_providers, min(5, count($disabled_providers)));
 
 //To show json links
 $download_folders = VP_Woo_Pont_Helpers::get_download_folder();
@@ -38,7 +38,7 @@ $provider_subgroups = apply_filters('vp_woo_pont_provider_subgroups',array(
 	'gls' => array('locker', 'shop'),
 	'packeta' => array('zbox', 'shop', 'mpl_postapont', 'mpl_automata', 'foxpost'),
 	'postapont' => array('posta', 'automata', 'postapont'),
-	'expressone' => array('alzabox', 'omv', 'packeta'),
+	'expressone' => array('alzabox', 'omv', 'packeta', 'exobox'),
 	'dpd' => array('alzabox', 'parcelshop')
 ));
 
@@ -198,9 +198,11 @@ $sortedProviders += $providers;
 							<a href="#" class="vp-woo-pont-providers-add-button button button-primary" data-providers="<?php echo $providers_attr; ?>"><?php esc_html_e('Enable more providers', 'vp-woo-pont'); ?></a>
 							<a href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/mukodik-hazhozszallitassal-is/" target="_blank" class="vp-woo-pont-providers-add-button button button-secondary"><?php esc_html_e('Setup home delivery', 'vp-woo-pont'); ?></a>
 							<div class="vp-woo-pont-providers-add-list">
-								<?php foreach ( $random_disabled_providers as $provider_id ): ?>
-									<i class="vp-woo-pont-provider-icon vp-woo-pont-provider-icon-<?php echo esc_attr($disabled_providers[$provider_id]); ?>"></i>
-								<?php endforeach; ?>
+								<?php if(is_array($random_disabled_providers)): ?>
+									<?php foreach ( $random_disabled_providers as $provider_id ): ?>
+										<i class="vp-woo-pont-provider-icon vp-woo-pont-provider-icon-<?php echo esc_attr($disabled_providers[$provider_id]); ?>"></i>
+									<?php endforeach; ?>
+								<?php endif; ?>
 							</div>
 						</div>
 					</td>
