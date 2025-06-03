@@ -116,21 +116,23 @@ class VP_Woo_Pont_Custom {
 		$fontData = $defaultFontConfig['fontdata'];		
 		
 		// Create a new mPDF object
-		$mpdf = new \Mpdf\Mpdf([
-			'useSubstitutions' => false, 
-			'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 
-			'allow_charset_conversion' => true,
-			'fontDir' => array_merge($fontDirs, [
-				VP_Woo_Pont::$plugin_path . '/assets/fonts/',
-			]),
-			'fontdata' => $fontData + [
-				'roboto' => [
-					'R' => 'Roboto-Regular.ttf',
-					'B' => 'Roboto-Bold.ttf',
-				]
-			],
-			'default_font' => 'roboto'
-		]);
+		$mpdf = new \Mpdf\Mpdf(
+			apply_filters('vp_woo_pont_custom_label_mpdf_config', [
+				'useSubstitutions' => false, 
+				'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 
+				'allow_charset_conversion' => true,
+				'fontDir' => array_merge($fontDirs, [
+					VP_Woo_Pont::$plugin_path . '/assets/fonts/',
+				]),
+				'fontdata' => $fontData + [
+					'roboto' => [
+						'R' => 'Roboto-Regular.ttf',
+						'B' => 'Roboto-Bold.ttf',
+					]
+				],
+				'default_font' => 'roboto'
+			], $data)
+		);
 
 		//Setup tempalte data
 		$label_data = array(
@@ -140,7 +142,7 @@ class VP_Woo_Pont_Custom {
 			'text' => VP_Woo_Pont_Helpers::get_option('custom_text', ''),
 			'data' => $data
 		);
-		$html = wc_get_template_html('order/custom-label.php', $label_data, false, VP_Woo_Pont::$plugin_path . '/templates/');
+		$html = apply_filters('vp_woo_pont_custom_label_mpdf_template', wc_get_template_html('order/custom-label.php', $label_data, false, VP_Woo_Pont::$plugin_path . '/templates/'), $data);
 
 		//Add the HTML content to the PDF document
 		$mpdf->WriteHTML($html);
@@ -274,7 +276,7 @@ class VP_Woo_Pont_Custom {
 		require_once plugin_dir_path(__FILE__) . '../../vendor/autoload.php';
 
 		// Create a new mPDF object
-		$mpdf = new \Mpdf\Mpdf(['mode' => 'c', 'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 'allow_charset_conversion' => true]);
+		$mpdf = new \Mpdf\Mpdf(apply_filters('vp_woo_pont_custom_label_mpdf_config', ['mode' => 'c', 'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 'allow_charset_conversion' => true]));
 
 		//Setup tempalte data
 		$order_id = intval($_GET['vp_woo_pont_custom_label_preview']);

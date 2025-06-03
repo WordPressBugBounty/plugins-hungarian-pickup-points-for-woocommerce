@@ -274,7 +274,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 			//Change order status if needed based on settings
 			if(!$response['error']) {
-				$target_status = VP_Woo_Pont_Helpers::get_option('auto_order_status', 'no');
+				$target_status = apply_filters('vp_woo_pont_target_order_status_after_label_generated', VP_Woo_Pont_Helpers::get_option('auto_order_status', 'no'),  $order, $label, $api_provider);
 				if($target_status != 'no') {
 					$order->update_status($target_status, __( 'Order status updated, because a shipping label was generated.', 'vp_woo_pont' ));
 					$order->save();
