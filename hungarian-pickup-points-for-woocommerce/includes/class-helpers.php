@@ -960,7 +960,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			foreach ( $packages as $package_id => $package ) {
 				if ( WC()->session->__isset( 'shipping_for_package_'.$package_id ) && isset(WC()->session->get( 'shipping_for_package_'.$package_id )['rates']) ) {
 					foreach ( WC()->session->get( 'shipping_for_package_'.$package_id )['rates'] as $shipping_rate_id => $shipping_rate ) {
-						$cost = $shipping_rate->get_cost();
+						$cost = (float)$shipping_rate->get_cost();
 						if($cost == 0 && $shipping_rate->get_method_id() != 'vp_pont' && $shipping_rate->get_method_id() != 'local_pickup') {
 							$is_free_shipping_available = true;
 						}

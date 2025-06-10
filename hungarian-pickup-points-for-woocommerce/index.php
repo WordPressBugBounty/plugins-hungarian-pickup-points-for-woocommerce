@@ -7,9 +7,9 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 3.5.9.1
+Version: 3.5.9.2
 WC requires at least: 7.0
-WC tested up to: 9.8.2
+WC tested up to: 9.9.3
 Requires Plugins: woocommerce
 */
 
@@ -67,7 +67,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '3.5.9.1';
+		self::$version = '3.5.9.2';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -1460,7 +1460,7 @@ class VP_Woo_Pont {
 			$has_free_shipping = false;
 			$vp_woo_pont_id = false;
 			foreach ( $rates as $rate_id => $rate ) {
-				if($rate->get_cost()+0 == 0 && $rate->get_method_id() != 'vp_pont' && $rate->get_method_id() != 'local_pickup') {
+				if((float)$rate->get_cost() == 0 && $rate->get_method_id() != 'vp_pont' && $rate->get_method_id() != 'local_pickup') {
 					$has_free_shipping = true;
 				}
 				if($rate->get_method_id() == 'vp_pont') {

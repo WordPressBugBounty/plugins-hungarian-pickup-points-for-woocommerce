@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 3.5.9.1
+Stable tag: 3.5.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.5.9.2
+* WooCommerce 9.9.3 kompatibilitás javítás
 
 3.5.9.1
 * vp_woo_pont_target_order_status_after_label_generated, vp_woo_pont_custom_label_mpdf_config és vp_woo_pont_custom_label_mpdf_template filter
