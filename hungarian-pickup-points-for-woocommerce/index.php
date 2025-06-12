@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 3.5.9.2
+Version: 3.5.9.3
 WC requires at least: 7.0
 WC tested up to: 9.9.3
 Requires Plugins: woocommerce
@@ -67,7 +67,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '3.5.9.2';
+		self::$version = '3.5.9.3';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -463,7 +463,7 @@ class VP_Woo_Pont {
 	public function checkout_ui() {
 
 		//Get selected shipping methd
-		$chosen_methods = WC()->session->chosen_shipping_methods;
+		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
 
 		//If vp_pont is chosen
 		$is_vp_pont_selected = false;
@@ -741,7 +741,7 @@ class VP_Woo_Pont {
 	public function hide_shipping_address($needs_shipping_address) {
 
 		//Get selected shipping method
-		$chosen_methods = WC()->session->chosen_shipping_methods;
+		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
 
 		//If vp_pont is chosen
 		if(!empty($chosen_methods)) {
@@ -1087,7 +1087,7 @@ class VP_Woo_Pont {
 	public function cart_ui() {
 
 		//Get selected shipping methd
-		$chosen_methods = WC()->session->chosen_shipping_methods;
+		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
 
 		//If vp_pont is chosen
 		$is_vp_pont_selected = false;

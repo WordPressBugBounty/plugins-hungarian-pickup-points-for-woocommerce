@@ -46,7 +46,8 @@ add_action('woocommerce_blocks_loaded', function() {
 			.wc-block-cart__sidebar span.wc-block-components-radio-control__description[id*="vp_pont"] span,
 			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price,
 			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price span,
-			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"] .wc-block-formatted-money-amount {
+			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"] .wc-block-formatted-money-amount,
+			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"] em {
 				font-size:0;
 			}
 			
@@ -166,8 +167,10 @@ add_action('woocommerce_blocks_loaded', function() {
 				$selected_pont = WC()->session->get( 'selected_vp_pont' );
 				if($selected_pont) {
 					$rate->add_meta_data('pickup_location', $rate->label);
+					$rate->label = VP_Woo_Pont_Helpers::get_provider_name($selected_pont['provider'], true);
+
 					if(is_checkout()) {
-						$rate->label = VP_Woo_Pont_Helpers::get_provider_name($selected_pont['provider'], true).', '.$selected_pont['name'].', '.$selected_pont['zip'].' '.$selected_pont['city'].', '.$selected_pont['addr'];
+						//$rate->label = VP_Woo_Pont_Helpers::get_provider_name($selected_pont['provider'], true).', '.$selected_pont['name'].', '.$selected_pont['zip'].' '.$selected_pont['city'].', '.$selected_pont['addr'];
 					}
 				}
 
@@ -198,5 +201,39 @@ add_action('woocommerce_blocks_loaded', function() {
 		WC()->session->set('vp_selected_payment_method', $first_payment_method);
 		
 	});
+
+	//Reset cache on shipping method change
+	add_action('woocommerce_order_before_calculate_totals', function($and_taxes, $order){
+
+		//Check if we have data
+		if(!WC() || !WC()->session || !WC()->session->get('chosen_shipping_methods') || !WC()->shipping() || !WC()->checkout) {
+			return;
+		}
+
+		//Only if the checkout block is used
+		if(!class_exists( 'Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils' ) || !CartCheckoutUtils::is_checkout_block_default()){
+			return;
+		}
+
+		//Get selected shipping methd
+		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
+
+		//If vp_pont is chosen
+		$is_vp_pont_selected = false;
+		if($chosen_methods) {
+			foreach ($chosen_methods as $chosen_method) {
+				if(strpos($chosen_method, 'vp_pont') !== false) {
+					$is_vp_pont_selected = true;
+				}
+			}
+		}
+
+		//Regenerate the shipping lines item if vp_pont is selected
+		if($is_vp_pont_selected) {
+			$order->remove_order_items( 'shipping' );
+			WC()->checkout->create_order_shipping_lines( $order, $chosen_methods, WC()->shipping()->get_packages() );
+		}
+
+	}, 10, 2);
 
 });
