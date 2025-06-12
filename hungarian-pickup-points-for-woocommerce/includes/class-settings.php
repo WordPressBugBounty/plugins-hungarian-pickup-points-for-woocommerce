@@ -17,6 +17,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 'vp_carriers' => __( 'Carriers', 'vp-woo-pont' ),
                 'vp_labels' => __( 'Labels', 'vp-woo-pont' ),
                 'vp_tracking' => __( 'Tracking', 'vp-woo-pont' ),
+                'vp_cod' => __( 'COD', 'vp-woo-pont' ),
             );
 
             //Create custom field types
@@ -64,6 +65,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             add_action( 'woocommerce_settings_save_shipping', array( __CLASS__, 'pre_save_settings') );
             add_action( 'woocommerce_update_options_shipping', array( __CLASS__, 'save_settings') );
             add_action( 'woocommerce_update_options_checkout', array( __CLASS__, 'save_cod_settings') );
+            add_action( 'woocommerce_update_options_shipping', array( __CLASS__, 'save_cod_settings') );
  
             //Bugfix for WC 8.4+
             add_action( 'woocommerce_sections_shipping', function(){
@@ -534,7 +536,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
         public static function save_cod_settings() {
 
             //Save cod fee options
-            if(isset($_GET['section']) && $_GET['section'] == 'cod') {
+            if(isset($_GET['section']) && ($_GET['section'] == 'cod' || $_GET['section'] == 'vp_cod')) {
                 $cod_fees = array();
                 if ( isset( $_POST['vp_woo_pont_cod_fee'] ) ) {
                     foreach ($_POST['vp_woo_pont_cod_fee'] as $cod_fee_id => $cod_fee) {
