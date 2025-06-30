@@ -328,7 +328,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save posta countries / services
-            if(isset($_GET['carrier']) && $_GET['carrier'] == 'mpl') {
+            if(isset($_GET['carrier']) && $_GET['carrier'] == 'posta') {
                 $posta_countries = array();
                 if(isset($_POST['vp_woo_pont_posta_countries'])) {
                     foreach ($_POST['vp_woo_pont_posta_countries'] as $service_id => $countries) {

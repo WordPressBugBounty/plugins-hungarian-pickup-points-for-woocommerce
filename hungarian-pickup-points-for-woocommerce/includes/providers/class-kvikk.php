@@ -9,6 +9,7 @@ class VP_Woo_Pont_Kvikk {
 	protected $api_key = '';
 	public $package_statuses = array();
 	public $package_statuses_tracking = array();
+	public $extra_services = array();
 
 	public function __construct() {
 		add_filter('vp_woo_pont_carrier_settings_kvikk', array($this, 'get_settings'));
@@ -69,6 +70,18 @@ class VP_Woo_Pont_Kvikk {
 		add_action( 'woocommerce_update_options_shipping', array( $this, 'save_settings') );
 		add_action('admin_notices', array($this, 'show_foxpost_packeta_notice'));
 		add_action( 'wp_ajax_vp_woo_pont_kvikk_foxpost_packeta_notice', array( $this, 'hide_foxpost_packeta_notice' ) );
+
+		//Support multi-parcel shipments
+		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_additional_package_fields'));
+		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_extra_services_fields'));
+
+		$this->extra_services = array(
+			'insurance' => __('Value insurance', 'vp-woo-pont'),
+			'oversized' => __('Bulky handling', 'vp-woo-pont'),
+			'amorf' => __('Amorf shaped package', 'vp-woo-pont'),
+			'fragile' => __('Fragile handling', 'vp-woo-pont'),
+			'nextday' => __('One business day time guarantee', 'vp-woo-pont'),
+		);
 
 	}
 
@@ -145,11 +158,45 @@ class VP_Woo_Pont_Kvikk {
 				'id' => 'kvikk_packaged_order_status',
 			),
 			array(
+				'type' => 'text',
+				'title' => __('Value insurance limit', 'vp-woo-pont'),
+				'default' => 50000,
+				'desc_tip' => __('If empty, it will be the order total up to 50.000 HUF. If you need a higher maximum limit, enter that here. In this case the value insurance service will be added to the shipment automatically.', 'vp-woo-pont'),
+				'id' => 'kvikk_insurance_limit'
+			),
+			'kvikk_fragile_products' => array(
+				'title' => __('Fragile products', 'vp-woo-pont'),
+				'type' => 'multiselect',
+				'class'   => 'wc-enhanced-select',
+				'options' => array(),
+				'id' => 'kvikk_fragile_products',
+				'desc_tip' => __('Select a product attribute or shipping class that relates to fragile shipments, so the generated label will be marked as fragile by default.', 'vp-woo-pont'),
+			),
+			'kvikk_oversized_products' => array(
+				'title' => __('Oversized products', 'vp-woo-pont'),
+				'type' => 'multiselect',
+				'class'   => 'wc-enhanced-select',
+				'options' => array(),
+				'id' => 'kvikk_oversized_products',
+				'desc_tip' => __('Select a product attribute or shipping class that relates to oversized shipments, so the generated label will be marked as oversized by default.', 'vp-woo-pont'),
+			),
+			array(
 				'type' => 'sectionend'
 			)
 		);
 
+		//Load product categories on settings page
+		if($this->is_settings_page()) {
+			$kvikk_settings['kvikk_fragile_products']['options'] = VP_Woo_Pont_Helpers::get_product_tags()+VP_Woo_Pont_Helpers::get_shipping_classes();
+			$kvikk_settings['kvikk_oversized_products']['options'] = VP_Woo_Pont_Helpers::get_product_tags()+VP_Woo_Pont_Helpers::get_shipping_classes();
+		}
+
 		return $settings+$kvikk_settings;
+	}
+
+	//Check if we are on the settings page
+	public function is_settings_page() {
+		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers');
 	}
 
     public function get_kvikk_db() {
@@ -276,15 +323,19 @@ class VP_Woo_Pont_Kvikk {
 
 			//Package details
 			'orderID' => $order->get_order_number(),
-			'weight' => $data['package']['weight_gramm'],
-			'value' => $data['package']['total'],
 			'note' => VP_Woo_Pont()->labels->get_package_contents_label($data, 'kvikk', 100),
 			'cod' => 0,
+			'parcels' => array(
+				array(
+					'weight' => $data['package']['weight_gramm'],
+					'value' => $data['package']['total'],
+				)
+			)
 		);
 
 		//If manually generated, use submitted weight instead
 		if(isset($data['options']) && isset($data['options']['package_weight']) && $data['options']['package_weight'] > 0) {
-			$shipment['weight'] = $data['options']['package_weight'];
+			$shipment['parcels'][0]['weight'] = $data['options']['package_weight'];
 		}
 
 		//Check for COD
@@ -309,14 +360,86 @@ class VP_Woo_Pont_Kvikk {
 
 		//If we have a package size set
 		if(isset($data['package']['size']) && isset($data['package']['size']['width']) && isset($data['package']['size']['height']) && isset($data['package']['size']['length'])) {
-			$shipment['width'] = $data['package']['size']['width'];
-			$shipment['height'] = $data['package']['size']['height'];
-			$shipment['length'] = $data['package']['size']['length'];
+			$shipment['parcels'][0]['width'] = $data['package']['size']['width'];
+			$shipment['parcels'][0]['height'] = $data['package']['size']['height'];
+			$shipment['parcels'][0]['length'] = $data['package']['size']['length'];
 		}
-		
+
+		//Set maximum insurance value
+		if($insurance_limit = VP_Woo_Pont_Helpers::get_option('kvikk_insurance_limit', 50000)) {
+			if($shipment['parcels'][0]['value'] > $insurance_limit) {
+				$shipment['parcels'][0]['value'] = $insurance_limit;
+			}
+		}
+
+		//Add insurance service if needed
+		$enabled_services = array();
+		if($shipment['parcels'][0]['value'] > 50000) {
+			$enabled_services[] = 'insurance';
+		}
+
+		//If manually generated, check submitted extra services
+		if($data['source'] == 'metabox') {
+			if(isset($data['options']) && isset($data['options']['extra_services'])) {
+				$enabled_services = $data['options']['extra_services'];
+			}
+		} else {
+			//Else, check for extra services
+			$services_check = array('fragile', 'oversized');
+			foreach ($services_check as $check_service) {
+				if ($this->is_extra_service_needed($order, $check_service)) {
+					$enabled_services[] = $check_service;
+				}
+			}
+		}
+
+		//Add extra services
+		if(!empty($enabled_services)) {
+			$shipment['parcels'][0]['services'] = $enabled_services;
+		}
+
+		//Support for multiple packages
+		if(isset($_POST['package_count']) && $_POST['package_count'] > 1 && isset($_POST['additional_package_data'])) {
+			$shipment['parcels'] = array();
+			$additional_package_data = json_decode(stripslashes($_POST['additional_package_data']), true);
+
+			foreach ($additional_package_data as $parcel_index => $parcel_data) {
+				$weight = $parcel_data['weight'];
+				$cost = $parcel_data['cost'];
+				$length = $parcel_data['length'];
+				$width = $parcel_data['width'];
+				$height = $parcel_data['height'];
+				$services = $parcel_data['services'];
+				
+				// Process this specific parcel with all its data
+				$parcel = array(
+					'weight' => intval($weight),
+					'value' => intval($cost),
+					'services' => $services
+				);
+
+				if($length && $width && $height) {
+					$parcel['length'] = intval($length);
+					$parcel['width'] = intval($width);
+					$parcel['height'] = intval($height);
+				}
+
+				$shipment['parcels'][] = $parcel;
+			}
+		}
+
+		//Remove the oversized and fragile services if the courier is not mpl or famafutar from all parcels
+		if(!in_array($courier_details[0], array('mpl', 'famafutar'))) {
+			foreach ($shipment['parcels'] as $index => $parcel) {
+				if(isset($parcel['services']) && is_array($parcel['services'])) {
+					$shipment['parcels'][$index]['services'] = array_diff($parcel['services'], array('oversized', 'fragile'));
+				}
+			}
+		}
+
 		//So developers can modify
 		$shipment = apply_filters('vp_woo_pont_kvikk_label', $shipment, $data);
-		
+	
 		//Build request params
 		$remote_url = $this->api_url . 'shipment';
 
@@ -453,13 +576,13 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//Submit request
-		$request = wp_remote_get( $api_url, array(
+		$request = wp_remote_get( $api_url, apply_filters('vp_woo_pont_kvikk_tracking_request', array(
 			'headers' => array(
 				'Accept' => 'application/json',
 				'Content-Type' => 'application/json',
 				'X-API-KEY' => $this->api_key
 			),
-		));
+		), $order));
 
 		VP_Woo_Pont()->log_debug_messages($request, 'kvikk-get-tracking-info');
 
@@ -1072,6 +1195,270 @@ class VP_Woo_Pont_Kvikk {
 		check_ajax_referer( 'vp_woo_pont_kvikk_foxpost_packeta_notice', 'nonce' );
 		update_option('vp_woo_pont_kvikk_foxpost_type_selected', true);
 		wp_send_json_success();
+	}
+
+	public function add_extra_services_fields($order) {
+		?>
+			<li data-providers="[kvikk]" class="vp-woo-pont-metabox-generate-options-item vp-woo-pont-package-services">
+				<label><?php esc_html_e('Extra services','vp-woo-pont'); ?></label>
+				<ul>
+					<?php foreach ($this->extra_services as $service_id => $service): ?>
+						<?php
+						$saved_options = [];
+						$order_total = $order->get_total();
+						$insurance_max = VP_Woo_Pont_Helpers::get_option('kvikk_insurance_limit', 50000);
+						if ($order_total > $insurance_max) {
+							$saved_options[] = 'insurance';
+						}
+						$services_check = array('fragile', 'oversized');
+						foreach ($services_check as $check_service) {
+							if ($this->is_extra_service_needed($order, $check_service)) {
+								$saved_options[] = $check_service;
+							}
+						}
+						?>
+						<li>
+							<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
+								<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />
+								<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
+							</label>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</li>
+		<?php
+	}
+	public function add_additional_package_fields($order) {
+		$packaging_types = get_option('vp_woo_pont_packagings');
+
+		?>
+			<li style="display:none" id="vp_woo_pont_kvikk_parcels">
+				<label>Küldemények adatai</label>
+				<ul class="vp-woo-pont-kvikk-parcels">
+					<li class="vp-woo-pont-kvikk-parcel-sample" style="display:none;">
+						<div class="vp-woo-pont-kvikk-parcel-main-fields">
+							<div class="vp-woo-pont-kvikk-parcel-unit">
+								<input type="text" name="vp_woo_pont_kvikk_package_weights[]" placeholder="" value="" />
+								<span>gramm</span>
+							</div>
+							<div class="vp-woo-pont-kvikk-parcel-unit">
+								<input type="text" name="vp_woo_pont_kvikk_package_costs[]" placeholder="" value="" />
+								<span>Ft</span>
+							</div>
+						</div>
+						<?php if($packaging_types) { ?>
+							<div class="vp-woo-pont-kvikk-parcel-package-size">
+								<div class="vp-woo-pont-kvikk-parcel-unit">
+									<input type="text" name="vp_woo_pont_kvikk_length" placeholder="" value="" />
+									<span>cm</span>
+								</div>
+								<div class="vp-woo-pont-kvikk-parcel-unit">
+									<input type="text" name="vp_woo_pont_kvikk_width" placeholder="" value="" />
+									<span>cm</span>
+								</div>
+								<div class="vp-woo-pont-kvikk-parcel-unit">
+									<input type="text" name="vp_woo_pont_kvikk_height" placeholder="" value="" />
+									<span>cm</span>
+								</div>
+								<a href="#" class="vp-woo-pont-kvikk-parcel-boxes-btn">
+									<span class="dashicons dashicons-archive"></span>
+								</a>
+							</div>
+							<ul class="vp-woo-pont-kvikk-parcel-packaging-types" style="display: none;">
+								<?php foreach ( $packaging_types as $packaging_id => $packaging_type ): ?>
+									<li>
+										<input type="radio" name="vp_woo_pont_kvikk_packaging_type" data-length="<?php echo esc_attr($packaging_type['length']); ?>" data-width="<?php echo esc_attr($packaging_type['width']); ?>" data-height="<?php echo esc_attr($packaging_type['height']); ?>" id="vp_woo_pont_kvikk_packaging_type_<?php echo esc_attr($packaging_type['sku']); ?>" value="<?php echo esc_attr($packaging_type['sku']); ?>">
+										<label for="vp_woo_pont_kvikk_packaging_type_<?php echo esc_attr($packaging_type['sku']); ?>">
+											<?php echo esc_html($packaging_type['name']); ?>
+											<small>
+												<?php echo esc_html($packaging_type['length']); ?>x<?php echo esc_html($packaging_type['width']); ?>x<?php echo esc_html($packaging_type['height']); ?>cm
+											</small>
+										</label>
+									</li>
+								<?php endforeach; ?>
+								<li>
+									<input type="radio" name="vp_woo_pont_kvikk_packaging_type" id="vp_woo_pont_kvikk_packaging_type_custom" value="custom">
+									<label for="vp_woo_pont_kvikk_packaging_type_custom">
+										<?php esc_html_e('Custom packaging', 'vp-woo-pont'); ?>
+									</label>
+								</li>
+							</ul>
+						<?php } ?>
+
+						<ul>
+							<?php foreach (VP_Woo_Pont()->providers['kvikk']->extra_services as $service_id => $service): ?>
+								<?php
+								if($service_id == 'nextday') {
+									continue;
+								}
+								$saved_options = [];
+								$services_check = array('fragile', 'oversized');
+								foreach ($services_check as $check_service) {
+									if ($this->is_extra_service_needed($order, $check_service)) {
+										$saved_options[] = $check_service;
+									}
+								}
+								?>
+								<li>
+									<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
+										<input type="checkbox" name="vp_woo_pont_kvikk_services" id="vp_woo_pont_kvikk_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />
+										<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
+									</label>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+
+					</li>
+				</ul>
+			</li>
+
+			<script>
+			jQuery(document).ready(function($){
+				function renderKvikkParcels(count) {
+					var $list = $('.vp-woo-pont-kvikk-parcels');
+					var $sample = $list.find('.vp-woo-pont-kvikk-parcel-sample');
+					$list.find('.vp-woo-pont-kvikk-parcel:not(.vp-woo-pont-kvikk-parcel-sample)').remove();
+					for (var i = 0; i < count; i++) {
+						var $clone = $sample.clone(true, true).removeClass('vp-woo-pont-kvikk-parcel-sample').addClass('vp-woo-pont-kvikk-parcel').show();
+						// Ensure unique name attributes for packaging_type radios
+						$clone.find('input[type=radio][name=vp_woo_pont_kvikk_packaging_type]').each(function(){
+							$(this).attr('name', 'vp_woo_pont_kvikk_packaging_type_' + i);
+						});
+						// Preselect custom if none selected
+						var $radios = $clone.find('input[type=radio][name="vp_woo_pont_kvikk_packaging_type_' + i + '"]');
+						if ($radios.filter(':checked').length === 0) {
+							$radios.filter('[value="custom"]').prop('checked', true).trigger('change');
+						}
+						$list.append($clone);
+					}
+				}
+
+				$(document).on('change', '#vp_woo_pont_package_count', function(){
+					var package_count = parseInt($(this).val(), 10) || 0;
+					var provider = $('.vp-woo-pont-metabox-content').data('provider_id');
+					$('#vp_woo_pont_kvikk_parcels').hide();
+					$('.vp-woo-pont-package-size').show();
+					$('.vp-woo-pont-package-weight').show();
+					$('.vp-woo-pont-package-services').show();
+
+					if(provider != 'kvikk') {
+						return;
+					}
+
+					if(package_count > 1) {
+						$('#vp_woo_pont_kvikk_parcels').show();
+						$('.vp-woo-pont-package-weight').hide();
+						$('.vp-woo-pont-package-size').hide();
+						$('.vp-woo-pont-package-services').hide();
+						renderKvikkParcels(package_count);
+					}
+				});
+
+				// Show/hide packaging types list on "Boxes" button click
+				$(document).on('click', '.vp-woo-pont-kvikk-parcel-boxes-btn', function(e){
+					e.preventDefault();
+					var $parcel = $(this).closest('.vp-woo-pont-kvikk-parcel, .vp-woo-pont-kvikk-parcel-sample');
+					var $types = $parcel.find('.vp-woo-pont-kvikk-parcel-packaging-types');
+					if ($types.is(':visible')) {
+						$types.hide();
+					} else {
+						$types.show();
+					}
+				});
+
+				// When a packaging type is selected, fill in the dimensions, set readonly, and hide the list
+				$(document).on('change', '.vp-woo-pont-kvikk-parcel-packaging-types input[type=radio]', function(){
+					var $li = $(this).closest('.vp-woo-pont-kvikk-parcel, .vp-woo-pont-kvikk-parcel-sample');
+					var $length = $li.find('input[name="vp_woo_pont_kvikk_length"]');
+					var $width = $li.find('input[name="vp_woo_pont_kvikk_width"]');
+					var $height = $li.find('input[name="vp_woo_pont_kvikk_height"]');
+					if($(this).val() !== 'custom') {
+						$length.val($(this).data('length')).prop('readonly', true);
+						$width.val($(this).data('width')).prop('readonly', true);
+						$height.val($(this).data('height')).prop('readonly', true);
+					} else {
+						$length.val('').prop('readonly', false);
+						$width.val('').prop('readonly', false);
+						$height.val('').prop('readonly', false);
+					}
+					$li.find('.vp-woo-pont-kvikk-parcel-packaging-types').hide();
+				});
+
+				// Make clicking the label also select the radio button
+				$(document).on('click', '.vp-woo-pont-kvikk-parcel-packaging-types label', function(e){
+					var $radio = $(this).closest('li').find('input[type=radio]');
+					if (!$radio.prop('checked')) {
+						$radio.prop('checked', true).trigger('change');
+					}
+					// Prevent default label click to avoid double event
+					e.preventDefault();
+				});
+
+				// AJAX Prefilter: collect all parcel data and append to request
+				$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+					if(options.data && options.data.includes('vp_woo_pont_generate_label')) {
+						var package_count = parseInt($('input#vp_woo_pont_package_count').val(), 10) || 0;
+						if(package_count > 1) {
+							var package_data = {};
+							$('.vp-woo-pont-kvikk-parcel').each(function(index){
+								var weight = $(this).find('input[name="vp_woo_pont_kvikk_package_weights[]"]').val();
+								var cost = $(this).find('input[name="vp_woo_pont_kvikk_package_costs[]"]').val();
+								var length = $(this).find('input[name="vp_woo_pont_kvikk_length"]').val();
+								var width = $(this).find('input[name="vp_woo_pont_kvikk_width"]').val();
+								var height = $(this).find('input[name="vp_woo_pont_kvikk_height"]').val();
+
+								var package_services_array = $(this).find('input[name="vp_woo_pont_kvikk_services"]:checked')
+									.map(function (){
+									return $(this).val();
+								}).toArray();
+
+								// Store all package data with explicit index
+								package_data[index] = {
+									weight: weight || '',
+									cost: cost || '',
+									length: length || '',
+									width: width || '',
+									height: height || '',
+									services: package_services_array
+								};
+							});
+							
+							// Send as JSON for easy server-side processing
+							options.data += '&additional_package_data='+encodeURIComponent(JSON.stringify(package_data));
+
+						}
+					}
+				});
+			});
+			</script>
+			<?php
+	}
+
+	public function is_extra_service_needed($order, $service_type) {
+		$fragile_product_tags = VP_Woo_Pont_Helpers::get_option('kvikk_'.$service_type.'_products', array());
+		if(empty($fragile_product_tags)) {
+			return false;
+		}
+
+		$order_items = $order->get_items();
+		foreach ($order_items as $item) {
+			$product = $item->get_product();
+			if($product) {
+				$tags = $product->get_tag_ids();
+				$shipping_class = $product->get_shipping_class();
+				if(in_array($shipping_class, $fragile_product_tags)) {
+					return true;
+				}
+
+				foreach ($tags as $tag) {
+					if(in_array($tag, $fragile_product_tags)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

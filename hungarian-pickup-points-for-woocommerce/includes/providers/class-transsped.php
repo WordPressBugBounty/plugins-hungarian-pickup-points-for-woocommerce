@@ -253,12 +253,17 @@ class VP_Woo_Pont_TransSped {
 		$comment = VP_Woo_Pont()->labels->get_package_contents_label($data, 'transsped');
 		$order = wc_get_order($data['order_id']);
 		$log = array();
+
+		//Validate packaging parameters
+		if(!isset($data['options']['transsped_packaging'])) {
+			return new WP_Error( 'transsped_error', __('Packaging quantity missing.', 'vp-woo-pont') );
+		}
 		
 		$item = array(
 			'waybill' => $data['order_number'],
 			'speditorName' => $this->api_client_code,
 			'type' => 'Delivery',
-			'note' => $data['order']->get_customer_note(),
+			'note' => $comment,
 			'responsible' => VP_Woo_Pont_Helpers::get_option('trans_sped_contact_name'),
 			'sender' => array(
 				'name' => VP_Woo_Pont_Helpers::get_option('trans_sped_sender_name'),

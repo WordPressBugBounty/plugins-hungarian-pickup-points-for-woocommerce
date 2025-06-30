@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 $accounting_info = $order->get_meta('_vp_woo_pont_kvikk_accounting');
+$services_labels = VP_Woo_Pont()->providers['kvikk']->extra_services;
+
 ?>
 
 	<div class="vp-woo-pont-metabox-content">
@@ -55,6 +57,19 @@ $accounting_info = $order->get_meta('_vp_woo_pont_kvikk_accounting');
 				</li>
 				<?php endif; ?>
 			<?php endif; ?>
+
+
+			<?php if(isset($accounting_info['services'])): ?>
+				<?php foreach($accounting_info['services'] as $service): ?>
+					<li class="vp-woo-pont-metabox-rows-data show">
+						<div class="vp-woo-pont-metabox-rows-data-inside">
+							<span><?php echo $services_labels[$service['type']]; ?></span>
+							<strong><?php echo wc_price($service['cost']); ?></strong>
+						</div>
+					</li>
+				<?php endforeach; ?>
+			<?php endif; ?>
+
 			<?php if(isset($accounting_info['link'])): ?>
 			<li class="vp-woo-pont-metabox-rows-data show">
 				<div class="vp-woo-pont-metabox-rows-data-inside">

@@ -80,7 +80,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 								<?php echo esc_html($name); ?>
 							</label>
 							<?php if(strpos($id, 'kvikk') !== false): ?>
-								<div class="shipping-cost" data-label="<?php esc_attr_e('Calculated cost(net)', 'vp-woo-pont'); ?>"></div>
+								<div class="shipping-cost-" style="display:none !important" data-label="<?php esc_attr_e('Calculated cost(net)', 'vp-woo-pont'); ?>"></div>
 							<?php endif; ?>
 						</li>
 					<?php endforeach; ?>
@@ -127,7 +127,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			</li>
 			<?php endif; ?>
 
-			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-kvikk-price">
+			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-kvikk-price-" style="display: none !important;">
 				<div class="vp-woo-pont-metabox-rows-data-inside">
 					<span><?php esc_html_e('Calculated cost(net)', 'vp-woo-pont'); ?></span>
 					<strong></strong>
@@ -200,7 +200,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			</div>
 
 			<ul class="vp-woo-pont-metabox-generate-options" style="display:none">
-				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls, dpd, posta, postapont, expressone, sameday]">
+				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls, dpd, posta, postapont, expressone, sameday, kvikk]">
 					<label for="vp_woo_pont_package_count"><?php esc_html_e('Number of packages','vp-woo-pont'); ?></label>
 					<input type="number" id="vp_woo_pont_package_count" value="1" />
 				</li>
