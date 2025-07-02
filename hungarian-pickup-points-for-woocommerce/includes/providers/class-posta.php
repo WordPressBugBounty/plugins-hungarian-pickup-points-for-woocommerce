@@ -396,7 +396,7 @@ class VP_Woo_Pont_Posta {
 				'city' => $point['city'],
 				'address' => $point['addr'],
 				'remark' => '',
-				'parcelPickupSite' => $point['name']
+				'parcelPickupSite' => $point['id']
 			);
 
 			$parcel['item'][0]['size'] = VP_Woo_Pont_Helpers::get_option('posta_size', 'M');
