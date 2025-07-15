@@ -1396,7 +1396,7 @@ class VP_Woo_Pont_Kvikk {
 
 				// AJAX Prefilter: collect all parcel data and append to request
 				$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-					if(options.data && options.data.includes('vp_woo_pont_generate_label')) {
+					if(options && typeof options.data === 'string' && options.data.includes('vp_woo_pont_generate_label')) {
 						var package_count = parseInt($('input#vp_woo_pont_package_count').val(), 10) || 0;
 						if(package_count > 1) {
 							var package_data = {};

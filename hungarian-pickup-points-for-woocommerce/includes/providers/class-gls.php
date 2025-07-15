@@ -462,9 +462,9 @@ class VP_Woo_Pont_GLS {
 			'WebshopEngine' => 'WooCommerce'
 		);
 
-		//If its A6, use the Connect one, which will give us a landscape A6 that we can rotate
+		//If its A6, use the Thermo one, which will give us a portrait label we can put on an A6
 		if($label_size == 'A6') {
-			$options['TypeOfPrinter'] = 'Connect';
+			$options['TypeOfPrinter'] = 'Thermo';
 		}
 
 		//So developers can modify

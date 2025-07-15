@@ -43,13 +43,20 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
 			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A6', 'orientation' => 'P'));
 			$stream = StreamReader::createByString($pdf);
-			$pagecount = $mpdf->setSourceFile($stream);
-			for ($i = 1; $i <= $pagecount; $i++) {
-				$mpdf->AddPage();
-				$mpdf->Rotate(-90);
-				$label = $mpdf->ImportPage($i);
-				$mpdf->UseTemplate($label, -4, -74);
-			}
+			$mpdf->AddPage();
+			$mpdf->setSourceFile($stream);
+			$label = $mpdf->ImportPage(1);
+			
+			// Get the original template size
+			$templateSize = $mpdf->getTemplateSize($label);
+			
+			// Scale by 1.1 (10% larger)
+			$scale = 1.2;
+			$newWidth = $templateSize['width'] * $scale;
+			$newHeight = $templateSize['height'] * $scale;
+			
+			$mpdf->UseTemplate($label, 2, 2, $newWidth, $newHeight);
+			
 			return $mpdf->Output('file.pdf', 'S');
 		}
 

@@ -132,7 +132,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			$need_sync = self::check_if_sync_needed('foxpost');
 			if(!$need_sync) return false;
 
-			$request = wp_remote_get('https://cdn.foxpost.hu/foxpost_terminals_extended_v3.json');
+			$request = wp_remote_get('https://cdn.foxpost.hu/foxplus.json');
 
 			//Check for errors
 			if( is_wp_error( $request ) ) {
@@ -159,7 +159,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			foreach ($json as $foxpost) {
 
 				// Skip if the name does not start with "FOXPOST "
-				if(strpos($foxpost['name'], 'FOXPOST ') !== 0) {
+				if($foxpost['variant'] != 'FOXPOST') {
 					continue;
 				}
 

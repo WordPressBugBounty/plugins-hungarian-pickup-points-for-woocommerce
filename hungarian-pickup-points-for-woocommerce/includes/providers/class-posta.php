@@ -280,6 +280,14 @@ class VP_Woo_Pont_Posta {
 				'id' => 'posta_fragile_products',
 				'desc_tip' => __('Select a product attribute or shipping class that relates to fragile products, so the generated label will be marked as fragile by default.', 'vp-woo-pont'),
 			),
+			'posta_oversized_products' => array(
+				'title' => __('Oversized products', 'vp-woo-pont'),
+				'type' => 'multiselect',
+				'class'   => 'wc-enhanced-select',
+				'options' => array(),
+				'id' => 'posta_oversized_products',
+				'desc_tip' => __('Select a product attribute or shipping class that relates to oversized shipments, so the generated label will be marked as oversized by default.', 'vp-woo-pont'),
+			),
 			array(
 				'title' => __('Dispatch from Csomagautomata', 'vp-woo-pont'),
 				'type'     => 'checkbox',
@@ -294,6 +302,7 @@ class VP_Woo_Pont_Posta {
 		//Load product categories on settings page
 		if($this->is_settings_page()) {
 			$posta_settings['posta_fragile_products']['options'] = VP_Woo_Pont_Helpers::get_product_tags()+VP_Woo_Pont_Helpers::get_shipping_classes();
+			$posta_settings['posta_oversized_products']['options'] = VP_Woo_Pont_Helpers::get_product_tags()+VP_Woo_Pont_Helpers::get_shipping_classes();
 		}
 
 		return $settings+$posta_settings;
@@ -445,8 +454,12 @@ class VP_Woo_Pont_Posta {
 		} else {
 
 			//Append auto fragile handling
-			if($this->is_fragile($order)) {
+			if($this->is_extra_service_needed($order, 'fragile')) {
 				$enabled_services[] = 'K_TOR';
+			}
+
+			if($this->is_extra_service_needed($order, 'oversized')) {
+				$enabled_services[] = 'K_TER';
 			}
 
 		}
@@ -934,8 +947,8 @@ class VP_Woo_Pont_Posta {
 		return $service_type;
 	}
 
-	public function is_fragile($order) {
-		$fragile_product_tags = VP_Woo_Pont_Helpers::get_option('posta_fragile_products', array());
+	public function is_extra_service_needed($order, $service_type) {
+		$fragile_product_tags = VP_Woo_Pont_Helpers::get_option('posta_'.$service_type.'_products', array());
 		if(empty($fragile_product_tags)) {
 			return false;
 		}

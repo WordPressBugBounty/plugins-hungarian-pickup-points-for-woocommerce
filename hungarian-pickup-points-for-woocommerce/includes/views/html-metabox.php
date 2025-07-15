@@ -234,11 +234,14 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 							$checked = false;
 							$saved_options_field = 'posta_extra_services';
 							$saved_options = VP_Woo_Pont_Helpers::get_option($saved_options_field, array());
-							$is_fragile = VP_Woo_Pont()->providers['posta']->is_fragile($order);
+							$is_fragile = VP_Woo_Pont()->providers['posta']->is_extra_service_needed($order,'fragile');
+							$is_oversized = VP_Woo_Pont()->providers['posta']->is_extra_service_needed($order,'oversized');
 							if($is_fragile) {
 								$saved_options[] = 'K_TOR';
 							}
-							?>
+							if($is_oversized) {
+								$saved_options[] = 'K_TER';
+							}							?>
 							<li>
 								<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
 									<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />

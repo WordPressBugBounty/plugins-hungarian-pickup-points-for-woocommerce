@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 3.6.1
+Stable tag: 3.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.6.2
+* Terjedelmes szolgáltatás MPL csomagnál szállítási osztály vagy címke szerint
+* GLS csoportos nyomtatás javítása A6 javasolt címkemérettel(a thermo címkét rakja rá A6-ra most, így nem kell forgatni a fekvő A6 címkét, ami a problémát okozta)
+* Rendelés admin JS hiba javítás
 
 3.6.1
 * MPL csomagpontos címkegenerálásnál a csomagpont azonosítót használja név helyett
