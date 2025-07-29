@@ -43,23 +43,26 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
 			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A6', 'orientation' => 'P'));
 			$stream = StreamReader::createByString($pdf);
-			$mpdf->AddPage();
-			$mpdf->setSourceFile($stream);
-			$label = $mpdf->ImportPage(1);
+			$pagecount = $mpdf->setSourceFile($stream);
 			
-			// Get the original template size
-			$templateSize = $mpdf->getTemplateSize($label);
-			
-			// Scale by 1.1 (10% larger)
-			$scale = 1.2;
-			$newWidth = $templateSize['width'] * $scale;
-			$newHeight = $templateSize['height'] * $scale;
-			
-			$mpdf->UseTemplate($label, 2, 2, $newWidth, $newHeight);
+			for ($i = 1; $i <= $pagecount; $i++) {
+				$mpdf->AddPage();
+				$label = $mpdf->ImportPage($i);
+				
+				// Get the original template size
+				$templateSize = $mpdf->getTemplateSize($label);
+				
+				// Scale by 1.2 (20% larger)
+				$scale = 1.2;
+				$newWidth = $templateSize['width'] * $scale;
+				$newHeight = $templateSize['height'] * $scale;
+				
+				$mpdf->UseTemplate($label, 2, 2, $newWidth, $newHeight);
+			}
 			
 			return $mpdf->Output('file.pdf', 'S');
-		}
-
+		}		
+	
 		public static function crop_to_a6_two($pdf) {
 			require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
 			$mpdf = new \Mpdf\Mpdf(array('mode' => 'c', 'format' => 'A4', 'orientation' => 'P'));

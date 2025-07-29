@@ -264,7 +264,7 @@ class VP_Woo_Pont_Foxpost {
 		$needs_convert = apply_filters('vp_woo_pont_convert_foxpost_pdf_for_bulk_printing', true);
 
 		//Convert to PNG(fix for v1.6 PDF parsing issue)
-		if (extension_loaded('imagick') && class_exists('Imagick') && $needs_convert) {
+		if (extension_loaded('imagick') && class_exists('Imagick') && $needs_convert && apply_filters('vp_woo_pont_convert_foxpost_pdf_with_imagick', true)) {
 
 			//Use Imagick to convert the PDF to PNG if supported by the hosting
 			$imagick_processed = VP_Woo_Pont_Print::pdf_to_png_pdf($pdf);

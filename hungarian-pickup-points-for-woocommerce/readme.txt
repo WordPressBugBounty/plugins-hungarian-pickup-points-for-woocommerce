@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 3.6.2
+Stable tag: 3.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,12 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+3.6.3
+* Pénztár blokk javítások
+* GLS többcsomagos címkenyomtatás javítás
+* Kvikk Foxpost házhozszállítás támogatás
+* vp_woo_pont_convert_foxpost_pdf_with_imagick filter, ha mégsem működne a tárhelyen megfelelően az Imagick(így kikapcsolható ez a rész)
 
 3.6.2
 * Terjedelmes szolgáltatás MPL csomagnál szállítási osztály vagy címke szerint

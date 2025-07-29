@@ -266,6 +266,7 @@ class VP_Woo_Pont_Kvikk {
         $groups['kvikk_gls'] = __('Kvikk GLS', 'vp-woo-pont');
         $groups['kvikk_dpd'] = __('Kvikk DPD', 'vp-woo-pont');
         //$groups['kvikk_dhl'] = __('Kvikk DHL', 'vp-woo-pont');
+        $groups['kvikk_foxpost'] = __('Kvikk Foxpost', 'vp-woo-pont');
         return $groups;
     }
 
@@ -301,7 +302,7 @@ class VP_Woo_Pont_Kvikk {
 		$courier = $data['provider']; 
 
 		//Fix for foxpost
-		if($courier == 'kvikk_foxpost') {
+		if($courier == 'kvikk_foxpost' && $data['point_id']) {
 			$courier = 'kvikk_packeta_foxpost';
 		}
 
@@ -323,7 +324,8 @@ class VP_Woo_Pont_Kvikk {
 
 			//Package details
 			'orderID' => $order->get_order_number(),
-			'note' => VP_Woo_Pont()->labels->get_package_contents_label($data, 'kvikk', 100),
+			'referenceNumber' => $data['reference_number'],
+			'note' => VP_Woo_Pont()->labels->get_package_contents_label($data, 'kvikk'),
 			'cod' => 0,
 			'parcels' => array(
 				array(
@@ -355,7 +357,10 @@ class VP_Woo_Pont_Kvikk {
 			$shipment['city'] = $order->get_shipping_city();
 			$shipment['postcode'] = $order->get_shipping_postcode();
 			$shipment['country'] = 'HU';
-			$shipment['note'] =VP_Woo_Pont()->labels->get_package_contents_label($data, 'kvikk', 100);
+
+			//Set remark
+			$shipment['remark'] = $order->get_customer_note();
+
 		}
 
 		//If we have a package size set

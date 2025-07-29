@@ -336,7 +336,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if(isset($label['deleted_locally'])) {
 
 				//Save order note
-				$order->add_order_note(sprintf(esc_html__("Shipping label removed from the order only. You still need to remove it in the provider's system. ID number: %s", 'vp-woo-pont'), $data['parcel_id']));
+				$order->add_order_note(sprintf(esc_html__("Shipping label removed from the order only. You still need to remove it in the provider's system. ID number: %s", 'vp-woo-pont'), $data['parcel_number']));
 
 				//Create response
 				$response['messages'][] = esc_html__("Shipping label removed from WooCommerce. You still need to remove it in the provider's system.",'vp-woo-pont');
@@ -344,7 +344,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			} else {
 
 				//Save order note
-				$order->add_order_note(sprintf(esc_html__('Shipping label removed successfully. ID number: %s', 'vp-woo-pont'), $data['parcel_id']));
+				$order->add_order_note(sprintf(esc_html__('Shipping label removed successfully. ID number: %s', 'vp-woo-pont'), $data['parcel_number']));
 
 				//Create response
 				$response['messages'][] = esc_html__('Shipping label removed successfully.','vp-woo-pont');

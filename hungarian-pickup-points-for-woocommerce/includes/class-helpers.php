@@ -109,7 +109,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				$carrier_labels = self::get_external_provider_groups();
 				$carrier = explode('_', $provider_id)[0];
 				if(in_array($carrier, array_keys($carrier_labels)) && strpos($provider_id, '_') !== false) {
-					$provider_name = $carrier_labels[$carrier].' - '.$provider_name;
+					$provider_name = $carrier_labels[$carrier].' – '.$provider_name;
 				}
 			}
 
