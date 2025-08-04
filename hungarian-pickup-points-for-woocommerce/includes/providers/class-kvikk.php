@@ -324,7 +324,7 @@ class VP_Woo_Pont_Kvikk {
 
 			//Package details
 			'orderID' => $order->get_order_number(),
-			'referenceNumber' => $data['reference_number'],
+			'referenceNumber' => (string) $data['reference_number'],
 			'note' => VP_Woo_Pont()->labels->get_package_contents_label($data, 'kvikk'),
 			'cod' => 0,
 			'parcels' => array(
@@ -834,8 +834,8 @@ class VP_Woo_Pont_Kvikk {
 		if($provider == 'kvikk' && $label_size == 'A5_LANDSCAPE') {
 			$positions['sections'] = 2;
 			$positions['format'] = 'A4-L';
-			$positions['x'] = array(20, 174);
-			$positions['y'] = array(28, 28);
+			$positions['x'] = array(21.5, 170);
+			$positions['y'] = array(31, 31);
 			$positions['layout'] = 'grid';
 			$positions['sticker'] = 'A6';
 		}
