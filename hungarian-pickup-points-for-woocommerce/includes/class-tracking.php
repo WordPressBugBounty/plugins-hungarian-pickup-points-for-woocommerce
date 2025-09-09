@@ -129,7 +129,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			//Get carried id from order
 			$provider_id = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 
-			//Stop traciking if the latest status is delivered
+			//Stop tracking if the latest status is delivered
 			$parcel_info = $order->get_meta('_vp_woo_pont_parcel_info');
 			if(!empty($parcel_info) && count($parcel_info) > 0) {
 				$latest_event = $parcel_info[0];

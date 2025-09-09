@@ -158,8 +158,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			//Simplify json, so its smaller to store, faster to load
 			foreach ($json as $foxpost) {
 
+
 				// Skip if the name does not start with "FOXPOST "
-				if($foxpost['variant'] != 'FOXPOST') {
+				if($foxpost['variant'] != 'FOXPOST A-BOX') {
 					continue;
 				}
 
@@ -174,7 +175,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 					'zip' => $foxpost['zip'],
 					'addr' => $foxpost['street'],
 					'city' => $foxpost['city'],
-					'comment' => $foxpost['findme']
+					'comment' => wp_strip_all_tags($foxpost['findme'])
 				);
 
 				//Open hours

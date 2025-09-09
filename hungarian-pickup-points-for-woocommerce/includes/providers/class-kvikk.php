@@ -494,7 +494,7 @@ class VP_Woo_Pont_Kvikk {
 
 		//Else, it was successful
 		$parcel_number = $response['data']['trackingNumber'];
-		$parcel_id = $response['data']['courierTrackingNumber'];
+		$parcel_id = $response['data']['accounting']['courierTrackingNumber'];
 		$pdf = base64_decode($response['data']['label']);
 
 		//Try to save PDF file
