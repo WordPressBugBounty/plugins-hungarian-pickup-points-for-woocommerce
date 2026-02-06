@@ -32,6 +32,8 @@ jQuery(document).ready(function($) {
 		checkout_needs_reload: false,
 		is_checkoutwc: false,
 		notes: false,
+		billing_country: false,
+		features: [],
 		init: function() {
 
 			//Initialize a map
@@ -52,7 +54,24 @@ jQuery(document).ready(function($) {
 			  disableClusteringAtZoom: 16,
 				removeOutsideVisibleBounds: true,
 				chunkedLoading: true,
-				maxClusterRadius: 100
+				chunkProgress: function(processed, total) {
+					// Optional: show loading progress
+					console.log(`Clustering: ${Math.round((processed/total)*100)}%`);
+				},
+				chunkDelay: 0, // Reduce delay for faster processing
+				maxClusterRadius: 80, // Slightly smaller for better performance
+				animate: true, // Disable animations for large datasets
+				spiderfyDistanceMultiplier: 1.2,
+				// Custom cluster icon for better performance
+				iconCreateFunction: function(cluster) {
+					var count = cluster.getChildCount();
+					var size = count < 100 ? 'small' : count < 1000 ? 'medium' : 'large';
+					return new L.DivIcon({ 
+						html: '<div><span>' + count + '</span></div>', 
+						className: 'marker-cluster marker-cluster-' + size, 
+						iconSize: new L.Point(40, 40) 
+					});
+				}
 			};
 
 			//If custom parameters set
@@ -260,8 +279,53 @@ jQuery(document).ready(function($) {
 			if(!notes) notes = $(this).parent().data('notes');
 			vp_woo_pont_frontend.notes = notes;
 
+			//Set country based on priority: billing_country > shipping_country > billing-country > default
+			var current_billing_country;
+			if($('#billing_country').length && $('#billing_country').val()) {
+				current_billing_country = $('#billing_country').val();
+			} else if($('#shipping_country').length && $('#shipping_country').val()) {
+				current_billing_country = $('#shipping_country').val();
+			} else if($('#billing-country').length && $('#billing-country').val()) {
+				current_billing_country = $('#billing-country').val();
+			} else {
+				current_billing_country = vp_woo_pont_frontend_params.default_country || 'HU';
+			}
+
 			//Setup provider filter
-			vp_woo_pont_frontend.setup_provider_filters(vp_woo_pont_frontend.providers);
+			vp_woo_pont_frontend.setup_provider_filters(vp_woo_pont_frontend.providers, current_billing_country);
+
+			//If we changed the country, we might need to reload the map points
+			if(current_billing_country != vp_woo_pont_frontend.billing_country) {
+				vp_woo_pont_frontend.map_loaded = false;
+				vp_woo_pont_frontend.billing_country = current_billing_country;
+
+				//Clear existing markers and groups
+				if(vp_woo_pont_frontend.markerClusters) {
+					vp_woo_pont_frontend.markerClusters.clearLayers();
+				}
+
+				//Clear all groups
+				Object.keys(vp_woo_pont_frontend.groups).forEach(function(group){
+					if(vp_woo_pont_frontend.groups[group]) {
+						vp_woo_pont_frontend.groups[group].clearLayers();
+						vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[group]);
+					}
+				});
+
+				//Reset groups array
+				vp_woo_pont_frontend.groups = [];
+
+				//Reset search index
+				vp_woo_pont_frontend.search = new JsSearch.Search('name');
+				vp_woo_pont_frontend.search.addIndex('name');
+				vp_woo_pont_frontend.search.addIndex('city_nfd');
+				vp_woo_pont_frontend.search.addIndex('zip');
+				vp_woo_pont_frontend.search.addIndex('addr_nfd');
+				vp_woo_pont_frontend.search.addIndex('keywords');
+
+				//Clear sidebar
+				vp_woo_pont_frontend.$list.html('');
+			}
 
 			//Init the map, but only once, when the modal is opened
 			if(!vp_woo_pont_frontend.map_loaded) {
@@ -336,14 +400,26 @@ jQuery(document).ready(function($) {
 			});
 
 			//Loop through json files
-			vp_woo_pont_frontend_params.files.forEach(function(json){
-				$.getJSON(json.url, function (data) {
-					vp_woo_pont_frontend.process_provider(json.type, data);
+			Object.keys(vp_woo_pont_frontend_params.files).forEach(function(json){
 
-					//Refresh sidebar
-					vp_woo_pont_frontend.syncSidebar();
+				//Check for country specific files
+				vp_woo_pont_frontend_params.files[json].forEach(function(file){
+
+					//Skip if the country doesn't match
+					if(vp_woo_pont_frontend.billing_country != file.country) {
+						return; //skip this file
+					}
+
+					$.getJSON(vp_woo_pont_frontend_params.db_url+file.file, function (data) {
+						vp_woo_pont_frontend.process_provider(json, data);
+
+						//Refresh sidebar
+						vp_woo_pont_frontend.syncSidebar();
+
+					});		
 
 				});
+
 			});
 
 			//Check for custom points
@@ -377,67 +453,172 @@ jQuery(document).ready(function($) {
 		},
 		process_provider: function(provider, data) {
 			var allDocuments = [];
-
-			//Loop through json results and create a marker on the map
-			for (var i = 0; i < data.length; i++) {
-				var a = data[i];
-				var marker = L.marker(new L.LatLng(a.lat, a.lon), { data: a });
-				a.marker_id = L.stamp(marker);
-
-				//Hook up click events
-				marker.on('click', vp_woo_pont_frontend.select_in_map);
-
-				//Remove accents from place name
-				if(a.country && a.country != 'HU' && a.country != 'hu') {
-					a.city_nfd = a.city;
-					a.addr_nfd = a.addr;
-				} else {
-					a.city_nfd = a.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-					a.addr_nfd = a.addr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");	
-				}
-
-				//Create markers and create local db for autocomplete search
-				if(provider == 'postapont') {
-					a.provider = provider+'_'+a.group
-					if(vp_woo_pont_frontend.groups[provider+'_'+a.group]) {
-						marker.setIcon(vp_woo_pont_frontend.markerIcons[a.provider]);
-						marker.addTo(vp_woo_pont_frontend.groups[provider+'_'+a.group]);
-						allDocuments.push(a);
+			var markers = [];
+			var batchSize = 4000; // Process 4000 markers at a time
+			var currentIndex = 0;
+			var features = [];
+			
+			// Show loading indicator
+			vp_woo_pont_frontend.$modal.addClass('loading-markers');
+			
+			function processBatch() {
+				var endIndex = Math.min(currentIndex + batchSize, data.length);
+				var batchDocuments = [];
+				var batchMarkers = [];
+				
+				for (var i = currentIndex; i < endIndex; i++) {
+					var a = data[i];
+					
+					// Process marker data
+					if(a.country && a.country != 'HU' && a.country != 'hu') {
+						a.city_nfd = a.city;
+						a.addr_nfd = a.addr;
+					} else {
+						a.city_nfd = a.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+						a.addr_nfd = a.addr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");	
 					}
-				} else {
-					a.provider = provider
-					if(vp_woo_pont_frontend.groups[provider]) {
-						marker.setIcon(vp_woo_pont_frontend.markerIcons[provider]);
-						marker.addTo(vp_woo_pont_frontend.groups[provider]);
-						allDocuments.push(a);
+										
+					// Only create marker if group exists
+					var targetGroup = null;
+					if(provider == 'postapont') {
+						a.provider = provider+'_'+a.group;
+						targetGroup = vp_woo_pont_frontend.groups[provider+'_'+a.group];
+					} else {
+						a.provider = provider;
+						targetGroup = vp_woo_pont_frontend.groups[provider];
+					}
+					
+					if(targetGroup) {
+						var marker = L.marker(new L.LatLng(a.lat, a.lon), { 
+							data: a,
+							riseOnHover: true // Better performance than default
+						});
+						a.marker_id = L.stamp(marker);
+						marker.on('click', vp_woo_pont_frontend.select_in_map);
+
+						//If the point has a features array, add feature classes to the marker for styling
+						if(a.features && Array.isArray(a.features)) {
+							var classes = 'vp-woo-pont-marker '+a.provider;
+							a.features.forEach(function(feature){
+								if(features.includes(feature) == false) {
+									features.push(feature);
+								}
+								classes += " feature-"+feature;
+							});
+							marker.setIcon(L.divIcon({html: '<div><i class="vp-woo-pont-provider-icon-'+a.provider+'"></i></div>', className: classes, iconSize: [48, 55], iconAnchor: [24, 52]}));
+						} else {
+							marker.setIcon(vp_woo_pont_frontend.markerIcons[a.provider]);
+						}
+						
+						batchMarkers.push({marker: marker, group: targetGroup});
+						batchDocuments.push(a);
 					}
 				}
-			}
-
-			//Add the group to the map
-			if(provider == 'postapont') {
-				var groups = ['10', '20', '30', '50', '70'];
-				groups.forEach(function(group){
-					if(vp_woo_pont_frontend.groups[provider+'_'+group]) vp_woo_pont_frontend.groups[provider+'_'+group].addTo(vp_woo_pont_frontend.$map);
+				
+				// Add markers to groups in batch
+				batchMarkers.forEach(function(item) {
+					item.marker.addTo(item.group);
 				});
-			} else {
-				if(vp_woo_pont_frontend.groups[provider]) {
-					vp_woo_pont_frontend.groups[provider].addTo(vp_woo_pont_frontend.$map);
+				
+				// Add to collections
+				markers = markers.concat(batchMarkers);
+				allDocuments = allDocuments.concat(batchDocuments);
+				
+				currentIndex = endIndex;
+				
+				// Update progress (optional)
+				var progress = Math.round((currentIndex / data.length) * 100);
+				console.log(`Processing markers: ${progress}%`);
+				
+				if (currentIndex < data.length) {
+					// Continue processing in next frame
+					requestAnimationFrame(processBatch);
+				} else {
+					// Finished processing
+					finishProcessing();
 				}
+
+				//Set features
+				vp_woo_pont_frontend.features[provider] = features;
+
+				console.log(vp_woo_pont_frontend.features);
+
 			}
-
-			//Setup search
-			vp_woo_pont_frontend.search.addDocuments(allDocuments);
-			vp_woo_pont_frontend.hide_unwanted_providers();
-
+			
+			function finishProcessing() {
+				// Add groups to map
+				if(provider == 'postapont') {
+					var groups = ['10', '20', '30', '50', '70'];
+					groups.forEach(function(group){
+						if(vp_woo_pont_frontend.groups[provider+'_'+group]) {
+							vp_woo_pont_frontend.groups[provider+'_'+group].addTo(vp_woo_pont_frontend.$map);
+						}
+					});
+				} else {
+					if(vp_woo_pont_frontend.groups[provider]) {
+						vp_woo_pont_frontend.groups[provider].addTo(vp_woo_pont_frontend.$map);
+					}
+				}
+				
+				// Add to search index
+				vp_woo_pont_frontend.search.addDocuments(allDocuments);
+				vp_woo_pont_frontend.hide_unwanted_providers();
+				
+				// Remove loading indicator
+				vp_woo_pont_frontend.$modal.removeClass('loading-markers');
+				
+				// Refresh sidebar
+				vp_woo_pont_frontend.syncSidebar();
+			}
+			
+			// Start processing
+			requestAnimationFrame(processBatch);
 		},
 		toggle_layers: function() {
-			var provider = $(this).attr('id');
-			provider = provider.replace('provider-', '');
-			if($(this).prop('checked')) {
-				vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[provider]);
+			var id = $(this).attr('id');
+			
+			// Check if this is a feature filter
+			if(id.startsWith('feature-')) {
+				var featureId = id.replace('feature-', '');
+				var provider = $(this).parent().data('provider');
+				var filteredGroupKey = provider + '_' + id;
+				
+				if($(this).prop('checked')) {
+					// Create filtered group if it doesn't exist
+					if(!vp_woo_pont_frontend.groups[filteredGroupKey]) {
+						var filteredGroup = L.featureGroup.subGroup(vp_woo_pont_frontend.markerClusters);
+						
+						// Copy markers that have the required feature
+						vp_woo_pont_frontend.groups[provider].eachLayer(function(marker) {
+							var pointData = marker.options.data;
+							var hasFeature = pointData.features && Array.isArray(pointData.features) && pointData.features.includes(featureId);
+							
+							if(hasFeature) {
+								filteredGroup.addLayer(marker);
+							}
+						});
+						
+						vp_woo_pont_frontend.groups[filteredGroupKey] = filteredGroup;
+					}
+					
+					// Hide regular group, show filtered group
+					vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[provider]);
+					vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[filteredGroupKey]);
+				} else {
+					// Hide filtered group, show regular group
+					if(vp_woo_pont_frontend.groups[filteredGroupKey]) {
+						vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[filteredGroupKey]);
+					}
+					vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[provider]);
+				}
 			} else {
-				vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[provider]);
+				// Handle regular provider toggle
+				var provider = id.replace('provider-', '');
+				if($(this).prop('checked')) {
+					vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[provider]);
+				} else {
+					vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[provider]);
+				}
 			}
 
 			//Refresh enabled provider list
@@ -450,21 +631,22 @@ jQuery(document).ready(function($) {
 			//Refresh sidebar
 			vp_woo_pont_frontend.syncSidebar();
 		},
-		setup_provider_filters: function(providers) {
+		setup_provider_filters: function(providers, country) {
 			vp_woo_pont_frontend.$filters.html(''); //reset content
 			vp_woo_pont_frontend.enabled_filters = [];
 
 			//Loop throguh providers and create list items
 			Object.keys(providers).forEach(function(provider_id){
 				var provider = providers[provider_id];
-				if(provider_id.indexOf('packeta_shop_') !== -1 || provider_id.indexOf('packeta_zbox_') !== -1 || provider_id.indexOf('gls_shop_') !== -1 || provider_id.indexOf('gls_locker_') !== -1 || provider_id.indexOf('dpd_parcelshop_') !== -1 || !provider.formatted_net) {
-					return;
-				}
+
+				//Set cost
 				var cost = provider.formatted_net;
 				if(vp_woo_pont_frontend_params.prices_including_tax) cost = provider.formatted_gross
-				var test = $('<li data-provider="'+provider_id+'"><input type="checkbox" checked id="provider-'+provider_id+'"><label for="provider-'+provider_id+'"><i class="vp-woo-pont-provider-icon-'+provider_id+'"></i><strong>'+provider.label+'</strong><em>'+cost+'</em></label></li>');
+
+				//Render HTML
+				var list_item = $('<li data-provider="'+provider_id+'"><input type="checkbox" checked id="provider-'+provider_id+'"><label for="provider-'+provider_id+'"><i class="vp-woo-pont-provider-icon-'+provider_id+'"></i><strong>'+provider.label+'</strong><em>'+cost+'</em></label></li>');
 				vp_woo_pont_frontend.enabled_filters.push(provider_id);
-				vp_woo_pont_frontend.$filters.append(test);
+				vp_woo_pont_frontend.$filters.append(list_item);
 			});
 
 			//If theres only one provider, just hide it, no need for the filters
@@ -473,6 +655,28 @@ jQuery(document).ready(function($) {
 			} else {
 				vp_woo_pont_frontend.$filters.show();
 			}
+
+			//Setup features filters too
+			var available_providers = Object.keys(providers);
+			Object.keys(vp_woo_pont_frontend_params.features).forEach(function(feature_id){
+				var feature = vp_woo_pont_frontend_params.features[feature_id];
+
+				if(!available_providers.includes(feature_id)) {
+					return; //skip this feature
+				}
+
+				//Check for country support
+				if(feature.countries && Array.isArray(feature.countries)) {
+					if(!feature.countries.includes(country)) {
+						return; //skip this feature
+					}
+				}
+
+				//Render HTML
+				var list_item = $('<li data-provider="'+feature_id+'" class="filter-feature" data-feature="'+feature.id+'"><input type="checkbox" id="feature-'+feature.id+'"><label for="feature-'+feature.id+'"><i class="vp-woo-pont-feature-icon-'+feature.id+'"></i><strong>'+feature.label+'</strong><small>'+feature.description+'</small></label></li>');
+				vp_woo_pont_frontend.$filters.append(list_item);
+			});
+			
 
 		},
 		hide_unwanted_providers: function() {
@@ -492,16 +696,27 @@ jQuery(document).ready(function($) {
 			//Create new array
 			//TODO: sort ascending
 
-			//Get checked filters
-			vp_woo_pont_frontend.$filters.find('input:checked').each(function(){
+			//Get checked provider filters (not feature filters)
+			vp_woo_pont_frontend.$filters.find('input:checked').not('[id^="feature-"]').each(function(){
 				var provider = $(this).parent().data('provider');
 				var provider_limit = 0;
+
+				// Check if there's an active feature filter for this provider
+				var activeGroup = provider;
+				vp_woo_pont_frontend.$filters.find('input[id^="feature-"]:checked').each(function(){
+					var featureProvider = $(this).parent().data('provider');
+					if(featureProvider === provider) {
+						var featureId = $(this).attr('id');
+						activeGroup = provider + '_' + featureId;
+						return false; // break loop
+					}
+				});
 
 				//Loop through layers(only the ones that are checked in the filter) and in the viewport and append to the list.
 				//Only append 10 / group for performance reasons, i think its still usable this way
 				//Only change the sidebar, if a point is not selected already
-				if(vp_woo_pont_frontend.groups && vp_woo_pont_frontend.groups[provider]) {
-					vp_woo_pont_frontend.groups[provider].eachLayer(function (layer) {
+				if(vp_woo_pont_frontend.groups && vp_woo_pont_frontend.groups[activeGroup]) {
+					vp_woo_pont_frontend.groups[activeGroup].eachLayer(function (layer) {
 						if (vp_woo_pont_frontend.$map.getBounds().contains(layer.getLatLng())) {
 							if(provider_limit < 10) {
 								layer.options.data.marker_id = L.stamp(layer);
@@ -568,19 +783,8 @@ jQuery(document).ready(function($) {
 			//// TODO: do this with vanilla js, so its a little faster
 			var list_item = $('#vp-woo-pont-modal-list-item-sample').clone();
 			var provider_price = vp_woo_pont_frontend.providers[provider];
-			var country = (item.country) ? item.country.toLowerCase() : '';
 
-			//Change price for packeta and gls based on countries
-			if((provider == 'packeta_shop' || provider == 'packeta_zbox' || provider == 'gls_shop' || provider == 'gls_locker' || provider == 'dpd_parcelshop') && country && vp_woo_pont_frontend.providers[provider+'_'+country]) {
-				console.log(vp_woo_pont_frontend.providers[provider+'_'+country], provider+'_'+country);
-				provider_price = vp_woo_pont_frontend.providers[provider+'_'+country]
-			}
-
-			//Change price for packeta
-			if(provider == 'packeta_shop' && item.carrier && vp_woo_pont_frontend.providers[provider+'_'+item.carrier]) {
-				provider_price = vp_woo_pont_frontend.providers[provider+'_'+item.carrier]
-			}
-
+			//If theres no price, skip
 			if(!provider_price) {
 				return;
 			}
@@ -598,6 +802,7 @@ jQuery(document).ready(function($) {
 			list_item.attr('data-provider', provider);
 			list_item.attr('data-id', item.id);
 			list_item.attr('data-marker-id', item.marker_id);
+			list_item.attr('data-country', item.country || 'HU');
 			list_item.find('.icon').addClass('vp-woo-pont-provider-icon-'+provider);
 			if(item.hasOwnProperty('cod') && !item.cod) {
 				list_item.find('.cod-notice').addClass("show");
@@ -606,6 +811,13 @@ jQuery(document).ready(function($) {
 			//Show extra note if needed
 			if(vp_woo_pont_frontend.notes && vp_woo_pont_frontend.notes[provider]) {
 				list_item.find('.comment').prepend('<div class="extra-note">'+vp_woo_pont_frontend.notes[provider]+'</div>');
+			}
+
+			//Show extra features
+			if(item.features && Array.isArray(item.features)) {
+				item.features.forEach(function(feature){
+					list_item.addClass('feature-'+feature);
+				});
 			}
 
 			//Setup opening hours
@@ -745,7 +957,7 @@ jQuery(document).ready(function($) {
 				security: security,
 				provider: provider,
 				id: id,
-				//page: page
+				country: $item.data('country')
 			};
 
 			//If its a my account page
@@ -832,9 +1044,9 @@ jQuery(document).ready(function($) {
 		},
 		geolocate: function() {
 			var selected_postcode = $('#billing_postcode').val();
-			var selected_country = $('#billing_country').val();
+			var selected_country = vp_woo_pont_frontend.billing_country || 'HU';
 			var selected_state = '';
-			if(selected_postcode) {
+			if(selected_postcode && selected_country == 'HU') {
 				selected_postcode = parseInt(selected_postcode);
 				$.each(zipCodes.vp_woo_pont_state_postcodes, function(state, postcodes) {
 					if(postcodes.includes(selected_postcode)) {
@@ -881,3 +1093,5 @@ jQuery(document).ready(function($) {
 
 	}
 });
+
+

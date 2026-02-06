@@ -20,6 +20,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 
 			//These functions are called by scheduled actions
 			add_action( 'vp_woo_pont_update_200_packeta', array( __CLASS__, 'vp_woo_pont_update_200_packeta' ) );
+			add_action( 'vp_woo_pont_update_375', array( __CLASS__, 'vp_woo_pont_update_375' ) );
 
 		}
 
@@ -73,6 +74,38 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 					self::vp_woo_pont_update_352();
 				}
 
+				//Fix Kvikk points
+				if(version_compare('3.7.5', $existing_version, '>')) {
+					WC()->queue()->add( 'vp_woo_pont_update_375', array(), 'vp_woo_pont' );
+
+				}
+
+				//Upgrade to v4.0
+				if(version_compare('4.0', $existing_version, '>')) {
+					self::vp_woo_pont_update_400();
+					VP_Woo_Pont_Import_Database::schedule_actions();
+				}
+
+			}
+
+			//Dismissable upgrade notices
+			add_action('wp_ajax_vp_woo_pont_dismiss_notice', function() {
+				
+				//Verify nonce
+				check_ajax_referer( 'vp_woo_pont_dismiss_notice', 'security' );
+
+				//Notice to hide
+				$notice = isset($_POST['notice']) ? sanitize_text_field($_POST['notice']) : '';
+
+				//Delete the option to hide the notice
+				delete_option('vp_woo_pont_show_'.$notice);
+				wp_send_json_success('vp_woo_pont_show_'.$notice);
+
+			});
+
+			//Check if we need tos how an upgrade notice
+			if(get_option('vp_woo_pont_show_upgrade_notice_400', 'no') == 'yes') {
+				add_action( 'admin_notices', array( __CLASS__, 'show_upgrade_notice_400' ) );
 			}
 			
 		}
@@ -364,10 +397,14 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 			foreach ($old_providers as $old_provider) {
 				$key = array_search($old_provider, $array);
 				if ($key !== false) {
-					$array[$key] = $new_provider;
+					if ($new_provider === false) {
+						unset($array[$key]);
+					} else {
+						$array[$key] = $new_provider;
+					}
 				}
 			}
-			return array_unique($array);
+			return array_unique(array_values($array));
 		}
 		
 		private static function replace_dpd($array, $replacements) {
@@ -406,6 +443,143 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 				update_option('vp_woo_pont_pricing', $pricings);
 			}
 
+		}
+
+		public static function vp_woo_pont_update_375() {
+			do_action('vp_woo_pont_update_kvikk_list');
+		}
+
+		public static function vp_woo_pont_update_400() {
+			$enabled_providers = get_option('vp_woo_pont_enabled_providers');
+			$free_shipping_coupon = get_option('vp_woo_pont_free_shipping', array());
+			$cod_disabled = get_option('vp_woo_pont_cod_disabled', array());
+			$pricings = get_option('vp_woo_pont_pricing');
+
+			//Update provider names
+			$updated_provider_ids = array(
+				'foxpost' => 'foxpost_foxpost',
+				'sameday' => 'sameday_easybox',
+				'packeta_shop' => 'packeta_zpont',
+				'sprinter' => false
+			);
+
+			//Loop through each provider and replace in all settings
+			foreach($updated_provider_ids as $old_provider => $new_provider) {
+
+				//Replace in enabled providers, free shipping and cod disabled
+				$enabled_providers = self::replace_providers($enabled_providers, array($old_provider), $new_provider);
+				$free_shipping_coupon = self::replace_providers($free_shipping_coupon, array($old_provider), $new_provider);
+				$cod_disabled = self::replace_providers($cod_disabled, array($old_provider), $new_provider);
+
+				//Loop through pricings and replace there too
+				foreach($pricings as $pricing_id => $pricing) {
+
+					//If contains old providers, replace them
+					$providers = $pricing['providers'];
+					$updated_providers = self::replace_providers($providers, array($old_provider), $new_provider);
+
+					//Update the pricing
+					$pricings[$pricing_id]['providers'] = $updated_providers;
+				}	
+
+			}
+
+			//Save new values
+			update_option('vp_woo_pont_enabled_providers', $enabled_providers);
+			update_option('vp_woo_pont_free_shipping', $free_shipping_coupon);
+			update_option('vp_woo_pont_cod_disabled', $cod_disabled);
+
+			//Fix Pactic settings
+			$pactic_enabled_providers = get_option('vp_woo_pont_pactic_external_providers', array());
+			$updated_pactic_providers = array();
+			$country_codes = array('sk', 'hr', 'si', 'ro', 'cz', 'pl', 'bg');
+			foreach($pactic_enabled_providers as $key => $provider_id) {
+				foreach($country_codes as $country_code) {
+					$updated_pactic_providers[] = str_replace($country_code.'_', '', $provider_id);
+				}
+			}
+			update_option('vp_woo_pont_pactic_external_providers', array_values(array_unique($updated_pactic_providers)));
+
+			//Update packeta settings
+			update_option('vp_woo_pont_packeta_countries', array('HU:packeta'));
+
+			//Update country settings for pricing
+			foreach($pricings as $pricing_id => $pricing) {
+				if(isset($pricing['countries'])) {
+					$updated_countries = array();
+					foreach($pricing['countries'] as $country_code) {
+						if(strlen($country_code) != 2) {
+							continue;
+						}
+						$updated_countries[] = $country_code;
+					}
+					$pricings[$pricing_id]['countries'] = $updated_countries;
+				}
+			}
+			update_option('vp_woo_pont_pricing', $pricings);
+
+			//Show upgrade notice
+			update_option('vp_woo_pont_show_upgrade_notice_400', 'yes');
+
+		}
+
+		public static function show_upgrade_notice_400() {
+			$nonce = wp_create_nonce( 'vp_woo_pont_dismiss_notice' );
+			$checkout_page = wc_get_page_id('checkout');
+			$is_block_checkout_used = ($checkout_page && has_block('woocommerce/checkout', $checkout_page));
+			$is_db_updated = get_option('_vp_woo_pont_db_postapont_posta');
+
+			?>
+			<div class="notice notice-warning is-dismissible notice-vp-woo-pont">
+				<h3>Csomagpontok és Címék bővítmény frissítése</h3>
+				<p>A bővítményt sikeresen <strong>frissítette a rendszer a legújabb, 4.0 verzióra</strong>. A háttérben több fontos változtatás is volt, ezért az alábbi lépéseken mindenképp menj végig és ellenőrizd, hogy minden megfelelően működjön:</p>
+				<ul>
+					<li>Ha <strong>külföldi csomagpontokat</strong> is használtál(főleg Packeta esetén), akkor azokat <strong>újra be kell állítanod</strong></li>
+					<?php if(!$is_db_updated): ?>
+						<li>A csomagpont lista adatbázis struktúrája változott. A háttérben automatán elindult a frissítés, de ha a térképen nem látod a pontokat, akkor a <strong>Csomagpontok menüben</strong> az engedélyezett szolgáltatók táblázatban <strong>kattints a frissítés gombra az adatbázis oszlopban</strong>.</li>
+					<?php endif; ?>
+					<li>Az új árazás funkcióval kényelmesebb beállítani 1-1 szolgáltatóhoz a <strong>súly alapú árazást</strong>. Javaslom, hogy írd át erre a megoldásra a részletes árazásban lévő jelenleg beállított értékeket, bővebb infót <a href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/arak-beallitasa/#suly-alapu-arazas">itt találsz</a>.</li>
+					<li>Az alábbi csomagpont és szolgáltató azonosítók megváltoztak. A beállításokat automatán frissítette ennek megfelelően, de ha használsz valamilyen egyedi kódot vagy megoldást, ellenőrizd őket:
+						<ul>
+							<li>Foxpost: <code>foxpost</code> &rarr; <code>foxpost_foxpost</code></li>
+							<li>Sameday: <code>sameday</code> &rarr; <code>sameday_easybox</code>(és pluszban lett <code>sameday_pick-pack-pont</code>)</li>
+							<li>Packeta Z-Pont: <code>packeta_shop</code> &rarr; <code>packeta_zpont</code></li>
+							<li>Sprinter szolgáltató pedig törölve lett(Sameday megvette)</li>
+						</ul>
+					</li>
+					<li><strong>Alapértelmezett árazás logika változott</strong>: ha ezt a mezőt üresen hagyod, alapból nem látszódik majd egyik szállítási opció sem, csak azok, amelyek a részletes árazásban beállított feltételeknek megfelelnek.</li>
+					<li>Külföldi csomagpontok esetén a térképen a számlázási/szállítási országnak megfelelő csomagpontok jelennek csak meg(eddig az összes ország pontjait betöltötte)</li>
+					<?php if ( $is_block_checkout_used ) : ?>
+						<li>Ha a WooCommerce <strong>blokk alapú pénztár oldalt</strong> használod, ellenőrizd a megjelenést, mert teljesen megújult a felület.</li>
+					<?php endif; ?>
+				</ul>
+				<hr />
+				<p>
+					<a class="button button-primary" href="<?php echo esc_url(admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' )); ?>" aria-label="<?php echo esc_attr__( 'VP Woo Pont Settings', 'vp-woo-pont' ); ?>"><?php echo esc_html__( 'Go to Settings', 'vp-woo-pont' ); ?></a>
+					<a class="button notice-vp-woo-pont-hide" href="#"><?php echo esc_html__( 'Hide notice', 'vp-woo-pont' ); ?></a>
+				</p>
+			</div>
+			<script>
+			jQuery(function($) {
+				$( document ).on( 'click', '.notice-vp-woo-pont .notice-vp-woo-pont-hide', function () {
+					$('.notice-vp-woo-pont .notice-dismiss').click();
+					return false;
+				});
+
+				$( document ).on( 'click', '.notice-vp-woo-pont .notice-dismiss', function () {
+					var nonce = '<?php echo esc_js( $nonce ); ?>';
+					$.ajax( ajaxurl, {
+						type: 'POST',
+						data: {
+							action: 'vp_woo_pont_dismiss_notice',
+							notice: 'upgrade_notice_400',
+							security: nonce
+						}
+					});
+				});
+			});
+			</script>
+			<?php
 		}
 
 	}

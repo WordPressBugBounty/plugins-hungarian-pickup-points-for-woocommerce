@@ -130,6 +130,9 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 			//If we found a fee, add it
 			if($calculated_fee) {
 
+				//Convert currency if needed
+				$calculated_fee = VP_Woo_Pont_Helpers::exchange_currency($calculated_fee);
+
 				//Allow plugins to customize the fee
 				$calculated_fee = apply_filters('vp_woo_pont_cod_fee', $calculated_fee, $cart_details);
 

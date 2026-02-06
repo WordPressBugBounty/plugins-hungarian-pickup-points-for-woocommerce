@@ -2,8 +2,8 @@
 Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 3.6.6
+Tested up to: 6.9
+Stable tag: 4.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 
 = Funkciók =
 
-* Postapont, Foxpost, Packeta(Csomagküldő), GLS, Express One, DPD és Pick Pack Pont(Sprinter), DPD és Sameday(easybox) választó egy térképen
+* Postapont, Foxpost, Packeta(Csomagküldő), GLS, Express One, DPD és Sameday(easybox) választó egy térképen
 * A PRO verzióban lehetőség van Foxpost, Packeta, GLS, DPD, Posta(MPL), Sameday, Express One, Trans-Sped ZERO, Csomagpiac címkét generálni, nyomtatni, házhozszállításra is, nem csak csomagpontra _PRO_
 * A csomagpont listát minden nap automatikusan szinkronizálja, így mindig az aktuálisat mutatja bővítmény frissítése nélkül
 * Jól kinéző, gyors, egyszerű térképes felület
@@ -55,6 +55,97 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.0.6
+* Pénztár blokk javítás
+
+4.0.5
+* Pénztár blokk javítások
+* Kvikk Packeta külföldi Z-Box javítás
+
+4.0.4
+* CheckoutWC fordítás javítás
+
+4.0.3
+* Megye mező elrejtése beállítás magyar címekhez(Woo / Beállítások / Szállítás / Csomagpontok)
+* Egyedi pénztár oldal térkép javítás külföldi csomagpontokhoz
+
+4.0.2
+* Kosárban csomagpont választó javítás, ha csak külföldi pontok vannak használva
+* Kiválasztott pont cseréje javítás adminban
+* Sameday pont import javítás
+
+4.0.1
+* Packeta MPL opciók visszakerültek(valószínűleg ideiglenesen) - a packeta beállításokban frisstísd a szolgáltató listát és a csomagpontoknál add hozzá újra a Packeta MPL opciókat
+
+4.0
+* Részletes árazás beállítás új funkciók: másolás, mozgatás fel/le, javított ország kezelés
+* Súly alap árazás: a részletes árazásnál egy helyen lehet beállítani súly alapú árazást, nem kell külön-külön feltételes ár
+* Teljesen új pénztár blokk: a csomagpont opciókat külön-külön szállítási módonként jeleníti meg, keresőmezővel és térkép gombbal
+* Vektoros térkép a Kvikk Map segítségével(blokkos pénztárnál)
+* Szolgáltató ikonok a házhozszállításnál(blokkos pénztárnál, a címkék beállításokban lévő párosítás alapján)
+* A térképre a számlázási/szállítási országnak megfelelő pontokat tölti csak be
+* Országokra bontott csomagpont lista import(gyorsabb, nem pazarol annyi erőforrást)
+* GLS Express Automata kezelés(+ ikon a térképen, opcionálisan megjelenő szűrő)
+* Packeta külföldi csomagpont beállítás átláthatóbb
+* Kvikk külföldi házhozszállítás támogatás Packetával
+* Packeta külföldi csomagpontok külön-külön szolgáltatónként jelennek meg, mindegyik a megfelelő logóval
+* Pick Pack Pont by Sameday csomagpontok a sima(már nem működő) Pick Pack Pont helyett
+* Ha az alapértelmezett ár üresen marad, akkor csak a részletes árazásnál beállított opciók lesznek érvényesek
+* Pénztár blokk kompatiblitás javítások az ár kijelzéssel kapcsolatban a kosárban és a pénztáron is
+* Packeta külföldi csomagpont címkegenerálás javítás
+* GLS csomagpont import javítás(szebb nevek)
+* Pactic külföldi csomagpont kezelés javítás
+* Booster pénznemváltás kompatibilitás javítás
+
+3.7.5.1
+* Kompatibilitás megjelölése WP 6.9-cel
+* Utánvét díj több pénznem támogatás
+
+3.7.5
+* Kvikk külföldi csomagpont javítások
+* Booster pénznemváltás kompatibilitás
+
+3.7.4.1
+* PHP Warning javítások
+
+3.7.4
+* Kvikk külföldi szállítás támogatás
+
+3.7.3
+* Csomagpiac több csomagos szállítás
+* GLS külföldi csomagpont javítás
+* vp_woo_pont_foxpost_id_field filterrel cserélhető, hogy melyik Foxpost csomagpont azonosítót használja a rendszer(külsős rendszer kompatibilitás miatt)
+
+3.7.1
+* Csomapgont cserélnél lehet térképről választani adminfelületen
+
+3.7
+* Külföldi GLS csomagpontok
+* Sameday Románia Easybox automaták
+* Gyorsabb térkép betöltés sok pontnál
+* Csomagkövetés automatizálás javítás
+* Csomagpiac javítás, garantált futár párosítás
+* Foxpost csomagpont azonosító javítás
+
+
+3.6.10
+* Kompatibilitás javítás 10.3 előtti WooCommerce verziókkal
+
+3.6.9
+* Kompatibilitás megjelölése legújabb Woo verzióval
+* Currency Switcher for WooCommerce(WPExperts) kompatibilitás
+
+3.6.8
+* GLS opcionális szállítólevél generálás
+* Sameday külföldi házhozszállítás támogatása
+* Csomagpiac garantált futár beállítás
+* Csomagkövetés e-mail javítások
+
+3.6.7
+* GLS javítások
+* Pénztár blokk kompatibilitás javítás
+* Kompatibilitás megjelölése legújabb Woo verzióval
 
 3.6.6
 * Foxpost csomagpont lista javítás

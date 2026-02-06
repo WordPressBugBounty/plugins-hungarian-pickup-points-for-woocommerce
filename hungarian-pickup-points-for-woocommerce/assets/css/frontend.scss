@@ -335,6 +335,27 @@ body.vp-woo-pont-modal-visible {
 						}
 					}
 				}
+
+				&.filter-feature {
+					width: 100%;
+					margin-right: 0;
+
+					small {
+						font-size: var(--vp-woo-pont-price-font-size);
+						color: var(--vp-woo-pont-text-color);
+						display: block;
+					}
+
+					.vp-woo-pont-feature-icon-milkrun {
+						background: #FFD100 url(../images/icon-gls-milkrun.svg) no-repeat center;
+						box-shadow: inset 0px 0px 0px 1px #0619B1;
+						border-radius: 50%;
+						width: 24px;
+						height: 24px;
+						margin-top: -12px;
+						margin-left: 4px;
+					}
+				}
 			}
 
 			&.show-checkbox {
@@ -389,6 +410,20 @@ body.vp-woo-pont-modal-visible {
 			padding: 8px 10px;
 			border-radius: 4px;
 			cursor: pointer;
+			position: relative;
+
+			&.feature-milkrun:after {
+				position: absolute;
+				width: 24px;
+				height: 24px;
+				content: '';
+				background: #FFD100 url(../images/icon-gls-milkrun.svg) no-repeat center;
+				left: 14px;
+				top: 44px;
+				display: block;
+				box-shadow: inset 0px 0px 0px 1px #0619B1;
+				border-radius: 50%;
+			}
 
 			@include respond(mobile) {
 				display: none;
@@ -738,6 +773,21 @@ body.vp-woo-pont-modal-visible {
 
 			&.selected div {
 				animation: vp_woo_pont_bounce_anim 2s infinite
+			}
+
+			&.feature-milkrun {
+				div:after {
+					position: absolute;
+					width: 24px;
+					height: 24px;
+					content: '';
+					background: #FFD100 url(../images/icon-gls-milkrun.svg) no-repeat center;
+					right: -8px;
+					top: -8px;
+					display: block;
+					box-shadow: inset 0px 0px 0px 1px #0619B1;
+					border-radius: 50%;
+				}
 			}
 
 		}

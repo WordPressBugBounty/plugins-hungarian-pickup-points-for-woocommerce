@@ -13,37 +13,41 @@ class VP_Woo_Pont_Pactic {
 
 	public function __construct() {
         $this->pactic_supported_providers = array(
-			'sk_gls' => array(
-				'name' => __('Slovakia GLS', 'vp-woo-pont'),
-				'carrier_id' => 2
+			'gls' => array(
+				'name' => __('GLS', 'vp-woo-pont'),
+				'carrier_id' => 2,
+				'countries' => ['SK', 'HR', 'SI'],
+				'type' => 'gls'
 			),
-			'hr_gls' => array(
-				'name' => __('Croatia GLS', 'vp-woo-pont'),
-				'carrier_id' => 2
-			),
-			'si_gls' => array(
-				'name' => __('Slovenia GLS', 'vp-woo-pont'),
-				'carrier_id' => 2
-			),
-			'ro_sameday' => array(
+			'sameday' => array(
 				'name' => __('Romania Sameday', 'vp-woo-pont'),
-				'carrier_id' => 24
+				'carrier_id' => 24,
+				'countries' => ['RO'],
+				'type' => 'easybox'
 			),
-			'sk_post' => array(
+			'post' => array(
 				'name' => __('Slovakia Post', 'vp-woo-pont'),
-				'carrier_id' => 30
+				'carrier_id' => 30,
+				'countries' => ['SK'],
+				'type' => 'post'
 			),
-			'cz_ppl' => array(
+			'ppl' => array(
 				'name' => __('Czech PPL', 'vp-woo-pont'),
-				'carrier_id' => 35
+				'carrier_id' => 35,
+				'countries' => ['CZ'],
+				'type' => 'pickup-point'
 			),
-			'pl_inpost' => array(
+			'inpost' => array(
 				'name' => __('Poland Inpost', 'vp-woo-pont'),
-				'carrier_id' => 20
+				'carrier_id' => 20,
+				'countries' => ['PL'],
+				'type' => 'pickup-point'
 			),
-			'bg_econt' => array(
+			'econt' => array(
 				'name' => __('Bulgaria Econt', 'vp-woo-pont'),
-				'carrier_id' => 17
+				'carrier_id' => 17,
+				'countries' => ['BG'],
+				'type' => 'pickup-point'
 			),
         );
 
@@ -103,88 +107,103 @@ class VP_Woo_Pont_Pactic {
 
 		//Get enabled providers
 		$enabled_providers = get_option('vp_woo_pont_pactic_external_providers', array());
-
-		//Collect points
-		$results = array();
+		$saved_files = array();
 
 		//Get data for each provider
 		foreach($enabled_providers as $provider_id) {
 
-			//Get country code and name
-			$provider_details = explode('_', $provider_id);
-			$country_code = $provider_details[0];
+			//Collect points
+			$provider = $this->pactic_supported_providers[$provider_id];
 
-			//Make request based on country code
-			$url = 'https://api.pactic.com/webservices/shipment/parcelpoints_v2/downloadparcelpoints.ashx?cdCountry='.$country_code;
-			$request = wp_remote_post($url, array(
-				'headers' => array(
-					'Content-Type' => 'application/json',
-					'Accept' => 'application/json',
-					'ApiKey' => 'jvbjzc7z-9d8g-uwrg-p3uj-f74v2nercahe',
-					'Accept-Encoding' => 'gzip, deflate, br'
-				),
-				'timeout' => 60
-			));
-		
-			//Check for errors
-			if( is_wp_error( $request ) ) {
-				VP_Woo_Pont()->log_error_messages($request, 'gls-import-points');
-				return false;
-			}
+			foreach($provider['countries'] as $country) {
 
-			//Get body
-			$body = wp_remote_retrieve_body( $request );
+				$results = array();
 
-			//Try to convert into json
-			$json = json_decode( $body, true );
-
-			//Check if json exists
-			if($json === null) {
-				return false;
-			}
-
-			//Simplify json, so its smaller to store, faster to load
-			foreach ($json as $carrier) {
-
-				//Check for carrier ID
-				if($carrier['CarrierId'] != $this->pactic_supported_providers[$provider_id]['carrier_id']) {
-					continue;
+				//Make request based on country code
+				$url = 'https://api.pactic.com/webservices/shipment/parcelpoints_v2/downloadparcelpoints.ashx?cdCountry='.$country;
+				$request = wp_remote_post($url, array(
+					'headers' => array(
+						'Content-Type' => 'application/json',
+						'Accept' => 'application/json',
+						'ApiKey' => 'jvbjzc7z-9d8g-uwrg-p3uj-f74v2nercahe',
+						'Accept-Encoding' => 'gzip, deflate, br'
+					),
+					'timeout' => 60
+				));
+			
+				//Check for errors
+				if( is_wp_error( $request ) ) {
+					VP_Woo_Pont()->log_error_messages($request, 'gls-import-points');
+					return false;
 				}
 
-				//Get each point
-				foreach($carrier['ParcelPoints'] as $place) {
+				//Get body
+				$body = wp_remote_retrieve_body( $request );
 
-					//Check for missing coordinates
-					if(!$place['Location']['Coordinates']['Lat']) {
+				//Try to convert into json
+				$json = json_decode( $body, true );
+
+				//Check if json exists
+				if($json === null) {
+					return false;
+				}
+
+				//Simplify json, so its smaller to store, faster to load
+				foreach ($json as $carrier) {
+
+					//Check for carrier ID
+					if($carrier['CarrierId'] != $this->pactic_supported_providers[$provider_id]['carrier_id']) {
 						continue;
 					}
 
-					$result = array(
-						'id' => $place['Code'],
-						'lat' => number_format(str_replace(',', '.', $place['Location']['Coordinates']['Lat']), 5, '.', ''),
-						'lon' => number_format(str_replace(',', '.', $place['Location']['Coordinates']['Long']), 5, '.', ''),
-						'zip' => $place['Location']['PostCode'],
-						'addr' => $place['Location']['Address'],
-						'city' => $place['Location']['City'],
-						'country' =>  strtoupper($place['Location']['CountryCode']),
-						'name' => $place['Name']
-					);
+					//Get each point
+					foreach($carrier['ParcelPoints'] as $place) {
 
-					if(!isset($results[$provider_id])) {
-						$results[$provider_id] = array();
+						//Check for missing coordinates
+						if(!$place['Location']['Coordinates']['Lat']) {
+							continue;
+						}
+
+						$result = array(
+							'id' => $place['Code'],
+							'lat' => number_format(str_replace(',', '.', $place['Location']['Coordinates']['Lat']), 5, '.', ''),
+							'lon' => number_format(str_replace(',', '.', $place['Location']['Coordinates']['Long']), 5, '.', ''),
+							'zip' => $place['Location']['PostCode'],
+							'addr' => $place['Location']['Address'],
+							'city' => $place['Location']['City'],
+							'country' =>  strtoupper($place['Location']['CountryCode']),
+							'name' => $place['Name']
+						);
+
+						if(!isset($results[$provider['type']])) {
+							$results[$provider['type']] = array();
+						}
+		
+						$results[$provider['type']][] = $result;	
 					}
-	
-					$results[$provider_id][] = $result;	
 				}
+
+				//Free up memory immediately after processing
+				unset($json);
+				unset($body);
+				unset($request);
+
+				//Save stuff
+				foreach ($results as $type => $points) {
+					$saved_files[] = VP_Woo_Pont_Import_Database::save_json_file(array(
+						'courier' => 'pactic',
+						'type' => $type,
+						'country' => $country,
+						'points' => $points
+					));
+				}
+					
 			}
 
 		}
 
-		//Save stuff
-		$saved_files = array();
-		foreach ($results as $type => $points) {
-			$saved_files['pactic_'.$type] = VP_Woo_Pont_Import_Database::save_json_file('pactic_'.$type, $points);
-		}
+		//Save to DB
+		VP_Woo_Pont_Import_Database::save_json_files('pactic', $saved_files);
 
         return $saved_files;
     }
@@ -232,6 +251,18 @@ class VP_Woo_Pont_Pactic {
 			$address['company'] = '';
 		}
 		return $address;
+	}
+
+	public function get_enabled_countries() {
+		$enabled_countries = array();
+		$enabled_providers = get_option('vp_woo_pont_pactic_external_providers', array());
+		$providers = $this->pactic_supported_providers;
+		foreach( $enabled_providers as $enabled_provider ) {
+			foreach( $providers[$enabled_provider]['countries'] as $country_code ) {
+				$enabled_countries[] = $country_code;
+			}
+		}
+		return $enabled_countries;
 	}
 
 }

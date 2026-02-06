@@ -11,6 +11,23 @@ if(empty($saved_values)) {
 	$saved_values = array('HU'=>0);
 }
 
+// Get EU countries
+$eu_countries = WC()->countries->get_european_union_countries('eu_vat');
+
+// Get country names for EU countries
+$country_names = array();
+foreach($eu_countries as $country_code) {
+    $country_names[$country_code] = WC()->countries->countries[$country_code];
+}
+
+//Sort ascending
+$unaccented = array_map('remove_accents', array_values($country_names));
+array_multisort($unaccented, SORT_ASC, SORT_STRING | SORT_FLAG_CASE, $country_names);
+$sorted_country_names = $country_names;
+
+//Move HU to the top
+$sorted_country_names = array_merge(['HU' => $sorted_country_names['HU']], $sorted_country_names);
+
 ?>
 
 <tr valign="top">
@@ -30,7 +47,8 @@ if(empty($saved_values)) {
 						<td class="vp-woo-pont-packeta-carriers-table-country">
 							<?php
 							woocommerce_form_field( 'vp_woo_pont_packeta_carriers[][country]', array(
-								'type' => 'country',
+								'type' => 'select',
+								'options' => $sorted_country_names,
 								'custom_attributes' => array(
 									'data-name' => 'vp_woo_pont_packeta_carriers[X][country]'
 								)

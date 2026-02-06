@@ -22,7 +22,6 @@ class WC_Shipping_Pont extends WC_Shipping_Method {
 
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'save_custom_options' ) );
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
-
 	}
 
 	//Initialize settings.
@@ -131,6 +130,7 @@ class WC_Shipping_Pont extends WC_Shipping_Method {
 				$prices[$pricing_id] = array(
 					'cost' => (float)$cost,
 					'conditional' => false,
+					'weight_based' => isset($pricing['weight_based']) ? true : false,
 					'providers' => array(),
 					'countries' => array()
 				);
@@ -154,6 +154,23 @@ class WC_Shipping_Pont extends WC_Shipping_Method {
 					}
 				}
 
+				//Save weight ranges
+				$weight_based = isset($pricing['weight_based']) ? true : false;
+				if($weight_based && isset($pricing['weight_ranges']) && count($pricing['weight_ranges']) > 0) {
+					$prices[$pricing_id]['weight_ranges'] = array();
+					foreach ($pricing['weight_ranges'] as $weight_range) {
+						$min_weight = wc_clean($weight_range['min']);
+						$max_weight = wc_clean($weight_range['max']);
+						$range_cost = wc_clean($weight_range['cost']);
+						$range_cost = str_replace(',','.',$range_cost);
+						$prices[$pricing_id]['weight_ranges'][] = array(
+							'min' => (float)$min_weight,
+							'max' => (float)$max_weight,
+							'cost' => (float)$range_cost
+						);
+					}
+				}
+
 				//Save providers
 				$providers = (isset($pricing['providers']) && count($pricing['providers']) > 0);
 				if($providers) {
@@ -168,6 +185,8 @@ class WC_Shipping_Pont extends WC_Shipping_Method {
 					foreach ($pricing['countries'] as $country) {
 						$prices[$pricing_id]['countries'][] = $country;
 					}
+				} else {
+					$prices[$pricing_id]['countries'] = array('HU');
 				}
 
 			}
@@ -227,6 +246,51 @@ class WC_Shipping_Pont extends WC_Shipping_Method {
 		return $providers;
 	}
 
+	public function get_enabled_countries() {
+
+		//Get a list of providers that support multiple countries
+		$multi_country_support = array('packeta', 'gls', 'dpd', 'kvikk', 'sameday', 'pactic');
+
+		//Get enabled couriers
+		$couriers = $this->get_enabled_couriers();
+
+		//Filter only multi country supported providers
+		$multi_country_support = array_intersect(array_keys($couriers), $multi_country_support);
+
+		//Build array with countries and their supporting couriers
+		$countries_with_couriers = array();
+
+		foreach($multi_country_support as $provider_key) {
+			$provider_countries = VP_Woo_Pont()->providers[$provider_key]->get_enabled_countries();
+			
+			foreach($provider_countries as $country_code) {
+				if(!isset($countries_with_couriers[$country_code])) {
+					$countries_with_couriers[$country_code] = array(
+						'label' => WC()->countries->countries[$country_code],
+						'couriers' => array()
+					);
+				}
+				
+				//Add courier to this country if not already added
+				if(!in_array($provider_key, $countries_with_couriers[$country_code]['couriers'])) {
+					$countries_with_couriers[$country_code]['couriers'][] = $provider_key;
+				}
+			}
+		}
+
+		//Sort by country label ascending
+		$country_labels = array_column($countries_with_couriers, 'label');
+		$unaccented = array_map('remove_accents', $country_labels);
+		array_multisort($unaccented, SORT_ASC, SORT_STRING | SORT_FLAG_CASE, $countries_with_couriers);
+
+		//Move HU to the top
+		if(isset($countries_with_couriers['HU'])) {
+			$countries_with_couriers = array_merge(['HU' => $countries_with_couriers['HU']], $countries_with_couriers);
+		}
+
+		return $countries_with_couriers;
+	}
+
 	//Check if we need to show a notice on the settings screen
 	public function is_local_pickup_feature_needed() {
 		$checkout_page = wc_get_page_id('checkout');
@@ -236,6 +300,18 @@ class WC_Shipping_Pont extends WC_Shipping_Method {
 
 		$pickup_location_settings = get_option('woocommerce_pickup_location_settings', []);
 		return !wc_string_to_bool($pickup_location_settings['enabled'] ?? 'no');
+	}
+
+	public function get_enabled_couriers() {
+		$saved_values = get_option('vp_woo_pont_enabled_providers');
+		$enabled_couriers = array();
+		if($saved_values && is_array($saved_values)) {
+			foreach($saved_values as $provider_id) {
+				$courier = explode('_', $provider_id)[0];
+				$enabled_couriers[$courier] = VP_Woo_Pont_Helpers::get_provider_name($courier, true);
+			}
+		}
+		return $enabled_couriers;
 	}
 
 }

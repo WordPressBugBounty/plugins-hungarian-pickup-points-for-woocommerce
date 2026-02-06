@@ -39,6 +39,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 'pro_notice',
                 'custom_label_template',
                 'kvikk_api',
+                'kvikk_countries',
                 'weight_corrections',
                 'packagings'
             );

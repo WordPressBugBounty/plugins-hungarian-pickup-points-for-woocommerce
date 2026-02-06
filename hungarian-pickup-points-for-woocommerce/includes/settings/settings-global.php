@@ -37,9 +37,8 @@ $settings = array(
 		'title'             => __( 'Default cost', 'vp-woo-pont' ),
 		'type'              => 'text',
 		'placeholder'       => '',
-		'description'       => __('Enter a default price for this shipping option. You can overwrite this later based on conditional logic.', 'vp-woo-pont'),
+		'description'       => __('In case you leave it empty, only the pricing setup below with matching conditions will be used.', 'vp-shipping-rate'),
 		'default'           => '0',
-		'desc_tip'          => true,
 		'sanitize_callback' => array( $this, 'sanitize_cost' ),
 	),
 	'detailed_cost' => array(
@@ -87,6 +86,20 @@ $settings = array(
 		'type' => 'vp_woo_pont_settings_notes',
 		'description' => __('These provider related notes appear when the customer selects a pickup point on the map.', 'vp-woo-pont'),
 		'title' => __( 'Extra notes', 'vp-woo-pont' ),
+	),
+	'kvikk_map_api_key' => array(
+		'type' => 'text',
+		'title' => __( 'Kvikk Map API Key(beta)', 'vp-woo-pont' ),
+		'label' => __( 'Enable', 'vp-woo-pont' ),
+		'description' => __('Enter the Kvikk Map API key to use a modern, vectorized map. Only works with Checkout Blocks. <a target="_blank" href="https://support.kvikk.hu/docs/kvikk-map/introduction">More Info</a>', 'vp-woo-pont')
+	),
+	'hide_state_field' => array(
+		'title'    => __( 'State field', 'vp-woo-pont' ),
+		'label'     => __( 'Hide state field', 'vp-woo-pont' ),
+		'desc_tip' => __( 'Hide state field for Hungary.', 'vp-woo-pont' ),
+		'id'       => 'vp_woo_pont_hide_state_field',
+		'default'  => 'no',
+		'type'     => 'checkbox'
 	)
 );
 

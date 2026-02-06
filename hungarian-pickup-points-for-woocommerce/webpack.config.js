@@ -10,11 +10,13 @@ const defaultRules = defaultConfig.module.rules.filter( ( rule ) => {
 
 const wcDepMap = {
 	'@woocommerce/blocks-checkout': [ 'wc', 'blocksCheckout' ],
+	'@woocommerce/blocks-components': [ 'wc', 'blocksComponents' ],
 	'@woocommerce/shared-hocs': [ 'wc', 'wcBlocksSharedHocs' ],
 };
 
 const wcHandleMap = {
 	'@woocommerce/blocks-checkout': 'wc-blocks-checkout',
+	'@woocommerce/blocks-components': 'wc-blocks-components',
 	'@woocommerce/shared-hocs': 'wc-blocks-shared-hocs',
 };
 
@@ -47,6 +49,13 @@ module.exports = {
 			'js',
 			'pont-picker-block',
 			'frontend.js'
+		),
+		'pont-picker-cart-slot-fill': path.resolve(
+			process.cwd(),
+			'src',
+			'js',
+			'pont-picker-block',
+			'cart-slot-fill.js'
 		),
 	},
 	module: {

@@ -728,6 +728,7 @@ class VP_Woo_Pont_Posta {
 
 		//Check for errors
 		if(is_wp_error($request)) {
+			VP_Woo_Pont()->log_error_messages($request, 'posta-close-shipments');
 			return $request;
 		}
 
@@ -752,10 +753,12 @@ class VP_Woo_Pont_Posta {
 
 		//Check for more errors
 		if(!isset($response['manifest']) || !isset($response['trackingNrPrices'])) {
+			VP_Woo_Pont()->log_error_messages($response, 'posta-close-shipments');
 			return new WP_Error( 'posta_error_unknown', __('Unknown error', 'vp-woo-pont') );
 		}
 
 		if((isset($response['manifest']) && empty($response['manifest'])) || (isset($response['trackingNrPrices']) && empty($response['trackingNrPrices']))) {
+			VP_Woo_Pont()->log_error_messages($response, 'posta-close-shipments');
 			return new WP_Error( 'posta_error_unknown', __('Unknown error', 'vp-woo-pont') );
 		}
 
@@ -880,6 +883,7 @@ class VP_Woo_Pont_Posta {
 
 		//Check for API errors
 		if(wp_remote_retrieve_response_code( $request ) != 200) {
+			VP_Woo_Pont()->log_error_messages($request, 'posta-tracking-info-update');
 			return new WP_Error( 'posta_error_unknown', __('Unknown error', 'vp-woo-pont') );
 		}
 

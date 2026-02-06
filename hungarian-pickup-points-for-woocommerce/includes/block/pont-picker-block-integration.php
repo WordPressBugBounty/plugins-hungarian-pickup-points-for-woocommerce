@@ -88,10 +88,14 @@ use Automattic\WooCommerce\StoreApi\Exceptions\InvalidCartException;
 
 	//An array of key, value pairs of data made available to the block on the client side, easy to translate
 	public function get_script_data() {
+		$styles = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_styles', array());
 		$data = [
 			'defaultText' => __('Select a pickup point', 'vp-woo-pont'),
 			'enabledProviders' => VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers', array('foxpost', 'gls', 'dpd')),
-			'codFeesEnabled' => (get_option('vp_woo_pont_cod_fees'))
+			'codFeesEnabled' => (get_option('vp_woo_pont_cod_fees')),
+			'kvikkMapApiKey' => VP_Woo_Pont_Helpers::get_option('kvikk_map_api_key', ''),
+			'primaryColor' => isset($styles['primary_color']) ? $styles['primary_color'] : '#2471B1',
+			'textColor' => isset($styles['text_color']) ? $styles['text_color'] : '#838383'
 		];
 
 		return $data;

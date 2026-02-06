@@ -7,6 +7,47 @@ use Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils;
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+//This makes the shipping method toggle render in the editor preview
+add_action( 'woocommerce_blocks_cart_enqueue_data', function() {
+
+	//Check if we are in the admin
+	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+		return;
+	}
+	
+	//If we are not in block editor, return
+	$screen = get_current_screen();
+	if ( ! $screen->is_block_editor() ) {
+		return;
+	}
+
+	//Get the asset data registry
+    $asset_data_registry = Automattic\WooCommerce\Blocks\Package::container()->get(
+        Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::class
+    );
+
+	//Check if we don't have any pickup locations yet
+	if($asset_data_registry->exists( 'localPickupLocations' )) {
+		return;
+	}
+
+	//Get the title of the shipping method
+	$shipping_method = get_option('woocommerce_vp_pont_settings', array('title' =>_x( 'Pickup points', 'method title', 'vp-woo-pont' )));
+
+	//And add a sample location
+    $asset_data_registry->add('localPickupLocations', [
+		[
+        	'name' => isset( $shipping_method['title'] ) ? $shipping_method['title'] : _x( 'Pickup points', 'method title', 'vp-woo-pont' ),
+        	'formatted_address' => '',
+        ],
+		[
+			'name' => __('Sample Pickup Point', 'vp-woo-pont'),
+			'formatted_address' => '1234 Sample St, Sample City, 5678, Country',
+		]
+    ]);
+
+});
+
 //Include the dependencies needed to instantiate the block.
 add_action('woocommerce_blocks_loaded', function() {
     require_once __DIR__ . '/pont-picker-block-integration.php';
@@ -17,6 +58,14 @@ add_action('woocommerce_blocks_loaded', function() {
 		}
 	);
 	
+    require_once __DIR__ . '/pont-picker-block-integration-cart.php';
+	add_action(
+		'woocommerce_blocks_cart_block_registration',
+		function( $integration_registry ) {
+			$integration_registry->register( new VP_Woo_Pont_Block_Integration_Cart() );
+		}
+	);
+
 	//Extends the cart schema to include the vat number values
 	if(function_exists('woocommerce_store_api_register_endpoint_data')) {
 		require_once __DIR__ . '/pont-picker-block-endpoints.php';
@@ -41,50 +90,109 @@ add_action('woocommerce_blocks_loaded', function() {
 		$min_cost_label = html_entity_decode(wp_strip_all_tags($min_cost_label));
 		$local_pickup_method_ids  = LocalPickupUtils::get_local_pickup_method_ids();
 		$local_pickup_locations = get_option( 'pickup_location_pickup_locations', [] );
+		$enabled_pickup_locations = array();
+		if ( is_array( $local_pickup_locations ) ) {
+			foreach ( $local_pickup_locations as $location ) {
+				if ( isset( $location['enabled'] ) && $location['enabled'] ) {
+					$enabled_pickup_locations[] = $location;
+				}
+			}
+		}
 
-		$custom_css = '
-			.wc-block-cart__sidebar span.wc-block-components-radio-control__description[id*="vp_pont"] span,
-			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price,
-			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price span,
+		//Setup custom CSS modificationsw, which are not possible at the moment with filters
+		$custom_css = '';
+
+		//Add the to correct pricing display for the shiping method selector
+		$custom_css .= '
+			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price {
+				font-size: 0;
+    			line-height: 1.23;
+			}
+
+			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price:after {
+				content: "'.$min_cost_label.'";
+				font-size: 13px;
+			}
+		';
+
+		//Add the correct pricing display for the local picker method selector
+		$custom_css .= '
 			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"] .wc-block-formatted-money-amount,
 			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"] em {
 				font-size:0;
 			}
 			
-			.wc-block-cart__sidebar span.wc-block-components-radio-control__description[id*="vp_pont"]:after,
-			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price:after,
 			.wc-block-components-local-pickup-select .wc-block-components-radio-control__secondary-label[id*="vp_pont"]:after {
 				content: "'.$min_cost_label.'";
+				font-size: var(--wp--preset--font-size--small, 14px);
 			}
+		';
 
-			#shipping-method .wc-block-checkout__shipping-method-option:nth-child(2) .wc-block-checkout__shipping-method-option-price:after {
-				font-size: .875rem;
-			}
-			
-			.wp-block-woocommerce-cart-order-summary-shipping-block .wc-block-components-totals-item__value:not(.wc-block-formatted-money-amount) strong {
-				display: none;
-			}
-
+		//Hide the shipping cost in order summary if vp_pont is selected and no point is selected yet
+		$custom_css .= '
 			.wp-block-woocommerce-checkout[data--vp-shipping-method*="vp_pont"][data--vp-selected-point=""] .wp-block-woocommerce-checkout-order-summary-shipping-block .wc-block-components-totals-shipping .wc-block-components-totals-item__value:not(.wc-block-formatted-money-amount) strong {
 				display: none;
 			}
 		';
 
-		//If we only have one local pickup method, we can hide the shipping method selection
-		if(count($local_pickup_method_ids) == 2 && count($local_pickup_locations) == 0) {
+		//If we only have one local pickup method, we can hide the shipping method selection in the shipping method block
+		if(count($local_pickup_method_ids) == 3 && count($enabled_pickup_locations) == 0 && in_array('pickup_location', $local_pickup_method_ids) && in_array('local_pickup', $local_pickup_method_ids) && in_array('vp_pont', $local_pickup_method_ids)) {
 			$custom_css .= '
 				.wc-block-components-local-pickup-rates-control {
-					display: none;
+					display: none !important;
 				}
 			';
 		}
 
+		//Fix shipping cost in cart
+		$custom_css .= '
+			.wp-block-woocommerce-cart-order-summary-shipping-block .wc-block-components-totals-shipping[data--vp-shipping-method*="vp_pont"][data--vp-selected-point=""] .wc-block-components-totals-item__value strong {
+				display: none;
+			}
+
+			.wp-block-woocommerce-cart-order-summary-shipping-block .wc-block-components-totals-shipping[data--vp-shipping-method*="vp_pont"][data--vp-selected-point=""] .wc-block-components-totals-item__value:after {
+				content: "'.$min_cost_label.'";
+				font-size: var(--wp--preset--font-size--small, 14px);
+				font-weight: bolder;
+			}
+		';
+
+		//Add icons to the regualr shipping methods list
+		$home_delivery_providers = get_option('vp_woo_pont_home_delivery', array());
+		foreach ($home_delivery_providers as $shipping_method_id => $provider_id) {
+			if(!empty($provider_id)) {
+				$custom_css .= '
+					.wc-block-components-radio-control__option[for*="'.$shipping_method_id.'"] .wc-block-components-radio-control__label {
+						display: flex;
+						align-items: center;
+						gap: 8px;
+					}
+
+					.wc-block-components-radio-control__option[for*="'.$shipping_method_id.'"] .wc-block-components-radio-control__label:before {
+						content: "";
+						display: block;
+						width: 24px;
+						height: 24px;
+						margin: -2px 0;
+						background-size: contain;
+						background-repeat: no-repeat;
+						background-image: url("'.VP_Woo_Pont()::$plugin_url.'/assets/images/icon-'.str_replace('kvikk_', '', $provider_id).'.svg");
+					}
+				';
+			}
+		}
+
 		//Add custom CSS
 		wp_add_inline_style( 'vp-woo-pont-picker-block', $custom_css );
+
+		//Add Kvikk Map script
+		wp_register_script_module('vp-woo-pont-kvikk-map-widget', 'https://cdn.kvikk.hu/map/kvikkMapWidget.js', [], '1.5');
+		wp_enqueue_script_module('vp-woo-pont-kvikk-map-widget');
+
 	});
 
-	//Validate checkout for point selection
-	add_action('woocommerce_store_api_checkout_order_processed', function($order){
+
+	add_action('woocommerce_checkout_validate_order_before_payment', function ( $order, $errors ) {
 
 		//If its the vp_pont shippign method
 		$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
@@ -93,12 +201,7 @@ add_action('woocommerce_blocks_loaded', function() {
 
 		//Check if a a vp_pont is selected
 		if(strpos($chosen_method, 'vp_pont') !== false && !$selected_pont && WC()->cart->needs_shipping()) {
-			$error = new WP_Error('vp_woo_pont_missing_point', apply_filters('vp_woo_pont_required_pont_message', esc_html__( 'Please select a pick-up point or choose a different shipping method.', 'vp-woo-pont')));
-			throw new InvalidCartException(
-				'woocommerce_cart_error',
-				$error,
-				409
-			);
+			$errors->add( 'vp_woo_pont_missing_point', apply_filters('vp_woo_pont_required_pont_message', esc_html__( 'Please select a pick-up point or choose a different shipping method.', 'vp-woo-pont')) );
 		}
 
 		//Validate phone number too(for hungarian numbers only)
@@ -108,18 +211,10 @@ add_action('woocommerce_blocks_loaded', function() {
 			
 		//If it's a hungarian number
 		if(!$is_phone_valid) {
-			$error = new WP_Error('vp_woo_pont_wrong_phone_number', apply_filters('vp_woo_pont_wrong_phone_number', esc_html__( 'Please enter a valid phone number!', 'vp-woo-pont')));
-			throw new InvalidCartException(
-				'woocommerce_cart_error',
-				$error,
-				409
-			);
+			$errors->add( 'vp_woo_pont_wrong_phone_number', apply_filters('vp_woo_pont_required_pont_message', esc_html__( 'Please enter a valid phone number!', 'vp-woo-pont')) );
 		}
 
-		//Save tracking link
-		$order->update_meta_data('_vp_woo_pont_tracking_link', wc_rand_hash() );
-		$order->save();
-	});
+	}, 10, 2);
 
 	//Save order meta
     add_action('woocommerce_store_api_checkout_update_order_from_request', function( \WC_Order $order, \WP_REST_Request $request ) {
@@ -147,6 +242,11 @@ add_action('woocommerce_blocks_loaded', function() {
 				$order->save();
 			}
 		}
+
+		//Save tracking link
+		$order->update_meta_data('_vp_woo_pont_tracking_link', wc_rand_hash() );
+		$order->save();
+
     }, 10, 2);
 
 	//Store pickup point name and location in shipping rate meta, so it shows up in the order details sidebar like the built-in local pickup method
@@ -161,17 +261,14 @@ add_action('woocommerce_blocks_loaded', function() {
 
 				//Get shipping costs
 				$shipping_cost = VP_Woo_Pont_Helpers::calculate_shipping_costs();
-				$min_cost_label = VP_Woo_Pont_Helpers::get_price_display($shipping_cost);
 
 				//Check if we have a selected pickup point
 				$selected_pont = WC()->session->get( 'selected_vp_pont' );
 				if($selected_pont) {
 					$rate->add_meta_data('pickup_location', $rate->label);
 					$rate->label = VP_Woo_Pont_Helpers::get_provider_name($selected_pont['provider'], true);
-
-					if(is_checkout()) {
-						//$rate->label = VP_Woo_Pont_Helpers::get_provider_name($selected_pont['provider'], true).', '.$selected_pont['name'].', '.$selected_pont['zip'].' '.$selected_pont['city'].', '.$selected_pont['addr'];
-					}
+					$rate->label = str_replace('Kvikk - ', '', $rate->label);
+					$rate->label = str_replace('Foxpost - ', '', $rate->label);
 				}
 
 				//And if empty, remove option
@@ -230,8 +327,8 @@ add_action('woocommerce_blocks_loaded', function() {
 
 		//Regenerate the shipping lines item if vp_pont is selected
 		if($is_vp_pont_selected) {
-			$order->remove_order_items( 'shipping' );
-			WC()->checkout->create_order_shipping_lines( $order, $chosen_methods, WC()->shipping()->get_packages() );
+			//$order->remove_order_items( 'shipping' );
+			//WC()->checkout->create_order_shipping_lines( $order, $chosen_methods, WC()->shipping()->get_packages() );
 		}
 
 	}, 10, 2);

@@ -638,6 +638,49 @@
 		padding: 0 !important
 	}
 
+	&-map {
+		height: 300px;
+
+		&-selected {
+			display: flex;
+			align-items: center;
+			padding: 0 15px 10px 15px;
+
+			div {
+				display: flex;
+				flex-direction: column;
+				padding: 5px 10px 5px 10px;
+				border: 1px solid #CCD0D4;
+				position: relative;
+				cursor: pointer;
+				border-radius: 4px;
+				width: 100%;
+
+				&:after {
+					position: absolute;
+					right: 15px;
+					top: 50%;
+					transform: translateY(-50%);
+					content: "\f12a";
+					font-family: 'dashicons';
+					font-size: 24px;
+					line-height: 24px;
+					opacity: 0;
+					transition: all ease 0.2s;
+					color: #2271b1
+				}
+
+				&:hover {
+					background: #f0f6fc;
+
+					&:after {
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+
 	&-providers {
 		margin: 0;
 		display: flex;
@@ -782,6 +825,61 @@
 			}
 		}
 	}
+
+	.vp-woo-pont-marker {
+		div {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			background: url(../images/marker-pin-bg.svg) no-repeat center;
+		}
+
+		&.selected div:before,
+		&-selected div:before {
+			position: absolute;
+			width: 36px;
+			height: 36px;
+			content: '';
+			background: rgba(#2471B1, 0.3);
+			left: 6px;
+			top: 6px;
+			border-radius: 4px;
+			display: block;
+		}
+
+		&-selected {
+			filter: grayscale(1);
+		}
+
+		i {
+			position: absolute;
+			width: 32px;
+			height: 32px;
+			left: 8px;
+			top: 8px;
+			background-position: center;
+			background-size: 100% auto;
+			background-repeat: no-repeat;
+		}
+
+		&.selected div {
+			animation: vp_woo_pont_bounce_anim 2s infinite
+		}
+
+	}
+
+	.marker-cluster.marker-cluster-small {
+		background-color: #49B654;
+	}
+
+	.marker-cluster.marker-cluster-medium {
+		background-color: #F7CB1E;
+	}
+
+	.marker-cluster.marker-cluster-large {
+		background-color: #E86100;
+	}
+
 }
 
 @keyframes vp_woo_pont_blink {

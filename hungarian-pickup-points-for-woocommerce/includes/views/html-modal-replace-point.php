@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<input type="text" id="vp-woo-pont-modal-replace-search" placeholder="<?php esc_attr_e('Search for a pickup point', 'vp-woo-pont'); ?>">
 						</div>
 						<ul class="vp-woo-pont-modal-replace-providers">
-							<?php $enabled_providers = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers'); ?>
+							<?php $enabled_providers = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers', array()); ?>
 							<?php foreach ($enabled_providers as $provider_id): ?>
 								<li>
 									<label>
@@ -31,7 +31,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</label>
 								</li>
 							<?php endforeach; ?>
+							<li>
+								<label>
+									<input type="radio" name="replacement_point_provider" value="map">
+									<i class="vp-woo-pont-provider-icon-custom"></i>
+									<span>Térkép</span>
+								</label>
+							</li>
 						</ul>
+						<div class="vp-woo-pont-modal-replace-map-container" style="display:none;">
+							<div class="vp-woo-pont-modal-replace-map-selected"></div>
+							<div class="vp-woo-pont-modal-replace-map" id="vp-woo-pont-replace-map">
+						</div>
+						</div>
 						<div class="vp-woo-pont-modal-replace-options">
 							<ul class="vp-woo-pont-modal-replace-results"></ul>
 						</div>

@@ -9,6 +9,7 @@ class VP_Woo_Pont_Sameday {
 	public $password = '';
 	public $package_statuses = array();
 	public $package_statuses_tracking = array();
+	public $supported_countries = array();
 
 	public function __construct() {
 		$this->username = VP_Woo_Pont_Helpers::get_option('sameday_username');
@@ -44,6 +45,11 @@ class VP_Woo_Pont_Sameday {
 			'delivery' => array(33, 78),
 			'delivered' => array(9),
 			'errors' => array()
+		);
+
+		$this->supported_countries = array(
+			'HU' => __( 'Hungary', 'vp-woo-pont' ),
+			'RO' => __( 'Romania', 'vp-woo-pont' ),
 		);
 
 	}
@@ -121,6 +127,14 @@ class VP_Woo_Pont_Sameday {
 				'default' => '',
 				'id' => 'sameday_insurance_limit'
 			),
+            array(
+                'type' => 'vp_checkboxes',
+                'title' => __( 'Enabled countries', 'vp-woo-pont' ),
+				'options' => $this->supported_countries,
+                'default' => array('HU'),
+				'desc' => __('Show pickup points in these countries as available options.', 'vp-woo-pont'),
+				'id' => 'sameday_countries'
+            ),
 			array(
 				'type' => 'sectionend'
 			)
@@ -270,6 +284,13 @@ class VP_Woo_Pont_Sameday {
 		if($data['point_id']) {
 			$item['lockerId'] = $data['point_id'];
 			$item['service'] = 15; //Simple locker service, TODO support other services
+		} else {
+
+			//Set a different service code for international home delivery shipments
+			if($order->get_shipping_country() != 'HU') {
+				$item['service'] = 28;
+			}
+
 		}
 
 		//Check for COD
@@ -610,6 +631,11 @@ class VP_Woo_Pont_Sameday {
 		}
 
 		return $tracking_info;
+	}
+
+	public function get_enabled_countries() {
+		$enabled_countries = get_option('vp_woo_pont_sameday_countries', array('HU'));
+		return $enabled_countries;
 	}
 
 }

@@ -41,7 +41,6 @@ class Vp_Woo_Pont_Woo_Webshippy_Compatibility {
 			if($carrier == 'gls') $provider = 'GLS CsomagPont';
 			if($carrier == 'posta') $provider = 'PostaPont';
 			if($carrier == 'packeta') $provider = 'Packeta';
-			if($carrier == 'sprinter') $provider = 'Sprinter';
 			if($carrier == 'dpd') $provider = 'DPD';
 
 			//Fill wc_selected_pont attribute with some custom data

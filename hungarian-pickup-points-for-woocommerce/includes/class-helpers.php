@@ -37,7 +37,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'foxpost' => __('Foxpost', 'vp-woo-pont'),
 				'postapont' => __('Postapont', 'vp-woo-pont'),
 				'packeta' => __('Packeta', 'vp-woo-pont'),
-				'sprinter' => __('Pick Pack Pont', 'vp-woo-pont'),
 				'expressone' => __('Express One', 'vp-woo-pont'),
 				'gls' => __('GLS', 'vp-woo-pont'),
 				'dpd' => __('DPD', 'vp-woo-pont'),
@@ -51,13 +50,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'postapont_posta' => __('Posta', 'vp-woo-pont'),
 				'postapont_automata' => __('Csomagautomata', 'vp-woo-pont'),
 				'postapont_postapont' => __('Postapontok', 'vp-woo-pont'),
-				'foxpost' => __('Foxpost', 'vp-woo-pont'),
-				'packeta_shop' => __('Z-Pont', 'vp-woo-pont'),
+				'foxpost_foxpost' => __('Foxpost', 'vp-woo-pont'),
+				'packeta_zpont' => __('Z-Pont', 'vp-woo-pont'),
 				'packeta_zbox' => __('Z-BOX', 'vp-woo-pont'),
 				'packeta_mpl_automata' => __('MPL Csomagautomata', 'vp-woo-pont'),
 				'packeta_mpl_postapont' => __('MPL Postapont', 'vp-woo-pont'),
 				'packeta_foxpost' => __('Foxpost', 'vp-woo-pont'),
-				'sprinter' => __('Pick Pack Pont', 'vp-woo-pont'),
 				'expressone_omv' => __('OMV', 'vp-woo-pont'),
 				'expressone_alzabox' => __('AlzaBox', 'vp-woo-pont'),
 				'expressone_packeta' => __('Packeta', 'vp-woo-pont'),
@@ -66,7 +64,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'gls_locker' => __('ParcelLocker', 'vp-woo-pont'),
 				'dpd_parcelshop' => __('Csomagpont', 'vp-woo-pont'),
 				'dpd_alzabox' => __('AlzaBox', 'vp-woo-pont'),
-				'sameday' => __('Easybox', 'vp-woo-pont'),
+				'sameday_easybox' => __('Easybox', 'vp-woo-pont'),
+				'sameday_pick-pack-pont' => __('Pick Pack Pont', 'vp-woo-pont'),
 				'custom' => self::get_option('custom_title', __( 'Store Pickup', 'vp-woo-pont' ))
 			));
 		}
@@ -98,6 +97,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'postapont_coop' => __('Coop', 'vp-woo-pont'),
 				'postapont_mediamarkt' => __('Mediamarkt', 'vp-woo-pont'),
 				'dpd' => __('DPD', 'vp-woo-pont'),
+				'mpl' => __('MPL', 'vp-woo-pont'),
+				'packeta_zpont' => __('Z-Pont', 'vp-woo-pont'),
 			);
 			$labels = $old_labels+self::get_external_provider_groups()+self::get_supported_providers()+self::get_supported_providers_for_home_delivery();
 
@@ -109,7 +110,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				$carrier_labels = self::get_external_provider_groups();
 				$carrier = explode('_', $provider_id)[0];
 				if(in_array($carrier, array_keys($carrier_labels)) && strpos($provider_id, '_') !== false) {
-					$provider_name = $carrier_labels[$carrier].' – '.$provider_name;
+					$provider_name = $carrier_labels[$carrier].' - '.$provider_name;
 				}
 			}
 
@@ -121,8 +122,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			$upload_dir = wp_upload_dir( null, false );
 			$basedir = $upload_dir['basedir'] . '/vp-woo-pont-db/';
 			$baseurl = set_url_scheme($upload_dir['baseurl']).'/vp-woo-pont-db/';
-			$random_file_name = substr(md5(rand()),5);
-			$json_file_name = implode( '-', array( $type, $random_file_name ) ).'.json';
+			$json_file_name = $type.'.json';
 			return array('name' => $json_file_name, 'dir' => $basedir, 'path' => $basedir.$json_file_name, 'url' => $baseurl);
 		}
 
@@ -130,32 +130,20 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 		public static function get_json_files() {
 			$paths = array();
 
-			//Get a download folder for the urls
-			$download_folders = self::get_download_folder();
-
 			//Only load enabled providers
 			$enabled_providers = self::get_option('vp_woo_pont_enabled_providers', array());
 
 			//Loop through each pont types
 			foreach ($enabled_providers as $pont_type) {
-
-				//Check if a file name is stored
-				$filename = get_option('_vp_woo_pont_file_'.$pont_type);
-
-				//If file name exists, append to results
-				if($filename) {
-					$paths[] = array(
-						'type' => $pont_type,
-						'url' => $download_folders['url'].$filename.'?v1',
-						'filename' => $filename
-					);
+				$files = get_option('_vp_woo_pont_db_'.$pont_type);
+				if($files) {
+					$paths[$pont_type] = $files;
 				}
-
 			}
 
 			return $paths;
 		}
-
+		
 		public static function get_cart_volume() {
 			// Initializing variables
 			$volume = $rate = 0;
@@ -265,20 +253,23 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			if(!$cart_details) {
 				$cart_details = VP_Woo_Pont_Conditions::get_cart_details('pricings');
 			}
-			
+
+			//Get current customer country
+			$selected_country = WC()->customer->get_shipping_country();
+
 			//Get default cost
 			$default_cost = self::get_option('cost', 0);
 			$default_cost = str_replace(',','.',$default_cost);
 			$default_cost = (float)$default_cost;
 
 			//Get available providers
-			$enabled_providers = get_option('vp_woo_pont_enabled_providers');
+			$enabled_providers = get_option('vp_woo_pont_enabled_providers', array());
 
 			//Get supported providers for labels
 			$supported_providers = self::get_supported_providers();
 
 			//Get custom costs table
-			$costs = get_option('vp_woo_pont_pricing');
+			$costs = get_option('vp_woo_pont_pricing', array());
 			if(!$costs) $costs = array();
 
 			//Loop through each cost setup and see if theres a match
@@ -288,6 +279,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				//Get the price
 				$price = $cost['cost'];
 
+				//Check for weight based pricing conditions
+				if(isset($cost['weight_based']) && $cost['weight_based']) {
+					$price = self::calculate_weight_based_price($cost['weight_ranges'], $cart_details['weight']);
+					if($price === false) {
+						$price = -1;
+					}
+				}
+
+				//Skip if country doesn't match
+				if(isset($cost['countries']) && !in_array($selected_country, $cost['countries'])) {
+					continue;
+				}
+				
 				//Check for conditions if needed
 				if($cost['conditional']) {
 
@@ -310,49 +314,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 					//Append to matched prices array grouped by provider
 					$matched_provider_prices[$provider][] = $price;
 
-					//Create categories based on target countires(packeta for now)
-					if($provider == 'packeta_shop' && isset($cost['countries']) && count($cost['countries']) > 0) {
-						foreach ($cost['countries'] as $country) {
-							$matched_provider_prices[$provider.'_'.$country][] = $price;
-						}
-					}
-
-					//Create categories based on target countires(packeta for now)
-					if($provider == 'packeta_zbox' && isset($cost['countries']) && count($cost['countries']) > 0) {
-						foreach ($cost['countries'] as $country) {
-							$matched_provider_prices[$provider.'_'.$country][] = $price;
-						}
-					}
-
-					//Create categories based on target countires(for gls)
-					if(($provider == 'gls_shop' || $provider == 'gls_locker') && isset($cost['countries']) && count($cost['countries']) > 0) {
-						foreach ($cost['countries'] as $country) {
-							if(substr( $country, 0, 4 ) === "gls_") {
-								$country_code = substr($country, 4);
-								$matched_provider_prices[$provider.'_'.$country_code][] = $price;
-							}
-						}
-					}
-
-					//Create categories based on target countires(for dpd)
-					if(($provider == 'dpd_parcelshop' && isset($cost['countries']) && count($cost['countries']) > 0)) {
-						foreach ($cost['countries'] as $country) {
-							if(substr( $country, 0, 4 ) === "dpd_") {
-								$country_code = substr($country, 4);
-								$matched_provider_prices[$provider.'_'.$country_code][] = $price;
-							}
-						}
-					}
-
 				}
 
 			}
 
 			//Get available providers, and if one is missing from the matched prices, use the default price instead.
 			//If theres no default price, that means the specific shipping provider is unavailable
-			foreach ($enabled_providers as $enabled_provider) {
-				if(!isset($matched_provider_prices[$enabled_provider])) {
-					$matched_provider_prices[$enabled_provider] = array($default_cost);
+			if($default_cost) {
+				foreach ($enabled_providers as $enabled_provider) {
+					if(!isset($matched_provider_prices[$enabled_provider])) {
+						$matched_provider_prices[$enabled_provider] = array($default_cost);
+					}
 				}
 			}
 
@@ -386,10 +358,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				//Check if a free coupon is used and can overwrite the cost
 				if(self::order_has_free_shipping_coupon()) {
 					$provider_to_check = $provider_id;
-					if (strpos($provider_id, 'packeta') !== false) {
-						//$provider_to_check = 'packeta_shop';
-					}
-
 					if(in_array($provider_to_check, self::get_option('vp_woo_pont_free_shipping', array()))) {
 						$cost = 0;
 						$tax = array(0);
@@ -415,13 +383,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 					$label = $supported_providers[$provider_id];
 				}
 
+				//Remove country prefix from label if any
+				$label = preg_replace('/^\[([A-Z]{2})\]\s/', '', $label);
+
 				//Calculate taxes too
 				$provider_costs[$provider_id] = array(
 					'formatted_net' => wc_price($formatted_cost),
 					'formatted_gross' => wc_price($formatted_cost+$formatted_tax),
 					'net' => $cost,
 					'tax' => $tax,
-					'label' => $label
+					'label' => $label,
+					'gross' => $cost + array_sum($tax)
 				);
 
 			}
@@ -437,7 +409,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			$sortedProviders += $provider_costs;
 			$provider_costs = $sortedProviders;
 
-			return apply_filters( 'vp_woo_pont_provider_costs', $provider_costs);
+			return apply_filters( 'vp_woo_pont_provider_costs', $provider_costs, $cart_details);
 		}
 
 		public static function get_shipping_cost() {
@@ -455,18 +427,6 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				//Find the related provider to the selected point
 				if(isset($shipping_costs[$selected_pont['provider']])) {
 					$shipping_cost = $shipping_costs[$selected_pont['provider']];
-					$country = (isset($selected_pont['country'])) ? $selected_pont['country'] : '';
-					$country = strtolower($country);
-
-					//Check for country pricing for packeta
-					if(($selected_pont['provider'] == 'packeta_shop' || $selected_pont['provider'] == 'gls_shop' || $selected_pont['provider'] == 'gls_locker' || $selected_pont['provider'] == 'dpd_parcelshop') && $country && isset($shipping_costs[$selected_pont['provider'].'_'.$country])) {
-						$shipping_cost = $shipping_costs[$selected_pont['provider'].'_'.$country];
-					}
-
-					//Check for country pricing for packeta
-					if($selected_pont['provider'] == 'packeta_shop' && isset($selected_pont['carrier']) && isset($shipping_costs[$selected_pont['provider'].'_'.$selected_pont['carrier']])) {
-						$shipping_cost = $shipping_costs[$selected_pont['provider'].'_'.$selected_pont['carrier']];
-					}
 				}
 
 			} else {
@@ -550,6 +510,14 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 						continue; // Skip this shipping method
 					}
 					$active_methods[$shipping_method->id.':'.$shipping_method->instance_id] = $method_title.' (Worldwide)';
+				}
+			}
+
+			//Get local pickup methods too
+			$local_pickup_methods = get_option( 'pickup_location_pickup_locations', array() );
+			foreach ($local_pickup_methods as $shipping_method_id => $shipping_method) {
+				if ( $shipping_method['enabled'] ) {
+					$active_methods['pickup_location:'.$shipping_method_id] = $shipping_method['name'].' (' . __('Local pickup', 'vp-woo-pont') . ')';
 				}
 			}
 
@@ -1135,7 +1103,25 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				$currency = Yay_Currency\Helpers\YayCurrencyHelper::detect_current_currency();		
 				$value = Yay_Currency\Helpers\YayCurrencyHelper::calculate_price_by_currency( $value, true, $currency );
 			}
-			
+
+			//Compatibility with Currency Switcher for WooCommerce by wpexperts
+			if ( defined( 'WCCS_VERSION' ) && isset( $GLOBALS['WCCS'] ) ) {
+				global $WCCS;
+				$value = $WCCS->wccs_price_conveter( $value, true );
+			}
+
+			//Boster for WooCommerce compatibility
+			if ( function_exists( 'w_c_j' ) && isset( w_c_j()->all_modules['multicurrency'] ) ) {
+				$wcj = w_c_j();
+				$value *= $wcj->all_modules['multicurrency']->get_currency_exchange_rate( $wcj->all_modules['multicurrency']->get_current_currency_code() );
+			}
+
+			//Booster Plus for WooCommerce compatibility
+			if ( function_exists( 'WCJ' ) && isset( WCJ()->all_modules['multicurrency'] ) ) {
+				$wcj = WCJ();
+				$value *= $wcj->all_modules['multicurrency']->get_currency_exchange_rate( $wcj->all_modules['multicurrency']->get_current_currency_code() );
+			}
+
 			return apply_filters('vp_woo_pont_exchange_currency', $value);
 		}
 
@@ -1243,7 +1229,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 		public static function get_enabled_couriers_and_providers() {
 			$providers_for_home_delivery = self::get_supported_providers_for_home_delivery();
-			$enabled_point_providers = self::get_option('vp_woo_pont_enabled_providers');
+			$enabled_point_providers = self::get_option('vp_woo_pont_enabled_providers', array());
 			$enabled_hd_providers = array();
 			foreach($providers_for_home_delivery as $provider_id => $label) {
 				if(self::is_provider_configured($provider_id)) {
@@ -1289,6 +1275,55 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				$available_roles[$role_id] = $role['name'];
 			}
 			return $available_roles;
+		}
+
+		public static function calculate_weight_based_price($ranges, $weight) {
+
+			//Make sure weight is in gramms
+			$weight = wc_get_weight($weight, 'kg');
+			
+			// Check if ranges is valid
+			if (empty($ranges) || !is_array($ranges)) {
+				return false;
+			}
+
+			// Loop through each range and find matching cost
+			// Using: min < weight <= max (exclusive min, inclusive max)
+			// This is standard shipping logic where 1kg falls in "0-1" range
+			foreach ($ranges as $range) {
+				if (!isset($range['min']) || !isset($range['max']) || !isset($range['cost'])) {
+					continue;
+				}
+
+				$min = floatval($range['min']);
+				$max = floatval($range['max']);
+				
+				// Check if weight falls within this range
+				if ($weight > $min && $weight <= $max) {
+					return floatval($range['cost']);
+				}
+			}
+
+			// No matching range found
+			return false;
+		}
+
+		public static function get_enabled_features() {
+			$features = array();
+
+			if(VP_Woo_Pont_Helpers::get_option('gls_milkrun_filter', 'yes') == 'yes') {
+				$features['gls_locker'] = array(
+					'countries' => array('HU'),
+					'id' => 'milkrun',
+					'label' => esc_html__('GLS Locker Express', 'vp-woo-pont'),
+					'description' => esc_html__('Your parcel will be delivered to this GLS Locker by 8 AM on the day after its arrival.', 'vp-woo-pont')
+				);
+
+				//Same as regular GLS
+				$features['kvikk_gls_locker'] = $features['gls_locker'];
+			}
+
+			return apply_filters('vp_woo_pont_enabled_features', $features);
 		}
 
 	}

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Hungarian Pickup Points for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-10 14:45+0000\n"
-"PO-Revision-Date: 2025-06-30 15:52+0000\n"
+"PO-Revision-Date: 2026-01-12 11:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: Magyar\n"
 "Language: hu_HU\n"
@@ -15,8 +15,8 @@ msgstr ""
 "X-Loco-Version: 2.7.1; wp-6.7.2\n"
 "X-Domain: vp-woo-pont"
 
-#: includes/class-tracking.php:341 includes/class-tracking.php:401
-#: includes/class-tracking.php:603 includes/views/html-metabox-tracking.php:37
+#: includes/class-tracking.php:346 includes/class-tracking.php:406
+#: includes/class-tracking.php:608 includes/views/html-metabox-tracking.php:37
 #: templates/order/order-tracking.php:33 templates/order/order-tracking.php:43
 #, php-format
 msgid "%1$s at %2$s"
@@ -30,24 +30,29 @@ msgstr "%d összesen"
 msgid "%d labels generated"
 msgstr "%d címke létrehozva"
 
-#: includes/class-tracking.php:419
+#: includes/class-tracking.php:424
 #, php-format
 msgid "%s ago"
 msgstr "%s telt el"
 
-#: includes/views/html-admin-enabled-providers.php:160
+#: includes/views/html-admin-enabled-providers.php:164
 #, php-format
 msgid "%s custom point"
 msgid_plural "%s custom point"
 msgstr[0] "%s saját hely"
 msgstr[1] "%s saját hely"
 
-#: includes/providers/class-pactic.php:89
+#: includes/providers/class-pactic.php:93
 #, php-format
 msgid "%s Service ID"
 msgstr "%s Service ID"
 
-#: templates/checkout/pont-map.php:42
+#: includes/providers/class-csomagpiac.php:123
+#, php-format
+msgid "%s shipping methods"
+msgstr "%s szállítási módok"
+
+#: templates/checkout/pont-map.php:43
 msgid "(today)"
 msgstr "(ma)"
 
@@ -71,7 +76,7 @@ msgstr "10 nap"
 msgid "100x150mm"
 msgstr "100x150mm"
 
-#: includes/providers/class-packeta.php:111
+#: includes/providers/class-packeta.php:116
 msgid "105x35mm on A4"
 msgstr "105x35mm A4-es lapon"
 
@@ -101,13 +106,13 @@ msgstr "[{site_title}]: Címke létrehozva ehhez a rendeléshez: #{order_number}
 msgid "_85X85"
 msgstr "_85X85"
 
-#: includes/views/html-admin-carriers.php:54
+#: includes/views/html-admin-carriers.php:57
 msgid ""
 "A Kvikk rendszerével kedvezményes áron szállíthatsz WooCommerce áruházadból "
 "a népszerű futárcégekkel egy egyszerű regisztráció után."
 msgstr ""
 
-#: includes/providers/class-sameday.php:35
+#: includes/providers/class-sameday.php:36
 msgid "A központi raktárban"
 msgstr "A központi raktárban"
 
@@ -119,20 +124,20 @@ msgstr ""
 "Létre lett hozva a címke ehhez a rendeléshez: {order_number}. A nyomkövetési "
 "szám {tracking_number}. A PDF fájl csatolva van ehhez az e-mailhez."
 
-#: includes/class-labels.php:203
+#: includes/class-labels.php:218
 msgid "A shipping label was already generated for this order."
 msgstr "Már létre lett hozva egy címke ehhez a rendeléshez."
 
 #: includes/providers/class-posta.php:164
-#: includes/providers/class-sameday.php:112
+#: includes/providers/class-sameday.php:118
 msgid "A4"
 msgstr "A4"
 
-#: includes/providers/class-gls.php:256
+#: includes/providers/class-gls.php:274
 msgid "A4_2x2 (Landscape)"
 msgstr "A4_2x2 (Fekvő)"
 
-#: includes/providers/class-gls.php:258
+#: includes/providers/class-gls.php:276
 msgid "A4_4x1"
 msgstr "A4_4x1"
 
@@ -159,29 +164,29 @@ msgid "A5 portrait"
 msgstr "A5 méretű, álló"
 
 #: includes/providers/class-posta.php:170 includes/providers/class-dpd.php:200
-#: includes/providers/class-csomagpiac.php:105
+#: includes/providers/class-csomagpiac.php:113
 #: includes/providers/class-foxpost.php:122
-#: includes/providers/class-kvikk.php:147
+#: includes/providers/class-kvikk.php:152
 msgid "A6"
 msgstr "A6"
 
 #: includes/providers/class-posta.php:171
-#: includes/providers/class-packeta.php:109
+#: includes/providers/class-packeta.php:114
 #: includes/providers/class-dpd.php:199
-#: includes/providers/class-csomagpiac.php:104
-#: includes/providers/class-gls.php:257
+#: includes/providers/class-csomagpiac.php:112
+#: includes/providers/class-gls.php:275
 #: includes/providers/class-foxpost.php:121
-#: includes/providers/class-kvikk.php:146
+#: includes/providers/class-kvikk.php:151
 #: includes/providers/class-expressone.php:81
 #: includes/providers/class-custom.php:74
 msgid "A6 on A4(recommended)"
 msgstr "A6-os címke A4-es lapon(javasolt)"
 
-#: includes/providers/class-packeta.php:107
+#: includes/providers/class-packeta.php:112
 msgid "A6 on A6"
 msgstr "A6 A6-os lapon"
 
-#: includes/providers/class-sameday.php:113
+#: includes/providers/class-sameday.php:119
 msgid "A6(recommended)"
 msgstr "A6(javasolt)"
 
@@ -189,15 +194,15 @@ msgstr "A6(javasolt)"
 msgid "A7"
 msgstr "A7"
 
-#: includes/providers/class-packeta.php:110
+#: includes/providers/class-packeta.php:115
 msgid "A7 on A4"
 msgstr "A7 A4-es lapon"
 
-#: includes/providers/class-packeta.php:108
+#: includes/providers/class-packeta.php:113
 msgid "A7 on A7"
 msgstr "A7 A7-es lapon"
 
-#: includes/providers/class-packeta.php:112
+#: includes/providers/class-packeta.php:117
 msgid "A8"
 msgstr "A8"
 
@@ -208,6 +213,13 @@ msgstr "Aktiválás"
 #: includes/views/html-metabox.php:53
 msgid "Activate PRO version"
 msgstr "PRO verzió aktiválása"
+
+#: includes/providers/class-gls.php:320
+msgid ""
+"Add a separate filter on the map to only show GLS Locker Express locations"
+msgstr ""
+"Külön szűrő hozzáadása a térképhez, amin a GLS Express automatákat lehet "
+"kiválasztani. "
 
 #: includes/views/html-admin-points-table.php:90
 msgid "Add custom pickup point"
@@ -222,7 +234,7 @@ msgstr "Új automatizálás"
 msgid "Add new correction"
 msgstr "Új korrekció"
 
-#: includes/views/html-admin-pricing-table.php:91
+#: includes/views/html-admin-pricing-table.php:135
 msgid "Add new cost"
 msgstr "Új ár hozzáadása"
 
@@ -294,8 +306,8 @@ msgstr "Csomagpontok"
 msgid "after %1$s status"
 msgstr "%1$s státusznál"
 
-#: includes/providers/class-packeta.php:638
-#: includes/providers/class-packeta.php:656
+#: includes/providers/class-packeta.php:693
+#: includes/providers/class-packeta.php:711
 msgid "Age verification 18+"
 msgstr "18+ ellenőrzés"
 
@@ -311,16 +323,24 @@ msgstr "Megállapodásszám"
 #: includes/views/html-admin-weight-corrections.php:80
 #: includes/views/html-admin-notes.php:54
 #: includes/views/html-admin-notes.php:100
-#: includes/views/html-admin-pricing-table.php:51
-#: includes/views/html-admin-pricing-table.php:114
+#: includes/views/html-admin-pricing-table.php:89
+#: includes/views/html-admin-pricing-table.php:180
 msgid "All"
 msgstr "Összes"
+
+#: includes/views/html-admin-pricing-table.php:38
+msgid "All countries"
+msgstr "Összes ország"
+
+#: includes/views/html-admin-pricing-table.php:31
+msgid "All pickup points"
+msgstr "Összes szolgáltató"
 
 #: includes/class-shipments.php:113
 msgid "All shipments closed successfully."
 msgstr "Minden csomag sikeresen lezárva."
 
-#: includes/class-helpers.php:62 includes/class-helpers.php:68
+#: includes/class-helpers.php:60 includes/class-helpers.php:66
 msgid "AlzaBox"
 msgstr "AlzaBox"
 
@@ -330,7 +350,7 @@ msgstr "Amorf(nem téglatest alakú)"
 
 #: includes/providers/class-posta.php:97
 #: includes/providers/class-foxpost.php:95
-#: includes/providers/class-kvikk.php:127
+#: includes/providers/class-kvikk.php:126
 msgid "API key"
 msgstr "API kulcs"
 
@@ -347,7 +367,7 @@ msgstr "Az API kulcs helyes"
 msgid "API password"
 msgstr "API jelszó"
 
-#: includes/providers/class-csomagpiac.php:62
+#: includes/providers/class-csomagpiac.php:70
 msgid "API Token"
 msgstr "API Token"
 
@@ -369,18 +389,18 @@ msgstr "Korrekció alkalmazása, ha"
 msgid "Apply this fee, if"
 msgstr "Díj alkalmazása, ha az"
 
-#: includes/views/html-admin-pricing-table.php:49
-#: includes/views/html-admin-pricing-table.php:112
+#: includes/views/html-admin-pricing-table.php:87
+#: includes/views/html-admin-pricing-table.php:178
 msgid "Apply this pricing, if"
 msgstr "Ár alkalmazása, ha"
 
-#: includes/views/html-admin-pricing-table.php:72
-#: includes/views/html-admin-pricing-table.php:135
+#: includes/views/html-admin-pricing-table.php:110
+#: includes/views/html-admin-pricing-table.php:201
 msgid "Apply to the following pickup point countries:"
 msgstr "A következő országokban található csomagpontokon:"
 
-#: includes/views/html-admin-pricing-table.php:59
-#: includes/views/html-admin-pricing-table.php:122
+#: includes/views/html-admin-pricing-table.php:97
+#: includes/views/html-admin-pricing-table.php:188
 msgid "Apply to the following pickup points:"
 msgstr "Érvényes a következő átvételi helyeken:"
 
@@ -396,11 +416,11 @@ msgstr "E-mail elején"
 msgid "At the end"
 msgstr "E-mail végén"
 
-#: includes/providers/class-dpd.php:102
+#: includes/providers/class-dpd.php:102 includes/providers/class-gls.php:146
 msgid "Austria"
 msgstr "Ausztria"
 
-#: includes/class-helpers.php:64
+#: includes/class-helpers.php:62
 msgid "Automata"
 msgstr ""
 
@@ -418,7 +438,7 @@ msgstr "Rendelés létrehozásakor"
 msgid "Automations"
 msgstr "Automatizálás"
 
-#: includes/class-tracking.php:744
+#: includes/class-tracking.php:749
 msgid "Available for pickup"
 msgstr "Átvehető az átvételi ponton"
 
@@ -438,11 +458,11 @@ msgstr "Vissza a csomagküldő központban sikertelen kézbesítés után"
 msgid "Bank account number for payments"
 msgstr "Számlaszám az utánvét átutalásához"
 
-#: includes/providers/class-dpd.php:109
+#: includes/providers/class-dpd.php:109 includes/providers/class-gls.php:153
 msgid "Belgium"
 msgstr "Belgium"
 
-#: includes/providers/class-sameday.php:30
+#: includes/providers/class-sameday.php:31
 msgid "Beérkezett futárrendelés"
 msgstr "Beérkezett futárrendelés"
 
@@ -458,11 +478,11 @@ msgstr "Számlázási ország"
 msgid "Border color"
 msgstr "Szegély színe"
 
-#: includes/providers/class-dpd.php:110
+#: includes/providers/class-dpd.php:110 includes/providers/class-gls.php:154
 msgid "Bulgaria"
 msgstr "Bulgária"
 
-#: includes/providers/class-pactic.php:45
+#: includes/providers/class-pactic.php:47
 msgid "Bulgaria Econt"
 msgstr "Bulgária Econt"
 
@@ -490,15 +510,16 @@ msgstr "Becsült ár(nettó)"
 msgid "Cancel"
 msgstr "Mégse"
 
-#: includes/views/html-admin-packeta-carriers.php:23
-#: includes/views/html-admin-carriers.php:18
-#: includes/views/html-admin-carriers.php:25
+#: includes/views/html-admin-packeta-carriers.php:40
+#: includes/views/html-admin-carriers.php:21
+#: includes/views/html-admin-carriers.php:28
 msgid "Carrier"
 msgstr "Szolgáltató"
 
-#: index.php:1030 includes/class-settings.php:17
-#: includes/class-settings.php:195 includes/settings/settings-carriers.php:13
+#: index.php:1061 includes/class-settings.php:17
+#: includes/class-settings.php:196 includes/settings/settings-carriers.php:13
 #: includes/views/html-admin-home-delivery.php:46
+#: includes/views/html-admin-packeta-countries.php:24
 msgid "Carriers"
 msgstr "Szolgáltatók"
 
@@ -514,7 +535,7 @@ msgstr "Kosár végösszeg(kedvezménnyel)"
 msgid "Cash"
 msgstr "Készpénz"
 
-#: index.php:791 index.php:796
+#: index.php:820 index.php:825
 msgid ""
 "Cash on delivery is not available on the selected pick-up point. Please "
 "select a different payment method or pick-up point!"
@@ -522,7 +543,7 @@ msgstr ""
 "A kiválasztott átvevőponton az utánvétes fizetés nem érhető el. Kérjük "
 "válassz egy másik fizetési módot vagy átvételi pontot!"
 
-#: templates/checkout/pont-map.php:51
+#: templates/checkout/pont-map.php:52
 msgid "Cash on delivery is not available on this pickup point!"
 msgstr "Ezen a csomagponton nem érhető el az utánvétes fizetés!"
 
@@ -543,7 +564,7 @@ msgstr "Rendelés módosítása erre: "
 msgid "Change the order status automatically based on the tracking status"
 msgstr "Rendelés státusz automata módosítása csomagkövetési infó alapján"
 
-#: includes/providers/class-sameday.php:79
+#: includes/providers/class-sameday.php:85
 msgid "Check this if you bring your packages to a pickup point in person."
 msgstr "Pipáld be, ha automatában adod fel a csomagokat."
 
@@ -556,7 +577,11 @@ msgstr "Válaszd ki milyen formátumban kerüljön kiküldésre az e-mail."
 msgid "City"
 msgstr "Város"
 
-#: index.php:49 includes/compatibility/class-compatibility.php:18
+#: includes/views/html-admin-pricing-table.php:44
+msgid "Clear filters"
+msgstr "Szűrők törlése"
+
+#: index.php:50 includes/compatibility/class-compatibility.php:18
 msgid "Cloning this object is forbidden."
 msgstr "Cloning this object is forbidden."
 
@@ -572,7 +597,7 @@ msgstr "Cloning this object is forbidden."
 msgid "Close modal panel"
 msgstr "Bezárás"
 
-#: includes/class-labels.php:765
+#: includes/class-labels.php:782
 msgid "Closed"
 msgstr "Lezárva"
 
@@ -580,7 +605,7 @@ msgstr "Lezárva"
 msgid "Closed manually"
 msgstr "Szállítottnak jelölve"
 
-#: includes/views/html-admin-shipments.php:82
+#: includes/views/html-admin-shipments.php:88
 msgid "Closed packages"
 msgstr "Lezárt csomagok"
 
@@ -592,7 +617,7 @@ msgstr "Utánvét"
 msgid "COD % fee"
 msgstr "Utánvét % díj(nettó)"
 
-#: includes/class-cod.php:145 includes/settings/settings-cod.php:25
+#: includes/class-cod.php:148 includes/settings/settings-cod.php:25
 msgid "COD Fee"
 msgstr "Utánvét díja"
 
@@ -637,16 +662,16 @@ msgstr "Cég azonosítószám"
 #: includes/views/html-admin-weight-corrections.php:72
 #: includes/views/html-admin-notes.php:43
 #: includes/views/html-admin-notes.php:89
-#: includes/views/html-admin-pricing-table.php:43
-#: includes/views/html-admin-pricing-table.php:106
+#: includes/views/html-admin-pricing-table.php:63
+#: includes/views/html-admin-pricing-table.php:154
 msgid "Conditional logic"
 msgstr "Feltételes mód"
 
-#: includes/views/html-admin-carriers.php:72
+#: includes/views/html-admin-carriers.php:75
 msgid "Configured"
 msgstr "Konfigurálva"
 
-#: includes/providers/class-gls.php:259
+#: includes/providers/class-gls.php:277
 msgid "Connect"
 msgstr "Connect"
 
@@ -662,7 +687,7 @@ msgstr "Consignee contacted Email delivery notification"
 msgid "Consignee was not in, contact card couldn't be left."
 msgstr "A címzett nem volt bent, értesítőt nem lehetett otthagyni."
 
-#: includes/providers/class-gls.php:246
+#: includes/providers/class-gls.php:264
 #: includes/providers/class-transsped.php:161
 msgid "Contact name"
 msgstr "Kapcsolattartó neve"
@@ -676,7 +701,7 @@ msgstr "Contact Service (CS1)"
 msgid "Content"
 msgstr "Tartalom"
 
-#: includes/class-helpers.php:95 includes/class-helpers.php:98
+#: includes/class-helpers.php:94 includes/class-helpers.php:97
 msgid "Coop"
 msgstr "Coop"
 
@@ -684,7 +709,9 @@ msgstr "Coop"
 msgid "Coordinates"
 msgstr "Koordináták"
 
-#: includes/views/html-admin-packeta-carriers.php:22
+#: includes/views/html-admin-packeta-countries.php:23
+#: includes/views/html-admin-kvikk-countries.php:61
+#: includes/views/html-admin-packeta-carriers.php:39
 msgid "Country"
 msgstr "Ország"
 
@@ -704,35 +731,27 @@ msgstr "API kulcs létrehozása"
 msgid "Croatia"
 msgstr "Horvátország"
 
-#: includes/providers/class-pactic.php:21
-msgid "Croatia GLS"
-msgstr "Horvát GLS"
-
-#: includes/class-helpers.php:52 includes/class-helpers.php:94
+#: includes/class-helpers.php:51 includes/class-helpers.php:93
 msgid "Csomagautomata"
 msgstr "Csomagautomata"
 
-#: includes/providers/class-packeta.php:351
-msgid "Csomagautomata (MPL)"
-msgstr "Csomagautomata (MPL)"
-
-#: includes/providers/class-sameday.php:38
+#: includes/providers/class-sameday.php:39
 msgid "Csomagok a raktárban"
 msgstr "Csomagok a raktárban"
 
-#: includes/views/html-metabox.php:259
+#: includes/views/html-metabox.php:262
 msgid "Csomagolás"
 msgstr ""
 
-#: includes/class-settings.php:243 includes/providers/class-csomagpiac.php:189
+#: includes/class-settings.php:244 includes/providers/class-csomagpiac.php:225
 msgid "Csomagpiac"
 msgstr "Csomagpiac"
 
-#: includes/providers/class-csomagpiac.php:58
+#: includes/providers/class-csomagpiac.php:66
 msgid "Csomagpiac settings"
 msgstr "Csomagpiac beállítások"
 
-#: includes/class-helpers.php:67
+#: includes/class-helpers.php:65
 msgid "Csomagpont"
 msgstr ""
 
@@ -761,7 +780,7 @@ msgstr "Egyedi import dátum"
 msgid "Custom Label"
 msgstr "Egyedi címke"
 
-#: includes/class-settings.php:244 includes/class-helpers.php:84
+#: includes/class-settings.php:245 includes/class-helpers.php:83
 msgid "Custom Labels"
 msgstr "Egyedi címkék"
 
@@ -774,9 +793,9 @@ msgstr "Egyedi mező"
 msgid "Custom order statuses"
 msgstr "Egyedi rendelés állapotok"
 
-#: includes/providers/class-kvikk.php:1282
+#: includes/providers/class-kvikk.php:1354
 #: includes/views/html-modal-packaging.php:38
-#: includes/views/html-metabox.php:273 includes/views/html-metabox.php:275
+#: includes/views/html-metabox.php:276 includes/views/html-metabox.php:278
 msgid "Custom packaging"
 msgstr "Egyedi csomagolás"
 
@@ -841,7 +860,7 @@ msgstr "A vámadatokat rögzíteni kell."
 msgid "Customs data recorded, parcel can be sent do final location."
 msgstr "Vámadatok rögzítve, a csomag elküldhető a végső helyére."
 
-#: includes/providers/class-packeta.php:35
+#: includes/providers/class-packeta.php:37
 msgid "Customs declaration process."
 msgstr "Vámeljárás folyamatban."
 
@@ -849,11 +868,11 @@ msgstr "Vámeljárás folyamatban."
 msgid "Customs parcel locked in origin country."
 msgstr "Customs parcel locked in origin country."
 
-#: includes/providers/class-pactic.php:37
+#: includes/providers/class-pactic.php:35
 msgid "Czech PPL"
 msgstr "Cseh PPL"
 
-#: includes/providers/class-packeta.php:354
+#: includes/providers/class-packeta.php:400
 msgid "Czech Republic (Packeta)"
 msgstr "Csehország (Packeta)"
 
@@ -861,7 +880,7 @@ msgstr "Csehország (Packeta)"
 msgid "Czechia"
 msgstr "Csehország"
 
-#: includes/views/html-admin-enabled-providers.php:126
+#: includes/views/html-admin-enabled-providers.php:131
 msgid "Database"
 msgstr "Adatbázis"
 
@@ -898,7 +917,7 @@ msgstr ""
 msgid "Default package weight(g)"
 msgstr "Alapértelmezett csomag súly(gramm)"
 
-#: includes/providers/class-sameday.php:101
+#: includes/providers/class-sameday.php:107
 msgid "Default package weight(kg)"
 msgstr "Alapértelmezett csomag súly(kg)"
 
@@ -906,7 +925,7 @@ msgstr "Alapértelmezett csomag súly(kg)"
 msgid "Default service"
 msgstr "Alapértelmezett szolgáltatás"
 
-#: includes/views/html-admin-enabled-providers.php:188
+#: includes/views/html-admin-enabled-providers.php:206
 msgid "Delete"
 msgstr "Törlés"
 
@@ -924,8 +943,8 @@ msgstr "Törlés"
 #: includes/views/html-admin-notes.php:91
 #: includes/views/html-admin-points-table.php:33
 #: includes/views/html-admin-points-table.php:103
-#: includes/views/html-admin-pricing-table.php:45
-#: includes/views/html-admin-pricing-table.php:108
+#: includes/views/html-admin-pricing-table.php:69
+#: includes/views/html-admin-pricing-table.php:160
 msgid "delete"
 msgstr "törlés"
 
@@ -943,7 +962,7 @@ msgctxt "Delete point"
 msgid "Are you sure?"
 msgstr "Biztos törlöd?"
 
-#: includes/class-tracking.php:711 includes/providers/class-dpd.php:35
+#: includes/class-tracking.php:716 includes/providers/class-dpd.php:35
 #: includes/views/html-admin-tracking-automations.php:74
 #: includes/views/html-admin-tracking-automations.php:126
 msgid "Delivered"
@@ -973,24 +992,24 @@ msgstr "Nem aláírt szállítólevél"
 msgid "Delivery notes"
 msgstr "Szállítólevelek"
 
-#: includes/providers/class-dpd.php:107
+#: includes/providers/class-dpd.php:107 includes/providers/class-gls.php:151
 msgid "Denmark"
 msgstr "Dánia"
 
-#: includes/settings/settings-global.php:46
+#: includes/settings/settings-global.php:45
 msgid "Detailed cost"
 msgstr "Részletes árazás"
 
 #: includes/settings/settings-labels.php:108
-#: includes/providers/class-csomagpiac.php:83
+#: includes/providers/class-csomagpiac.php:91
 msgid "Developer mode"
 msgstr "Fejlesztői mód"
 
-#: includes/views/html-admin-enabled-providers.php:128
+#: includes/views/html-admin-enabled-providers.php:133
 msgid "Disable COD"
 msgstr "Utánvét tiltás"
 
-#: includes/providers/class-posta.php:284
+#: includes/providers/class-posta.php:292
 msgid "Dispatch from Csomagautomata"
 msgstr "Feladás csomagautomatában"
 
@@ -998,27 +1017,27 @@ msgstr "Feladás csomagautomatában"
 msgid "Disposed"
 msgstr "Disposed"
 
-#: index.php:424 includes/views/html-admin-pro-version.php:24
+#: index.php:441 includes/views/html-admin-pro-version.php:24
 msgid "Documentation"
 msgstr "Dokumentáció"
 
-#: includes/class-settings.php:185
+#: includes/class-settings.php:186
 msgid "Don't use custom page"
 msgstr "Nem használok egyedi oldalt"
 
-#: includes/class-shipments-table.php:125 includes/class-labels.php:772
-#: includes/class-labels.php:793 includes/views/html-admin-shipments.php:97
+#: includes/class-shipments-table.php:125 includes/class-labels.php:789
+#: includes/class-labels.php:810 includes/views/html-admin-shipments.php:103
 #: includes/views/html-metabox.php:145
 #: includes/views/html-modal-generate.php:62
 msgid "Download"
 msgstr "Letöltés"
 
-#: includes/class-labels.php:83 includes/class-labels.php:128
+#: includes/class-labels.php:98 includes/class-labels.php:143
 msgid "Download shipping labels"
 msgstr "Címkék letöltése"
 
-#: includes/class-settings.php:238 includes/class-helpers.php:43
-#: includes/class-helpers.php:81 includes/class-helpers.php:100
+#: includes/class-settings.php:239 includes/class-helpers.php:42
+#: includes/class-helpers.php:80 includes/class-helpers.php:99
 #: includes/views/html-admin-shipments.php:12
 msgid "DPD"
 msgstr "DPD"
@@ -1035,6 +1054,11 @@ msgstr "DPD Classic(Predict)"
 msgid "DPD settings"
 msgstr "DPD beállítások"
 
+#: includes/views/html-admin-pricing-table.php:68
+#: includes/views/html-admin-pricing-table.php:159
+msgid "duplicate"
+msgstr "duplikál"
+
 #: includes/views/html-admin-points-table.php:65
 #: includes/views/html-admin-points-table.php:135
 msgid "E-Mail address"
@@ -1048,11 +1072,11 @@ msgstr "E-mail szöveg"
 msgid "E-mail text position"
 msgstr "E-mail szöveg pozíció"
 
-#: includes/class-helpers.php:69
+#: includes/class-helpers.php:67
 msgid "Easybox"
 msgstr "easybox"
 
-#: includes/views/html-admin-enabled-providers.php:186
+#: includes/views/html-admin-enabled-providers.php:204
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -1066,6 +1090,7 @@ msgstr "E-mail fejléc"
 msgid "Email type"
 msgstr "E-mail típus"
 
+#: includes/settings/settings-global.php:93
 #: includes/settings/settings-labels.php:103
 #: includes/settings/settings-labels.php:111
 #: includes/settings/settings-labels.php:119
@@ -1088,20 +1113,20 @@ msgid "Enable carrier"
 msgstr "Engedélyezés"
 
 #: includes/providers/class-posta.php:123 includes/providers/class-dpd.php:188
-#: includes/providers/class-sameday.php:83
+#: includes/providers/class-sameday.php:89
 #: includes/providers/class-transsped.php:151
 msgid "Enable DEV mode"
 msgstr "Fejlesztő mód"
 
-#: includes/views/html-admin-enabled-providers.php:104
+#: includes/views/html-admin-enabled-providers.php:109
 msgid "Enable local pickup"
 msgstr "Személyes átvétel aktiválása"
 
-#: includes/views/html-admin-enabled-providers.php:198
+#: includes/views/html-admin-enabled-providers.php:216
 msgid "Enable more providers"
 msgstr "Csomagpontok hozzáadása"
 
-#: includes/providers/class-gls.php:192
+#: includes/providers/class-gls.php:210
 msgid "Enable sandbox mode"
 msgstr "Sandbox mód használata"
 
@@ -1116,25 +1141,27 @@ msgstr "E-mail értesítés bekapcsolása"
 msgid "Enable/Disable"
 msgstr "Bekapcsolás/Kikapcsolás"
 
-#: includes/providers/class-dpd.php:206 includes/providers/class-gls.php:185
+#: includes/providers/class-dpd.php:206 includes/providers/class-gls.php:203
+#: includes/providers/class-sameday.php:132
+#: includes/providers/class-kvikk.php:141
 msgid "Enabled countries"
 msgstr "Engedélyezett országok"
 
 #: includes/settings/settings-global.php:21
-#: includes/providers/class-pactic.php:77
+#: includes/providers/class-pactic.php:81
 msgid "Enabled providers"
 msgstr "Engedélyezett szolgáltatók"
 
 #: includes/providers/class-posta.php:219
-#: includes/providers/class-csomagpiac.php:89
+#: includes/providers/class-csomagpiac.php:97
 msgid "Enabled services"
 msgstr "Engedélyezett szolgáltatások"
 
-#: includes/providers/class-gls.php:266
+#: includes/providers/class-gls.php:284
 msgid "Enabled services for home delivery"
 msgstr "Extra szolgáltatások házhozszállításnál"
 
-#: includes/providers/class-gls.php:274
+#: includes/providers/class-gls.php:292
 msgid "Enabled services for point delivery"
 msgstr "Extra szolgáltatások csomagpontra szállításnál"
 
@@ -1154,20 +1181,11 @@ msgstr ""
 "Adj meg egy egyedi mező azonosítót, amit a referenciaszámként szeretnél "
 "használni(order meta)."
 
-#: includes/settings/settings-global.php:40
-msgid ""
-"Enter a default price for this shipping option. You can overwrite this later "
-"based on conditional logic."
-msgstr ""
-"Adj meg egy alapértelmezett szállítási értéket, ami mindegyik opcióra "
-"vonatkozni fog. Utána egyesével, feltételek szerint felül tudod írni ezt az "
-"összeget."
-
 #: includes/providers/class-custom.php:58
 msgid "Enter an image URL"
 msgstr "Adj meg egy kép URL-t"
 
-#: includes/providers/class-csomagpiac.php:71
+#: includes/providers/class-csomagpiac.php:79
 msgid "Enter if you have multiple stores connected to Csomagpiac."
 msgstr "Add meg, ha több boltod is van a Csomagpiachoz kötve. "
 
@@ -1177,13 +1195,27 @@ msgid "Enter recipients (comma separated) for this email. Defaults to %s."
 msgstr ""
 "Adjuk meg a címzetteket (vesszővel elválasztva). Az alapértelmezés: %s."
 
-#: includes/providers/class-kvikk.php:129
+#: includes/settings/settings-global.php:94
+msgid ""
+"Enter the Kvikk Map API key to use a modern, vectorized map. Only works with "
+"Checkout Blocks. <a target=\"_blank\" href=\"https://support.kvikk."
+"hu/docs/kvikk-map/introduction\">More Info</a>"
+msgstr ""
+"Add meg a Kvikk Map API kulcsot egy modern, vektoros térkép használatához. "
+"Csak a pénztár blokkal működik. <a target=\"_blank\" href=\"https://support."
+"kvikk.hu/docs/kvikk-map/introduction\">Bővebb infó</a>"
+
+#: includes/providers/class-kvikk.php:128
 msgid "Enter your account's API key."
 msgstr "Add meg a fiókod API kulcsát."
 
-#: includes/providers/class-csomagpiac.php:64
+#: includes/providers/class-csomagpiac.php:72
 msgid "Enter your account's API token."
 msgstr "Add meg a fiókod API kulcsát. "
+
+#: includes/views/html-admin-kvikk-countries.php:166
+msgid "Enter your API key first to see these options."
+msgstr "Add meg az API kulcsod az elérhető opciók megjelenítéséhez."
 
 #: includes/providers/class-dpd.php:152
 msgid "Enter your DPD account's Weblabel password."
@@ -1193,15 +1225,15 @@ msgstr "Add meg a DPD Weblabel jelszódat."
 msgid "Enter your DPD account's Weblabel username."
 msgstr "Add meg a DPD Weblabel felhasználónevedet."
 
-#: includes/providers/class-gls.php:168
+#: includes/providers/class-gls.php:186
 msgid "Enter your GLS account's e-mail address."
 msgstr "Add meg a GLS fiókod e-mail címét"
 
-#: includes/providers/class-gls.php:174
+#: includes/providers/class-gls.php:192
 msgid "Enter your GLS account's password."
 msgstr "Add meg a GLS fiókod jelszavát"
 
-#: includes/providers/class-gls.php:180
+#: includes/providers/class-gls.php:198
 msgid "Enter your GLS customer number."
 msgstr "Add meg a GLS ügyfélszámod"
 
@@ -1218,7 +1250,7 @@ msgstr ""
 msgid "equal"
 msgstr "egyenlő"
 
-#: includes/providers/class-dpd.php:113
+#: includes/providers/class-dpd.php:113 includes/providers/class-gls.php:157
 msgid "Estonia"
 msgstr "Észtország"
 
@@ -1231,7 +1263,7 @@ msgid "Exchange Service"
 msgstr "Exchange Service"
 
 #: includes/views/html-admin-points-table.php:92
-#: includes/views/html-admin-pricing-table.php:93
+#: includes/views/html-admin-pricing-table.php:137
 msgid "Export"
 msgstr "Export"
 
@@ -1239,8 +1271,8 @@ msgstr "Export"
 msgid "Export / Import cleared"
 msgstr ""
 
-#: includes/class-settings.php:240 includes/class-helpers.php:41
-#: includes/class-helpers.php:83 includes/views/html-admin-shipments.php:11
+#: includes/class-settings.php:241 includes/class-helpers.php:40
+#: includes/class-helpers.php:82 includes/views/html-admin-shipments.php:11
 msgid "Express One"
 msgstr "Express One"
 
@@ -1248,11 +1280,11 @@ msgstr "Express One"
 msgid "Express One settings"
 msgstr "Express One beállítások"
 
-#: includes/settings/settings-global.php:89
+#: includes/settings/settings-global.php:88
 msgid "Extra notes"
 msgstr "Megjegyzések"
 
-#: includes/providers/class-kvikk.php:1203 includes/views/html-metabox.php:212
+#: includes/providers/class-kvikk.php:1275 includes/views/html-metabox.php:212
 #: includes/views/html-metabox.php:230
 msgid "Extra services"
 msgstr "Extra szolgáltatások"
@@ -1278,15 +1310,19 @@ msgstr "Díjak"
 msgid "Fetch tracking information automatically"
 msgstr "Csomagkövetési adatok automata szinkronizálása"
 
-#: index.php:1023
+#: includes/views/html-admin-pricing-table.php:29
+msgid "Filter by:"
+msgstr "Szűrés:"
+
+#: index.php:1054
 msgid "Filter shipping providers"
 msgstr "Szűrés csomagpont szerint"
 
-#: includes/views/html-admin-carriers.php:78
+#: includes/views/html-admin-carriers.php:81
 msgid "Find out more"
 msgstr "Bővebb infó"
 
-#: includes/providers/class-dpd.php:118
+#: includes/providers/class-dpd.php:118 includes/providers/class-gls.php:162
 msgid "Finland"
 msgstr "Finnország"
 
@@ -1314,10 +1350,9 @@ msgstr "Forwarded normal"
 msgid "Forwarded sorting error"
 msgstr "Továbbított szortírozási hiba"
 
-#: includes/class-settings.php:234 includes/class-helpers.php:37
-#: includes/class-helpers.php:54 includes/class-helpers.php:59
-#: includes/class-helpers.php:80 includes/providers/class-packeta.php:355
-#: includes/views/html-admin-shipments.php:10
+#: includes/class-settings.php:235 includes/class-helpers.php:37
+#: includes/class-helpers.php:53 includes/class-helpers.php:58
+#: includes/class-helpers.php:79 includes/views/html-admin-shipments.php:10
 msgid "Foxpost"
 msgstr "Foxpost"
 
@@ -1331,23 +1366,23 @@ msgid "Fragile handling"
 msgstr "Törékeny"
 
 #: includes/providers/class-posta.php:276
-#: includes/providers/class-kvikk.php:168
+#: includes/providers/class-kvikk.php:173
 msgid "Fragile products"
 msgstr "Törékeny termékek"
 
-#: includes/providers/class-dpd.php:106
+#: includes/providers/class-dpd.php:106 includes/providers/class-gls.php:150
 msgid "France"
 msgstr "Franciaország"
 
-#: includes/settings/settings-global.php:62
+#: includes/settings/settings-global.php:61
 msgid "Free shipping"
 msgstr "Ingyenes szállítás"
 
-#: includes/views/html-admin-enabled-providers.php:127
+#: includes/views/html-admin-enabled-providers.php:132
 msgid "Free with coupon"
 msgstr "Kuponnal ingyenes"
 
-#: index.php:515 includes/class-conditions.php:94
+#: index.php:532 includes/class-conditions.php:94
 #: includes/views/html-modal-design.php:11
 #: includes/views/html-admin-points-table.php:14
 msgid "Friday"
@@ -1358,7 +1393,7 @@ msgstr "Péntek"
 msgid "from"
 msgstr "nettó"
 
-#: index.php:1437 includes/settings/settings-global.php:16
+#: index.php:1470 includes/settings/settings-global.php:16
 #: templates/emails/email-vp-woo-pont-order-details.php:23
 #: templates/checkout/pont.php:22 templates/checkout/pont.php:23
 #: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:77
@@ -1372,11 +1407,11 @@ msgstr "Átvételi hely"
 msgid "Full container"
 msgstr "Láda"
 
-#: includes/class-labels.php:799
+#: includes/class-labels.php:816
 msgid "Generate & print label"
 msgstr "Címke nyomtatása"
 
-#: includes/views/html-admin-shipments.php:53
+#: includes/views/html-admin-shipments.php:59
 msgid ""
 "Generate at least one label, after that, you can generate the necessary "
 "delivery note for them."
@@ -1384,10 +1419,14 @@ msgstr ""
 "Generálj egy címkét ezzel a szolgáltatóval, utána tudsz létrehozni "
 "szállítólevelet"
 
-#: includes/views/html-admin-shipments.php:66
 #: includes/views/html-admin-shipments.php:72
+#: includes/views/html-admin-shipments.php:78
 msgid "Generate delivery note"
 msgstr "Feladójegyzék zárása"
+
+#: includes/providers/class-gls.php:311
+msgid "Generate delivery notes"
+msgstr "Szállítólevél generálása"
 
 #: includes/views/html-metabox.php:198
 msgid "Generate label"
@@ -1402,11 +1441,17 @@ msgstr "Biztos generálsz egy címkét?"
 msgid "Generate labels"
 msgstr "Címkék generálása"
 
+#: includes/providers/class-gls.php:313
+msgid "Generate optional GLS delivery notes for the shipments"
+msgstr ""
+"Opcionális szállítólevél generálása a csomagokról a WooCommerce / "
+"Szállítólevelek menüben"
+
 #: includes/views/html-admin-automations.php:84
 msgid "Generate shipping label"
 msgstr "Címke generálása"
 
-#: includes/class-labels.php:81 includes/class-labels.php:126
+#: includes/class-labels.php:96 includes/class-labels.php:141
 #| msgid "Generate pont shipping labels"
 msgid "Generate shipping labels"
 msgstr "Címkék generálása"
@@ -1423,41 +1468,50 @@ msgstr "A címkék generálása folyamatban van, egy kis türelmet."
 msgid "Generating..."
 msgstr "Generálás..."
 
-#: includes/providers/class-dpd.php:101
+#: includes/providers/class-dpd.php:101 includes/providers/class-gls.php:145
 msgid "Germany"
 msgstr "Németország"
 
-#: includes/class-settings.php:236 includes/class-helpers.php:42
-#: includes/class-helpers.php:77
+#: includes/class-settings.php:237 includes/class-helpers.php:41
+#: includes/class-helpers.php:76 includes/providers/class-pactic.php:17
+#: includes/views/html-admin-shipments.php:18
 msgid "GLS"
 msgstr "GLS"
 
-#: includes/providers/class-gls.php:178
+#: includes/providers/class-gls.php:196
 msgid "GLS Customer Number"
 msgstr "GLS ügyfélszám"
 
-#: includes/providers/class-gls.php:172
+#: includes/class-helpers.php:1318 includes/providers/class-gls.php:317
+msgid "GLS Locker Express"
+msgstr "GLS Automata Expressz"
+
+#: includes/providers/class-gls.php:190
 msgid "GLS Password"
 msgstr "GLS jelszó"
 
-#: includes/providers/class-gls.php:162
+#: includes/providers/class-gls.php:180
 msgid "GLS settings"
 msgstr "GLS beállítások"
 
-#: includes/providers/class-gls.php:166
+#: includes/providers/class-gls.php:184
 msgid "GLS Username"
 msgstr "GLS felhasználónév"
 
-#: includes/views/html-admin-shipments.php:49
+#: includes/views/html-admin-shipments.php:55
 msgid "Go to my Kvikk account"
 msgstr "Tovább a Kvikk fiókomba"
+
+#: includes/class-update.php:558
+msgid "Go to Settings"
+msgstr "Tovább a beállításokhoz"
 
 #: includes/views/html-admin-instance.php:18
 msgid "Go to settings"
 msgstr "Tovább a beállításokhoz"
 
 #: includes/views/html-modal-packaging.php:62
-#: includes/views/html-metabox.php:254
+#: includes/views/html-metabox.php:257
 msgid "gramms"
 msgstr "gramm"
 
@@ -1469,11 +1523,11 @@ msgstr "nagyobb, vagy egyenlő"
 msgid "greater than"
 msgstr "nagyobb"
 
-#: includes/providers/class-dpd.php:104
+#: includes/providers/class-dpd.php:104 includes/providers/class-gls.php:148
 msgid "Greece"
 msgstr "Görögország"
 
-#: includes/providers/class-gls.php:132 includes/providers/class-gls.php:156
+#: includes/providers/class-gls.php:132 includes/providers/class-gls.php:174
 msgid "Guaranteed delivery in 24 Hours"
 msgstr "Garantált 24 órán belüli szállítás"
 
@@ -1483,7 +1537,7 @@ msgid "Half container"
 msgstr "Fél"
 
 #: includes/views/html-modal-packaging.php:53
-#: includes/views/html-metabox.php:289
+#: includes/views/html-metabox.php:292
 msgid "Height"
 msgstr "Magasság"
 
@@ -1518,11 +1572,23 @@ msgstr ""
 "Hello {customer_name}! Örömmel értesítünk, hogy rendelésed jelenleg "
 "kézbesítés alatt van!"
 
+#: includes/class-update.php:559
+msgid "Hide notice"
+msgstr "Üzenet elrejtése"
+
 #: includes/views/html-admin-points-table.php:81
 msgid "Hide pickup point"
 msgstr "Átvételi pont elrejtése"
 
-#: includes/views/html-admin-enabled-providers.php:128
+#: includes/settings/settings-global.php:98
+msgid "Hide state field"
+msgstr "Megye mező elrejtése"
+
+#: includes/settings/settings-global.php:99
+msgid "Hide state field for Hungary."
+msgstr "Megye mező elrejtése Magyarország esetén."
+
+#: includes/views/html-admin-enabled-providers.php:133
 msgid "Hide the COD payment method if the provider is selected."
 msgstr "Utánvét elrejtése, ha ez az opció van kiválasztva"
 
@@ -1548,10 +1614,11 @@ msgid "Hungarian Pickup Points & Shipping Labels for WooCommerce"
 msgstr "WooCommerce Csomagpontok és Címkék"
 
 #: includes/providers/class-dpd.php:95 includes/providers/class-gls.php:139
+#: includes/providers/class-sameday.php:51
 msgid "Hungary"
 msgstr "Magyarország"
 
-#: includes/providers/class-packeta.php:349
+#: includes/providers/class-packeta.php:397
 msgid "Hungary (Packeta)"
 msgstr "Magyarország (Packeta)"
 
@@ -1567,7 +1634,7 @@ msgstr ""
 "Ha létrejött egy címke a rendeléshez, automatán megváltoztatja a rendelés "
 "státuszt."
 
-#: includes/views/html-admin-carriers.php:27
+#: includes/views/html-admin-carriers.php:30
 msgid ""
 "If an order has this shipping method, it will use the selected carrier to "
 "generate a shipping label by default."
@@ -1575,8 +1642,8 @@ msgstr ""
 "Ha egy megrendelésnek ez a szállítási módja, akkor a kiválasztott "
 "futárszolgálatot fogja használni a címke létrehozásához."
 
-#: includes/providers/class-packeta.php:641
-#: includes/providers/class-packeta.php:659
+#: includes/providers/class-packeta.php:696
+#: includes/providers/class-packeta.php:714
 msgid ""
 "If checked, the packet will be handed over only to person older than 18 "
 "years(only for internal Packeta pickup points)."
@@ -1584,7 +1651,7 @@ msgstr ""
 "Packeta csomag esetén csak 18 éven felüli veheti át a csomagot(ez csak a "
 "Packeta által üzemeltetett csomagpontokra vonatkozik, egyéb külföldiekre nem)"
 
-#: includes/providers/class-posta.php:286
+#: includes/providers/class-posta.php:294
 msgid ""
 "If checked, the shipment will be marked to be shipped from MPL "
 "Csomagautomata."
@@ -1599,7 +1666,7 @@ msgstr ""
 "Ha nem adsz meg értéket, akkor a csomag értéke, de max 50.000 Ft. Ha ettől "
 "magasabb értéknyilvántartási maximum-határt akarsz, akkor azt add meg."
 
-#: includes/providers/class-kvikk.php:164
+#: includes/providers/class-kvikk.php:169
 msgid ""
 "If empty, it will be the order total up to 50.000 HUF. If you need a higher "
 "maximum limit, enter that here. In this case the value insurance service "
@@ -1609,7 +1676,7 @@ msgstr ""
 "magasabb árat adsz meg, akkor az értékbiztosítás szolgáltatás automatikusan "
 "hozzáadódik a csomaghoz."
 
-#: includes/settings/settings-global.php:84
+#: includes/settings/settings-global.php:83
 msgid ""
 "If enabled, the phone number field will be validated on checkout for "
 "Hungarian phone numbers only."
@@ -1617,12 +1684,12 @@ msgstr ""
 "Ha be van kapcsolva, akkor Magyarországi szállítási cím esetén validálja a "
 "telefonszámot."
 
-#: includes/settings/settings-global.php:63
+#: includes/settings/settings-global.php:62
 msgid "If free shipping is available, make pickup points free too"
 msgstr ""
 "Ha van ingyenes szállítás opció, legyen ingyenes a csomagpontos szállítás is"
 
-#: includes/settings/settings-global.php:55
+#: includes/settings/settings-global.php:54
 msgid ""
 "If theres multiple matches for the shipping cost, use the lowest or the "
 "highest cost."
@@ -1665,7 +1732,7 @@ msgstr ""
 "Ha be van kapcsolva, akkor a követési számot a vásárló fiókjában a "
 "rendelések adatainál is mutatja. "
 
-#: includes/providers/class-packeta.php:99
+#: includes/providers/class-packeta.php:104
 #| msgid ""
 #| "If you are planning to ship worldwide with home delivery, select the "
 #| "provider you want to use in each country."
@@ -1690,7 +1757,7 @@ msgstr ""
 msgid "If you generate a delivery note, this name will be on it as sender."
 msgstr "Ez lesz a feladó neve a szállítólevélen"
 
-#: includes/providers/class-kvikk.php:157
+#: includes/providers/class-kvikk.php:162
 msgid ""
 "If you scan the label in the Kvikk App, you can mark the order to be in this "
 "status."
@@ -1748,15 +1815,11 @@ msgstr ""
 
 #: includes/views/html-modal-import.php:30
 #: includes/views/html-admin-points-table.php:91
-#: includes/views/html-admin-pricing-table.php:92
+#: includes/views/html-admin-pricing-table.php:136
 msgid "Import"
 msgstr "Import"
 
-#: includes/views/html-admin-enabled-providers.php:168
-msgid "Import failed or not finished yet"
-msgstr "Az import nem sikerült, vagy még nem lett kész"
-
-#: includes/class-import.php:815 includes/providers/class-packeta.php:608
+#: includes/class-import.php:808 includes/providers/class-packeta.php:663
 msgid "Import run successfully."
 msgstr "Importálás sikeres."
 
@@ -1773,7 +1836,7 @@ msgstr "Fontos: az import lecseréli a már meglévő árakat"
 msgid "In transit (Consolidation)"
 msgstr "Úton (Consolidation)"
 
-#: includes/views/html-admin-carriers.php:74
+#: includes/views/html-admin-carriers.php:77
 msgid "Inactive"
 msgstr "Inaktív"
 
@@ -1781,7 +1844,7 @@ msgstr "Inaktív"
 msgid "Inbound damaged"
 msgstr "Bejövő sérült"
 
-#: includes/providers/class-packeta.php:81
+#: includes/providers/class-packeta.php:86
 msgid "Indication"
 msgstr "Webáruház/feladó jelzése"
 
@@ -1793,7 +1856,7 @@ msgstr "Magánszemély"
 msgid "Inside the EU"
 msgstr "EU-n belül"
 
-#: includes/providers/class-sameday.php:119
+#: includes/providers/class-sameday.php:125
 msgid "Insurance maximum limit"
 msgstr "Biztosítás maximális összege"
 
@@ -1821,11 +1884,11 @@ msgstr "Inverz MPL Europe Standard"
 msgid "Invoice"
 msgstr "Számla"
 
-#: includes/settings/settings-global.php:74
+#: includes/settings/settings-global.php:73
 msgid "Invoice line item description"
 msgstr "Számla tétel leírás"
 
-#: includes/settings/settings-global.php:68
+#: includes/settings/settings-global.php:67
 msgid "Invoice line item name"
 msgstr "Számla tétel elnevezés"
 
@@ -1834,11 +1897,11 @@ msgstr "Számla tétel elnevezés"
 msgid "Invoice number"
 msgstr "Számla sorszáma"
 
-#: includes/providers/class-dpd.php:114
+#: includes/providers/class-dpd.php:114 includes/providers/class-gls.php:158
 msgid "Ireland"
 msgstr "Írország"
 
-#: includes/providers/class-dpd.php:105
+#: includes/providers/class-dpd.php:105 includes/providers/class-gls.php:149
 msgid "Italy"
 msgstr "Olaszország"
 
@@ -1858,33 +1921,45 @@ msgstr "Termékek száma a rendelésben"
 msgid "JWT Token"
 msgstr "JWT Token"
 
-#: includes/providers/class-sameday.php:29
+#: includes/providers/class-sameday.php:30
 msgid "Kiállított fuvarokmány"
 msgstr "Kiállított fuvarokmány"
 
-#: includes/class-settings.php:233 includes/providers/class-kvikk.php:106
-#: includes/providers/class-kvikk.php:258
+#: includes/class-settings.php:234 includes/providers/class-kvikk.php:105
+#: includes/providers/class-kvikk.php:312
 #: includes/views/html-admin-shipments.php:8
 msgid "Kvikk"
 msgstr "Kvikk"
 
-#: includes/providers/class-kvikk.php:267
+#: includes/providers/class-kvikk.php:321
 msgid "Kvikk DPD"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:265
+#: includes/providers/class-kvikk.php:323
+msgid "Kvikk Foxpost"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:319
 msgid "Kvikk FámaFutár"
 msgstr "Kvikk FámaFutár"
 
-#: includes/providers/class-kvikk.php:266
+#: includes/providers/class-kvikk.php:320
 msgid "Kvikk GLS"
 msgstr ""
 
-#: includes/providers/class-kvikk.php:263
+#: includes/settings/settings-global.php:92
+msgid "Kvikk Map API Key(beta)"
+msgstr "Kvikk Map API kulcs(beta)"
+
+#: includes/providers/class-kvikk.php:317
 msgid "Kvikk MPL"
 msgstr "Kvikk MPL"
 
-#: includes/providers/class-kvikk.php:122
+#: includes/providers/class-kvikk.php:324
+msgid "Kvikk Packeta"
+msgstr ""
+
+#: includes/providers/class-kvikk.php:121
 msgid "Kvikk settings"
 msgstr "Kvikk beállítások"
 
@@ -1897,7 +1972,7 @@ msgstr "L"
 msgid "Label"
 msgstr "Címke"
 
-#: includes/providers/class-packeta.php:104
+#: includes/providers/class-packeta.php:109
 msgid "Label format"
 msgstr "Címke formátum"
 
@@ -1941,7 +2016,7 @@ msgstr "Címkék sikeresen létrehozva. Frissítsd az oldalt, hogy lásd őket. 
 msgid "Large cluster color"
 msgstr "Térkép nagy csoport színe"
 
-#: includes/providers/class-sameday.php:95
+#: includes/providers/class-sameday.php:101
 msgid "Large package"
 msgstr "Nagy csomag"
 
@@ -1949,7 +2024,7 @@ msgstr "Nagy csomag"
 msgid "Last updated"
 msgstr "Frissítve"
 
-#: includes/providers/class-dpd.php:111
+#: includes/providers/class-dpd.php:111 includes/providers/class-gls.php:155
 msgid "Latvia"
 msgstr "Lettország"
 
@@ -1957,14 +2032,14 @@ msgstr "Lettország"
 msgid "Learn More"
 msgstr "Bővebb infó"
 
-#: includes/providers/class-sameday.php:120
+#: includes/providers/class-sameday.php:126
 msgid "Leave it empty if theres no max limit(it will use the order total)."
 msgstr ""
 "Hagyd üresen, ha nincs maximális limit (a rendelés végösszegét fogja "
 "használni)."
 
 #: includes/views/html-modal-packaging.php:45
-#: includes/views/html-metabox.php:281
+#: includes/views/html-metabox.php:284
 msgid "Length"
 msgstr "Hossz"
 
@@ -1992,19 +2067,23 @@ msgstr "Licensz kulcs"
 msgid "License type"
 msgstr "Licenc típus"
 
-#: includes/providers/class-dpd.php:112
+#: includes/providers/class-dpd.php:112 includes/providers/class-gls.php:156
 msgid "Lithuania"
 msgstr "Litvánia"
+
+#: includes/class-helpers.php:520
+msgid "Local pickup"
+msgstr "Személyes átvétel"
 
 #: includes/providers/class-custom.php:56
 msgid "Logo on label"
 msgstr "Logó a címkén"
 
-#: includes/settings/settings-global.php:57
+#: includes/settings/settings-global.php:56
 msgid "Lowest"
 msgstr "Legolcsóbb"
 
-#: includes/providers/class-dpd.php:116
+#: includes/providers/class-dpd.php:116 includes/providers/class-gls.php:160
 msgid "Luxembourg"
 msgstr "Luxemburg"
 
@@ -2013,15 +2092,15 @@ msgstr "Luxemburg"
 msgid "M"
 msgstr "M"
 
-#: includes/views/html-admin-enabled-providers.php:127
+#: includes/views/html-admin-enabled-providers.php:132
 msgid "Make this option free if the cart contains a free shipping coupon."
 msgstr "Legyen ingyenes, ha van egy ingyenes szállítás kupon a kosrában."
 
-#: includes/views/html-admin-carriers.php:79
+#: includes/views/html-admin-carriers.php:82
 msgid "Manage"
 msgstr "Beállítások"
 
-#: includes/views/html-admin-carriers.php:79
+#: includes/views/html-admin-carriers.php:82
 #, php-format
 msgid "Manage the \"%s\" carrier"
 msgstr "%s beállítások"
@@ -2030,8 +2109,8 @@ msgstr "%s beállítások"
 msgid "Map design"
 msgstr "Térkép design"
 
-#: includes/views/html-admin-shipments.php:67
 #: includes/views/html-admin-shipments.php:73
+#: includes/views/html-admin-shipments.php:79
 msgid "Mark as shipped"
 msgstr "Megjelölés szállítottként"
 
@@ -2051,7 +2130,12 @@ msgstr ""
 "A csomagkövetési adatok módosítása kiszállítás alatt állapotra, ha a "
 "rendelés ebbe a státuszba került"
 
-#: includes/class-helpers.php:96 includes/class-helpers.php:99
+#: includes/views/html-admin-pricing-table.php:77
+#: includes/views/html-admin-pricing-table.php:168
+msgid "Max weight(kg)"
+msgstr "Maximum súly(kg)"
+
+#: includes/class-helpers.php:95 includes/class-helpers.php:98
 msgid "Mediamarkt"
 msgstr "Mediamarkt"
 
@@ -2064,9 +2148,16 @@ msgid "Method title"
 msgstr "Szállítási mód neve"
 
 #: includes/class-wc-shipping-pont.php:13
+#: includes/block/pont-picker-block.php:35
+#: includes/block/pont-picker-block.php:40
 msgctxt "method title"
 msgid "Pickup points"
 msgstr "Csomagpontok"
+
+#: includes/views/html-admin-pricing-table.php:76
+#: includes/views/html-admin-pricing-table.php:167
+msgid "Min weight(kg)"
+msgstr "Minimum súly(kg)"
 
 #: includes/providers/class-transsped.php:122
 msgid "Mini container"
@@ -2076,22 +2167,22 @@ msgstr "Mini"
 msgid "Modify"
 msgstr "Módosítás"
 
-#: includes/class-helpers.php:93 includes/class-helpers.php:97
+#: includes/class-helpers.php:92 includes/class-helpers.php:96
 msgid "Mol"
 msgstr "Mol"
 
-#: index.php:511 includes/class-conditions.php:90
+#: index.php:528 includes/class-conditions.php:90
 #: includes/views/html-modal-design.php:7
 #: includes/views/html-admin-points-table.php:10
 msgid "Monday"
 msgstr "Hétfő"
 
-#: includes/class-settings.php:237 includes/class-helpers.php:78
-#: includes/views/html-admin-shipments.php:9
+#: includes/class-settings.php:238 includes/class-helpers.php:77
+#: includes/class-helpers.php:100 includes/views/html-admin-shipments.php:9
 msgid "MPL"
 msgstr "MPL"
 
-#: includes/class-helpers.php:57
+#: includes/class-helpers.php:56
 msgid "MPL Csomagautomata"
 msgstr "MPL Csomagautomata"
 
@@ -2099,11 +2190,11 @@ msgstr "MPL Csomagautomata"
 msgid "MPL Europe Standard"
 msgstr "MPL Europe Standard"
 
-#: includes/class-helpers.php:58
+#: includes/class-helpers.php:57
 msgid "MPL Postapont"
 msgstr "MPL Postapont"
 
-#: includes/settings/settings-global.php:50
+#: includes/settings/settings-global.php:49
 msgid "Multiple cost logic"
 msgstr "Árazás logika"
 
@@ -2111,11 +2202,11 @@ msgstr "Árazás logika"
 #: includes/views/html-admin-packagings.php:23
 #: includes/views/html-admin-packagings.php:63
 #: includes/views/html-admin-packagings.php:64
-#: includes/views/html-admin-enabled-providers.php:125
+#: includes/views/html-admin-enabled-providers.php:130
 msgid "Name"
 msgstr "Név"
 
-#: includes/providers/class-dpd.php:108
+#: includes/providers/class-dpd.php:108 includes/providers/class-gls.php:152
 msgid "Netherlands"
 msgstr "Hollandia"
 
@@ -2126,6 +2217,10 @@ msgstr "Következő fizetés"
 #: includes/class-conditions.php:104
 msgid "No"
 msgstr "Nem"
+
+#: includes/views/html-admin-enabled-providers.php:184
+msgid "No database found"
+msgstr "Adatbázis nem található"
 
 #: includes/class-shipments.php:51
 msgid "No packages selected."
@@ -2143,7 +2238,7 @@ msgstr "Nem szállított idő hiányában"
 msgid "not equal"
 msgstr "nem egyenlő"
 
-#: includes/views/html-admin-carriers.php:60
+#: includes/views/html-admin-carriers.php:63
 msgid "Not paired"
 msgstr "Nincs párosítva"
 
@@ -2169,12 +2264,12 @@ msgstr "Csomagok száma"
 #: includes/views/html-admin-weight-corrections.php:83
 #: includes/views/html-admin-notes.php:57
 #: includes/views/html-admin-notes.php:103
-#: includes/views/html-admin-pricing-table.php:54
-#: includes/views/html-admin-pricing-table.php:117
+#: includes/views/html-admin-pricing-table.php:92
+#: includes/views/html-admin-pricing-table.php:183
 msgid "of the following match"
 msgstr "feltétel teljesül"
 
-#: includes/class-helpers.php:61
+#: includes/class-helpers.php:59
 msgid "OMV"
 msgstr "OMV"
 
@@ -2186,8 +2281,8 @@ msgstr "OMV"
 #: includes/views/html-admin-weight-corrections.php:81
 #: includes/views/html-admin-notes.php:55
 #: includes/views/html-admin-notes.php:101
-#: includes/views/html-admin-pricing-table.php:52
-#: includes/views/html-admin-pricing-table.php:115
+#: includes/views/html-admin-pricing-table.php:90
+#: includes/views/html-admin-pricing-table.php:181
 msgid "One"
 msgstr "Egyik"
 
@@ -2205,7 +2300,7 @@ msgid "Open in Kvikk"
 msgstr "Megnyitom a Kvikk-ben"
 
 #: includes/views/html-admin-points-table.php:73
-#: templates/checkout/pont-map.php:32
+#: templates/checkout/pont-map.php:33
 msgid "Opening hours"
 msgstr "Nyitvatartás"
 
@@ -2257,7 +2352,7 @@ msgstr "Rendelésszám"
 msgid "Order number"
 msgstr "Rendelés száma"
 
-#: includes/class-tracking.php:699
+#: includes/class-tracking.php:704
 msgid "Order Ready"
 msgstr "Csomag előkészítve"
 
@@ -2265,7 +2360,7 @@ msgstr "Csomag előkészítve"
 msgid "Order Status"
 msgstr "Rendelés státusz"
 
-#: includes/class-tracking.php:223
+#: includes/class-tracking.php:228
 #, php-format
 msgid ""
 "Order status updated, because of the following tracking status event: %s"
@@ -2279,7 +2374,7 @@ msgstr "Rendelés összesen"
 msgid "Order type"
 msgstr "Rendelés típusa"
 
-#: includes/class-tracking.php:693
+#: includes/class-tracking.php:698
 msgid "Ordered"
 msgstr "Rögzített rendelés"
 
@@ -2287,7 +2382,7 @@ msgstr "Rögzített rendelés"
 msgid "Orders"
 msgstr "Rendelések"
 
-#: includes/class-tracking.php:707 includes/providers/class-dpd.php:36
+#: includes/class-tracking.php:712 includes/providers/class-dpd.php:36
 #: includes/providers/class-dpd.php:68
 #: includes/emails/class-email-delivery.php:12
 msgid "Out for delivery"
@@ -2301,16 +2396,17 @@ msgstr "kézbesítés alatt"
 msgid "Outside of the EU"
 msgstr "EU-n kívüli "
 
-#: includes/providers/class-kvikk.php:176
+#: includes/providers/class-posta.php:284
+#: includes/providers/class-kvikk.php:181
 msgid "Oversized products"
 msgstr "Terjedelmes termékek"
 
 #: includes/class-shipments-table.php:172
-#: includes/providers/class-sameday.php:93
+#: includes/providers/class-sameday.php:99
 msgid "Package"
 msgstr "Csomag"
 
-#: includes/views/html-metabox.php:313
+#: includes/views/html-metabox.php:316
 msgid "Package contents"
 msgstr "Csomag tartalma"
 
@@ -2318,7 +2414,7 @@ msgstr "Csomag tartalma"
 msgid "Package contents text"
 msgstr "Csomag tartalma szöveg"
 
-#: includes/class-tracking.php:410 includes/class-tracking.php:595
+#: includes/class-tracking.php:415 includes/class-tracking.php:600
 #: includes/views/html-metabox-tracking.php:45
 #: templates/order/order-tracking.php:63
 msgid "Package created. Tracking number:"
@@ -2328,7 +2424,7 @@ msgstr "Címke létrehozva. Követési szám:"
 msgid "Package delivered order status"
 msgstr "Csomag kiszállítva rendelés státusz"
 
-#: index.php:1382
+#: index.php:1414
 msgid "Package details"
 msgstr "Csomag adatai"
 
@@ -2344,7 +2440,7 @@ msgstr "Csomag leghosszabb mérete"
 msgid "Package not shipped yet, waiting for tracking number."
 msgstr "Csomag még nem lett feladva, csomagkövetési számra vár"
 
-#: includes/providers/class-sameday.php:90
+#: includes/providers/class-sameday.php:96
 msgid "Package type"
 msgstr "Csomag típus"
 
@@ -2352,11 +2448,11 @@ msgstr "Csomag típus"
 msgid "Package volume"
 msgstr "Csomag térfogat"
 
-#: includes/class-conditions.php:48 includes/views/html-metabox.php:252
+#: includes/class-conditions.php:48 includes/views/html-metabox.php:255
 msgid "Package weight"
 msgstr "Csomag súly"
 
-#: includes/providers/class-kvikk.php:155
+#: includes/providers/class-kvikk.php:160
 msgid "Packaged order status"
 msgstr "Csomagolt rendelés állapot"
 
@@ -2369,7 +2465,7 @@ msgstr "Csomagok"
 msgid "Packaging"
 msgstr "Csomagolás"
 
-#: includes/views/html-metabox.php:157 includes/views/html-metabox.php:297
+#: includes/views/html-metabox.php:157 includes/views/html-metabox.php:300
 msgid "Packaging Quantity"
 msgstr "Csomagolás darabszám"
 
@@ -2377,64 +2473,64 @@ msgstr "Csomagolás darabszám"
 msgid "Packaging quantity missing."
 msgstr "Csomagolás darabszám hiányzik."
 
-#: includes/providers/class-packeta.php:25
+#: includes/providers/class-packeta.php:27
 msgid "Packet has been accepted at our branch."
 msgstr "A csomagot a kirendeltségünkön elfogadták."
 
-#: includes/providers/class-packeta.php:33
+#: includes/providers/class-packeta.php:35
 msgid "Packet has been cancelled."
 msgstr "A csomagot törölték."
 
-#: includes/providers/class-packeta.php:34
+#: includes/providers/class-packeta.php:36
 msgid "Packet has been collected and is on its way."
 msgstr "A csomagot összegyűjtöttük, és már úton van."
 
-#: includes/providers/class-packeta.php:28
+#: includes/providers/class-packeta.php:30
 msgid ""
 "Packet has been delivered to its destination, the customer has been informed "
 "via SMS."
 msgstr "A csomag megérkezett a célállomásra, az ügyfelet SMS-ben értesítettük."
 
-#: includes/providers/class-packeta.php:29
+#: includes/providers/class-packeta.php:31
 msgid "Packet has been handed over to an external carrier for delivery."
 msgstr "A csomagot átadták egy külső szállítónak kézbesítésre."
 
-#: includes/providers/class-packeta.php:32
+#: includes/providers/class-packeta.php:34
 msgid "Packet has been returned to the sender."
 msgstr "A csomag visszakerült a feladóhoz."
 
-#: includes/providers/class-packeta.php:31
+#: includes/providers/class-packeta.php:33
 msgid "Packet is on the way back to the sender."
 msgstr "A csomag úton van vissza a feladóhoz."
 
-#: includes/providers/class-packeta.php:27
+#: includes/providers/class-packeta.php:29
 #: includes/providers/class-custom.php:18
 msgid "Packet is on the way."
 msgstr "A csomag már úton van."
 
-#: includes/providers/class-packeta.php:26
+#: includes/providers/class-packeta.php:28
 msgid "Packet is waiting to be dispatched."
 msgstr "A csomag elküldésre vár."
 
-#: includes/providers/class-packeta.php:30
+#: includes/providers/class-packeta.php:32
 #: includes/providers/class-custom.php:19
 msgid "Packet was picked up by the customer."
 msgstr "A csomagot az ügyfél átvette."
 
-#: includes/class-settings.php:235 includes/class-helpers.php:39
-#: includes/class-helpers.php:63 includes/class-helpers.php:79
+#: includes/class-settings.php:236 includes/class-helpers.php:39
+#: includes/class-helpers.php:61 includes/class-helpers.php:78
 msgid "Packeta"
 msgstr "Packeta"
 
-#: includes/providers/class-packeta.php:69
+#: includes/providers/class-packeta.php:74
 msgid "Packeta API key"
 msgstr "Packeta API kulcs"
 
-#: includes/providers/class-packeta.php:75
+#: includes/providers/class-packeta.php:80
 msgid "Packeta API password"
 msgstr "Packeta API jelszó"
 
-#: includes/providers/class-packeta.php:65
+#: includes/providers/class-packeta.php:70
 msgid "Packeta settings"
 msgstr "Packeta beállítások"
 
@@ -2442,11 +2538,11 @@ msgstr "Packeta beállítások"
 msgid "Packeta Support"
 msgstr "Packeta támogatás"
 
-#: includes/class-settings.php:242 includes/providers/class-pactic.php:197
+#: includes/class-settings.php:243 includes/providers/class-pactic.php:216
 msgid "Pactic"
 msgstr "Pactic"
 
-#: includes/providers/class-pactic.php:72
+#: includes/providers/class-pactic.php:76
 msgid "Pactic settings"
 msgstr "Pactic beállítások"
 
@@ -2497,15 +2593,15 @@ msgstr "A csomagot a vámhatóságok lefoglalták."
 msgid "Parcel was refused because the goods was not ordered."
 msgstr "A csomagot visszautasították, mert az árut nem rendelték meg."
 
-#: includes/class-helpers.php:66
+#: includes/class-helpers.php:64
 msgid "ParcelLocker"
 msgstr "Csomagautomata"
 
-#: includes/class-helpers.php:65
+#: includes/class-helpers.php:63
 msgid "ParcelShop"
 msgstr "CsomagPont"
 
-#: includes/providers/class-sameday.php:63
+#: includes/providers/class-sameday.php:69
 #: includes/providers/class-expressone.php:66
 msgid "Password"
 msgstr "Jelszó"
@@ -2523,7 +2619,7 @@ msgstr "db"
 msgid "PDF document"
 msgstr "PDF dokumentum"
 
-#: includes/providers/class-sameday.php:76
+#: includes/providers/class-sameday.php:82
 msgid "Personal drop-off"
 msgstr "Csomagfeladás automatában"
 
@@ -2531,11 +2627,11 @@ msgstr "Csomagfeladás automatában"
 msgid "Pick and Ship/Return cancelled"
 msgstr "Pick and Ship/Return törölve"
 
-#: includes/class-helpers.php:40 includes/class-helpers.php:60
+#: includes/class-helpers.php:68
 msgid "Pick Pack Pont"
 msgstr "Pick Pack Pont"
 
-#: includes/class-tracking.php:746
+#: includes/class-tracking.php:751
 msgid "Picked up"
 msgstr "Átvéve"
 
@@ -2543,11 +2639,12 @@ msgstr "Átvéve"
 msgid "Pickup date"
 msgstr "Felvétel napja"
 
-#: includes/providers/class-csomagpiac.php:75
+#: includes/providers/class-csomagpiac.php:83
 msgid "Pickup Point"
 msgstr "Felvételi pont"
 
-#: includes/providers/class-sameday.php:68
+#: includes/providers/class-sameday.php:74
+#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:107
 msgid "Pickup point"
 msgstr "Feladási hely"
 
@@ -2559,7 +2656,11 @@ msgstr "Csomagpont szolgáltató"
 msgid "Pickup point name"
 msgstr "Átvételi hely neve"
 
-#: index.php:1024 includes/class-settings.php:215
+#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:94
+msgid "Pickup point shipping"
+msgstr "Csomagpontos szállítás"
+
+#: index.php:1055 includes/class-settings.php:216
 #: includes/views/html-admin-points-title.php:7
 #| msgid "Pickup point list"
 msgid "Pickup points"
@@ -2570,11 +2671,11 @@ msgid "Pickup points map for WooCommerce stores in the hungarian market"
 msgstr ""
 "Csomagpont választás, címke nyomtatás és csomagkövetés WooCommerce boltokhoz"
 
-#: index.php:819 includes/block/pont-picker-block.php:111
+#: index.php:848 includes/block/pont-picker-block.php:214
 msgid "Please enter a valid phone number!"
 msgstr "Kérlek, ellenőrizd a megadott telefonszámot!"
 
-#: includes/providers/class-packeta.php:84
+#: includes/providers/class-packeta.php:89
 msgid ""
 "Please enter your Indication that you can fund in your Packeta account under "
 "User Informations / Senders."
@@ -2583,7 +2684,7 @@ msgstr ""
 "Webáruház/feladó jelzése oszlopban lévő értéket add meg(ne az azonosítót, "
 "hanem a sima szöveges értéket)"
 
-#: includes/providers/class-packeta.php:72
+#: includes/providers/class-packeta.php:77
 msgid ""
 "Please enter your Packeta API key if you plan to use it. This is required to "
 "get an up to date list of pickup points. Sign in into your Packeta account, "
@@ -2594,7 +2695,7 @@ msgstr ""
 "Packeta fiókodba, jobb felül kattints a nevedre és itt megtalálod az API "
 "kulcsot. "
 
-#: includes/providers/class-packeta.php:78
+#: includes/providers/class-packeta.php:83
 msgid ""
 "Please enter your Packeta API password. This is required to generate labels "
 "for packages. Sign in into your Packeta account, click on your name top "
@@ -2604,11 +2705,11 @@ msgstr ""
 "generálni. Lépj be a Packeta fiókodba, kattints a nevedre jobb felül és ott "
 "megtalálod az API jelszót."
 
-#: index.php:785 index.php:807 includes/block/pont-picker-block.php:96
+#: index.php:814 index.php:836 includes/block/pont-picker-block.php:204
 msgid "Please select a pick-up point or choose a different shipping method."
 msgstr "Válassz egy átvételi helyet, vagy egy másik szállítási módot."
 
-#: includes/providers/class-dpd.php:103
+#: includes/providers/class-dpd.php:103 includes/providers/class-gls.php:147
 msgid "Poland"
 msgstr "Legnyelország"
 
@@ -2616,7 +2717,7 @@ msgstr "Legnyelország"
 msgid "Poland Inpost"
 msgstr "Lengyel Inpost"
 
-#: includes/providers/class-dpd.php:117
+#: includes/providers/class-dpd.php:117 includes/providers/class-gls.php:161
 msgid "Portugal"
 msgstr "Portugália"
 
@@ -2624,7 +2725,7 @@ msgstr "Portugália"
 msgid "Position the location to the center of the map."
 msgstr "Mozgasd a térképet a megfelelő helyre."
 
-#: includes/class-helpers.php:51 includes/class-helpers.php:92
+#: includes/class-helpers.php:50 includes/class-helpers.php:91
 msgid "Posta"
 msgstr "Posta"
 
@@ -2636,11 +2737,7 @@ msgstr "Posta(MPL) beállítások"
 msgid "Postapont"
 msgstr "Postapont"
 
-#: includes/providers/class-packeta.php:350
-msgid "Postapont (MPL)"
-msgstr "Postapont (MPL)"
-
-#: includes/class-helpers.php:53
+#: includes/class-helpers.php:52
 msgid "Postapontok"
 msgstr "Postapontok"
 
@@ -2648,7 +2745,7 @@ msgstr "Postapontok"
 msgid "Postcode"
 msgstr "Irányítószám"
 
-#: includes/providers/class-gls.php:130 includes/providers/class-gls.php:154
+#: includes/providers/class-gls.php:130 includes/providers/class-gls.php:172
 msgid "Preadvice Service (SM2)"
 msgstr "Preadvice Service (SM2)"
 
@@ -2668,17 +2765,17 @@ msgstr "Ár betűméret"
 msgid "Primary color"
 msgstr "Elsődleges szín"
 
-#: includes/class-labels.php:777 includes/class-labels.php:797
+#: includes/class-labels.php:794 includes/class-labels.php:814
 #: includes/views/html-modal-generate.php:63
 msgid "Print"
 msgstr "Nyomtatás"
 
-#: includes/class-labels.php:82 includes/class-labels.php:127
+#: includes/class-labels.php:97 includes/class-labels.php:142
 #: includes/views/html-modal-layout-selector.php:24
 msgid "Print shipping labels"
 msgstr "Címkék nyomtatása"
 
-#: index.php:428
+#: index.php:445
 msgid "Pro version"
 msgstr "Pro verzió"
 
@@ -2736,15 +2833,16 @@ msgid "Reference number meta key"
 msgstr "Referenciaszám egyedi mező"
 
 #: includes/class-background-generator.php:82
+#: includes/views/html-admin-enabled-providers.php:190
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: includes/views/html-admin-packeta-countries.php:33
-#: includes/views/html-admin-packeta-carriers.php:63
+#: includes/views/html-admin-packeta-countries.php:55
+#: includes/views/html-admin-packeta-carriers.php:81
 msgid "Refresh providers"
 msgstr "Szolgáltatók frissítése"
 
-#: includes/class-tracking.php:604
+#: includes/class-tracking.php:609
 #, php-format
 msgid "Refreshed %s ago"
 msgstr "Frissítés óta eltelt %s"
@@ -2786,27 +2884,28 @@ msgstr "Csomag őrzési ideje"
 msgid "Return to sender(System return)"
 msgstr "Visszatérés a feladóhoz(System return)"
 
-#: includes/providers/class-packeta.php:36
+#: includes/providers/class-packeta.php:38
 msgid "Reverse packet has been accepted at our branch."
 msgstr "Reverse packet has been accepted at our branch."
 
 #: includes/providers/class-dpd.php:96 includes/providers/class-gls.php:140
+#: includes/providers/class-sameday.php:52
 msgid "Romania"
 msgstr "Románia"
 
-#: includes/providers/class-packeta.php:352
+#: includes/providers/class-packeta.php:398
 msgid "Romania (Packeta)"
 msgstr "Románia (Packeta)"
 
-#: includes/providers/class-pactic.php:29
+#: includes/providers/class-pactic.php:23
 msgid "Romania Sameday"
 msgstr "Román Sameday"
 
-#: includes/providers/class-posta.php:255 includes/providers/class-gls.php:287
+#: includes/providers/class-posta.php:255 includes/providers/class-gls.php:305
 msgid "Round cash on delivery amount"
 msgstr "Utánvét összeg kerekítése"
 
-#: includes/providers/class-posta.php:257 includes/providers/class-gls.php:289
+#: includes/providers/class-posta.php:257 includes/providers/class-gls.php:307
 msgid "Round the COD amount to 5."
 msgstr "Utánvét összeg kerekítése a Ft kerekítési szabályoknak megfelelően"
 
@@ -2820,7 +2919,7 @@ msgstr "Automatizmus futtatása, ha"
 msgid "S"
 msgstr "S"
 
-#: templates/checkout/pont-map.php:56
+#: templates/checkout/pont-map.php:57
 msgid ""
 "Sadly there are no results for this keyword. Please try to look for another "
 "place, or select a nearby pickup point on the map."
@@ -2828,20 +2927,24 @@ msgstr ""
 "Sajnos a keresett kifejezésre nincs találat. Próbálj meg egy másik helyre "
 "keresni, vagy a térképen válassz ki egy hozzád közeli átvételi pontot"
 
-#: includes/class-settings.php:239 includes/class-helpers.php:44
-#: includes/class-helpers.php:82
+#: includes/class-settings.php:240 includes/class-helpers.php:43
+#: includes/class-helpers.php:81
 msgid "Sameday"
 msgstr "Sameday"
 
-#: includes/providers/class-sameday.php:31
+#: includes/providers/class-sameday.php:32
 msgid "Sameday raktárában"
 msgstr "Sameday raktárában"
 
-#: includes/providers/class-sameday.php:54
+#: includes/providers/class-sameday.php:60
 msgid "Sameday settings"
 msgstr "Sameday beállítások"
 
-#: index.php:516 includes/class-conditions.php:95
+#: includes/block/pont-picker-block.php:44
+msgid "Sample Pickup Point"
+msgstr "Minta átvételi pont"
+
+#: index.php:533 includes/class-conditions.php:95
 #: includes/views/html-modal-design.php:12
 #: includes/views/html-admin-points-table.php:15
 msgid "Saturday"
@@ -2878,7 +2981,7 @@ msgid "Select a pick-up point"
 msgstr "Válassz egy átvételi helyet"
 
 #: includes/views/html-metabox.php:125
-#: includes/block/pont-picker-block-integration.php:92
+#: includes/block/pont-picker-block-integration.php:93
 msgid "Select a pickup point"
 msgstr "Csomagpont kiválasztása"
 
@@ -2894,7 +2997,7 @@ msgstr ""
 "termékeknek állítasz be, így a címke létrehozásakor automatán megjelöli "
 "törékenynek a csomagot."
 
-#: includes/providers/class-kvikk.php:173
+#: includes/providers/class-kvikk.php:178
 msgid ""
 "Select a product attribute or shipping class that relates to fragile "
 "shipments, so the generated label will be marked as fragile by default."
@@ -2903,7 +3006,8 @@ msgstr ""
 "termékeknek állítasz be, így a címke létrehozásakor automatán megjelöli "
 "törékenynek a csomagot."
 
-#: includes/providers/class-kvikk.php:181
+#: includes/providers/class-posta.php:289
+#: includes/providers/class-kvikk.php:186
 msgid ""
 "Select a product attribute or shipping class that relates to oversized "
 "shipments, so the generated label will be marked as oversized by default."
@@ -2922,7 +3026,7 @@ msgstr "Válaszd ki, hogy a Weblabel-t vagy az új Shipping API-t használod. "
 msgid "Select provider"
 msgstr "Szolgáltató kiválasztása"
 
-#: includes/views/html-admin-enabled-providers.php:117
+#: includes/views/html-admin-enabled-providers.php:122
 msgid "Select providers"
 msgstr "Csomagpontok kiválasztása"
 
@@ -2943,21 +3047,30 @@ msgstr ""
 msgid "Select the file that you previously exported."
 msgstr "Töltsd fel azt a fájlt, amit korábban exportáltál. "
 
+#: includes/providers/class-csomagpiac.php:128
+msgid ""
+"Select the shipping methods related to this courier if you want to guarantee "
+"it for your shipment"
+msgstr ""
+"Válaszd ki azokat a szállítási módokat, amikhez ezt a garantált "
+"futárszolgálatot szeretnéd használni(ha üresen hagyod, a Csomagpiac "
+"automatán választ hozzá egyet). "
+
 #: includes/views/html-modal-layout-selector.php:19
 msgid "Select the starting position of your sticker"
 msgstr "Válaszd ki a címke pozícióját"
 
-#: includes/views/html-admin-enabled-providers.php:109
+#: includes/views/html-admin-enabled-providers.php:114
 msgid "Select which providers you want to show to your customers."
 msgstr ""
 "Állítsd be, hogy melyik szolgáltatók csomagpontjait választhatják ki a "
 "vásárlók."
 
-#: includes/providers/class-kvikk.php:137
+#: includes/providers/class-kvikk.php:136
 msgid "Select your sender ID."
 msgstr "Válaszd ki a feladási címet."
 
-#: includes/providers/class-csomagpiac.php:79
+#: includes/providers/class-csomagpiac.php:87
 msgid ""
 "Select your shipment's pickup point(available after you enter your API token)"
 msgstr ""
@@ -3000,24 +3113,24 @@ msgstr "Feladó címe"
 msgid "Sender Address ID"
 msgstr "Feladó cím azonosító"
 
-#: includes/providers/class-gls.php:207
+#: includes/providers/class-gls.php:225
 msgid "Sender address info(building, stairway, etc...)"
 msgstr "Feladó közterület jellege(út, utca stb...)"
 
-#: includes/providers/class-gls.php:212
+#: includes/providers/class-gls.php:230
 msgid "Sender address(just the number)"
 msgstr "Feladó házszám"
 
-#: includes/providers/class-gls.php:202
+#: includes/providers/class-gls.php:220
 msgid "Sender address(street)"
 msgstr "Feladó közterület neve"
 
-#: includes/providers/class-posta.php:138 includes/providers/class-gls.php:217
+#: includes/providers/class-posta.php:138 includes/providers/class-gls.php:235
 #: includes/providers/class-transsped.php:171
 msgid "Sender city"
 msgstr "Feladó város"
 
-#: includes/providers/class-gls.php:238
+#: includes/providers/class-gls.php:256
 msgid "Sender country"
 msgstr "Feladó ország"
 
@@ -3025,27 +3138,27 @@ msgstr "Feladó ország"
 msgid "Sender Details"
 msgstr "Feladó adatai"
 
-#: includes/providers/class-posta.php:153 includes/providers/class-gls.php:232
+#: includes/providers/class-posta.php:153 includes/providers/class-gls.php:250
 #: includes/providers/class-transsped.php:187
 msgid "Sender email address"
 msgstr "Feladó e-mail címe"
 
-#: includes/providers/class-kvikk.php:133
+#: includes/providers/class-kvikk.php:132
 msgid "Sender ID"
 msgstr "Feladó azonosító"
 
-#: includes/providers/class-posta.php:128 includes/providers/class-gls.php:197
+#: includes/providers/class-posta.php:128 includes/providers/class-gls.php:215
 #: includes/providers/class-foxpost.php:129
 #: includes/providers/class-transsped.php:156
 msgid "Sender name"
 msgstr "Feladó neve"
 
-#: includes/providers/class-posta.php:148 includes/providers/class-gls.php:227
+#: includes/providers/class-posta.php:148 includes/providers/class-gls.php:245
 #: includes/providers/class-transsped.php:181
 msgid "Sender phone number"
 msgstr "Feladó telefonszáma"
 
-#: includes/providers/class-posta.php:143 includes/providers/class-gls.php:222
+#: includes/providers/class-posta.php:143 includes/providers/class-gls.php:240
 #: includes/providers/class-transsped.php:176
 msgid "Sender postcode"
 msgstr "Feladó irányítószáma"
@@ -3062,7 +3175,7 @@ msgstr "Szolgáltatás típusa nemzetközi csomagok esetén"
 msgid "Set an extra note based on the selected shipping provider."
 msgstr "Állíts be extra megjegyzést a kiválasztott szolgáltató alapján."
 
-#: templates/checkout/pont-map.php:53
+#: templates/checkout/pont-map.php:54
 msgid "Set as my pick-up point"
 msgstr "Átvétel itt"
 
@@ -3070,7 +3183,7 @@ msgstr "Átvétel itt"
 msgid "Set order status"
 msgstr "Státusz módosítás"
 
-#: index.php:411
+#: index.php:428
 msgid "Settings"
 msgstr "Beállítások"
 
@@ -3090,7 +3203,7 @@ msgstr ""
 "Beállítások a nyomkövetéssel és csomagkövetési számmal kapcsolatban. Ezek a "
 "funkciók a PRO verzióban érhetők el."
 
-#: includes/views/html-admin-enabled-providers.php:158
+#: includes/views/html-admin-enabled-providers.php:162
 msgid "Setup custom points"
 msgstr "Saját pontok beállítása"
 
@@ -3107,7 +3220,7 @@ msgstr ""
 "Állíts be extra díjakat ehhez a fizetési módhoz különböző feltételek alapján."
 " Elérhető a <a href=\"%s\">PRO verzióban</a>."
 
-#: includes/views/html-admin-enabled-providers.php:199
+#: includes/views/html-admin-enabled-providers.php:217
 msgid "Setup home delivery"
 msgstr "Házhozszállítás beállítása"
 
@@ -3128,7 +3241,7 @@ msgstr "Beállítás varázsló"
 msgid "Setup your own pickup points, like store pickup."
 msgstr "Állítsd be a saját csomagpontjaidat, például bolti átvételhez."
 
-#: includes/class-labels.php:727 templates/shipments-table.php:96
+#: includes/class-labels.php:743 templates/shipments-table.php:96
 msgid "Shipment"
 msgstr "Csomag"
 
@@ -3143,7 +3256,7 @@ msgstr "Futárszolgálat"
 msgid "Shipment closed. Generated delivery note ID: %s"
 msgstr "Csomag feladás lezárva. Szállítólevél azonosító: %s "
 
-#: includes/providers/class-kvikk.php:596
+#: includes/providers/class-kvikk.php:668
 msgid "Shipment not found"
 msgstr "Csomag nem található"
 
@@ -3151,11 +3264,11 @@ msgstr "Csomag nem található"
 msgid "Shipment Summary"
 msgstr "Szállítólevél"
 
-#: includes/class-tracking.php:457 includes/settings/settings-tracking.php:19
+#: includes/class-tracking.php:462 includes/settings/settings-tracking.php:19
 msgid "Shipment tracking"
 msgstr "Csomagkövetés"
 
-#: includes/providers/class-kvikk.php:1111
+#: includes/providers/class-kvikk.php:1183
 msgid "Shipment was marked as packaged in the Kvikk App."
 msgstr "Csomagoltnak jelölve a Kvikk App-ban"
 
@@ -3164,13 +3277,18 @@ msgstr "Csomagoltnak jelölve a Kvikk App-ban"
 msgid "Shipments"
 msgstr "Szállítólevelek"
 
-#: includes/class-tracking.php:703 includes/providers/class-dpd.php:34
+#: includes/class-tracking.php:708 includes/providers/class-dpd.php:34
 msgid "Shipped"
 msgstr "Csomag úton van"
 
 #: includes/settings/settings-tracking.php:49
 msgid "shipped"
 msgstr "feladva"
+
+#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:41
+#: includes/compatibility/modules/class-vp-woo-pont-checkoutwc.php:101
+msgid "Shipping"
+msgstr "Szállítás"
 
 #: templates/shipments-table.php:95
 msgid "Shipping Address"
@@ -3196,38 +3314,40 @@ msgstr "Szállítási osztály"
 msgid "Shipping confirmation"
 msgstr "Futárnak átadva"
 
-#: index.php:702 index.php:917 includes/class-helpers.php:1210
+#: index.php:731 index.php:946 includes/class-helpers.php:1196
 msgctxt "shipping cost summary on cart & checkout"
 msgid "free"
 msgstr "ingyenes"
 
-#: index.php:717 includes/class-helpers.php:1225
+#: index.php:746 includes/class-helpers.php:1211
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(free & 1 shipping cost)"
 msgid "free or %s"
 msgstr "ingyen vagy %s"
 
-#: index.php:722 includes/class-helpers.php:1230
+#: index.php:751 includes/class-helpers.php:1216
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(free & 1+ shipping cost)"
 msgid "free & from %s"
 msgstr "ingyen vagy %s-tól"
 
-#: index.php:712 includes/class-helpers.php:1220
+#: index.php:741 includes/class-helpers.php:1206
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(multiple shipping costs)"
 msgid "from %s"
 msgstr "%s-tól"
 
-#: index.php:707 includes/class-helpers.php:1215
+#: index.php:736 includes/class-helpers.php:1201
 #, php-format
 msgctxt "shipping cost summary on cart & checkout(one shipping cost only)"
 msgid "%s"
 msgstr "%s"
 
 #: includes/views/html-metabox-kvikk.php:35
-#: includes/views/html-admin-pricing-table.php:38
-#: includes/views/html-admin-pricing-table.php:101
+#: includes/views/html-admin-pricing-table.php:54
+#: includes/views/html-admin-pricing-table.php:78
+#: includes/views/html-admin-pricing-table.php:145
+#: includes/views/html-admin-pricing-table.php:169
 msgid "Shipping cost(net)"
 msgstr "Szállítási költség(nettó)"
 
@@ -3235,21 +3355,21 @@ msgstr "Szállítási költség(nettó)"
 msgid "Shipping in % calculation"
 msgstr "Szállítási díj a % számításban"
 
-#: includes/class-labels.php:568
+#: includes/class-labels.php:584
 msgid "Shipping informations"
 msgstr "Szállítás és csomag"
 
-#: index.php:1385 includes/class-shipments-table.php:291
+#: index.php:1417 includes/class-shipments-table.php:291
 #: includes/views/html-admin-automations.php:36
 #: includes/views/html-metabox.php:142
 msgid "Shipping label"
 msgstr "Címke"
 
-#: includes/class-labels.php:269
+#: includes/class-labels.php:284
 msgid "Shipping label generated successfully."
 msgstr "Címke sikeresen létrehozva."
 
-#: includes/class-labels.php:264
+#: includes/class-labels.php:279
 #, php-format
 msgid "Shipping label generated successfully. ID number: %s"
 msgstr "Címke sikeresen generálva. Azonosító: %s"
@@ -3258,7 +3378,7 @@ msgstr "Címke sikeresen generálva. Azonosító: %s"
 msgid "Shipping label generated!"
 msgstr "Címke sikeresen létrehozva!"
 
-#: includes/class-labels.php:339
+#: includes/class-labels.php:354
 #, php-format
 msgid ""
 "Shipping label removed from the order only. You still need to remove it in "
@@ -3267,7 +3387,7 @@ msgstr ""
 "A címke törölve lett a rendelésből, de a szolgáltató felületén is törölnöd "
 "kell. Azonosító: %s"
 
-#: includes/providers/class-kvikk.php:957
+#: includes/providers/class-kvikk.php:1029
 #, php-format
 msgid ""
 "Shipping label removed from the order, because it was removed from Kvikk. "
@@ -3276,7 +3396,7 @@ msgstr ""
 "A címke törölve lett a rendelésből, mert a Kvikk felületén törölve lett. Ez "
 "volt a követési szám: %s"
 
-#: includes/class-labels.php:342
+#: includes/class-labels.php:357
 msgid ""
 "Shipping label removed from WooCommerce. You still need to remove it in the "
 "provider's system."
@@ -3284,11 +3404,11 @@ msgstr ""
 "A címke törölve lett a rendelésből, de a szolgáltató felületén is törölnöd "
 "kell."
 
-#: includes/class-labels.php:350
+#: includes/class-labels.php:365
 msgid "Shipping label removed successfully."
 msgstr "Címke sikeresen törölve."
 
-#: includes/class-labels.php:347
+#: includes/class-labels.php:362
 #, php-format
 msgid "Shipping label removed successfully. ID number: %s"
 msgstr "Címke sikeresen törölve. Csomag azonosító: %s"
@@ -3297,16 +3417,16 @@ msgstr "Címke sikeresen törölve. Csomag azonosító: %s"
 msgid "Shipping method"
 msgstr "Szállítási mód"
 
-#: includes/views/html-admin-carriers.php:20
-#: includes/views/html-admin-carriers.php:27
+#: includes/views/html-admin-carriers.php:23
+#: includes/views/html-admin-carriers.php:30
 msgid "Shipping methods"
 msgstr "Szálíltási módok"
 
-#: includes/providers/class-csomagpiac.php:68
+#: includes/providers/class-csomagpiac.php:76
 msgid "Shop ID"
 msgstr "Bolt ID"
 
-#: includes/providers/class-gls.php:133 includes/providers/class-gls.php:157
+#: includes/providers/class-gls.php:133 includes/providers/class-gls.php:175
 msgid "Shop Return Service"
 msgstr "Shop Return Service"
 
@@ -3330,7 +3450,10 @@ msgstr "Megjelenítés fiókban"
 msgid "Show open hours on the map"
 msgstr "Nyitvatartás megjelenítése"
 
-#: includes/providers/class-dpd.php:209 includes/providers/class-gls.php:188
+#: includes/providers/class-dpd.php:209 includes/providers/class-gls.php:206
+#: includes/providers/class-sameday.php:135
+#: includes/providers/class-kvikk.php:142
+#: includes/views/html-admin-kvikk-countries.php:113
 msgid "Show pickup points in these countries as available options."
 msgstr "Csomagpontok mutatása a térképen ezekben az országokban."
 
@@ -3354,7 +3477,7 @@ msgstr "Térképes választó a kosár oldalon is látszódjon"
 msgid "Show tracking numbers in My Account / Orders"
 msgstr "A csomagkövetési szám megjelenítése a fiókom / rendeléseim menüben"
 
-#: includes/providers/class-sameday.php:72
+#: includes/providers/class-sameday.php:78
 msgid ""
 "Sign in on eawb.sameday.hu to create a new pickup point. This is where the "
 "carrier will collect your shipments."
@@ -3366,11 +3489,11 @@ msgstr ""
 msgid "Signature confirmed"
 msgstr "Aláírás megerősítve"
 
-#: includes/providers/class-sameday.php:33
+#: includes/providers/class-sameday.php:34
 msgid "Sikeresen kézbesítve"
 msgstr "Sikeresen kézbesítve"
 
-#: includes/views/html-admin-enabled-providers.php:103
+#: includes/views/html-admin-enabled-providers.php:108
 #, php-format
 msgid ""
 "Since you are using the block based checkout page, you need to enable Woo's "
@@ -3397,15 +3520,11 @@ msgstr "Cikkszám"
 msgid "Slovakia"
 msgstr "Szlovákia"
 
-#: includes/providers/class-packeta.php:353
+#: includes/providers/class-packeta.php:399
 msgid "Slovakia (Packeta)"
 msgstr "Szlovákia (Packeta)"
 
-#: includes/providers/class-pactic.php:17
-msgid "Slovakia GLS"
-msgstr "Szlovák GLS"
-
-#: includes/providers/class-pactic.php:33
+#: includes/providers/class-pactic.php:29
 msgid "Slovakia Post"
 msgstr "Szlovák Posta"
 
@@ -3413,23 +3532,19 @@ msgstr "Szlovák Posta"
 msgid "Slovenia"
 msgstr "Szlovénia"
 
-#: includes/providers/class-pactic.php:25
-msgid "Slovenia GLS"
-msgstr "Szlovén GLS"
-
 #: includes/class-customizer.php:56
 msgid "Small cluster color"
 msgstr "Térkép kis csoport színe"
 
-#: includes/providers/class-sameday.php:94
+#: includes/providers/class-sameday.php:100
 msgid "Small package"
 msgstr "Kis csomag"
 
-#: includes/providers/class-gls.php:131 includes/providers/class-gls.php:155
+#: includes/providers/class-gls.php:131 includes/providers/class-gls.php:173
 msgid "SMS Service (SM1)"
 msgstr "SMS Service (SM1)"
 
-#: includes/providers/class-gls.php:281
+#: includes/providers/class-gls.php:299
 msgid "SMS text for the SMS Service (SM1)"
 msgstr "SMS szöveg az SMS Service (SM1) szolgáltatáshoz"
 
@@ -3437,7 +3552,7 @@ msgstr "SMS szöveg az SMS Service (SM1) szolgáltatáshoz"
 msgid "Some shipments failed to close. Please check the list below."
 msgstr "Nem sikerült minden csomagot lezárni. Nézd meg a lenti listát."
 
-#: includes/providers/class-packeta.php:625
+#: includes/providers/class-packeta.php:680
 msgid "Something went wrong"
 msgstr "Valami hiba történt"
 
@@ -3445,12 +3560,16 @@ msgstr "Valami hiba történt"
 msgid "Sorting error at the depot."
 msgstr "Válogatási hiba a depóban."
 
-#: includes/providers/class-dpd.php:119
+#: includes/providers/class-dpd.php:119 includes/providers/class-gls.php:163
 msgid "Spain"
 msgstr "Spanyolország"
 
-#: includes/views/html-admin-carriers.php:19
-#: includes/views/html-admin-carriers.php:26
+#: includes/settings/settings-global.php:97
+msgid "State field"
+msgstr "Megye mező"
+
+#: includes/views/html-admin-carriers.php:22
+#: includes/views/html-admin-carriers.php:29
 msgid "Status"
 msgstr "Státusz"
 
@@ -3459,11 +3578,11 @@ msgid "Sticker format"
 msgstr "Címke fájltípus"
 
 #: includes/providers/class-posta.php:161 includes/providers/class-dpd.php:196
-#: includes/providers/class-csomagpiac.php:101
-#: includes/providers/class-gls.php:253
-#: includes/providers/class-sameday.php:109
+#: includes/providers/class-csomagpiac.php:109
+#: includes/providers/class-gls.php:271
+#: includes/providers/class-sameday.php:115
 #: includes/providers/class-foxpost.php:116
-#: includes/providers/class-kvikk.php:143
+#: includes/providers/class-kvikk.php:148
 #: includes/providers/class-expressone.php:78
 #: includes/providers/class-transsped.php:201
 #: includes/providers/class-custom.php:70
@@ -3474,8 +3593,8 @@ msgstr "Címkeméret"
 msgid "Stop"
 msgstr "Stop"
 
-#: includes/class-helpers.php:70 includes/settings/settings-points.php:14
-#: includes/views/html-admin-enabled-providers.php:35
+#: includes/class-helpers.php:69 includes/settings/settings-points.php:14
+#: includes/views/html-admin-enabled-providers.php:38
 msgid "Store Pickup"
 msgstr "Bolti átvétel"
 
@@ -3496,13 +3615,13 @@ msgstr "Előfizetés"
 msgid "Successfully marked as not shipped."
 msgstr "Szállítottnak jelölés visszavonva."
 
-#: index.php:517 includes/class-conditions.php:96
+#: index.php:534 includes/class-conditions.php:96
 #: includes/views/html-modal-design.php:13
 #: includes/views/html-admin-points-table.php:16
 msgid "Sunday"
 msgstr "Vasárnap"
 
-#: includes/providers/class-packeta.php:96
+#: includes/providers/class-packeta.php:101
 msgid "Supported address delivery options"
 msgstr "Támogatott szolgáltatók házhozszállításhoz"
 
@@ -3514,11 +3633,11 @@ msgstr "Támogatott ország"
 msgid "Supported couriers"
 msgstr "Elérhető szolgáltatók"
 
-#: includes/providers/class-packeta.php:88
+#: includes/providers/class-packeta.php:93
 msgid "Supported pick up points"
 msgstr "Támogatott szolgáltatók csomagpontos szállításhoz"
 
-#: includes/providers/class-dpd.php:115
+#: includes/providers/class-dpd.php:115 includes/providers/class-gls.php:159
 msgid "Sweden"
 msgstr "Svédország"
 
@@ -3526,11 +3645,11 @@ msgstr "Svédország"
 msgid "Sync tracking info"
 msgstr "Csomagkövetés szinkronizálás"
 
-#: includes/providers/class-sameday.php:37
+#: includes/providers/class-sameday.php:38
 msgid "Szekrénybe behelyezve"
 msgstr "Szekrénybe behelyezve"
 
-#: includes/providers/class-sameday.php:34
+#: includes/providers/class-sameday.php:35
 msgid "Szállítási folyamatban a futárnál"
 msgstr "Szállítási folyamatban a futárnál"
 
@@ -3542,7 +3661,7 @@ msgstr "Az adókulcs a kosár tartalmától függ"
 msgid "Tax status"
 msgstr "Adózás"
 
-#: includes/settings/settings-global.php:58
+#: includes/settings/settings-global.php:57
 msgctxt "Tax status"
 msgid "Highest"
 msgstr "Legdrágább"
@@ -3609,12 +3728,12 @@ msgstr "A sofőr megkapta a megbízást, hogy a csomagot a nap folyamán vegye �
 msgid "The external service returned an error."
 msgstr ""
 
-#: includes/views/html-admin-shipments.php:61
+#: includes/views/html-admin-shipments.php:67
 msgid "The following packages are waiting for closing and a delivery note."
 msgstr ""
 "Az alábbi csomagok még nem lettek lezárva, nem kerültek rá szállítólevélre"
 
-#: includes/providers/class-packeta.php:92
+#: includes/providers/class-packeta.php:97
 #| msgid "The map will show pickup points from these countries."
 msgid "The map will show pickup points from these providers."
 msgstr "A térképen az átvételi pontok ezekben az országokban látszanak."
@@ -3841,7 +3960,7 @@ msgstr ""
 "A súly kötelező paraméter. Ha nincs megadva a terméknél, akkor ezt az "
 "értéket fogja használni. (gramm)"
 
-#: includes/providers/class-sameday.php:103
+#: includes/providers/class-sameday.php:109
 msgid ""
 "The weight is a required parameter. If it is missing, this value will be "
 "used instead. Enter a value in kg."
@@ -3860,11 +3979,11 @@ msgstr ""
 "Válassz egyet a rendeléshez, vagy <a href=\"%s\">párosítsd össze a "
 "beállításokban</a>, hogy legközelebb ne kelljen."
 
-#: includes/providers/class-gls.php:260
+#: includes/providers/class-gls.php:278
 msgid "Thermo"
 msgstr "Thermo"
 
-#: includes/settings/settings-global.php:88
+#: includes/settings/settings-global.php:87
 msgid ""
 "These provider related notes appear when the customer selects a pickup point "
 "on the map."
@@ -3876,7 +3995,7 @@ msgstr ""
 msgid "This controls the title which the user sees during checkout."
 msgstr "Ezt a nevet látja a vásárló a fizetés során."
 
-#: includes/class-settings.php:156
+#: includes/class-settings.php:157
 msgid ""
 "This feature requires the ZipArchive function and by the looks of it, this "
 "is not enabled on your website. You can ask your hosting provider for help."
@@ -3885,7 +4004,7 @@ msgstr ""
 "weboldaladon. Kérd meg a tárhelyszolgáltatód, hogy engedélyezzék a "
 "tárhelyeden ezt a funkciót."
 
-#: includes/settings/settings-global.php:77
+#: includes/settings/settings-global.php:76
 msgid ""
 "This is the label that appears on the invoices for shipping. Default is the "
 "name of the provider. You can use the {provider} and {point} shortcode to "
@@ -3895,7 +4014,7 @@ msgstr ""
 "a szolgáltató neve és a kiválasztott csomagpont neve. A {provider} és a "
 "{point} kódokkal tudod megjeleníteni ezt a két értéket. "
 
-#: includes/settings/settings-global.php:70
+#: includes/settings/settings-global.php:69
 msgid ""
 "This is the label that appears on the invoices for shipping. Default is the "
 "name of this shipping method. You can use the {provider} shortcode to "
@@ -3905,7 +4024,7 @@ msgstr ""
 "a szállítási módnak a neve. Használhatod a {provider} és a {point} "
 "cserekódot a szolgáltató és az átvételi pont nevének a megjelenítéséhez. "
 
-#: includes/class-labels.php:577
+#: includes/class-labels.php:593
 msgid ""
 "This order doesn't need shipping. Add a shipping line item to generate a "
 "label."
@@ -3929,7 +4048,7 @@ msgstr ""
 "{tracking_number} kódot automatikusan lecseréli a követési számra és a "
 "linkre. "
 
-#: index.php:514 includes/class-conditions.php:93
+#: index.php:531 includes/class-conditions.php:93
 #: includes/views/html-modal-design.php:10
 #: includes/views/html-admin-points-table.php:13
 msgid "Thursday"
@@ -3943,7 +4062,7 @@ msgstr "Cím betűméret"
 msgid "To add 1kg to the package weight, use +1"
 msgstr "1kg hozzáadása a csomag súlyához: +1"
 
-#: includes/class-labels.php:764
+#: includes/class-labels.php:781
 msgid "To be closed"
 msgstr "Lezárandó"
 
@@ -3995,7 +4114,7 @@ msgstr "Csomagkövetés automatizálás"
 msgid "Tracking details"
 msgstr "Csomagkövetési adatok"
 
-#: includes/class-tracking.php:290
+#: includes/class-tracking.php:295
 #, php-format
 msgid "Tracking e-mail %s sent to the customer."
 msgstr "Csomagkövetési e-mail elküldve a vásárlónak: %s"
@@ -4004,7 +4123,7 @@ msgstr "Csomagkövetési e-mail elküldve a vásárlónak: %s"
 msgid "Tracking externally"
 msgstr "Követés a szolgáltató oldalán"
 
-#: includes/class-tracking.php:324
+#: includes/class-tracking.php:329
 msgid "Tracking info updated successfully"
 msgstr "Csomagkövetés sikeresen frissítve"
 
@@ -4013,7 +4132,7 @@ msgstr "Csomagkövetés sikeresen frissítve"
 msgid "Tracking Information"
 msgstr "Csomag követése"
 
-#: includes/class-tracking.php:435 includes/class-tracking.php:542
+#: includes/class-tracking.php:440 includes/class-tracking.php:547
 #: includes/views/html-modal-tracking.php:13
 msgid "Tracking informations"
 msgstr "Csomagkövetés"
@@ -4022,8 +4141,8 @@ msgstr "Csomagkövetés"
 msgid "Tracking Number"
 msgstr "Követési szám"
 
-#: index.php:1383 includes/class-labels.php:753 includes/class-labels.php:759
-#: includes/class-tracking.php:528 includes/views/html-modal-tracking.php:29
+#: index.php:1415 includes/class-labels.php:770 includes/class-labels.php:776
+#: includes/class-tracking.php:533 includes/views/html-modal-tracking.php:29
 #: includes/views/html-metabox.php:163
 msgid "Tracking number"
 msgstr "Követési szám"
@@ -4048,7 +4167,7 @@ msgstr "Trans-Sped API jelszó"
 msgid "Trans-Sped Username"
 msgstr "Trans-Sped API Felhasználónév"
 
-#: includes/class-settings.php:241 includes/class-helpers.php:85
+#: includes/class-settings.php:242 includes/class-helpers.php:84
 msgid "Trans-Sped ZERO"
 msgstr "Trans-Sped ZERO"
 
@@ -4057,15 +4176,15 @@ msgstr "Trans-Sped ZERO"
 msgid "Trans-Sped ZERO settings"
 msgstr "Trans-Sped ZERO beállítások"
 
-#: includes/providers/class-sameday.php:32
+#: includes/providers/class-sameday.php:33
 msgid "Tranzitban a raktár felé"
 msgstr "Tranzitban a raktár felé"
 
-#: includes/providers/class-sameday.php:36
+#: includes/providers/class-sameday.php:37
 msgid "Tranzitban a raktár felé(Kilépés a hubból)"
 msgstr "Tranzitban a raktár felé(Kilépés a hubból)"
 
-#: index.php:512 includes/class-conditions.php:91
+#: index.php:529 includes/class-conditions.php:91
 #: includes/views/html-modal-design.php:8
 #: includes/views/html-admin-points-table.php:11
 msgid "Tuesday"
@@ -4075,11 +4194,11 @@ msgstr "Kedd"
 msgid "Two A5 landscape on an A4 page"
 msgstr "Két A5-ös fekvő egy A4-es lapon"
 
-#: includes/providers/class-kvikk.php:148
+#: includes/providers/class-kvikk.php:153
 msgid "Two A5 on landscape A4"
 msgstr "Két A5 egy fekvő A4-es lapon"
 
-#: includes/class-labels.php:220
+#: includes/class-labels.php:235
 #, php-format
 msgid "Unable to create shipping label. Error code: %s"
 msgstr "Unable to create shipping label. Error code: %s"
@@ -4088,11 +4207,11 @@ msgstr "Unable to create shipping label. Error code: %s"
 msgid "Unable to generate label"
 msgstr "Nem sikerült létrehozni"
 
-#: includes/class-import.php:821
+#: includes/class-import.php:813
 msgid "Unable to run the import tool for some reason."
 msgstr "Nem sikerült futtatni az import eszközt. "
 
-#: includes/class-labels.php:321
+#: includes/class-labels.php:336
 #, php-format
 msgid "Unable to void the shipping label. Error code: %s"
 msgstr "Nem sikerült törölni a címkét. Hibakód: %s"
@@ -4105,32 +4224,32 @@ msgstr "Visszavonás"
 msgid "Unique ID"
 msgstr "Egyedi azonosító"
 
-#: includes/providers/class-posta.php:671
-#: includes/providers/class-posta.php:733
+#: includes/providers/class-posta.php:682
 #: includes/providers/class-posta.php:744
-#: includes/providers/class-posta.php:748
-#: includes/providers/class-posta.php:872 includes/providers/class-dpd.php:525
-#: includes/providers/class-csomagpiac.php:434
-#: includes/providers/class-csomagpiac.php:479
-#: includes/providers/class-csomagpiac.php:489
-#: includes/providers/class-sameday.php:155
-#: includes/providers/class-sameday.php:317
-#: includes/providers/class-sameday.php:324
-#: includes/providers/class-sameday.php:414
-#: includes/providers/class-sameday.php:584
-#: includes/providers/class-sameday.php:596
+#: includes/providers/class-posta.php:755
+#: includes/providers/class-posta.php:759
+#: includes/providers/class-posta.php:884 includes/providers/class-dpd.php:525
+#: includes/providers/class-csomagpiac.php:515
+#: includes/providers/class-csomagpiac.php:560
+#: includes/providers/class-csomagpiac.php:570
+#: includes/providers/class-sameday.php:169
+#: includes/providers/class-sameday.php:338
+#: includes/providers/class-sameday.php:345
+#: includes/providers/class-sameday.php:435
+#: includes/providers/class-sameday.php:605
+#: includes/providers/class-sameday.php:617
 #: includes/providers/class-foxpost.php:387
 #: includes/providers/class-foxpost.php:431
 #: includes/providers/class-foxpost.php:443
 #: includes/providers/class-foxpost.php:500
-#: includes/providers/class-kvikk.php:481
-#: includes/providers/class-kvikk.php:757
+#: includes/providers/class-kvikk.php:553
+#: includes/providers/class-kvikk.php:829
 #: includes/providers/class-expressone.php:198
 #: includes/providers/class-transsped.php:468
 msgid "Unknown error"
 msgstr "Ismeretlen hiba"
 
-#: includes/providers/class-packeta.php:37
+#: includes/providers/class-packeta.php:39
 msgid "Unknown packet status."
 msgstr "Ismeretlen csomag státusz."
 
@@ -4138,11 +4257,11 @@ msgstr "Ismeretlen csomag státusz."
 msgid "Unlimited"
 msgstr "Korlátlan"
 
-#: index.php:54 includes/compatibility/class-compatibility.php:22
+#: index.php:55 includes/compatibility/class-compatibility.php:22
 msgid "Unserializing instances of this class is forbidden."
 msgstr "Unserializing instances of this class is forbidden."
 
-#: includes/class-labels.php:196 includes/views/html-admin-pro-notice.php:10
+#: includes/class-labels.php:211 includes/views/html-admin-pro-notice.php:10
 #: includes/views/html-metabox.php:50
 msgid ""
 "Upgrade to the PRO version to generate shipping labels and to track "
@@ -4171,16 +4290,16 @@ msgstr "Felhasználó belépve"
 msgid "User role"
 msgstr "Felhasználó szerepkör"
 
-#: includes/providers/class-sameday.php:58
+#: includes/providers/class-sameday.php:64
 #: includes/providers/class-expressone.php:61
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: includes/settings/settings-global.php:81
+#: includes/settings/settings-global.php:80
 msgid "Validate phone numbers"
 msgstr "Telefonszám validáció"
 
-#: includes/settings/settings-global.php:82
+#: includes/settings/settings-global.php:81
 msgid "Validate phone numbers on checkout"
 msgstr "Telefonszám validáció a pénztárban"
 
@@ -4189,7 +4308,7 @@ msgid "Value insurance"
 msgstr "Értékbiztosítás"
 
 #: includes/providers/class-posta.php:232
-#: includes/providers/class-kvikk.php:162
+#: includes/providers/class-kvikk.php:167
 msgid "Value insurance limit"
 msgstr "Értéknyilvántartás maximum érték"
 
@@ -4197,15 +4316,15 @@ msgstr "Értéknyilvántartás maximum érték"
 msgid "Viszt Péter"
 msgstr "Viszt Péter"
 
-#: index.php:424 includes/views/html-admin-pro-version.php:24
+#: index.php:441 includes/views/html-admin-pro-version.php:24
 msgid "VP Woo Pont Documentation"
 msgstr "Dokumentáció"
 
-#: index.php:428
+#: index.php:445
 msgid "VP Woo Pont Pro version"
 msgstr "PRO verzió"
 
-#: index.php:411
+#: index.php:428 includes/class-update.php:558
 msgid "VP Woo Pont Settings"
 msgstr "VP Woo Pont Beállítások"
 
@@ -4213,11 +4332,11 @@ msgstr "VP Woo Pont Beállítások"
 msgid "Vp Woo Pont Walkthrough"
 msgstr "Beállítás varázsló"
 
-#: includes/views/html-admin-shipments.php:60
+#: includes/views/html-admin-shipments.php:66
 msgid "Waiting for closing"
 msgstr "Lezárásra váró csomagok"
 
-#: includes/providers/class-packeta.php:24
+#: includes/providers/class-packeta.php:26
 #: includes/providers/class-custom.php:17
 msgid "We have received the packet data. Freshly created packet."
 msgstr "Csomagadatok sikeresen létrehozva."
@@ -4234,7 +4353,7 @@ msgstr "Weblabel jelszó"
 msgid "Weblabel Username"
 msgstr "Weblabel felhasználónév"
 
-#: index.php:513 includes/class-conditions.php:92
+#: index.php:530 includes/class-conditions.php:92
 #: includes/views/html-modal-design.php:9
 #: includes/views/html-admin-points-table.php:12
 msgid "Wednesday"
@@ -4245,6 +4364,11 @@ msgstr "Szerda"
 #: templates/order/custom-label.php:100
 msgid "Weight"
 msgstr "Súly"
+
+#: includes/views/html-admin-pricing-table.php:59
+#: includes/views/html-admin-pricing-table.php:150
+msgid "Weight based pricing"
+msgstr "Súly alapú árazás"
 
 #: includes/settings/settings-labels.php:90
 #: includes/views/html-admin-weight-corrections.php:26
@@ -4267,7 +4391,7 @@ msgid "Where should the tracking numbers be included in the emails?"
 msgstr "Hol legyen benne a szöveg az e-mailben?"
 
 #: includes/views/html-modal-packaging.php:49
-#: includes/views/html-metabox.php:285
+#: includes/views/html-metabox.php:288
 msgid "Width"
 msgstr "Szélesség"
 
@@ -4304,6 +4428,10 @@ msgstr ""
 "kiválaszthatod, hogy melyik adat kerüljön a címkékre. A számla sorszáma "
 "opció a Számlázz.hu és a Woo Billingo Plus bővítménnyel kompatibilis."
 
+#: includes/providers/class-kvikk.php:538
+msgid "Wrong API Key"
+msgstr "Hibás API kulcs"
+
 #: includes/providers/class-foxpost.php:109
 msgid "XL"
 msgstr "XL"
@@ -4331,7 +4459,7 @@ msgstr ""
 " A jelenlegi mértékegység %s. Egyszerűen használj matematikai értéket a "
 "korrekcióhoz, például:"
 
-#: includes/views/html-admin-shipments.php:48
+#: includes/views/html-admin-shipments.php:54
 msgid ""
 "You can create delivery notes for Kvikk packages in the delivery notes menu "
 "of your app.kvikk.hu account."
@@ -4339,7 +4467,7 @@ msgstr ""
 "A Kvikk-es csomagokhoz tartozó szállítóleveleket az app.kvikk.hu fiókod "
 "szállítólevelek menüpontjában tudod létrehozni."
 
-#: includes/views/html-admin-shipments.php:83
+#: includes/views/html-admin-shipments.php:89
 msgid "You can find all your closed packages and delivery notes here."
 msgstr "Itt találod a lezárt csomagfeladásokat és a szállítóleveleket."
 
@@ -4370,13 +4498,13 @@ msgstr ""
 "átvételi helyek elnevezése\" mezőben lévő kategória alatt fognak megjelenni. "
 "A kategóriához a Testreszabás menüben állíthatsz be saját ikont is. "
 
-#: includes/class-tracking.php:461 includes/class-tracking.php:475
+#: includes/class-tracking.php:466 includes/class-tracking.php:480
 #: includes/settings/settings-tracking.php:70
 msgid ""
 "You can track the order by clicking on the tracking number: {tracking_number}"
 msgstr "A csomagot az alábbi linken keresztül tudod követni: {tracking_number}"
 
-#: includes/providers/class-gls.php:283
+#: includes/providers/class-gls.php:301
 msgid ""
 "You can use the following shortcodes: #ParcelNr#, #COD#, #PickupDate#, "
 "#From_Name#, #ClientRef#."
@@ -4396,7 +4524,7 @@ msgstr ""
 "{customer_note}, {products_sku}, {invoice_number}"
 
 #: includes/class-shipments.php:31 includes/class-shipments.php:130
-#: includes/class-shipments.php:158 includes/providers/class-packeta.php:618
+#: includes/class-shipments.php:158 includes/providers/class-packeta.php:673
 #: includes/providers/class-custom.php:272
 msgid "You do not have sufficient permissions to access this action."
 msgstr "Nincs megfelelő jogosultságod a funkció eléréséhez."
@@ -4413,6 +4541,14 @@ msgstr "A rendelésed már úton van!"
 msgid "Your package is on it's way!"
 msgstr "A csomagod kézbesítés alatt van!"
 
+#: includes/class-helpers.php:1319
+msgid ""
+"Your parcel will be delivered to this GLS Locker by 8 AM on the day after "
+"its arrival."
+msgstr ""
+"Csomagodat ebbe a GLS Automatába a beérkezés utáni napon reggel 8-ig "
+"kiszállítjuk."
+
 #: includes/emails/class-email-delivery.php:20
 msgid "Your {site_title} Order #{order_number} is out for delivery!"
 msgstr "{site_title}: #{order_number} számú rendelésed kézbesítés alatt van!"
@@ -4425,11 +4561,11 @@ msgstr "{site_title}: #{order_number} számú rendelésed kézbesítés átvehet
 msgid "Your {site_title} Order #{order_number} just shipped!"
 msgstr "{site_title}: #{order_number} számú rendelésed úton van!"
 
-#: includes/class-helpers.php:56
+#: includes/class-helpers.php:55
 msgid "Z-BOX"
 msgstr "Z-BOX"
 
-#: includes/class-helpers.php:55
+#: includes/class-helpers.php:54 includes/class-helpers.php:101
 msgid "Z-Pont"
 msgstr "Z-Pont"
 

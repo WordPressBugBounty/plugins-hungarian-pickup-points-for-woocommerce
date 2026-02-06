@@ -84,7 +84,6 @@ class VP_Woo_Pont_Kvikk {
 		);
 
 	}
-
 	public function load_admin_scripts() {
 
 		wp_enqueue_script('vp-woo-pont-kvikk-admin', VP_Woo_Pont::$plugin_url.'assets/js/kvikk-admin.min.js', array('jquery'), VP_Woo_Pont::$version, true);
@@ -137,6 +136,12 @@ class VP_Woo_Pont_Kvikk {
 				'desc' => __("Select your sender ID.", 'vp-woo-pont'),
 				'id' => 'kvikk_sender_id'
 			),
+            array(
+                'type' => 'vp_kvikk_countries',
+                'title' => __( 'Enabled countries', 'vp-woo-pont' ),
+				'desc' => __('Show pickup points in these countries as available options.', 'vp-woo-pont'),
+				'id' => 'kvikk_countries'
+            ),
 			array(
 				'type' => 'select',
 				'class' => 'wc-enhanced-select',
@@ -201,48 +206,97 @@ class VP_Woo_Pont_Kvikk {
 
     public function get_kvikk_db() {
 
-		//URL of the database
-		$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls,dpd&country=HU';
-
-		//Get XML file
-		$request = wp_remote_get($url);
-
-		//Check for errors
-		if( is_wp_error( $request ) ) {
-			VP_Woo_Pont()->log_error_messages($request, 'kvikk-import-points');
-			return false;
+		//Check if we need to get multiple countries
+		$countries = get_option('vp_woo_pont_kvikk_countries', array());
+		
+		//Default to HU with basic point types if no countries are set
+		if(empty($countries)) {
+			$countries = array('HU' => array(
+				'packeta_zpont' => 1,
+				'foxpost' => 1,
+				'gls_locker' => 1,
+				'dpd_parcelshop' => 1
+			));
 		}
 
-		//Get body
-		$body = wp_remote_retrieve_body( $request );
-
-		//Try to convert into json
-		$json = json_decode( $body, true );
-
-		//Check if json exists
-		if($json === null) {
-			return false;
-		}
-
-		//Create a new json
-		$results = array('packeta_zpont' => array(), 'packeta_zbox' => array(), 'foxpost' => array(), 'mpl_automata' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'gls_locker' => array(), 'gls_shop' => array(), 'dpd_parcelshop' => array(), 'dpd_alzabox' => array());
-
-		//Loop through points
-		foreach ($json['data'] as $point) {
-			$point_type = $point['type'];
-			if(!isset($results[$point_type])) {
-				$point_type = $point['courier'].'_'.$point['type'];
-			}
-			if(isset($results[$point_type])) {
-				$results[$point_type][] = $point;
-			}
-		}
-
-		//Save stuff
+		//Initialize saved files array
 		$saved_files = array();
-		foreach ($results as $type => $points) {
-			$saved_files['kvikk_'.$type] = VP_Woo_Pont_Import_Database::save_json_file('kvikk_'.$type, $points);
+
+		//Loop through each country and save separate JSON files
+		foreach (array_keys($countries) as $country) {
+			//URL of the database for this country
+			$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls,dpd&country=' . $country;
+
+			//Get data
+			$request = wp_remote_get($url, array(
+				'timeout' => 100,
+			));
+
+			//Check for errors
+			if( is_wp_error( $request ) ) {
+				VP_Woo_Pont()->log_error_messages($request, 'kvikk-import-points-' . $country);
+				continue; // Skip to next country
+			}
+
+			//Get body
+			$body = wp_remote_retrieve_body( $request );
+
+			//Try to convert into json
+			$json = json_decode( $body, true );
+
+			//Check if json exists
+			if($json === null || !isset($json['data'])) {
+				continue; // Skip to next country
+			}
+
+			//Create country-specific results organized by type
+			$country_results = array(
+				'packeta_zpont' => array(), 
+				'packeta_zbox' => array(), 
+				'foxpost' => array(), 
+				'mpl_automata' => array(), 
+				'mpl_postapont' => array(), 
+				'mpl_posta' => array(), 
+				'gls_locker' => array(), 
+				'gls_shop' => array(), 
+				'dpd_parcelshop' => array(), 
+				'dpd_alzabox' => array()
+			);
+
+			//Process points and categorize
+			foreach ($json['data'] as $point) {
+				$point_type = $point['type'];
+				if(!isset($country_results[$point_type])) {
+					$point_type = $point['courier'].'_'.$point['type'];
+				}
+				if(isset($country_results[$point_type])) {
+					$country_results[$point_type][] = $point;
+				}
+			}
+
+			//Free up memory immediately after processing
+			unset($json);
+			unset($body);
+			unset($request);
+
+			//Save each type for this country with country code in filename
+			foreach ($country_results as $type => $points) {
+				if(!empty($points)) {
+					$saved_files[] = VP_Woo_Pont_Import_Database::save_json_file(array(
+						'courier' => 'kvikk',
+						'type' => $type,
+						'country' => $country,
+						'points' => $points
+					));
+				}
+			}
+
+			//Free country results
+			unset($country_results);
 		}
+
+		//Save to DB
+		VP_Woo_Pont_Import_Database::save_json_files('kvikk', $saved_files);
 
 		//Also update courier details
 		$this->get_pickup_points_response(true);
@@ -267,6 +321,7 @@ class VP_Woo_Pont_Kvikk {
         $groups['kvikk_dpd'] = __('Kvikk DPD', 'vp-woo-pont');
         //$groups['kvikk_dhl'] = __('Kvikk DHL', 'vp-woo-pont');
         $groups['kvikk_foxpost'] = __('Kvikk Foxpost', 'vp-woo-pont');
+        $groups['kvikk_packeta'] = __('Kvikk Packeta', 'vp-woo-pont');
         return $groups;
     }
 
@@ -356,10 +411,15 @@ class VP_Woo_Pont_Kvikk {
 			$shipment['address'] = implode(' ', array($order->get_shipping_address_1(), $order->get_shipping_address_2()));
 			$shipment['city'] = $order->get_shipping_city();
 			$shipment['postcode'] = $order->get_shipping_postcode();
-			$shipment['country'] = 'HU';
+			$shipment['country'] = ($order->get_shipping_country()) ? $order->get_shipping_country() : 'HU';
 
 			//Set remark
 			$shipment['remark'] = $order->get_customer_note();
+
+		} else {
+
+			//If point delivery, set country to HU
+			$shipment['country'] = ($order->get_shipping_country()) ? $order->get_shipping_country() : 'HU';
 
 		}
 
@@ -442,9 +502,16 @@ class VP_Woo_Pont_Kvikk {
 			}
 		}
 
+		//Convert currency for each parcel value if needed
+		if($data['package']['currency'] != 'HUF') {
+			foreach ($shipment['parcels'] as $index => $parcel) {
+				$shipment['parcels'][$index]['value'] = round(VP_Woo_Pont_Helpers::convert_currency($data['package']['currency'], 'HUF', $shipment['parcels'][$index]['value']));
+			}
+		}
+
 		//So developers can modify
 		$shipment = apply_filters('vp_woo_pont_kvikk_label', $shipment, $data);
-	
+
 		//Build request params
 		$remote_url = $this->api_url . 'shipment';
 
@@ -470,6 +537,11 @@ class VP_Woo_Pont_Kvikk {
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
 		$response = json_decode( $response, true );
+
+		//Check for api errors
+		if(wp_remote_retrieve_response_code( $request ) == 401) {
+			return new WP_Error( 'bad_request', __('Wrong API Key', 'vp-woo-pont') );
+		}
 
 		//Check validation errors
 		if(isset($response['validation'])) {
@@ -1139,7 +1211,7 @@ class VP_Woo_Pont_Kvikk {
 			if(VP_Woo_Pont_Helpers::get_option('kvikk_api_key') && !VP_Woo_Pont_Helpers::get_option('kvikk_foxpost_type_selected')) {
 
 				//Get enabled providers
-				$providers = get_option('vp_woo_pont_enabled_providers');
+				$providers = get_option('vp_woo_pont_enabled_providers', array());
 
 				//Check if we have either kvikk_packeta_zpont, kvikk_packeta_zbox or kvikk_foxpost enabled
 				$packeta_providers = array('kvikk_packeta_zpont', 'kvikk_packeta_zbox', 'kvikk_foxpost');
@@ -1341,14 +1413,15 @@ class VP_Woo_Pont_Kvikk {
 				$(document).on('change', '#vp_woo_pont_package_count', function(){
 					var package_count = parseInt($(this).val(), 10) || 0;
 					var provider = $('.vp-woo-pont-metabox-content').data('provider_id');
-					$('#vp_woo_pont_kvikk_parcels').hide();
-					$('.vp-woo-pont-package-size').show();
-					$('.vp-woo-pont-package-weight').show();
-					$('.vp-woo-pont-package-services').show();
 
 					if(provider != 'kvikk') {
 						return;
 					}
+
+					$('#vp_woo_pont_kvikk_parcels').hide();
+					$('.vp-woo-pont-package-size').show();
+					$('.vp-woo-pont-package-weight').show();
+					$('.vp-woo-pont-package-services').show();
 
 					if(package_count > 1) {
 						$('#vp_woo_pont_kvikk_parcels').show();
@@ -1464,6 +1537,11 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		return false;
+	}
+
+	public function get_enabled_countries() {
+		$countries = array_keys(get_option('vp_woo_pont_kvikk_countries', array('HU' => 'Hungary')));
+		return $countries;
 	}
 
 }

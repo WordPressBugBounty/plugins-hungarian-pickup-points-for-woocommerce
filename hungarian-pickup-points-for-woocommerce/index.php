@@ -7,9 +7,9 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 3.6.6
+Version: 4.0.6
 WC requires at least: 7.0
-WC tested up to: 10.0.4
+WC tested up to: 10.4.3
 Requires Plugins: woocommerce
 */
 
@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if ( ! defined( 'VP_WOO_PONT_PLUGIN_FILE' ) ) {
 	define( 'VP_WOO_PONT_PLUGIN_FILE', __FILE__ );
 }
+
 
 class VP_Woo_Pont {
 	public static $plugin_prefix;
@@ -67,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '3.6.6';
+		self::$version = '4.0.6';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -200,6 +201,12 @@ class VP_Woo_Pont {
 		//Shows shipping address section even though this is a local pickup
 		add_filter( 'woocommerce_order_hide_shipping_address', array($this, 'show_shipping_address'), 11);
 
+		//Hide the state field for Hungary
+		if(VP_Woo_Pont_Helpers::get_option('hide_state_field', 'no') == 'yes') {
+			add_filter( 'woocommerce_get_country_locale', array($this, 'hide_state_field'));
+			add_filter( 'woocommerce_states', array($this, 'remove_states'));
+		}
+
 	}
 
 	//When plugin is activated
@@ -324,6 +331,9 @@ class VP_Woo_Pont {
 		//Get current screen
 		$screen       = get_current_screen();
 		$screen_id    = $screen ? $screen->id : '';
+		$woocommerce_version = defined( 'WC_VERSION' ) ? WC_VERSION : '0.0.0';
+		$dependencies = version_compare( $woocommerce_version, '10.3.0', '>=' ) ? array('jquery', 'wc-backbone-modal', 'wc-jquery-blockui', 'jquery-ui-sortable', 'wc-jquery-tiptip') : array('jquery', 'wc-backbone-modal', 'jquery-blockui', 'jquery-ui-sortable', 'jquery-tiptip');
+		$download_folders = VP_Woo_Pont_Helpers::get_download_folder();
 
 		if(
 			in_array($screen_id, wc_get_screen_ids()) || 
@@ -334,7 +344,7 @@ class VP_Woo_Pont {
 		) {
 			wp_enqueue_script( 'vp_woo_pont_print_js', plugins_url( '/assets/js/'.$print_js,__FILE__ ), array('jquery'), VP_Woo_Pont::$version, TRUE );
 			wp_enqueue_script( 'vp_woo_pont_tiny_autocomplete', plugins_url( '/assets/js/tiny-autocomplete.js',__FILE__ ), array('jquery'), VP_Woo_Pont::$version, TRUE );
-			wp_enqueue_script( 'vp_woo_pont_admin_js', plugins_url( '/assets/js/admin.min.js',__FILE__ ), array('jquery', 'wc-backbone-modal', 'jquery-blockui', 'jquery-ui-sortable', 'jquery-tiptip'), VP_Woo_Pont::$version, TRUE );
+			wp_enqueue_script( 'vp_woo_pont_admin_js', plugins_url( '/assets/js/admin.min.js',__FILE__ ), $dependencies, VP_Woo_Pont::$version, TRUE );
 			wp_enqueue_style( 'vp_woo_pont_admin_css', plugins_url( '/assets/css/admin.css',__FILE__ ), array(), VP_Woo_Pont::$version );
 		}
 
@@ -351,6 +361,7 @@ class VP_Woo_Pont {
 				'settings' => current_user_can( 'manage_woocommerce' ) ? wp_create_nonce( 'vp-woo-pont-settings' ) : null,
 				'tracking' => current_user_can( 'manage_woocommerce' ) ? wp_create_nonce( 'vp-woo-pont-tracking' ) : null,
 			),
+			'db_url' => $download_folders['url']
 		);
 
 		//Check for merged printing
@@ -374,6 +385,7 @@ class VP_Woo_Pont {
 		}
 
 		$show_in_cart = apply_filters('vp_woo_pont_load_frontend_js', $show_in_cart);
+		$download_folders = VP_Woo_Pont_Helpers::get_download_folder();
 
 		//Only on the checkout page
 		if(is_checkout() || $show_in_cart || is_account_page()) {
@@ -391,9 +403,14 @@ class VP_Woo_Pont {
 				'nonce' => wp_create_nonce( 'vp-woo-pont-map' ),
 				'ajax_url' => WC()->ajax_url(),
 				'wc_ajax_url' => WC_AJAX::get_endpoint( '%%endpoint%%' ),
+				'db_url' => $download_folders['url'],
+				'features' => VP_Woo_Pont_Helpers::get_enabled_features(),
+				'kvikk_map_api_key' => VP_Woo_Pont_Helpers::get_option('kvikk_map_api_key', ''),
+				'default_country' => WC()->customer && WC()->customer->get_billing_country() ? WC()->customer->get_billing_country() : WC()->countries->get_base_country(),
 			);
 
 			wp_localize_script( 'vp_woo_pont_frontend_js', 'vp_woo_pont_frontend_params', apply_filters('vp_woo_pont_frontend_params', $vp_woo_pont_local) );
+
 		}
 
 		//If its the tracking page
@@ -520,23 +537,10 @@ class VP_Woo_Pont {
 		}
 	}
 
-	public function find_point_info($provider, $point_id) {
+	public function find_point_info($provider, $point_id, $country = 'HU') {
 
 		//Use this as the provider for the json files
 		$provider_json = $provider;
-
-		//Backward compat
-		$postapont_new_names = array(
-			'postapont_10' => 'postapont_posta',
-			'postapont_20' => 'postapont_mol',
-			'postapont_30' => 'postapont_automata',
-			'postapont_50' => 'postapont_coop',
-			'postapont_70' => 'postapont_mediamarkt'
-		);
-
-		if(isset($postapont_new_names[$provider_json])) {
-			$provider_json = $postapont_new_names[$provider_json];
-		}
 
 		//Get submitted data
 		$points = array();
@@ -545,11 +549,35 @@ class VP_Woo_Pont {
 
 		//Get the JSON file based on the provider type
 		if($provider_json != 'custom') {
-			$filename = get_option('_vp_woo_pont_file_'.$provider_json);
-			$filepath = $download_folders['dir'].$filename;
-			$json_file = file_get_contents($filepath);
+			$files = get_option('_vp_woo_pont_db_'.$provider_json);
 
-			//Check if file exists
+			//Check if files are available
+			if(!$files) {
+				return false;
+			}
+
+			//Get the file based on the country
+			$filename = '';
+			foreach ($files as $file) {
+				if(strtoupper($file['country']) == strtoupper($country)) {
+					$filename = $file['file'];
+					break;
+				}
+			}
+
+			//If no file, return false
+			if(!$filename) {
+				return false;
+			}
+			
+			//Check if file exists before trying to read it
+			$filepath = $download_folders['dir'].$filename;
+			if(!file_exists($filepath)) {
+				return false;
+			}
+
+			//Load file content
+			$json_file = file_get_contents($filepath);
 			if($json_file === false) {
 				return false;
 			}
@@ -603,12 +631,13 @@ class VP_Woo_Pont {
 		//Get submitted data
 		$provider = sanitize_text_field($_POST['provider']);
 		$id = sanitize_text_field($_POST['id']);
+		$country = sanitize_text_field($_POST['country']);
 		$points = array();
 		$download_folders = VP_Woo_Pont_Helpers::get_download_folder();
 		$point = false;
 
 		//Get point data
-		$point = $this->find_point_info($provider, $id);
+		$point = $this->find_point_info($provider, $id, $country);
 
 		//Check if we have a point found
 		if($point) {
@@ -871,7 +900,7 @@ class VP_Woo_Pont {
 			'address_1'  => $point['addr'],
 			'address_2'  => '',
 			'city'       => $point['city'],
-			'state'      => '',
+			'state'      => '-',
 			'postcode'   => $point['zip'],
 			'country'    => 'HU'
 		);
@@ -955,9 +984,10 @@ class VP_Woo_Pont {
 		$order = wc_get_order($order_id);
 		$provider = sanitize_text_field($_POST['provider']);
 		$point_id = sanitize_text_field($_POST['point_id']);
+		$country = sanitize_text_field($_POST['country']);
 
 		//Get point data
-		$point = $this->find_point_info($provider, $point_id);
+		$point = $this->find_point_info($provider, $point_id, $country);
 
 		//Save custom meta and replace shipping address
 		$this->update_order_with_selected_point($order, $point);
@@ -967,6 +997,7 @@ class VP_Woo_Pont {
 		$response = array();
 		$providers = VP_Woo_Pont_Helpers::get_supported_providers();
 		$response['point_id'] = $point['id'];
+		$response['coordinates'] = $point['lat'].';'.$point['lon'];
 		$response['point_name'] = $point['name'];
 		$response['provider_label'] = $providers[$point['provider']];
 		$response['provider'] = $point['provider'];
@@ -1016,7 +1047,7 @@ class VP_Woo_Pont {
 
 	public function render_provider_filter() {
 		$providers_for_home_delivery = VP_Woo_Pont_Helpers::get_supported_providers_for_home_delivery();
-		$enabled_providers = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers');
+		$enabled_providers = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers', array());
 		$selected_filter = isset($_GET['vp_woo_pont_provider_filter']) ? sanitize_text_field($_GET['vp_woo_pont_provider_filter']) : '';
 		?>
 		<select name="vp_woo_pont_provider_filter">
@@ -1264,6 +1295,7 @@ class VP_Woo_Pont {
 			$customer_id = get_current_user_id();
 			$point_info = get_user_meta( $customer_id, '_vp_woo_pont_point_id', true );
 			$selected_pont = WC()->session->get( 'selected_vp_pont' );
+			$country = get_user_meta( $customer_id, 'shipping_country', true );
 
 			//If a point is stored
 			if($point_info && !$selected_pont) {
@@ -1275,7 +1307,7 @@ class VP_Woo_Pont {
 				if(!in_array($provider, array('gls', 'packeta', 'postapont_10', 'postapont_20', 'postapont_30', 'postapont_50', 'postapont_70'))) {
 			
 					//Get point data
-					$point = $this->find_point_info($provider, $point_id);
+					$point = $this->find_point_info($provider, $point_id, $country);
 
 					//Check if we have a point found
 					if($point) {
@@ -1417,9 +1449,10 @@ class VP_Woo_Pont {
 			$point_info = explode('|', $point_info);
 			$provider = $point_info[0];
 			$point_id = $point_info[1];
+			$country = get_user_meta( $customer_id, 'shipping_country', true );
 
 			//Get point data
-			$point = $this->find_point_info($provider, $point_id);
+			$point = $this->find_point_info($provider, $point_id, $country);
 
 			//Check if we have a point found
 			if($point) {
@@ -1480,6 +1513,16 @@ class VP_Woo_Pont {
 	public function show_shipping_address($methods){
 		$methods = array_diff($methods, array('vp_pont'));
 		return $methods;
+	}
+
+	public function hide_state_field($locales) {
+		$locales['HU']['state']['hidden'] = true;
+		return $locales;
+	}
+
+	public function remove_states($states): mixed {
+		$states['HU'] = array();
+		return $states;
 	}
 
 }

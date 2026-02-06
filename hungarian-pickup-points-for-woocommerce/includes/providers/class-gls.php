@@ -141,14 +141,32 @@ class VP_Woo_Pont_GLS {
 			'HR' => __( 'Croatia', 'vp-woo-pont' ),
 			'CZ' => __( 'Czechia', 'vp-woo-pont' ),
 			'SI' => __( 'Slovenia', 'vp-woo-pont' ),
-			'SK' => __( 'Slovakia', 'vp-woo-pont' )
+			'SK' => __( 'Slovakia', 'vp-woo-pont' ),
+			'DE' => __( 'Germany', 'vp-woo-pont' ),
+			'AT' => __( 'Austria', 'vp-woo-pont' ),
+			'PL' => __( 'Poland', 'vp-woo-pont' ),
+			'GR' => __( 'Greece', 'vp-woo-pont' ),
+			'IT' => __( 'Italy', 'vp-woo-pont' ),
+			'FR' => __( 'France', 'vp-woo-pont' ),
+			'DK' => __( 'Denmark', 'vp-woo-pont' ),
+			'NL' => __( 'Netherlands', 'vp-woo-pont' ),
+			'BE' => __( 'Belgium', 'vp-woo-pont' ),
+			'BG' => __( 'Bulgaria', 'vp-woo-pont' ),
+			'LV' => __( 'Latvia', 'vp-woo-pont' ),
+			'LT' => __( 'Lithuania', 'vp-woo-pont' ),
+			'EE' => __( 'Estonia', 'vp-woo-pont' ),
+			'IE' => __( 'Ireland', 'vp-woo-pont' ),
+			'SE' => __( 'Sweden', 'vp-woo-pont' ),
+			'LU' => __( 'Luxembourg', 'vp-woo-pont' ),
+			'PT' => __( 'Portugal', 'vp-woo-pont' ),
+			'FI' => __( 'Finland', 'vp-woo-pont' ),
+			'ES' => __( 'Spain', 'vp-woo-pont' ),
 		);
 
 		//Smallf ix for tracking automation, since the return shipment has the same delivered status as the normal one
 		add_filter('vp_woo_pont_tracking_automation_target_status', array($this, 'tracking_automation_target_status'), 10, 6);
 
 	}
-
 	public function get_settings($settings) {
 		$point_services = array(
 			'SM2' => __('Preadvice Service (SM2)', 'vp-woo-pont'),
@@ -290,6 +308,19 @@ class VP_Woo_Pont_GLS {
 				'id' => 'gls_cod_rounding'
 			),
 			array(
+				'title' => __( 'Generate delivery notes','vp-woo-pont'  ),
+				'type'     => 'checkbox',
+				'desc' => __( 'Generate optional GLS delivery notes for the shipments','vp-woo-pont'  ),
+				'id' => 'gls_delivery_notes'
+			),
+			array(
+				'title' => __( 'GLS Locker Express','vp-woo-pont'  ),
+				'type'     => 'checkbox',
+				'default' => 'yes',
+				'desc' => __( 'Add a separate filter on the map to only show GLS Locker Express locations','vp-woo-pont'  ),
+				'id' => 'gls_milkrun_filter'
+			),
+			array(
 				'type' => 'sectionend'
 			)
 		);
@@ -297,11 +328,22 @@ class VP_Woo_Pont_GLS {
 		return $settings+$gls_settings;
 	}
 
+	public function get_auth_data($order) {
+		return apply_filters('vp_woo_pont_gls_auth_data', array(
+			'Username' => $this->api_username,
+			'Password' => array_values(unpack('C*', hash('sha512', $this->api_password, true))),
+			'ClientNumber' => intval($this->api_client_number)
+		), $order);
+	}
+
 	public function create_label($data) {
+
+		//Get auth data
+		$auth = $this->get_auth_data($data['order']);
 
 		//Create packet data
 		$parcel = array(
-			'ClientNumber' => intval($this->api_client_number),
+			'ClientNumber' => $auth['ClientNumber'],
 			'ClientReference' => $data['reference_number'],
 			'Content' => VP_Woo_Pont()->labels->get_package_contents_label($data, 'gls'),
 			'PickupAddress' => array(
@@ -362,6 +404,18 @@ class VP_Woo_Pont_GLS {
 			$parcel['DeliveryAddress']['City'] = '';
 			$parcel['DeliveryAddress']['ZipCode'] = '';
 			$parcel['DeliveryAddress']['CountryIsoCode'] = ($order->get_shipping_country()) ? $order->get_shipping_country() : 'HU';
+		}
+
+		//For EU points, we need to supply the address of the point too
+		if($data['point_id'] && $order->get_shipping_country() != 'HU') {
+			$provider_id = $data['order']->get_meta('_vp_woo_pont_provider');
+			$point = VP_Woo_Pont()->find_point_info($provider_id, $data['point_id']);
+			if($point) {
+				$parcel['DeliveryAddress']['Street'] = $point['addr'];
+				$parcel['DeliveryAddress']['HouseNumberInfo'] = '';
+				$parcel['DeliveryAddress']['City'] = $point['city'];
+				$parcel['DeliveryAddress']['ZipCode'] = $point['zip'];
+			}
 		}
 
 		//Check for COD
@@ -453,8 +507,8 @@ class VP_Woo_Pont_GLS {
 		//Create request data
 		$label_size = VP_Woo_Pont_Helpers::get_option('gls_sticker_size', 'A4_2x2');
 		$options = array(
-			'Username' => $this->api_username,
-			'Password' => array_values(unpack('C*', hash('sha512', $this->api_password, true))),
+			'Username' => $auth['Username'],
+			'Password' => $auth['Password'],
 			'ParcelList' => array($parcel),
 			'PrintPosition' => 1,
 			'ShowPrintDialog' => 0,
@@ -549,12 +603,18 @@ class VP_Woo_Pont_GLS {
 
 	public function void_label($data) {
 
+		//Get auth data
+		$auth = $this->get_auth_data($data['order']);
+
 		//Create request data
 		$options = array(
-			'Username' => $this->api_username,
-			'Password' => array_values(unpack('C*', hash('sha512', $this->api_password, true))),
+			'Username' => $auth['Username'],
+			'Password' => $auth['Password'],
 			'ParcelIdList' => array($data['parcel_id'])
 		);
+
+		//Allow plugins to modify
+		$options = apply_filters('vp_woo_pont_gls_void_label', $options, $data);
 
 		//Submit request
 		$request = wp_remote_post( $this->api_url.'DeleteLabels', array(
@@ -702,10 +762,13 @@ class VP_Woo_Pont_GLS {
 		//Parcel number
 		$parcel_number = $order->get_meta('_vp_woo_pont_parcel_number');
 
+		//Get auth data
+		$auth = $this->get_auth_data($order);
+
 		//Create request data
 		$options = array(
-			'Username' => $this->api_username,
-			'Password' => array_values(unpack('C*', hash('sha512', $this->api_password, true))),
+			'Username' => $auth['Username'],
+			'Password' => $auth['Password'],
 			'ParcelNumber' => $parcel_number,
 			'ReturnPOD' => 0,
 			'LanguageIsoCode' => 'HU'
@@ -713,6 +776,9 @@ class VP_Woo_Pont_GLS {
 
 		//Logging
 		VP_Woo_Pont()->log_debug_messages($options, 'gls-get-tracking-info');
+
+		//Allow plugins to modify request
+		$options = apply_filters('vp_woo_pont_gls_tracking', $options, $order);
 
 		//Submit request
 		$request = wp_remote_post( $this->api_url.'GetParcelStatuses', array(
@@ -730,7 +796,6 @@ class VP_Woo_Pont_GLS {
 
 		//Parse response
 		$response = wp_remote_retrieve_body( $request );
-		//print_r($response);die();
 		$response = json_decode( $response, true );
 
 		//Get tracking info
@@ -781,12 +846,7 @@ class VP_Woo_Pont_GLS {
 
 	public function get_enabled_countries() {
 		$enabled_countries = get_option('vp_woo_pont_gls_countries', array('HU'));
-		$enabled = array();
-		$supported = $this->supported_countries;
-		foreach ($enabled_countries as $enabled_country) {
-			$enabled['gls_'.strtolower($enabled_country)] = $supported[$enabled_country].' (GLS)';
-		}
-		return $enabled;
+		return $enabled_countries;
 	}
 
 	public function tracking_automation_target_status($target_status, $order, $provider, $tracking_info, $automation, $event_status) {
@@ -806,6 +866,42 @@ class VP_Woo_Pont_GLS {
 			}
 		}
 		return false;
+	}
+
+	public function close_shipments($packages = array(), $orders = array()) {
+
+		//Init mPDF
+		require_once plugin_dir_path(__FILE__) . '../../vendor/autoload.php';
+
+		// Create a new mPDF object
+		$mpdf = new \Mpdf\Mpdf(['mode' => 'c', 'format' => 'A4', 'allow_charset_conversion' => true]);
+
+		//Setup tempalte data
+		$label_data = array(
+			'orders' => $orders,
+			'carrier' => 'gls',
+			'icon' => VP_Woo_Pont()::$plugin_url.'/assets/images/icon-gls.svg'
+		);
+		$html = wc_get_template_html('shipments-table.php', $label_data, false, VP_Woo_Pont::$plugin_path . '/templates/');
+
+		//Add the HTML content to the PDF document
+		$mpdf->WriteHTML($html);
+
+		//Output the PDF document
+		$pdf = $mpdf->Output('', 'S');
+
+		//Try to save PDF file
+		$pdf_file = VP_Woo_Pont_Labels::get_pdf_file_path('gls-manifest', 0);
+		VP_Woo_Pont_Labels::save_pdf_file($pdf, $pdf_file);
+
+		//Return response in unified format
+		return array(
+			'shipments' => array(),
+			'orders' => $orders,
+			'pdf' => array(
+				'gls' => $pdf_file['name']
+			)
+		);
 	}
 
 }

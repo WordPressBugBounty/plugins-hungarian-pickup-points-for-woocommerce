@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<span class="cost"></span>
 					</div>
 				</div>
+				<div class="vp-woo-pont-modal-sidebar-result-info-features features"></div>
 				<div class="vp-woo-pont-modal-sidebar-result-info-comment comment"></div>
 				<div class="vp-woo-pont-modal-sidebar-result-info-open-hours open-hours">
 					<a href="#" class="open-hours-toggle">

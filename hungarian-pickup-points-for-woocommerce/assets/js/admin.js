@@ -1,4 +1,6 @@
 var L = require('leaflet');
+require('leaflet.markercluster');
+require("leaflet.featuregroup.subgroup");
 
 jQuery(document).ready(function($) {
 
@@ -28,7 +30,7 @@ jQuery(document).ready(function($) {
 
 			//When enabled providers changed
 			this.$enabled_providers.on('change', 'input[name="vp_woo_pont_enabled_providers[]"]', this.on_provider_change);
-			this.$pricing_table.on('change', '.vp-woo-pont-settings-pricing-points input', function(){vp_woo_pont_settings.reindex_x_rows('pricings')});
+			this.$pricing_table.on('change', '.vp-woo-pont-settings-pricing-points input', this.on_provider_change_in_pricing);
 			this.on_provider_change(); //also run on page load
 
 			//Pro version actions
@@ -161,6 +163,108 @@ jQuery(document).ready(function($) {
 					$selectedField.parents('tr').show();
 				}
 			}).trigger('change');
+
+			//Weight based pricing toggle
+			this.$pricing_table.on('click', '.add-weight-row', vp_woo_pont_settings.add_new_pricing_weight_row);
+			this.$pricing_table.on('click', '.delete-weight-row', vp_woo_pont_settings.delete_pricing_weight_row);
+			this.$pricing_table.on('change', 'input.weight-based', vp_woo_pont_settings.toggle_pricing_weight);
+				
+			//If we already have some weight pricing, append to the table
+			this.$pricing_table.find('.vp-woo-pont-settings-pricing-weight-options').each(function(){
+				var saved_options = $(this).data('options');
+				var tbody = $(this);
+				if(saved_options) {
+					saved_options.forEach(function(condition){
+						var sample_row = $('#vp_woo_pont_weight_range_sample_row').html();
+						sample_row = $(sample_row);
+						sample_row.find('input.min').val(condition.min);
+						sample_row.find('input.max').val(condition.max);
+						sample_row.find('input.cost').val(condition.cost);
+						tbody.append(sample_row);
+					});
+				} else {
+					var sample_row = $('#vp_woo_pont_weight_range_sample_row').html();
+					sample_row = $(sample_row);
+					tbody.append(sample_row);
+				}
+				console.log('test',saved_options);
+
+				vp_woo_pont_settings.reindex_x_rows('pricings');
+			});
+
+			//Setup pricing filters
+			$('.vp-woo-pont-settings-pricings-filter select').on('change', function(){
+				var courier_filter = $('.vp-woo-pont-settings-pricings-filter select').first().val();
+				var country_filter = $('.vp-woo-pont-settings-pricings-filter select').last().val();
+
+				if(courier_filter == 'all' && country_filter == 'all') {
+					$('.vp-woo-pont-settings-pricings-filter .clear-filters').hide();
+				} else {
+					$('.vp-woo-pont-settings-pricings-filter .clear-filters').show();
+				}	
+
+				$('.vp-woo-pont-settings-pricing').each(function(){
+					var show_by_courier = false;
+					var show_by_country = false;
+					var enabled_providers = $(this).find('.vp-woo-pont-settings-pricing-points li:visible input:checked');
+					var enabled_countires = $(this).find('.vp-woo-pont-settings-pricing-countries input:checked');
+
+					//Filter by courier
+					if(courier_filter == 'all') show_by_courier = true;
+					enabled_providers.each(function(){
+						var courier = $(this).data('courier');
+						if(courier_filter != 'all' && courier == courier_filter) {
+							show_by_courier = true;
+						}
+					});
+
+					//Filter by country
+					if(country_filter == 'all') show_by_country = true;
+					enabled_countires.each(function(){
+						var country = $(this).val();
+						if(country_filter != 'all' && country == country_filter) {
+							show_by_country = true;
+						}
+					});
+
+					if(show_by_courier && show_by_country || (courier_filter == 'all' && country_filter == 'all')) {
+						$(this).show();
+					} else {
+						$(this).hide();
+					}
+
+				});
+
+			});
+
+			//Clear pricing filters
+			$('.vp-woo-pont-settings-pricings-filter').on('click', '.clear-filters', function(e){
+				e.preventDefault();
+				$('.vp-woo-pont-settings-pricings-filter select').val('all').trigger('change');
+				return false;
+			});
+
+			//Copy function for pricing row
+			this.$pricing_table.on('click', '.duplicate-pricing', function(e){
+				e.preventDefault();
+				var $row = $(this).closest('.vp-woo-pont-settings-pricing');
+				var $newRow = $row.clone();
+				$row.after($newRow);
+				vp_woo_pont_settings.reindex_x_rows('pricings');
+				return false;
+			});
+
+			//Move up & down function for pricing row
+			this.$pricing_table.on('click', '.move-up, .move-down', function(e){
+				e.preventDefault();
+				var $row = $(this).closest('.vp-woo-pont-settings-pricing');
+				if($(this).hasClass('move-up'))
+					$row.prev().before($row);
+				else
+					$row.next().after($row);
+				vp_woo_pont_settings.reindex_x_rows('pricings');
+				return false;
+			});
 
 		},
 		check_if_provider_selected: function() {
@@ -369,7 +473,9 @@ jQuery(document).ready(function($) {
 		},
 		reindex_x_rows: function(group) {
 			var group = group.replace('_', '-');
+			var item_count = 0;
 			$('.vp-woo-pont-settings-'+group).find('.vp-woo-pont-settings-repeat-item').each(function(index){
+				item_count++;
 				$(this).find('textarea, select, input').each(function(){
 					var name = $(this).data('name');
 					if(name) {
@@ -390,6 +496,20 @@ jQuery(document).ready(function($) {
 					});
 				});
 
+				//Reindex weight pricing
+				if(group == 'pricings') {
+					$(this).find('tr').each(function(index_child){
+						$(this).find('input').each(function(){
+							var name = $(this).data('name');
+							if(name) {
+								name = name.replace('Y', index_child);
+								name = name.replace('X', index);
+								$(this).attr('name', name);
+							}
+						});
+					});
+				}
+
 				$(this).find('.vp-woo-pont-settings-repeat-select').each(function(){
 					var val = $(this).val();
 					if($(this).hasClass('vp-woo-pont-settings-advanced-option-property')) {
@@ -407,15 +527,14 @@ jQuery(document).ready(function($) {
 					$(this).parent().find('label i').removeClass().addClass(val);
 				});
 
-				if(group == 'pricings') {
-					vp_woo_pont_settings.toggle_countries_checkboxes($(this));
-				}
-
 			});
 
 			if(group == 'pricings') {
 				vp_woo_pont_settings.on_provider_change();
 			}
+
+			//Add counter to added rows
+			$('.vp-woo-pont-settings-'+group).attr('data-count', item_count);
 
 			$( document.body ).trigger( 'wc-enhanced-select-init' );
 
@@ -516,29 +635,31 @@ jQuery(document).ready(function($) {
 			vp_woo_pont_settings.reindex_x_rows(event.data.group);
 			return false;
 		},
-		toggle_countries_checkboxes: function($row) {
-			var couriers = ['packeta', 'gls_', 'dpd'];
-			if($row.find('input[value*="packeta"]:checked').length || $row.find('input[value*="gls_"]:checked').length || $row.find('input[value*="dpd"]:checked').length) {
-				$row.find('.vp-woo-pont-settings-pricing-countries').show();
-				$row.find('.vp-woo-pont-settings-pricing-countries').find('li').hide();
-				couriers.forEach(function(courier){
-					if($row.find('input[value*="'+courier+'"]:checked').length) {
-						$row.find('.vp-woo-pont-settings-pricing-countries').find('li[data-courier="'+courier+'"]').show();
-					}
-				});
-			} else {
-				$row.find('.vp-woo-pont-settings-pricing-countries').hide();
-			}
-		},
 		load_json_files: function(callback) {
 			var providers = vp_woo_pont_params.providers;
 			providers['postapont'] = 'Postapont';
+			console.log(providers);
+			var billing_country = $('#_billing_country').val();
 
-			var calls = vp_woo_pont_params.files.map(function(file) {
-				console.log(file);
-				return $.getJSON( file.url, function( data ) {
-					vp_woo_pont_settings.json_data_points.push({provider: file.type, title: providers[file.type], data: data});
+			var calls = [];
+			
+			Object.keys(vp_woo_pont_params.files).forEach(function(json) {
+				
+				//Check for country specific files
+				vp_woo_pont_params.files[json].forEach(function(file){
+
+					//Skip if the country doesn't match
+					if(billing_country != file.country) {
+						return; //skip this file
+					}
+
+					calls.push($.getJSON(vp_woo_pont_params.db_url+file.file, function (data) {
+						vp_woo_pont_settings.json_data_points.push({provider: json, title: providers[json], data: data});
+						console.log('loaded json for '+json);
+					}));
+
 				});
+
 			});
 
 			$.when.apply($, calls).fail(function (jqXhr, status, error) {
@@ -719,27 +840,60 @@ jQuery(document).ready(function($) {
 		},
 		trigger_json_import: function() {
 			var provider_id = $(this).data('provider');
-			var $form = $(this).parent();
+			var $list = $(this).parent().find('ul');
+			var $this = $(this);
 			var data = {
 				action: 'vp_woo_pont_import_json_manually',
 				nonce: vp_woo_pont_params.nonces.settings,
 				provider: provider_id
 			};
 
-			$form.addClass('loading');
+			$this.addClass('loading');
 			$.post(ajaxurl, data, function(response) {
-				$form.removeClass('loading');
-				$form.removeClass('has-file');
+				$this.removeClass('loading');
+				$list.addClass('resetting');
+				
 				if(response.success) {
-					$form.addClass('has-file');
-					$form.find('.download-link').attr('href', response.data.url+response.data.files[provider_id]);
-					$form.find('.download-link').attr('data-qty', response.data.qty);
-					console.log(response.data.qty);
-				} else {
-					$form.addClass('fail');
 					setTimeout(function(){
-						$form.removeClass('fail');
-					}, 1000);
+						$list.empty();
+
+						//Add success icon
+						var success_icon = $('<li><span class="dashicons dashicons-yes-alt"></span></li>');
+						$list.append(success_icon);
+
+						//Append results
+						response.data.files.forEach(function(item){
+							if(response.data.courier+'_'+item.type != provider_id) {
+								return;
+							}
+
+							var list_item = $('<li></li>');
+							var link = $('<a></a>');
+							link.attr('href', response.data.url + item.file);
+							link.attr('data-qty', item.count);
+							link.attr('target', '_blank');
+							link.addClass('download-link');
+							link.text(item.file);
+							list_item.append(link);
+							$list.append(list_item);
+						});
+
+						$list.removeClass('resetting');
+					}, 500);
+				} else {
+					setTimeout(function(){
+						$list.empty();
+
+						//Add warning icon
+						var warning_icon = $('<li><span class="dashicons dashicons-warning"></span></li>');
+						$list.append(warning_icon);
+
+						var warning_message = $('<li></li>');
+						warning_message.text(response.data.message);
+						$list.append(warning_message);
+
+						$list.removeClass('resetting');
+					}, 500);
 				}
 			});
 
@@ -826,12 +980,7 @@ jQuery(document).ready(function($) {
 				});
 
 				var selected_country = $(this).find('.vp-woo-pont-packeta-carriers-table-country select').val();
-				if(!$(this).find('.vp-woo-pont-packeta-carriers-table-country select').length) {
-					selected_country = $(this).find('.vp-woo-pont-packeta-carriers-table-country input').val();
-				}
-
 				var $carrier_select = $(this).find('.vp-woo-pont-packeta-carriers-table-carrier select');
-				var selected_carrier = $carrier_select.val();
 
 				$carrier_select.find('optgroup').each(function(){
 					if($(this).attr('label') == selected_country) {
@@ -839,11 +988,13 @@ jQuery(document).ready(function($) {
 
 						if(!$(this).find('option:selected').length) {
 							$carrier_select.find('option').removeAttr('selected');
+							$(this).find('option').attr('hidden', false);
 							$(this).find('option').first().attr('selected', true);
 						}
 					} else {
 						$(this).attr('hidden', true);
 						$(this).find('option').removeAttr('selected');
+						$(this).find('option').attr('hidden', true);
 					}
 				});
 
@@ -872,6 +1023,40 @@ jQuery(document).ready(function($) {
 			});
 
 			$( '.woocommerce-save-button' ).removeAttr( 'disabled' );
+		},
+		on_provider_change_in_pricing: function() {
+			vp_woo_pont_settings.reindex_x_rows('pricings');
+			var $pricing = $(this).closest('.vp-woo-pont-settings-pricing');
+			var country_options = $pricing.find('.vp-woo-pont-settings-pricing-countries li');
+			var enabled_couriers = [];
+
+			var $points = $pricing.find('.vp-woo-pont-settings-pricing-points li:visible');
+			$points.each(function(){
+				var $input = $(this).find('input');
+				var courier = $input.data('courier');
+				var checked = $input.is(':checked');
+				if(checked) {
+					enabled_couriers.push(courier);
+				}
+			});
+
+			country_options.each(function(){
+				var couriers = $(this).data('couriers').split(',');
+				var should_show = false;
+				enabled_couriers.forEach(function(courier){
+					if(couriers.includes(courier)) {
+						should_show = true;
+					}
+				});
+
+				if(should_show) {
+					$(this).show();
+				} else {
+					$(this).hide();
+					$(this).find('input').prop('checked', false);
+				}
+			});
+
 		},
 		refresh_field: function(field, button) {
 			var $this = button;
@@ -983,6 +1168,37 @@ jQuery(document).ready(function($) {
 				}
 				
 			});
+		},
+		add_new_pricing_weight_row: function(event) {
+			var sample_row = $('#vp_woo_pont_weight_range_sample_row').html();
+			$(this).closest('tbody').append(sample_row);
+			vp_woo_pont_settings.reindex_x_rows('pricings');
+			return false;
+		},
+		delete_pricing_weight_row: function(event) {
+			$(this).closest('tr').remove();
+			vp_woo_pont_settings.reindex_x_rows('pricings');
+			return false;
+		},
+		toggle_pricing_weight: function(event) {
+			var checked = $(this).is(":checked");
+			var $weight_pricing = $(this).closest('.vp-woo-pont-settings-pricing').find('.vp-woo-pont-settings-pricing-weight');
+			var $weight_pricing_options = $weight_pricing.find('.vp-woo-pont-settings-pricing-weight-options');
+
+			console.log(checked, $weight_pricing);
+
+			if(checked) {
+				//Add empty row if no condtions exists
+				if($weight_pricing_options.find('tr').length < 1) {
+					var sample_row = $('#vp_woo_pont_weight_range_sample_row').html();
+					$weight_pricing_options.append(sample_row);
+				}
+				$weight_pricing.show();
+			} else {
+				$weight_pricing.hide();
+			}
+
+			vp_woo_pont_settings.reindex_x_rows('pricings');
 		},
 	}
 
@@ -2183,6 +2399,12 @@ jQuery(document).ready(function($) {
 		$shipmentRow: $('.vp-woo-pont-metabox-rows-data-shipment'),
 		$transspedPackages: $('.vp-woo-pont-transsped-packaging'),
 		selected_replacement: false,
+		$map: false,
+		markerIcons: [],
+		markerClusters: false,
+		groups: [],
+		selectedPointCoordinates: '',
+		selectedPointID: '',
 		init: function() {
 			this.$optionsButton.on( 'click', this.show_options );
 			this.$generateButtonLabel.on( 'click', this.generate_label );
@@ -2672,9 +2894,19 @@ jQuery(document).ready(function($) {
 				$('.vp-woo-pont-modal-replace-options li.category#'+provider_id).addClass('selected');
 			}
 			$('#vp-woo-pont-modal-replace-search').trigger('keyup');
+
+			if(provider_id == 'map') {
+				vp_woo_pont_metabox.load_replacement_map();
+				console.log('load_replacement_map');
+			} else {
+				$('.vp-woo-pont-modal-replace-map-container').hide();
+				$('.vp-woo-pont-modal-replace-options').show();
+			}
+
 		},
 		load_replacement_points: function(provider_id) {
 			vp_woo_pont_settings.json_data_points.forEach(function(data_points){
+				console.log('load_replacement_points', provider_id, data_points);
 				if(data_points.provider == provider_id && !$('.vp-woo-pont-modal-replace-results li#'+provider_id).length) {
 					var providerLi = $('<li>').attr('id', data_points.provider);
 					providerLi.addClass('category');
@@ -2682,14 +2914,159 @@ jQuery(document).ready(function($) {
 					var dataUl = $('<ul>');
 					data_points.data.forEach(function(data) {
 						var nameStrong = $('<strong>').text(data.name);
-			      var addressSpan = $('<span>').text(data.zip + ' ' + data.city + ' ' + data.addr);
-			      var dataLi = $('<li>').addClass('result').data('point_id', data.id).data('provider', provider_id).append(nameStrong, addressSpan);
+						var addressSpan = $('<span>').text(data.zip + ' ' + data.city + ' ' + data.addr);
+						var dataLi = $('<li>').addClass('result').data('point_id', data.id).data('provider', provider_id).append(nameStrong, addressSpan);
 						dataUl.append(dataLi);
 					});
 					providerLi.append(dataUl);
 					$('.vp-woo-pont-modal-replace-results').append(providerLi);
 				}
 			});
+		},
+		load_replacement_map: function() {
+
+			//Reset map
+			if(vp_woo_pont_metabox.$map) {
+				vp_woo_pont_metabox.$map.off();
+				vp_woo_pont_metabox.$map.remove();
+				$('#vp-woo-pont-replace-map').html('');
+				vp_woo_pont_metabox.$map = false;
+			}
+		
+			//Show the div
+			$('.vp-woo-pont-modal-replace-map-container').show();
+			$('.vp-woo-pont-modal-replace-options').hide();
+
+			//Load map if not loaded yet
+			vp_woo_pont_metabox.$map = L.map('vp-woo-pont-replace-map')
+
+			//Just to center in Hungary
+			vp_woo_pont_metabox.$map.setView([47.25525656277509, 19.54590752720833], 7); 
+			vp_woo_pont_metabox.$map.zoomControl.setPosition('bottomright');
+
+			//Check for custom coordinates
+			if(vp_woo_pont_settings.selectedPointCoordinates) {
+				var coords = vp_woo_pont_settings.selectedPointCoordinates.split(';');
+				vp_woo_pont_metabox.$map.setView([parseFloat(coords[0]), parseFloat(coords[1])], 14);
+			}
+
+			//Load images into map
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 19,
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(vp_woo_pont_metabox.$map);
+
+			//Get default parameters for markerClusters
+			var markerClusterParams = {
+			  spiderfyOnMaxZoom: true,
+			  showCoverageOnHover: false,
+			  zoomToBoundsOnClick: true,
+			  disableClusteringAtZoom: 16,
+				removeOutsideVisibleBounds: true,
+				chunkedLoading: true,
+				chunkProgress: function(processed, total) {
+					// Optional: show loading progress
+					console.log(`Clustering: ${Math.round((processed/total)*100)}%`);
+				},
+				chunkDelay: 0, // Reduce delay for faster processing
+				maxClusterRadius: 80, // Slightly smaller for better performance
+				animate: true, // Disable animations for large datasets
+				spiderfyDistanceMultiplier: 1.2,
+				// Custom cluster icon for better performance
+				iconCreateFunction: function(cluster) {
+					var count = cluster.getChildCount();
+					var size = count < 100 ? 'small' : count < 1000 ? 'medium' : 'large';
+					return new L.DivIcon({ 
+						html: '<div><span>' + count + '</span></div>', 
+						className: 'marker-cluster marker-cluster-' + size, 
+						iconSize: new L.Point(40, 40) 
+					});
+				}
+			};
+
+			//Create cluster layer
+			vp_woo_pont_metabox.markerClusters = new L.MarkerClusterGroup(markerClusterParams);
+
+			//Setup markers
+			vp_woo_pont_metabox.markerClusters.addTo(vp_woo_pont_metabox.$map);
+			vp_woo_pont_metabox.markerClusters._getExpandedVisibleBounds = function () {
+				return vp_woo_pont_metabox.markerClusters._map.getBounds();
+			};
+
+			//Create groups
+			vp_woo_pont_settings.json_data_points.forEach(function(data_points){
+				vp_woo_pont_metabox.groups[data_points.provider] = L.featureGroup.subGroup(vp_woo_pont_metabox.markerClusters);
+				vp_woo_pont_metabox.markerIcons[data_points.provider] = L.divIcon({html: '<div><i class="vp-woo-pont-provider-icon-'+data_points.provider+'"></i></div>', className: 'vp-woo-pont-marker '+data_points.provider, iconSize: [48, 55], iconAnchor: [24, 52]});
+			});
+
+			//Loop through json files
+			vp_woo_pont_settings.json_data_points.forEach(function(data_points){
+				vp_woo_pont_metabox.process_provider(data_points.provider, data_points.data);
+			});
+
+		},
+		process_provider: function(provider, data) {
+					var markers = [];
+					var batchSize = 1000; // Process 1000 markers at a time
+					var currentIndex = 0;
+					
+					function processBatch() {
+						var endIndex = Math.min(currentIndex + batchSize, data.length);
+						var batchMarkers = [];
+						
+						for (var i = currentIndex; i < endIndex; i++) {
+							var a = data[i];
+
+							// Only create marker if group exists
+							var targetGroup = null;
+							a.provider = provider;
+							targetGroup = vp_woo_pont_metabox.groups[provider];
+							
+							if(targetGroup) {
+								var marker = L.marker(new L.LatLng(a.lat, a.lon), { 
+									data: a,
+									riseOnHover: true // Better performance than default
+								});
+								a.marker_id = L.stamp(marker);
+								
+								marker.on('click', vp_woo_pont_metabox.select_in_map);
+								marker.setIcon(vp_woo_pont_metabox.markerIcons[a.provider]);
+
+								//Add class to marker element for styling if its the same as the selected one
+								if(vp_woo_pont_settings.selectedPointID && vp_woo_pont_settings.selectedPointID == a.id) {
+									marker.setIcon(L.divIcon({html: '<div><i class="vp-woo-pont-provider-icon-'+a.provider+'"></i></div>', className: 'vp-woo-pont-marker-selected vp-woo-pont-marker '+a.provider, iconSize: [48, 55], iconAnchor: [24, 52]}));
+								}
+								
+								batchMarkers.push({marker: marker, group: targetGroup});
+							}
+						}
+						
+						// Add markers to groups in batch
+						batchMarkers.forEach(function(item) {
+							item.marker.addTo(item.group);
+						});
+						
+						// Add to collections
+						markers = markers.concat(batchMarkers);
+	
+						currentIndex = endIndex;											
+						if (currentIndex < data.length) {
+							// Continue processing in next frame
+							requestAnimationFrame(processBatch);
+						} else {
+							// Finished processing
+							finishProcessing();
+						}
+					}
+					
+					function finishProcessing() {
+						if(vp_woo_pont_metabox.groups[provider]) {
+							vp_woo_pont_metabox.groups[provider].addTo(vp_woo_pont_metabox.$map);
+						}
+					}
+					
+					// Start processing
+					requestAnimationFrame(processBatch);
 		},
 		replace_point: function() {
 			$(this).WCBackboneModal({
@@ -2706,21 +3083,48 @@ jQuery(document).ready(function($) {
 			$selected.prop('checked', true);
 			$selected.parents('li').addClass('selected');
 
+			//Get coordinates
+			vp_woo_pont_settings.selectedPointCoordinates = $(this).data('coordinates');
+			vp_woo_pont_settings.selectedPointID = $(this).data('point_id');
+
 			//Get enabled providers
 			var enabled_providers = $('.vp-woo-pont-modal-replace-providers input').map(function() {
 				return this.value;
 			}).get();
 
 			//Load JSON files
-			vp_woo_pont_settings.load_json_files(function(){
+			if(vp_woo_pont_settings.json_data_points.length === 0) {
+				vp_woo_pont_settings.load_json_files(function(){
 
-				//Load selected values
+					console.log('JSON files loaded');
+
+					//Load selected values
+					$selected.trigger('change');
+
+				});
+			} else {
 				$selected.trigger('change');
-
-			});
+			}
 
 			return false;
+		},
+		select_in_map: function(e) {
 
+			//Remove active marker class
+			$('.leaflet-marker-icon.selected').removeClass('selected');
+			$('.vp-woo-pont-modal-replace-map-selected').html('');
+
+			//Add selected class
+			var layer = vp_woo_pont_metabox.markerClusters.getLayer(e.target.options.data.marker_id);
+			$(layer._icon).addClass('selected');
+
+			var nameStrong = $('<strong>').text(e.target.options.data.name);
+			var addressSpan = $('<span>').text(e.target.options.data.zip + ' ' + e.target.options.data.city + ' ' + e.target.options.data.addr);
+			var dataLi = $('<div>').addClass('result').data('point_id', e.target.options.data.id).data('provider', e.target.options.data.provider).append(nameStrong, addressSpan);
+			dataLi.on('click', vp_woo_pont_metabox.save_replacement_point);
+			$('.vp-woo-pont-modal-replace-map-selected').append(dataLi);
+
+			return false;
 		},
 		on_replacement_search: function() {
 			var searchText = $(this).val().toLowerCase();
@@ -2746,7 +3150,8 @@ jQuery(document).ready(function($) {
 				nonce: vp_woo_pont_metabox.nonce,
 				order: vp_woo_pont_metabox.order,
 				provider: $(this).data('provider'),
-				point_id: $(this).data('point_id')
+				point_id: $(this).data('point_id'),
+				country: $('#_billing_country').val()
 			};
 
 			$.post(ajaxurl, data, function(response) {
@@ -2771,6 +3176,8 @@ jQuery(document).ready(function($) {
 					vp_woo_pont_metabox.selected_provider = response.data.carrier;
 					vp_woo_pont_metabox.toggle_options();
 					vp_woo_pont_metabox.$replaceRow.find('a').data('provider_id', response.data.provider);
+					vp_woo_pont_metabox.$replaceRow.find('a').data('point_id', response.data.point_id);
+					vp_woo_pont_metabox.$replaceRow.find('a').data('coordinates', response.data.coordinates);
 
 					//Trigger event
 					$( document.body ).trigger( 'vp_woo_pont_metabox_pickup_point_changed' );

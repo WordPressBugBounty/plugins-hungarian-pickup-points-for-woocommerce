@@ -765,7 +765,6 @@ class VP_Woo_Pont_DPD {
 
 		return $tracking_info;
 	}
-
 	public function close_shipments($packages = array(), $orders = array()) {
 
 		//Submit request
@@ -829,7 +828,6 @@ class VP_Woo_Pont_DPD {
 			)
 		);
 	}
-
 	public function export_label($data) {
 		$dpd_country_codes = array('AT' => 'A', 'BA' => 'BIH', 'DE' => 'D', 'ES' => 'E', 'FI' => 'FIN', 'FR' => 'F', 'HU' => 'H', 'IE' => 'IRL', 'IT' => 'I', 'LU' => 'L', 'NO' => 'N', 'PT' => 'P', 'RU' => 'GUS', 'SE' => 'S', 'SI' => 'SLO');
 		$order = $data['order'];
@@ -871,12 +869,7 @@ class VP_Woo_Pont_DPD {
 
 	public function get_enabled_countries() {
 		$enabled_countries = get_option('vp_woo_pont_dpd_countries', array('HU'));
-		$enabled = array();
-		$supported = $this->supported_countries;
-		foreach ($enabled_countries as $enabled_country) {
-			$enabled['dpd_'.strtolower($enabled_country)] = $supported[$enabled_country].' (DPD)';
-		}
-		return $enabled;
+		return $enabled_countries;
 	}
 
 	public function tracking_automation_target_status($target_status, $order, $provider, $tracking_info, $automation, $event_status) {

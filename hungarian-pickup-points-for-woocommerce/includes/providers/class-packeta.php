@@ -18,6 +18,8 @@ class VP_Woo_Pont_Packeta {
 
 		//Load settings
 		add_filter('vp_woo_pont_carrier_settings_packeta', array($this, 'get_settings'));
+        add_filter('vp_woo_pont_get_supported_providers', array($this, 'add_providers'));
+        add_filter('vp_woo_pont_provider_subgroups', array($this, 'add_provider_subgroups'));
 
 		//Set supported statuses
 		$this->package_statuses = array(
@@ -56,6 +58,9 @@ class VP_Woo_Pont_Packeta {
 			add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'variable_options_fields'), 10, 3 );
 			add_action( 'woocommerce_save_product_variation', array( $this, 'save_variable_options_fields'), 10, 2 );
 		}
+
+		//Filter out options based on enabled countries
+		add_filter( 'vp_woo_pont_provider_costs', array( $this, 'filter_provider_costs' ), 10, 2 );
 
 	}
 
@@ -121,6 +126,35 @@ class VP_Woo_Pont_Packeta {
 		return $settings+$packeta_settings;
 	}
 
+	//Add providers based on the settings
+	public function add_providers($providers) {
+		$enabled_countries = get_option('vp_woo_pont_packeta_countries', array());
+		foreach( $enabled_countries as $enabled_country ) {
+			$country_code = explode(':', $enabled_country)[0];
+			$supported_countries = $this->get_supported_countries();
+			if(isset($supported_countries[$country_code])) {
+				foreach ($supported_countries[$country_code] as $carrier_id => $carrier_name) {
+					if($carrier_id == 'packeta') continue;
+					$providers['packeta_'.$carrier_id] = $carrier_name;
+				}
+			}
+		}
+        return $providers;
+    }
+
+	//Add provider subgroups too
+    public function add_provider_subgroups($subgroups) {
+		$enabled_countries = get_option('vp_woo_pont_packeta_countries', array());
+		foreach( $enabled_countries as $enabled_country ) {
+			$carrier_id = explode(':', $enabled_country)[1];
+			if($carrier_id == 'packeta') continue;
+			$subgroups['packeta'][] = $carrier_id;
+		}
+
+        return $subgroups;
+    }
+
+
 	public function create_label($data) {
 
 		//Create a new XML object
@@ -164,8 +198,8 @@ class VP_Woo_Pont_Packeta {
 
 		//Use a different point id, if its home delivery and define shipping address too
 		//ID in this case is the carrier ID set in settings
+		$order = $data['order'];
 		if(!$data['point_id']) {
-			$order = $data['order'];
 			$shipping_address = $this->get_shipping_address($order);
 			$carrier_id = $this->get_packeta_carrier_from_order($order);
 			$attributes->addressId = $carrier_id;
@@ -178,23 +212,37 @@ class VP_Woo_Pont_Packeta {
 			$attributes->currency = $this->get_packeta_package_currency($data['package'], $carrier_id);
 		} else {
 
+			//Split the provider and if the second part is a number, use that as addressId
+			$provider_parts = explode('_', $data['provider']);
+			$addressID = end($provider_parts);
+			if(is_numeric($addressID)) {
+
+				//Set address ID(this identifies the carrier)
+				$attributes->addressId = $addressID;
+
+				//Set size, as its required by most of the carriers
+				if(isset($data['package']['size']) && isset($data['package']['size']['width']) && isset($data['package']['size']['height']) && isset($data['package']['size']['length'])) {
+					$size = $attributes->addChild('size');
+					$size->addChild('height', $data['package']['size']['height']*10);
+					$size->addChild('length', $data['package']['size']['length']*10);
+					$size->addChild('width', $data['package']['size']['width']*10);
+				}
+
+			}
+
+			//Set pickup point ID
+			$attributes->addChild('carrierPickupPoint', $data['point_id']);
+
 			if($data['provider'] == 'packeta_mpl_postapont') {
 				$attributes->addressId = 4539;
-				$attributes->addChild('carrierPickupPoint', $data['point_id']);
 			}
 
 			if($data['provider'] == 'packeta_foxpost') {
 				$attributes->addressId = 32970;
-				$attributes->addChild('carrierPickupPoint', $data['point_id']);
 			}
 
 			if($data['provider'] == 'packeta_mpl_automata') {
 				$attributes->addressId = 29760;
-				$attributes->addChild('carrierPickupPoint', $data['point_id']);
-				$size = $attributes->addChild('size');
-				$size->addChild('height', 500);
-				$size->addChild('length', 310);
-				$size->addChild('width', 350);
 			}
 
 		}
@@ -346,13 +394,10 @@ class VP_Woo_Pont_Packeta {
 
 		//Default Packeta pickup points in these countries
 		$supported_countries = array(
-			'HU' => __('Hungary (Packeta)', 'vp-woo-pont'),
-			'MPL_POSTAPONT' => __('Postapont (MPL)', 'vp-woo-pont'),
-			'MPL_AUTOMATA' => __('Csomagautomata (MPL)', 'vp-woo-pont'),
-			'RO' => __('Romania (Packeta)', 'vp-woo-pont'),
-			'SK' => __('Slovakia (Packeta)', 'vp-woo-pont'),
-			'CZ' => __('Czech Republic (Packeta)', 'vp-woo-pont'),
-			'FOXPOST' => __('Foxpost', 'vp-woo-pont'),
+			'HU' => array('packeta' => __('Hungary (Packeta)', 'vp-woo-pont')),
+			'RO' => array('packeta' => __('Romania (Packeta)', 'vp-woo-pont')),
+			'SK' => array('packeta' => __('Slovakia (Packeta)', 'vp-woo-pont')),
+			'CZ' => array('packeta' => __('Czech Republic (Packeta)', 'vp-woo-pont'))
 		);
 
 		//Get the JSON file based on the provider type
@@ -371,7 +416,11 @@ class VP_Woo_Pont_Packeta {
 		//Group by countries
 		if(WC()->countries) {
 			foreach ($saved_carriers as $carrier_id => $carrier) {
-				$supported_countries[$carrier_id] = WC()->countries->countries[ $carrier['country'] ].': '.$carrier['name'];
+
+				if(!isset($supported_countries[$carrier['country']])) {
+					$supported_countries[$carrier['country']] = array();
+				}
+				$supported_countries[$carrier['country']][$carrier_id] = $carrier['name'];
 			}
 		}
 
@@ -379,13 +428,11 @@ class VP_Woo_Pont_Packeta {
 	}
 
 	public function get_enabled_countries() {
-		$supported_countries = $this->get_supported_countries();
-		$enabled_countries = get_option('vp_woo_pont_packeta_countries', array('HU'));
+		$enabled_countries = get_option('vp_woo_pont_packeta_countries', array());
 		$enabled = array();
-		foreach ($enabled_countries as $enabled_country) {
-			if(isset($supported_countries[$enabled_country])) {
-				$enabled[$enabled_country] = $supported_countries[$enabled_country];
-			}
+		foreach( $enabled_countries as $enabled_country ) {
+			$country_code = explode(':', $enabled_country)[0];
+			$enabled[] = $country_code;
 		}
 		return $enabled;
 	}
@@ -443,9 +490,9 @@ class VP_Woo_Pont_Packeta {
 
 		//Check if we need to convert value
 		if($carrier_currency != $package['currency']) {
-			return VP_Woo_Pont_Helpers::convert_currency($package['currency'], $carrier_currency, $package['total']);
+			return VP_Woo_Pont_Helpers::convert_currency($package['currency'], $carrier_currency, $package['total_insurance']);
 		} else {
-			return $package['total'];
+			return $package['total_insurance'];
 		}
 
 	}
@@ -588,8 +635,16 @@ class VP_Woo_Pont_Packeta {
 			} else {
 
 				//Exclude MPL
-				if($carrier['id'] == 29760 || $carrier['id'] == 4539 || $carrier['id'] == 32970) continue;
+				$hu_names = array(
+					32970 => 'Foxpost Csomagautomata',
+					4539 => 'MPL Postapont',
+					29760 => 'MPL Csomagautomata'
+				);
 
+				if(array_key_exists($carrier['id'], $hu_names)) {
+					$carrier['name'] = $hu_names[$carrier['id']];
+				}
+				
 				$pickup_point_carriers[$carrier['id']] = array(
 					'name' => $carrier['name'],
 					'country' => strtoupper($carrier['country']),
@@ -749,6 +804,33 @@ class VP_Woo_Pont_Packeta {
 		return array(
 			'data' => array($first_row, $second_row, $csv_row)
 		);
+	}
+
+	public function filter_provider_costs($provider_costs, $cart_details) {
+		
+		//Get current customer country
+		$selected_country = WC()->customer->get_shipping_country();
+
+		//Get enabled countries in packeta settings
+		$supported_countries = $this->get_supported_countries();
+
+		//Loop through provider costs and unset those which are not in enabled countries
+		foreach ($provider_costs as $provider_key => $provider_cost) {
+			$provider_parts = explode('_', $provider_key);
+			if($provider_parts[0] != 'packeta') {
+				continue;
+			}
+
+			foreach($supported_countries as $country_code => $carriers) {
+				if(isset($carriers[$provider_parts[1]]) && $country_code != $selected_country) {
+					unset($provider_costs[$provider_key]);
+					break;
+				}
+				
+			}
+		}
+
+		return $provider_costs;
 	}
 
 }

@@ -30,7 +30,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 
 ?>
 
-	<?php if(!in_array($provider_id, $this->supported_providers) && $order->get_meta('_vp_woo_pont_point_name')): //TODO: check for api keys for labels ?>
+	<?php if(!in_array($carrier_id, $this->supported_providers) && $order->get_meta('_vp_woo_pont_point_name')): //TODO: check for api keys for labels ?>
 		<p class="vp-woo-pont-metabox-unsupported">A kiválasztott szolgáltatóhoz(<?php echo esc_html($provider_name); ?>) jelenleg nem érhető el a címkenyomtatás funkció.</p>
 	<?php endif; ?>
 
@@ -107,7 +107,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			</li>
 			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-replace <?php if(!$has_label && !$pending): ?>show<?php endif; ?>">
 				<div class="vp-woo-pont-metabox-rows-data-inside">
-					<a href="#" data-provider_id="<?php echo esc_attr($provider_id); ?>"><?php esc_html_e('Replace selected point','vp-woo-pont'); ?></a>
+					<a href="#" data-provider_id="<?php echo esc_attr($provider_id); ?>" data-point_id="<?php echo esc_attr($order->get_meta('_vp_woo_pont_point_id')); ?>" data-coordinates="<?php echo esc_attr($order->get_meta('_vp_woo_pont_point_coordinates')); ?>"><?php esc_html_e('Replace selected point','vp-woo-pont'); ?></a>
 				</div>
 			</li>
 			<?php endif; ?>
@@ -191,7 +191,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 		</ul>
 
 		<?php if(VP_Woo_Pont_Pro::is_pro_enabled() && !$pending): ?>
-		<div class="vp-woo-pont-metabox-generate <?php if(!$has_label && in_array($provider_id, $this->supported_providers)): ?>show<?php endif; ?>">
+		<div class="vp-woo-pont-metabox-generate <?php if(!$has_label && in_array($carrier_id, $this->supported_providers)): ?>show<?php endif; ?>">
 			<div class="vp-woo-pont-metabox-generate-buttons">
 				<a href="#" id="vp_woo_pont_label_options"><span class="dashicons dashicons-admin-generic"></span><span><?php esc_html_e('Options','vp-woo-pont'); ?></span></a>
 				<a href="#" id="vp_woo_pont_label_generate" class="button button-primary" target="_blank" data-question="<?php echo esc_attr_x('Are you sure?', 'Generate label', 'vp-woo-pont'); ?>">
@@ -200,7 +200,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			</div>
 
 			<ul class="vp-woo-pont-metabox-generate-options" style="display:none">
-				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls, dpd, posta, postapont, expressone, sameday, kvikk]">
+				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls, dpd, posta, postapont, expressone, sameday, kvikk, csomagpiac]">
 					<label for="vp_woo_pont_package_count"><?php esc_html_e('Number of packages','vp-woo-pont'); ?></label>
 					<input type="number" id="vp_woo_pont_package_count" value="1" />
 				</li>
@@ -251,14 +251,14 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 						<?php endforeach; ?>
 					</ul>
 				</li>
-				<li class="vp-woo-pont-package-weight vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, sameday, dpd]">
+				<li class="vp-woo-pont-package-weight vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, sameday, dpd, csomagpiac]">
 					<label for="vp_woo_pont_package_weight"><?php esc_html_e('Package weight','vp-woo-pont'); ?></label>
 					<input type="text" id="vp_woo_pont_package_weight" value="<?php echo VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order); ?>">
 					<em><?php esc_html_e('gramms', 'vp-woo-pont'); ?></em>
 				</li>
 
 				<?php if($packaging_types): ?>
-					<li class="vp-woo-pont-package-size vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, dhl, dpd]">
+					<li class="vp-woo-pont-package-size vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, dhl, dpd, packeta]">
 						<label><?php esc_html_e('Csomagolás', 'vp-woo-pont'); ?></label>
 						<ul>
 							<?php foreach ( $packaging_types as $packaging_id => $packaging_type ): ?>

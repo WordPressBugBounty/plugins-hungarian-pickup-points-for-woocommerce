@@ -38,7 +38,7 @@ class Vp_Woo_Pont_CheckoutWC_Compatibility {
 	}
 
 	public static function change_shipping_label($label) {
-		return 'Szállítás';
+		return __('Shipping', 'vp-woo-pont'); //Szállítás
 	}
 
 	public static function is_vp_pont_selected() {
@@ -91,20 +91,20 @@ class Vp_Woo_Pont_CheckoutWC_Compatibility {
 
 	public static function change_header_label($label) {
 		if(self::is_vp_pont_selected()) {
-			$label = 'Csomagpontos szállítás';
+			$label = __('Pickup point shipping', 'vp-woo-pont'); //Csomagpontos szállítás
 		}
 		return $label;
 	}
 
 	public static function change_method_label($label) {
 		if(self::is_vp_pont_selected()) {
-			$label = 'Szállítás';
+			$label = __('Shipping', 'vp-woo-pont'); //Szállítás
 		}
 		return $label;
 	}
 
 	public static function change_pickup_label($data) {
-		$data['messages']['pickup_label'] = 'Csomagpont';
+		$data['messages']['pickup_label'] = _x( 'Pickup point', 'frontend', 'vp-woo-pont' ); //Csomagpont
 		return $data;
 	}
 

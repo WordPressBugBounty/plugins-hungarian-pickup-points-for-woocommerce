@@ -14,7 +14,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 	class VP_Woo_Pont_Labels {
 		public $bulk_actions = array();
 		public $supported_providers = array(
+			'kvikk',
 			'foxpost',
+			'gls',
+			'packeta',
+			'posta',
+			'dpd',
+			'expressone',
+			'sameday',
+			'csomagpiac',
+			'transsped',
+			'custom'
+
+			/*
+			'foxpost',
+			'foxpost_foxpost',
 			'packeta',
 			'gls',
 			'postapont_10',
@@ -68,6 +82,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			'kvikk_dpd',
 			'kvikk_dpd_parcelshop',
 			'kvikk_dpd_alzabox',
+			*/
 		);
 		public $supports_bulk_printing = array();
 
@@ -437,6 +452,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				'package' => array(
 					'total' => $package_total,
 					'total_rounded' => 5 * round($package_total / 5),
+					'total_insurance' => $order->get_subtotal(),
 					'weight' => $total_weight,
 					'weight_gramm' => VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order),
 					'cod' => ($order->get_payment_method() == VP_Woo_Pont_Helpers::get_option('cod_method', 'cod')),
@@ -746,6 +762,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$hidden_columns = get_hidden_columns($screen);
 			if ( (in_array('vp_woo_pont_shipment', $hidden_columns) && 'shipping_address' === $column) || $column === 'vp_woo_pont_shipment') {
 				if($provider_id = VP_Woo_Pont_Helpers::get_provider_from_order($order)) {
+					$carrier_id = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 					$provider_name = VP_Woo_Pont_Helpers::get_provider_name($provider_id);
 					?>
 					<div class="vp-woo-pont-order-column" data-provider="<?php echo esc_attr($provider_id); ?>" data-order="<?php echo esc_attr($order->get_id()); ?>">
@@ -792,7 +809,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 									<i></i>
 									<span><?php esc_html_e('Download', 'vp-woo-pont'); ?></span>
 								</a>
-								<?php if(in_array($provider_id, $this->supported_providers)): ?>
+								<?php if(in_array($carrier_id, $this->supported_providers)): ?>
 								<div class="vp-woo-pont-order-column-print" tabindex="0">
 									<div class="vp-woo-pont-order-column-print-button" data-alt-label="<?php esc_html_e('Print', 'vp-woo-pont'); ?>">
 										<span class="dashicons dashicons-printer"></span>

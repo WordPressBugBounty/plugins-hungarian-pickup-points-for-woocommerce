@@ -21,6 +21,9 @@ $disabled_providers = array_diff($all_provider_types, $saved_values);
 //Get 5 random providers from the disabled providers
 $random_disabled_providers = array_rand($disabled_providers, min(5, count($disabled_providers)));
 
+//Limit the all providers to 20 items
+$all_provider_types = array_slice($all_provider_types, 0, 20);
+
 //To show json links
 $download_folders = VP_Woo_Pont_Helpers::get_download_folder();
 
@@ -36,10 +39,12 @@ $provider_groups['custom'] = get_option('vp_woo_pont_custom_title', __('Store Pi
 $supported_providers = VP_Woo_Pont_Helpers::get_supported_providers();
 $provider_subgroups = apply_filters('vp_woo_pont_provider_subgroups',array(
 	'gls' => array('locker', 'shop'),
-	'packeta' => array('zbox', 'shop', 'mpl_postapont', 'mpl_automata', 'foxpost'),
+	'packeta' => array('zbox', 'zpont'),
 	'postapont' => array('posta', 'automata', 'postapont'),
 	'expressone' => array('alzabox', 'omv', 'packeta', 'exobox'),
-	'dpd' => array('alzabox', 'parcelshop')
+	'dpd' => array('alzabox', 'parcelshop'),
+	'sameday' => array('easybox', 'pick-pack-pont'),
+	'foxpost' => array('foxpost'),
 ));
 
 $all_available_providers = array();
@@ -143,9 +148,8 @@ $sortedProviders += $providers;
 						<?php echo $provider_name; ?>
 					</td>
 					<td class="vp-woo-pont-providers-cell-database">
-						<?php $filename = get_option('_vp_woo_pont_file_'.$provider_id); ?>
-						<?php $qty = get_option('_vp_woo_pont_file_'.$provider_id.'_count'); ?>
-						<?php $url = $download_folders['url'].$filename; ?>
+
+						<?php $files = get_option('_vp_woo_pont_db_'.$provider_id); ?>
 						<?php if($provider_id == 'custom'): ?>
 						<div class="vp-woo-pont-providers-cell-database-custom">
 							<?php if(count($custom_points) > 0): ?>
@@ -162,14 +166,28 @@ $sortedProviders += $providers;
 							</a>
 						</div>
 						<?php else: ?>
-						<div <?php if($filename): ?> class="has-file"<?php endif; ?> data-provider="<?php echo esc_attr($provider_id); ?>">
-							<span class="dashicons dashicons-warning"></span>
-							<span class="dashicons dashicons-yes-alt"></span>
-							<span class="file-name help_tip" data-tip="<?php esc_html_e('Import failed or not finished yet', 'vp-woo-pont'); ?>"><?php echo esc_html($provider_id); ?>.json</span>
-							<a target="_blank" class="download-link" href="<?php echo esc_url($url); ?>" <?php if($qty): ?>data-qty="<?php echo esc_attr($qty); ?>"<?php endif; ?>><?php echo esc_html($provider_id); ?>.json</a>
-
+						<div data-provider="<?php echo esc_attr($provider_id); ?>">
+							<ul>
+								<?php if($files && count($files) > 0): ?>
+									<li><span class="dashicons dashicons-yes-alt"></span></li>
+									<?php foreach($files as $file): ?>
+										<?php if(isset($file['file'])): ?>
+											<li>
+												<?php $url = $download_folders['url'] . $file['file']; ?>
+												<a target="_blank" class="download-link" href="<?php echo esc_url($url); ?>" <?php if(isset($file['count'])): ?>data-qty="<?php echo esc_attr($file['count']); ?>"<?php endif; ?>><?php echo esc_html($file['file']); ?></a>
+											</li>
+										<?php endif; ?>
+									<?php endforeach; ?>
+								<?php endif; ?>
+								<?php if(!$files || count($files) == 0): ?>
+									<li><span class="dashicons dashicons-warning"></span></li>
+									<li><span class="no-file"><?php esc_html_e('No database found', 'vp-woo-pont'); ?></span></li>
+								<?php endif; ?>
+							</ul>
+							
 							<a href="#" data-provider="<?php echo esc_attr($provider_id); ?>" class="import">
 								<span class="dashicons dashicons-update"></span>
+								<?php esc_html_e('Refresh', 'vp-woo-pont'); ?>
 							</a>
 						</div>
 						<?php endif; ?>

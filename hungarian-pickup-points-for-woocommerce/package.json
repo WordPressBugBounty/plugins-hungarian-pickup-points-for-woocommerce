@@ -16,7 +16,8 @@
 		"build-map": "browserify assets/js/frontend.js --plugin tinyify > assets/js/frontend.min.js",
 		"build-tracking-map": "browserify assets/js/frontend-tracking.js --plugin tinyify > assets/js/frontend-tracking.min.js",
 		"build-admin": "browserify assets/js/admin.js --plugin tinyify > assets/js/admin.min.js",
-		"watch-map": "watchify assets/js/frontend.js -o assets/js/frontend.min.js -v"
+		"watch-map": "watchify assets/js/frontend.js -o assets/js/frontend.min.js -v",
+		"watch-admin": "watchify assets/js/admin.js -o assets/js/admin.min.js -v"
 	},
 	"dependencies": {
 		"@varvet/tiny-autocomplete": "^1.1.1",
@@ -28,7 +29,8 @@
 		"leaflet": "^1.9.4",
 		"leaflet.featuregroup.subgroup": "^1.0.2",
 		"leaflet.markercluster": "^1.5.3",
-		"lodash": "^4.17.21"
+		"lodash": "^4.17.21",
+		"react-search-autocomplete": "^8.5.2"
 	},
 	"devDependencies": {
 		"@woocommerce/dependency-extraction-webpack-plugin": "^2.2.0",

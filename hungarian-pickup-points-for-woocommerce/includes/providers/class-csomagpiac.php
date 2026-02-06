@@ -8,6 +8,7 @@ class VP_Woo_Pont_Csomagpiac {
 	protected $api_token = '';
 	public $package_statuses = array();
 	public $package_statuses_tracking = array();
+	public $service_codes = array();
 
 	public function __construct() {
 		add_filter('vp_woo_pont_carrier_settings_csomagpiac', array($this, 'get_settings'));
@@ -47,6 +48,13 @@ class VP_Woo_Pont_Csomagpiac {
 			'delivery' => array('8'),
 			'delivered' => array('99'),
 			'errors' => array('101', '10', '98')
+		);
+
+		$this->service_codes = array(
+			'csomagpiac' => 1,
+			'dpd' => 2,
+			'sameday' => 3,
+			'mpl' => 4
 		);
 
 		$this->api_token = VP_Woo_Pont_Helpers::get_option('csomagpiac_api_token');
@@ -105,13 +113,33 @@ class VP_Woo_Pont_Csomagpiac {
 					'a6' => __( 'A6', 'vp-woo-pont' ),
 				),
 				'id' => 'csomagpiac_sticker_size'
-			),
-			array(
-				'type' => 'sectionend'
 			)
 		);
 
+		//Add service type settings
+		if($this->is_settings_page()) {
+			foreach($this->service_codes as $service_key => $service_code) {
+				$csomagpiac_settings[] = array(
+					'title' => sprintf( __( '%s shipping methods', 'vp-woo-pont' ), VP_Woo_Pont_Helpers::get_provider_name($service_key) ),
+					'type' => 'multiselect',
+					'class'   => 'wc-enhanced-select',
+					'options' => VP_Woo_Pont_Helpers::get_available_shipping_methods(),
+					'id' => 'csomagpiac_shipping_methods_' . $service_key,
+					'desc_tip' => __("Select the shipping methods related to this courier if you want to guarantee it for your shipment", 'vp-woo-pont' ),
+				);
+			}
+		}
+
+		$csomagpiac_settings[] = array(
+			'type' => 'sectionend'
+		);
+
 		return $settings+$csomagpiac_settings;
+	}
+
+	//Check if we are on the settings page
+	public function is_settings_page() {
+		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers');
 	}
 
     public function get_csomagpiac_db() {
@@ -175,8 +203,16 @@ class VP_Woo_Pont_Csomagpiac {
 		//Save stuff
 		$saved_files = array();
 		foreach ($results as $type => $points) {
-			$saved_files['csomagpiac_'.$type] = VP_Woo_Pont_Import_Database::save_json_file('csomagpiac_'.$type, $points);
+			$saved_files[] = VP_Woo_Pont_Import_Database::save_json_file(array(
+				'courier' => 'csomagpiac',
+				'type' => $type,
+				'country' => 'HU',
+				'points' => $points
+			));
 		}
+
+		//Save to DB
+		VP_Woo_Pont_Import_Database::save_json_files('csomagpiac', $saved_files);
 
         return $saved_files;
     }
@@ -209,7 +245,7 @@ class VP_Woo_Pont_Csomagpiac {
 		//Create item
 		$order = wc_get_order($data['order_id']);
 		$limit = apply_filters('vp_woo_pont_csomagpiac_label_character_limit', 40, $data);
-
+		
 		//Set package data
 		$item = array(
 			'pickupPointId' => VP_Woo_Pont_Helpers::get_option('csomagpiac_pickup_point'),
@@ -291,6 +327,51 @@ class VP_Woo_Pont_Csomagpiac {
 					'name' => $extra_service
 				);
 			}
+		}
+
+		//Set the guaranteed courier based on shipping method
+		if(!$data['point_id']) {
+
+			//Get shipping method id
+			$shipping_method = '';
+			$shipping_methods = $order->get_shipping_methods();
+			if($shipping_methods) {
+				foreach( $shipping_methods as $shipping_method_obj ){
+					$shipping_method = $shipping_method_obj->get_method_id().':'.$shipping_method_obj->get_instance_id();
+				}
+			}
+
+			//Check if the shipping method matches any guaranteed courier
+			$service_code = '';
+			foreach($this->service_codes as $service_key => $service_code_option) {
+				$related_methods = VP_Woo_Pont_Helpers::get_option('csomagpiac_shipping_methods_' . $service_key, array());
+				if(in_array($shipping_method, $related_methods)) {
+					$service_code = $service_key;
+					break;
+				}
+			}
+
+			//If we have a code, set it
+			if($service_code) {
+				$item['services'][] = array(
+					'name' => 'garantalt_futar',
+					'value' => $service_code
+				);
+			}
+		}
+
+		//If package count set
+		if(isset($data['options']) && isset($data['options']['package_count']) && $data['options']['package_count'] > 1) {
+			$item['packageCount'] = $data['options']['package_count'];
+			$packages =  $data['options']['package_count'];
+			$single_weight = round($data['package']['weight_gramm']/$packages);
+
+			//Create extra items
+			$item['weights'] = array();
+			for ($i = 0; $i < $packages; $i++){
+				$item['weights'][] = $single_weight;
+			}
+
 		}
 
 		//So developers can modify

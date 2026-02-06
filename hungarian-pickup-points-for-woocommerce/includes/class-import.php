@@ -10,7 +10,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 		private static $skip_check = false;
 
 		public static function get_pont_types() {
-			return apply_filters('vp_woo_pont_import_database_providers', array('foxpost', 'postapont', 'packeta', 'sprinter', 'expressone', 'gls', 'dpd', 'sameday', 'kvikk'));
+			return apply_filters('vp_woo_pont_import_database_providers', array('foxpost', 'postapont', 'packeta', 'expressone', 'gls', 'dpd', 'sameday', 'kvikk'));
 		}
 
 		public static function init() {
@@ -37,7 +37,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 			foreach (self::get_pont_types() as $pont_type) {
 
-				//Download postapont list on activation
+				//Download list on activation
 				WC()->queue()->add( 'vp_woo_pont_update_'.$pont_type.'_list', array(), 'vp_woo_pont' );
 
 				//Get saved frequency value
@@ -122,8 +122,16 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			//Save as separate files
 			$saved_files = array();
 			foreach ($results as $group_id => $points) {
-				$saved_files['postapont_'.$group_id] = self::save_json_file('postapont_'.$group_id, $points);
+				$saved_files[] = self::save_json_file(array(
+					'courier' => 'postapont',
+					'type' => $group_id,
+					'country' => 'HU',
+					'points' => $points
+				));
 			}
+
+			//Save to DB
+			self::save_json_files('postapont', $saved_files);
 
 			return $saved_files;
 		}
@@ -152,15 +160,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			}
 
 			//Create a new json
-			$results = array();
+			$results = array('foxpost' => array());
 			$open_days = array('hetfo', 'kedd', 'szerda', 'csutortok', 'pentek', 'szombat', 'vasarnap');
+
+			//ID field name
+			$id_field = apply_filters('vp_woo_pont_foxpost_id_field', 'operator_id');
 
 			//Simplify json, so its smaller to store, faster to load
 			foreach ($json as $foxpost) {
 
-
 				// Skip if the name does not start with "FOXPOST "
-				if($foxpost['variant'] != 'FOXPOST A-BOX') {
+				if($foxpost['variant'] != 'FOXPOST A-BOX' && $foxpost['variant'] != 'FOXPOST Z-BOX') {
 					continue;
 				}
 
@@ -168,7 +178,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 				$name = str_replace('FOXPOST ', '', $foxpost['name']);
 
 				$result = array(
-					'id' => $foxpost['place_id'],
+					'id' => $foxpost[$id_field],
 					'lat' => number_format($foxpost['geolat'], 5, '.', ''),
 					'lon' => number_format($foxpost['geolng'], 5, '.', ''),
 					'name' => $name,
@@ -195,12 +205,23 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 					$result['hours'] = $times;
 				}
 
-				$results[] = $result;
+				$results['foxpost'][] = $result;
 			}
 
-			//Save stuff
+			//Save as separate files
 			$saved_files = array();
-			$saved_files['foxpost'] = self::save_json_file('foxpost', $results);
+			foreach ($results as $group_id => $points) {
+				$saved_files[] = self::save_json_file(array(
+					'courier' => 'foxpost',
+					'type' => $group_id,
+					'country' => 'HU',
+					'points' => $points
+				));
+			}
+
+			//Save to DB
+			self::save_json_files('foxpost', $saved_files);
+
 			return $saved_files;
 
 		}
@@ -215,228 +236,145 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			}
 
 			//Get supported countries
-			$enabled_countries = get_option('vp_woo_pont_packeta_countries', array('HU'));
+			$enabled_countries = get_option('vp_woo_pont_packeta_countries', array('HU:packeta'));
+			$saved_files = array();
 
-			//Extra points for the rest of the countries
-			$extra_point_ids = array();
-			foreach ($enabled_countries as $carrier_id) {
-				if(intval($carrier_id) > 0) {
-					$extra_point_ids[] = $carrier_id;
+			//Get enabled countries where the value doesn'T contain :packeta
+			$has_extra_points = false;
+			foreach ($enabled_countries as $country_provider) {
+				if(strpos($country_provider, ':packeta') === false) {
+					$has_extra_points = true;
+					break;
 				}
 			}
 
 			//If we have extra points, but no api key, return error
-			if(!empty($extra_point_ids) && !$api_key) {
+			if($has_extra_points && !$api_key) {
 				return false;
 			}
 
-			//Download address delivery list too
-			$download_folder = VP_Woo_Pont_Helpers::get_download_folder('packeta');
-			$file_points = $download_folder['dir'].'packeta-points-source-file.json';
-
-			//Create a new json
-			$results = array('zbox' => array(), 'shop' => array(), 'mpl_postapont' => array(), 'mpl_automata' => array());
-			$open_days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-
-			//For packeta branded pickup points
-			if(in_array('HU', $enabled_countries) || in_array('RO', $enabled_countries) || in_array('SK', $enabled_countries) || in_array('CZ', $enabled_countries) || in_array('MPL_POSTAPONT', $enabled_countries) || in_array('MPL_AUTOMATA', $enabled_countries) || in_array('FOXPOST', $enabled_countries)) {
+			foreach($enabled_countries as $key => $country_provider) {
+				$parts = explode(':', $country_provider);
+				$provider_id = $parts[1];
+				$country_code = $parts[0];
 
 				//Make request for branches json file
-				$request = wp_remote_get('https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost&country=HU,SK,CZ,RO', array(
-					'timeout' => 100,
-				));
+				if($provider_id == 'packeta') {
 
-				//Check for errors
-				if( is_wp_error( $request ) ) {
-					VP_Woo_Pont()->log_error_messages($request, 'packeta-import-points');
-					return false;
-				}
+					//Create a new json
+					$results = array('zbox' => array(), 'zpont' => array());
+					$request = wp_remote_get('https://points-api.kvikk.hu/points?search=packeta&country='.$country_code, array(
+						'timeout' => 100,
+					));
 
-				//Get body
-				$body = wp_remote_retrieve_body( $request );
-
-				//Try to convert into json
-				$json = json_decode( $body, true );
-
-				//Check if json exists
-				if($json === null) {
-					return false;
-				}
-
-				//Simplify json, so its smaller to store, faster to load
-				foreach ($json['data'] as $place) {
-
-					//For now, only hungarian points
-					if(!in_array($place['country'], $enabled_countries)) {
-						continue;
+					//Check for errors
+					if( is_wp_error( $request ) ) {
+						VP_Woo_Pont()->log_error_messages($request, 'packeta-import-points');
+						return false;
 					}
 
-					//Create results
-					$result = $place;
-					$type = $result['type'];
-					unset($result['type']);
+					//Get body
+					$body = wp_remote_retrieve_body( $request );
 
-					//Check if we need to skip Z-Box
-					if($type == 'zbox') {
-						$results['zbox'][] = $result;
-					} elseif($type == 'zpont') {
-						$results['shop'][] = $result;
-					} elseif($type == 'postapont' || $type == 'posta') {
-						$results['mpl_postapont'][] = $result;
-					} elseif($type == 'automata') {
-						$results['mpl_automata'][] = $result;
-					} elseif($type == 'foxpost') {
-						$results['foxpost'][] = $result;
+					//Try to convert into json
+					$json = json_decode( $body, true );
+
+					//Check if json exists
+					if($json === null) {
+						return false;
 					}
 
-				}
+					//Simplify json, so its smaller to store, faster to load
+					foreach ($json['data'] as $place) {
 
-			}
+						//Create results
+						$result = $place;
+						$type = $result['type'];
+						unset($result['type']);
 
-			//Download extra pickup points
-			if(!empty($extra_point_ids)) {
-				$request = wp_remote_get('https://www.zasilkovna.cz/api/'.$api_key.'/point.json?ids='.implode(',', $extra_point_ids), array(
-					'timeout' => 100,
-					'stream' => true,
-					'filename' => $file_points
-				));
-
-				//Check for errors
-				if( is_wp_error( $request ) ) {
-					VP_Woo_Pont()->log_error_messages($request, 'packeta-import-points');
-					return false;
-				}
-
-				//Get body
-				$points = file_get_contents($file_points);
-
-				//Try to convert into json
-				$json = json_decode( $points );
-
-				//Check if json exists
-				if($json === null) {
-					return false;
-				}
-
-				foreach ($json->carriers as $json_carrier) {
-					foreach ($json_carrier->points as $place) {
-						if($place->displayFrontend == '1') {
-							$result = array(
-								'id' => $place->code,
-								'lat' => number_format($place->coordinates->latitude, 5, '.', ''),
-								'lon' => number_format($place->coordinates->longitude, 5, '.', ''),
-								'name' => $place->city.' '.$place->street,
-								'zip' => $place->zip,
-								'addr' => $place->street.' '.$place->streetNumber,
-								'city' => $place->city,
-								'country' => strtoupper($place->country),
-								'carrier' => $json_carrier->id
-							);
-							$results['shop'][] = $result;
+						//Check if we need to skip Z-Box
+						if($type == 'zbox') {
+							$results['zbox'][] = $result;
+						} elseif($type == 'zpont') {
+							$results['zpont'][] = $result;
 						}
+
 					}
-				}
 
-				//Delete source files
-				unlink($file_points);
+					//Free up memory immediately after processing
+					unset($json);
+					unset($body);
+					unset($request);
 
-			}
+					//Save as separate files
+					foreach ($results as $group_id => $points) {
+						$saved_files[] = self::save_json_file(array(
+							'courier' => 'packeta',
+							'type' => $group_id,
+							'country' => $country_code,
+							'points' => $points
+						));
+					}
 
-			//Save stuff
-			$saved_files = array();
-			foreach ($results as $type => $points) {
-				$saved_files['packeta_'.$type] = self::save_json_file('packeta_'.$type, $points);
-			}
+				} else {
 
+					$results = array();
+					$request = wp_remote_get('https://www.zasilkovna.cz/api/'.$api_key.'/point.json?ids='.$provider_id, array(
+						'timeout' => 100
+					));
 
-			return $saved_files;
-		}
+					//Check for errors
+					if( is_wp_error( $request ) ) {
+						VP_Woo_Pont()->log_error_messages($request, 'packeta-import-points');
+						return false;
+					}
 
-		public static function get_sprinter_json() {
-			$need_sync = self::check_if_sync_needed('sprinter');
-			if(!$need_sync) return false;
+					//Get body
+					$body = wp_remote_retrieve_body( $request );
 
-			//Make request for json file
-			$request = wp_remote_get('https://partner.pickpackpont.hu/stores/ShopList.json');
+					//Try to convert into json
+					$json = json_decode( $body );
 
-			//Check for errors
-			if( is_wp_error( $request ) ) {
-				VP_Woo_Pont()->log_error_messages($request, 'sprinter-import-points');
-				return false;
-			}
+					//Check if json exists
+					if($json === null) {
+						return false;
+					}
 
-			//Get body
-			$body = wp_remote_retrieve_body( $request );
-
-			//Remove BOM, so its a valid json
-			$bom = pack('H*','EFBBBF');
-	    	$body = preg_replace("/^$bom/", '', $body);
-
-			//Try to convert into json
-			$json = json_decode( $body, true );
-
-			//Check if json exists
-			if($json === null) {
-				return false;
-			}
-
-			//Create a new json
-			$results = array();
-			$open_days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-
-			//Simplify json, so its smaller to store, faster to load
-			foreach ($json as $place) {
-
-				//Check for valid coordinates
-				if(empty($place['lat'])) continue;
-
-				//Parse address
-				$address = explode(', ', $place['address']);
-				
-				//For now, only hungarian points
-				$result = array(
-					'id' => $place['shopCode'],
-					'lat' => number_format($place['lat'], 5, '.', ''),
-					'lon' => number_format($place['lng'], 5, '.', ''),
-					'name' => $place['shopName'],
-					'zip' => $place['zipCode'],
-					'addr' => $address[2],
-					'city' => $place['city']
-				);
-
-				if($place['description']) {
-					$result['comment'] = $place['description'];
-				}
-
-				//Open hours
-				if(isset($place['openTimes'])) {
-					$result['hours'] = array();
-					foreach ($open_days as $day => $day_name) {
-						if(isset($place['openTimes'][$day_name])) {
-							if($place['openTimes'][$day_name]['isOpen'] == 'true') {
-								$result['hours'][$day+1] = $place['openTimes'][$day_name]['from'].' - '.$place['openTimes'][$day_name]['to'];
-							} else {
-								$result['hours'][$day+1] = false;
+					foreach ($json->carriers as $json_carrier) {
+						foreach ($json_carrier->points as $place) {
+							if($place->displayFrontend == '1') {	
+								$result = array(
+									'id' => $place->code,
+									'lat' => number_format($place->coordinates->latitude, 5, '.', ''),
+									'lon' => number_format($place->coordinates->longitude, 5, '.', ''),
+									'name' => $place->city.' '.$place->street,
+									'zip' => $place->zip,
+									'addr' => $place->street.' '.$place->streetNumber,
+									'city' => $place->city,
+									'country' => strtoupper($place->country),
+									'carrier' => $json_carrier->id
+								);
+								$results[] = $result;
 							}
 						}
 					}
+
+					//Save as separate files
+					$saved_files[] = self::save_json_file(array(
+						'courier' => 'packeta',
+						'type' => $provider_id,
+						'country' => $country_code,
+						'points' => $results
+					));
+
 				}
 
-				//Check if its 0-24 all week(so the json is smaller)
-				$open_days_count = array_unique($result['hours']);
-				if(count($result['hours']) == 7 && count($open_days_count) == 1) {
-					$times = $result['hours'][1];
-					$result['hours'] = $times;
-				}
-
-				$results[] = $result;
 			}
 
-			//Save stuff
-			$saved_files = array();
-			$saved_files['sprinter'] = self::save_json_file('sprinter', $results);
-			return $saved_files;
+			//Save to DB
+			self::save_json_files('packeta', $saved_files);
 
+			return $saved_files;
 		}
 
 		public static function get_expressone_json($company_id = false, $username = false, $password = false) {
@@ -492,7 +430,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			//Create a new json
 			$results = array('alzabox' => array(), 'packeta' => array(), 'omv' => array(), 'exobox' => array());
 
-			//Valod groups, so only sync what we really need
+			//Valid groups, so only sync what we really need
 			$enabled_groups = array('omv', 'alzabox', 'packeta', 'exobox');
 
 			//Simplify json, so its smaller to store, faster to load
@@ -516,9 +454,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 			//Save stuff
 			$saved_files = array();
-			foreach ($results as $type => $points) {
-				$saved_files['expressone_'.$type] = self::save_json_file('expressone_'.$type, $points);
+			foreach ($results as $group_id => $points) {
+				$saved_files[] = self::save_json_file(array(
+					'courier' => 'expressone',
+					'type' => $group_id,
+					'country' => 'HU',
+					'points' => $points
+				));
 			}
+
+			//Save to DB
+			self::save_json_files('expressone', $saved_files);
 
 			return $saved_files;
 		}
@@ -529,12 +475,15 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 			//Get supported countries
 			$enabled_countries = get_option('vp_woo_pont_gls_countries', array('HU'));
-
-			//Create a new json
-			$results = array('shop' => array(), 'locker' => array());
+			$saved_files = array();
 
 			//Get data for each country
 			foreach($enabled_countries as $enabled_country) {
+
+				//Create a new json
+				$results = array('shop' => array(), 'locker' => array());
+
+				//Get the data
 				$country_code = strtolower($enabled_country);
 				$request = wp_remote_get('https://map.gls-hungary.com/data/deliveryPoints/'.$country_code.'.json');
 
@@ -567,6 +516,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 						'addr' => $place['contact']['address'],
 						'city' => $place['contact']['city'],
 						'country' => strtolower($place['contact']['countryCode']),
+						'features' => []
 					);
 
 					//Skip the ones where the ID doesn't containt a -
@@ -586,6 +536,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 					// Add comment about the place (if it exists)
 					if(isset($place['description']) && !empty($place['description'])) {
 						$result['comment'] = isset($result['comment']) ? $result['comment'].' '.$place['description'] : $place['description'];
+
+						//Remove the description string from the name if it exists there
+						$result['name'] = str_replace($place['description'], '', $result['name']);
 					}
 
 					//Open hours
@@ -606,6 +559,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 						}
 					}
 
+					//Check if its an express locker
+					if($place['features'] && in_array('milkrun', $place['features'])) {
+						$result['features'][] = 'milkrun';
+					}
+
 					//Group parcel lockers and shops
 					if($place['type'] == 'parcel-locker') {
 						$results['locker'][] = $result;
@@ -614,14 +572,26 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 					}
 
 				}
+
+				//Free up memory immediately after processing
+				unset($json);
+				unset($body);
+				unset($request);
+
+				//Save stuff
+				foreach ($results as $type => $points) {
+					$saved_files[] = self::save_json_file(array(
+						'courier' => 'gls',
+						'type' => $type,
+						'country' => $country_code,
+						'points' => $points
+					));
+				}
 				
 			}
 
-			//Save stuff
-			$saved_files = array();
-			foreach ($results as $type => $points) {
-				$saved_files['gls_'.$type] = self::save_json_file('gls_'.$type, $points);
-			}
+			//Save to DB
+			self::save_json_files('gls', $saved_files);
 
 			return $saved_files;
 		}
@@ -632,162 +602,185 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 
 			//Get enabled countries
 			$enabled_countries = get_option('vp_woo_pont_dpd_countries', array('HU'));
-			$country_list = implode(',', $enabled_countries);
-
-			//Get the data
-			$request = wp_remote_get('https://points-api.kvikk.hu/points?search=dpd&country='.$country_list, array(
-				'timeout' => 60
-			));
-
-			//Check for errors
-			if( is_wp_error( $request ) ) {
-				VP_Woo_Pont()->log_error_messages($request, 'dpd-import-points');
-				return false;
-			}
-
-			//Get body
-			$body = wp_remote_retrieve_body( $request );
-
-			//Try to convert into json
-			$json = json_decode( $body, true );
-
-			//Check if json exists
-			if($json === null) {
-				return false;
-			}
-
-			//Create a new json
-			$results = array('alzabox' => array(), 'parcelshop' => array());
-
-			//Simplify json, so its smaller to store, faster to load
-			foreach ($json['data'] as $place) {
-				if(!in_array($place['country'], $enabled_countries)) {
-					continue;
-				}
-
-				//Create results
-				unset($place['courier']);
-
-				if($place['type'] == 'alzabox') {
-					$results['alzabox'][] = $place;
-				} else {
-					$results['parcelshop'][] = $place;
-				}
-				
-			}
-
-			//Save stuff
 			$saved_files = array();
-			foreach ($results as $type => $points) {
-				$saved_files['dpd_'.$type] = self::save_json_file('dpd_'.$type, $points);
+
+			//Loop through countries
+			foreach ($enabled_countries as $enabled_country) {
+				$country_code = strtolower($enabled_country);
+
+				//Get the data
+				$request = wp_remote_get('https://points-api.kvikk.hu/points?search=dpd&country='.$enabled_country, array(
+					'timeout' => 60
+				));
+
+				//Check for errors
+				if( is_wp_error( $request ) ) {
+					VP_Woo_Pont()->log_error_messages($request, 'dpd-import-points');
+					return false;
+				}
+
+				//Get body
+				$body = wp_remote_retrieve_body( $request );
+
+				//Try to convert into json
+				$json = json_decode( $body, true );
+
+				//Check if json exists
+				if($json === null) {
+					return false;
+				}
+
+				//Create a new json
+				$results = array('alzabox' => array(), 'parcelshop' => array());
+
+				//Simplify json, so its smaller to store, faster to load
+				foreach ($json['data'] as $place) {
+
+					//Create results
+					unset($place['courier']);
+
+					if($place['type'] == 'alzabox') {
+						$results['alzabox'][] = $place;
+					} else {
+						$results['parcelshop'][] = $place;
+					}
+					
+				}
+
+				//Save stuff
+				foreach ($results as $group_id => $points) {
+					if(empty($points)) {
+						continue;
+					}
+
+					$saved_files[] = self::save_json_file(array(
+						'courier' => 'dpd',
+						'type' => $group_id,
+						'country' => $enabled_country,
+						'points' => $points
+					));
+				}
+
 			}
+
+			//Save to DB
+			self::save_json_files('dpd', $saved_files);
 
 			return $saved_files;
 		}
 
-		public static function get_sameday_json() {
+		public static function get_sameday_json($username = false, $password = false) {
 			$need_sync = self::check_if_sync_needed('sameday');
 			if(!$need_sync) return false;
 
-			//Get zip code ids - sameday stores the poscodes in a different format, so we need to convert that later into actual postcodes
-			$request = wp_remote_get('https://www.vaterafutar.hu/sameday/ajax?action=getlockers');
+			//Get enabled countries
+			$enabled_countries = get_option('vp_woo_pont_sameday_countries', array('HU'));
+			$saved_files = array();
 
-			//Check for errors
-			if( is_wp_error( $request ) ) {
-				VP_Woo_Pont()->log_error_messages($request, 'sameday-import-points');
-				return false;
-			}
+			//Loop through countries
+			foreach ($enabled_countries as $enabled_country) {
+				$country_code = strtolower($enabled_country);
 
-			//Get body
-			$body = wp_remote_retrieve_body( $request );
+				//Get the data
+				$request = wp_remote_get('https://points-api.kvikk.hu/points?search=sameday&country='.$enabled_country, array(
+					'timeout' => 60
+				));
 
-			//Try to convert into json
-			$json = json_decode( $body, true );
-
-			//Check if json exists
-			if($json === null) {
-				return false;
-			}
-
-			//Create a new json
-			$results = array();
-
-			//Simplify json, so its smaller to store, faster to load
-			foreach ($json as $easybox) {
-
-				//Only hungarian points
-				//if($easybox['countryId'] != 237) continue;
-
-				$result = array(
-					'id' => $easybox['id'],
-					'lat' => number_format($easybox['lat'], 5, '.', ''),
-					'lon' => number_format($easybox['long'], 5, '.', ''),
-					'name' => $easybox['name'],
-					'zip' => $easybox['postalcode'],
-					'addr' => $easybox['address'],
-					'city' => $easybox['city'],
-					'cod' => ($easybox['supportedPayment'] == 1)
-				);
-
-				//Open hours
-				if(isset($easybox['schedule'])) {
-					$schedule = json_decode($easybox['schedule'], true);
-					if(count($schedule) > 0) {
-						$result['hours'] = array();
-						foreach ($schedule as $day) {
-							$result['hours'][$day['day']] = $day['openingHour'].' - '.$day['closingHour'];
-						}
-	
-						//Check if its 0-24 all week(so the json is smaller)
-						$open_days_count = array_unique($result['hours']);
-						if(count($result['hours']) == 7 && count($open_days_count) == 1) {
-							$times = $result['hours'][1];
-							$result['hours'] = $times;
-						}	
-					}
+				//Check for errors
+				if( is_wp_error( $request ) ) {
+					VP_Woo_Pont()->log_error_messages($request, 'dpd-import-points');
+					return false;
 				}
 
-				$results[] = $result;
+				//Get body
+				$body = wp_remote_retrieve_body( $request );
+
+				//Try to convert into json
+				$json = json_decode( $body, true );
+
+				//Check if json exists
+				if($json === null) {
+					return false;
+				}
+
+				//Create a new json
+				$results = array('easybox' => array(), 'pick-pack-pont' => array());
+
+				//Simplify json, so its smaller to store, faster to load
+				foreach ($json['data'] as $place) {
+
+					//Create results
+					unset($place['courier']);
+
+					if($place['type'] == 'easybox') {
+						$results['easybox'][] = $place;
+					} else {
+						$results['pick-pack-pont'][] = $place;
+					}
+					
+				}
+
+				//Save stuff
+				foreach ($results as $type => $points) {
+					if(empty($points)) {
+						continue;
+					}
+
+					$saved_files[] = self::save_json_file(array(
+						'courier' => 'sameday',
+						'type' => $type,
+						'country' => $country_code,
+						'points' => $points
+					));
+				}
+
 			}
 
-			//Save stuff only if results are not empty
-			$saved_files = array();
-			if(!empty($results)) {
-				$saved_files['sameday'] = self::save_json_file('sameday', $results);
-			}
+			//Save to DB
+			self::save_json_files('sameday', $saved_files);
+
 			return $saved_files;
 		}
 
-		public static function save_json_file($provider, $json) {
+		public static function save_json_file($attrs) {
 
 			//Allow plugins to customize
-			$json = apply_filters('vp_woo_pont_db_import_'.$provider, $json);
+			$json = apply_filters('vp_woo_pont_db_import_'.$attrs['courier'], $attrs['points']);
 			$count = count($json);
 
 			//Create smaller json
 			$smaller_json = json_encode($json, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 			//Get filename and download folder
-			$paths = VP_Woo_Pont_Helpers::get_download_folder($provider);
+			$paths = VP_Woo_Pont_Helpers::get_download_folder(join('_', array($attrs['courier'], strtolower($attrs['country']), $attrs['type'])));
 			$filename = $paths['name'];
-
-			//Remove existing file
-			$existing_filename = get_option('_vp_woo_pont_file_'.$provider);
-			if($existing_filename) {
-				$existing_file = $paths['dir'].$existing_filename;
-				if(file_exists($existing_file)){
-					unlink($existing_file);
-				}
-			}
 
 			//Save the file
 			file_put_contents($paths['path'], $smaller_json);
 
-			//Store current file name in db
-			update_option('_vp_woo_pont_file_'.$provider, $filename);
-			update_option('_vp_woo_pont_file_'.$provider.'_count', $count);
+			//Return saved file info
+			return array(
+				'country' => strtoupper($attrs['country']),
+				'type' => $attrs['type'],
+				'file' => $filename,
+				'count' => $count
+			);
+		}
 
-			return $filename;
+		public static function save_json_files($provider, $files) {
+
+			$grouped = array();
+			foreach ($files as $file) {
+				if(!isset($grouped[$file['type']])) {
+					$grouped[$file['type']] = array();
+				}
+				$grouped[$file['type']][] = $file;
+			}
+
+			foreach ($grouped as $type => $file) {
+				update_option('_vp_woo_pont_db_'.$provider.'_'.$type, $file);
+			}
+
 		}
 
 		public static function import_manually() {
@@ -809,13 +802,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			//Return response
 			if($import) {
 				$download_folders = VP_Woo_Pont_Helpers::get_download_folder();
-				$updated_file = get_option('_vp_woo_pont_file_'.$carrier);
-				$count = get_option('_vp_woo_pont_file_'.$provider.'_count');
 				wp_send_json_success(array(
+					'courier' => $carrier,
 					'url' => $download_folders['url'],
 					'message' => __('Import run successfully.', 'vp-woo-pont'),
 					'files' => $import,
-					'qty' => $count
 				));
 			} else {
 				wp_send_json_error(array(
@@ -834,7 +825,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			$saved_file = get_option('_vp_woo_pont_file_'.$provider);
 
 			//Get enabled providers
-			$enabled_providers = get_option('vp_woo_pont_enabled_providers');
+			$enabled_providers = get_option('vp_woo_pont_enabled_providers', array());
 
 			//Check enabled providers
 			$enabled = false;

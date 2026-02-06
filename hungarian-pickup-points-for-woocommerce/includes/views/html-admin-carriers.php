@@ -3,8 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$home_delivery_pairs = get_option('vp_woo_pont_home_delivery', array());
 $shipping_methods = VP_Woo_Pont_Helpers::get_available_shipping_methods();
+$home_delivery_pairs = array_map(function($item) {
+    $parts = explode('_', $item);
+    return $parts[0];
+}, get_option('vp_woo_pont_home_delivery', array()));
 
 ?>
             <tr valign="top">

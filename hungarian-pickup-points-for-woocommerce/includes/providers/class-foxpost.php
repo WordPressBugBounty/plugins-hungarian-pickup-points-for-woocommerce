@@ -559,7 +559,7 @@ class VP_Woo_Pont_Foxpost {
 	public function add_packeta_support($provider, $order) {
 		if($provider == 'packeta' && VP_Woo_Pont_Helpers::get_option('foxpost_packeta_support', 'no') == 'yes' && $order->get_shipping_country() == 'HU') {
 			$provider_type = VP_Woo_Pont_Helpers::get_provider_from_order($order);
-			if($provider_type == 'packeta_zbox' || $provider_type == 'packeta_shop') {
+			if($provider_type == 'packeta_zbox' || $provider_type == 'packeta_shop' || $provider_type == 'packeta_zpont') {
 				return 'foxpost';
 			}
 		}

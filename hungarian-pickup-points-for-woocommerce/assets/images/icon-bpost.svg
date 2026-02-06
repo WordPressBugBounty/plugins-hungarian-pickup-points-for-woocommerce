@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <defs>
+        <path d="M36.8404669,3.37559753 C32.4980545,12.8929072 22.3657588,22.5977501 14.2412451,25.082565 C6.07003891,27.5673798 2.98832685,21.8476174 7.37743191,12.3303076 L3.03501946,13.64304 C1.02723735,18.0500701 0,21.9413839 0,25.1294483 L0,25.4107481 C0.046692607,32.4432429 4.94941634,35.7250739 13.4941634,33.0996091 C25.9610895,29.3489452 41.4163424,14.4869394 48,0 L36.8404669,3.37559753 Z" id="path-1"></path>
+        <linearGradient x1="23.942149%" y1="68.2246907%" x2="80.0379058%" y2="28.9878428%" id="linearGradient-3">
+            <stop stop-color="#A21007" offset="0%"></stop>
+            <stop stop-color="#B90D11" offset="24.4%"></stop>
+            <stop stop-color="#D0091B" offset="55.55%"></stop>
+            <stop stop-color="#D9081F" offset="75%"></stop>
+            <stop stop-color="#D9081F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M1.01810287,4.54768001 C-1.22314227,9.42354311 0.364406372,12.3303076 4.52004839,11.0644586 C8.67569042,9.7986095 13.8585698,4.8289798 16.0531223,0 L1.01810287,4.54768001 Z" id="path-4"></path>
+        <linearGradient x1="27.1519698%" y1="65.9902487%" x2="80.1855193%" y2="28.9158628%" id="linearGradient-6">
+            <stop stop-color="#A21007" offset="0%"></stop>
+            <stop stop-color="#B90D11" offset="24.4%"></stop>
+            <stop stop-color="#D0091B" offset="55.55%"></stop>
+            <stop stop-color="#D9081F" offset="75%"></stop>
+            <stop stop-color="#D9081F" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bpost_logo" transform="translate(0, 7)">
+            <g id="Clipped">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="SVGID_1_"></g>
+                <polygon id="Path" fill="url(#linearGradient-3)" fill-rule="nonzero" mask="url(#mask-2)" points="-16.7159533 11.7677081 32.2178988 -22.6446334 64.7159533 24.0042491 15.7821012 58.3697073"></polygon>
+            </g>
+            <g id="Clipped" transform="translate(8.3204, 7.1731)">
+                <mask id="mask-5" fill="white">
+                    <use xlink:href="#path-4"></use>
+                </mask>
+                <g id="SVGID_4_"></g>
+                <polygon id="Path" fill="url(#linearGradient-6)" fill-rule="nonzero" mask="url(#mask-5)" points="-7.01302553 4.03196372 10.3566243 -8.15769403 21.796313 8.25146063 4.47335579 20.4880017"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

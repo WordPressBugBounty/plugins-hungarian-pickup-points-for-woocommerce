@@ -1,5 +1,11 @@
 .vp-woo-pont-provider-icon-foxpost {
   background-image: url(../images/icon-foxpost.svg); }
+.vp-woo-pont-provider-icon-foxpost_foxpost {
+  background-image: url(../images/icon-foxpost.svg); }
+.vp-woo-pont-provider-icon-foxpost_abox {
+  background-image: url(../images/icon-foxpost.svg); }
+.vp-woo-pont-provider-icon-foxpost_zbox {
+  background-image: url(../images/icon-foxpost.svg); }
 .vp-woo-pont-provider-icon-postapont {
   background-image: url(../images/icon-postapont-csomagautomata.svg); }
 .vp-woo-pont-provider-icon-mpl {
@@ -34,6 +40,8 @@
   background-image: url(../images/icon-packeta-zbox.svg); }
 .vp-woo-pont-provider-icon-packeta_shop {
   background-image: url(../images/icon-packeta.svg); }
+.vp-woo-pont-provider-icon-packeta_zpont {
+  background-image: url(../images/icon-packeta.svg); }
 .vp-woo-pont-provider-icon-packeta_mpl_postapont {
   background-image: url(../images/icon-postapont-posta.svg); }
 .vp-woo-pont-provider-icon-packeta_mpl_automata {
@@ -66,26 +74,42 @@
   background-image: url(../images/icon-dpd.svg); }
 .vp-woo-pont-provider-icon-sameday {
   background-image: url(../images/icon-easybox.svg); }
+.vp-woo-pont-provider-icon-sameday_easybox {
+  background-image: url(../images/icon-easybox.svg); }
+.vp-woo-pont-provider-icon-sameday_pick-pack-pont {
+  background-image: url(../images/icon-sameday-pickpackpont.svg); }
 .vp-woo-pont-provider-icon-custom {
   background-image: url(../images/icon-custom.svg); }
 .vp-woo-pont-provider-icon-transsped {
   background-image: url(../images/icon-transsped.svg); }
 .vp-woo-pont-provider-icon-pactic {
   background-image: url(../images/icon-pactic.svg); }
+.vp-woo-pont-provider-icon-pactic_gls {
+  background-image: url(../images/icon-gls.svg); }
 .vp-woo-pont-provider-icon-pactic_sk_gls {
   background-image: url(../images/icon-gls.svg); }
 .vp-woo-pont-provider-icon-pactic_hr_gls {
   background-image: url(../images/icon-gls.svg); }
 .vp-woo-pont-provider-icon-pactic_si_gls {
   background-image: url(../images/icon-gls.svg); }
+.vp-woo-pont-provider-icon-pactic_sameday {
+  background-image: url(../images/icon-easybox.svg); }
 .vp-woo-pont-provider-icon-pactic_ro_sameday {
   background-image: url(../images/icon-easybox.svg); }
+.vp-woo-pont-provider-icon-pactic_inpost {
+  background-image: url(../images/icon-inpost.svg); }
 .vp-woo-pont-provider-icon-pactic_pl_inpost {
   background-image: url(../images/icon-inpost.svg); }
+.vp-woo-pont-provider-icon-pactic_econt {
+  background-image: url(../images/icon-econt.svg); }
 .vp-woo-pont-provider-icon-pactic_bg_econt {
   background-image: url(../images/icon-econt.svg); }
+.vp-woo-pont-provider-icon-pactic_post {
+  background-image: url(../images/icon-sk-post.svg); }
 .vp-woo-pont-provider-icon-pactic_sk_post {
   background-image: url(../images/icon-sk-post.svg); }
+.vp-woo-pont-provider-icon-pactic_ppl {
+  background-image: url(../images/icon-ppl.svg); }
 .vp-woo-pont-provider-icon-pactic_cz_ppl {
   background-image: url(../images/icon-ppl.svg); }
 .vp-woo-pont-provider-icon-csomagpiac {
@@ -144,6 +168,66 @@
   background-image: url(../images/icon-dpd.svg); }
 .vp-woo-pont-provider-icon-kvikk_dpd_alzabox {
   background-image: url(../images/icon-expressone-alzabox.svg); }
+.vp-woo-pont-provider-icon-packeta_33777, .vp-woo-pont-provider-icon-packeta_35369, .vp-woo-pont-provider-icon-packeta_20409, .vp-woo-pont-provider-icon-packeta_35319 {
+  background-image: url(../images/icon-boxnow.svg); }
+.vp-woo-pont-provider-icon-packeta_25989, .vp-woo-pont-provider-icon-packeta_25985, .vp-woo-pont-provider-icon-packeta_25992, .vp-woo-pont-provider-icon-packeta_25988, .vp-woo-pont-provider-icon-packeta_25990, .vp-woo-pont-provider-icon-packeta_25987 {
+  background-image: url(../images/icon-venipak.svg); }
+.vp-woo-pont-provider-icon-packeta_7455, .vp-woo-pont-provider-icon-packeta_26067 {
+  background-image: url(../images/icon-easybox.svg); }
+.vp-woo-pont-provider-icon-packeta_19470, .vp-woo-pont-provider-icon-packeta_19471 {
+  background-image: url(../images/icon-econt.svg); }
+.vp-woo-pont-provider-icon-packeta_3060 {
+  background-image: url(../images/icon-inpost.svg); }
+.vp-woo-pont-provider-icon-packeta_5066, .vp-woo-pont-provider-icon-packeta_5064, .vp-woo-pont-provider-icon-packeta_5061, .vp-woo-pont-provider-icon-packeta_5062 {
+  background-image: url(../images/icon-omniva.svg); }
+.vp-woo-pont-provider-icon-packeta_32428 {
+  background-image: url(../images/icon-fanbox.svg); }
+.vp-woo-pont-provider-icon-packeta_7910 {
+  background-image: url(../images/icon-bpost.svg); }
+.vp-woo-pont-provider-icon-packeta_4017 {
+  background-image: url(../images/icon-dpd.svg); }
+.vp-woo-pont-provider-icon-packeta_6828 {
+  background-image: url(../images/icon-hermes.svg); }
+.vp-woo-pont-provider-icon-packeta_4994, .vp-woo-pont-provider-icon-packeta_4828, .vp-woo-pont-provider-icon-packeta_4826 {
+  background-image: url(../images/icon-postnord.svg); }
+.vp-woo-pont-provider-icon-packeta_4654, .vp-woo-pont-provider-icon-packeta_4656 {
+  background-image: url(../images/icon-mrw.svg); }
+.vp-woo-pont-provider-icon-packeta_26986, .vp-woo-pont-provider-icon-packeta_26987 {
+  background-image: url(../images/icon-matkahuolto.svg); }
+.vp-woo-pont-provider-icon-packeta_4307 {
+  background-image: url(../images/icon-colissimo.svg); }
+.vp-woo-pont-provider-icon-packeta_12889 {
+  background-image: url(../images/icon-mondial.svg); }
+.vp-woo-pont-provider-icon-packeta_17467 {
+  background-image: url(../images/icon-acs.svg); }
+.vp-woo-pont-provider-icon-packeta_27955 {
+  background-image: url(../images/icon-elta.svg); }
+.vp-woo-pont-provider-icon-packeta_10619 {
+  background-image: url(../images/icon-expressone.svg); }
+.vp-woo-pont-provider-icon-packeta_29678, .vp-woo-pont-provider-icon-packeta_9104 {
+  background-image: url(../images/icon-dpd.svg); }
+.vp-woo-pont-provider-icon-packeta_32528, .vp-woo-pont-provider-icon-packeta_29660 {
+  background-image: url(../images/icon-punto-poste.svg); }
+.vp-woo-pont-provider-icon-packeta_18809 {
+  background-image: url(../images/icon-lt-post.svg); }
+.vp-woo-pont-provider-icon-packeta_8001 {
+  background-image: url(../images/icon-kvikk-dhl.svg); }
+.vp-woo-pont-provider-icon-packeta_14052 {
+  background-image: url(../images/icon-pl-posta.svg); }
+.vp-woo-pont-provider-icon-packeta_25005 {
+  background-image: url(../images/icon-expressone.svg); }
+.vp-woo-pont-provider-icon-packeta_19516, .vp-woo-pont-provider-icon-packeta_19517 {
+  background-image: url(../images/icon-sk-posta.svg); }
+.vp-woo-pont-provider-icon-packeta_3616 {
+  background-image: url(../images/icon-novapost.svg); }
+.vp-woo-pont-provider-icon-packeta_4635 {
+  background-image: url(../images/icon-hr-posta.svg); }
+.vp-woo-pont-provider-icon-packeta_4539 {
+  background-image: url(../images/icon-postapont-posta.svg); }
+.vp-woo-pont-provider-icon-packeta_29760 {
+  background-image: url(../images/icon-postapont-csomagautomata.svg); }
+.vp-woo-pont-provider-icon-packeta_32970 {
+  background-image: url(../images/icon-foxpost.svg); }
 
 .wp-admin .vp-woo-pont-provider-icon-kvikk_packeta_zpont {
   background-image: url(../images/icon-kvikk-packeta-zpont.svg);
@@ -221,6 +305,9 @@
   background-image: url(../images/icon-kvikk-expressone-alzabox.svg);
   width: 72px !important;
   background-size: 100% !important; }
+
+.vp-woo-pont-feature-icon-milkrun {
+  background-image: url(../images/feature-milkrun.svg); }
 
 @font-face {
   font-family: 'vp-woo-pont-tracking-icons';

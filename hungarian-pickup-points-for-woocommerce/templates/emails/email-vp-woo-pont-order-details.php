@@ -50,6 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </table>
 
 <h3><?php esc_html_e('Your order', 'vp-woo-pont'); ?></h3>
+
 <table>
 	<?php foreach($order->get_items() as $item): ?>
 	<?php if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) continue; ?>
@@ -68,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</td>
 		<td>
 			<strong><?php echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, false ) ); ?></strong><br>
-			<?php echo wp_kses_post( $item->get_quantity() ); ?> x <?php echo wp_kses_post( $order->get_formatted_line_subtotal($item) ); ?>
+			<?php echo wp_kses_post( $item->get_quantity() ); ?> x <?php echo wc_price(( $order->get_line_total($item, true) / $item->get_quantity() )); ?>
 		</td>
 	</tr>
 	<?php endforeach; ?>

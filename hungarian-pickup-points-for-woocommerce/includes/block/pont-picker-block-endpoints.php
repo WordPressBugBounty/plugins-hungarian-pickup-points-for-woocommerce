@@ -29,6 +29,8 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 				if(!is_admin()) {
 					$shipping_costs = VP_Woo_Pont_Helpers::calculate_shipping_costs();
 					$selected_pont = WC()->session->get( 'selected_vp_pont' );
+					$shipping_cost = VP_Woo_Pont_Helpers::get_price_display($shipping_costs);
+					$shipping_cost = html_entity_decode(wp_strip_all_tags($shipping_cost));
 
 					//Check for logged in user data
 					if(is_user_logged_in()) {
@@ -44,7 +46,7 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 							//Get point data and store it in session
 							$point = VP_Woo_Pont()->find_point_info($provider, $point_id);
 							if($point) {
-								WC()->session->set('selected_vp_pont', $point);
+								//WC()->session->set('selected_vp_pont', $point);
 							}
 
 						}
@@ -63,8 +65,49 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 		woocommerce_store_api_register_update_callback([
 			'namespace' => 'vp-woo-pont-picker',
 			'callback'  => function( $data ) {
+
+				//Runs when a payment method is selected
 				if(isset($data['payment_method'])) {
 					WC()->session->set('vp_selected_payment_method', $data['payment_method']);
+				}
+
+				//If we need to select a point
+				if(isset($data['selected_point'])) {
+
+					//If ID is empty, we clear the selected point
+					if(isset($data['selected_point']['reset'])) {
+						WC()->session->set('selected_vp_pont', null);
+						return;
+					}
+
+					//Get submitted data
+					$provider = sanitize_text_field($data['selected_point']['provider']);
+					$provider = str_replace('_custom', '', $provider); //Remove custom suffix if any
+					$id = sanitize_text_field($data['selected_point']['id']);
+					$country = sanitize_text_field($data['selected_point']['country']);
+					$point = false;
+
+					//Get point data
+					$point = VP_Woo_Pont()->find_point_info($provider, $id, $country);
+
+					//Check if we have a point found
+					if($point) {
+
+						//Reset shipping cost cache
+						$packages = WC()->cart->get_shipping_packages();
+						foreach ($packages as $key => $value) {
+							$shipping_session = "shipping_for_package_$key";
+							unset(WC()->session->$shipping_session);
+						}
+
+						//Store it in the checkout session. Use session, because it will remember the selected point if the checkout page is reloaded
+						WC()->session->set('selected_vp_pont', $point);
+
+						//Allow plugins to hook in
+						do_action('vp_woo_pont_point_selected', $point);
+
+					}
+
 				}
 			}
 		]);

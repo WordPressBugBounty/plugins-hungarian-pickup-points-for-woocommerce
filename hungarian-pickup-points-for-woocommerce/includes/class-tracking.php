@@ -185,6 +185,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			//Get all new events
 			$new_events = $this->find_new_events($old_tracking_info,$new_tracking_info);
 
+			//Sort events by date ascending
+			usort($new_events, function($a, $b) {
+				return $a['date'] - $b['date'];
+			});
+
 			//Get tracking autoamtions
 			$automations = get_option('vp_woo_pont_tracking_automations', array());
 
@@ -192,7 +197,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			if(strpos($provider, 'kvikk') !== false) {
 				$provider = 'kvikk';
 			}
-
+			
 			//Loop through automations
 			foreach($new_events as $tracking_info) {
 				foreach ($automations as $automation) {
@@ -445,6 +450,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 
 		//Email attachment
 		public function email_attachment($order, $sent_to_admin, $plain_text, $email){
+
 			$order_id = $order->get_id();
 			$order = wc_get_order($order_id);
 			$emails = VP_Woo_Pont_Helpers::get_option('email_tracking_number', array());
@@ -461,9 +467,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 				$text = VP_Woo_Pont_Helpers::get_option('email_tracking_number_desc', __('You can track the order by clicking on the tracking number: {tracking_number}', 'vp-woo-pont'));
 				$params = array( 'order' => $order, 'tracking_url' => $tracking_url, 'tracking_link' => $tracking_link, 'tracking_number' => $tracking_number, 'tracking_text' => $text );
 				if($plain_text) {
-					wc_get_template( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
 				} else {
-					wc_get_template( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
 				}
 				return;
 			}
@@ -476,9 +482,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 				$params = array( 'order' => $order, 'tracking_url' => $tracking_url, 'tracking_link' => $tracking_link, 'tracking_number' => $tracking_number, 'tracking_text' => $text );
 
 				if($plain_text) {
-					wc_get_template( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
 				} else {
-					wc_get_template( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
 				}
 				return;
 			}

@@ -12,6 +12,12 @@ $tabs        = array(
 	'dpd'   => __( 'DPD', 'vp-woo-pont' ),
 	'transsped'   => __( 'Trans-Sped', 'vp-woo-pont' ),
 );
+
+//Add support for GLS if needed based on custom settings
+if (VP_Woo_Pont_Helpers::get_option('gls_delivery_notes', 'no') == 'yes') {
+	$tabs['gls'] = __( 'GLS', 'vp-woo-pont' );
+}
+
 ?>
 
 <div class="wrap woocommerce vp-woo-pont-admin-shipments">
