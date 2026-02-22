@@ -114,7 +114,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				}
 			}
 
-			return $provider_name;
+			return apply_filters('vp_woo_pont_get_provider_name', $provider_name, $provider_id, $prefix);
 		}
 
 		//Helper function to get download folder paths and filenames
@@ -323,7 +323,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			if($default_cost) {
 				foreach ($enabled_providers as $enabled_provider) {
 					if(!isset($matched_provider_prices[$enabled_provider])) {
-						$matched_provider_prices[$enabled_provider] = array($default_cost);
+						$matched_provider_prices[$enabled_provider] = array('default');
 					}
 				}
 			}
@@ -334,6 +334,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			//Loop through options and create a new array with single values, including taxes
 			$provider_costs = array();
 			foreach ($matched_provider_prices as $provider_id => $costs) {
+				$is_default = in_array('default', $costs);
+				if($is_default) $costs = array($default_cost);
 				$cost = min($costs);
 				if($cost_logic != 'low') {
 					$cost = max($costs);
@@ -393,7 +395,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 					'net' => $cost,
 					'tax' => $tax,
 					'label' => $label,
-					'gross' => $cost + array_sum($tax)
+					'gross' => $cost + array_sum($tax),
+					'is_default' => $is_default
 				);
 
 			}
@@ -967,6 +970,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 			//Get order details
 			$order_details = VP_Woo_Pont_Conditions::get_order_details($order, 'weight_corrections');
+			$order_details['weight'] = $total_weight;
 			foreach ($weight_corrections as $weight_correction_id => $weight_correction) {
 
 				//Check for conditions if needed

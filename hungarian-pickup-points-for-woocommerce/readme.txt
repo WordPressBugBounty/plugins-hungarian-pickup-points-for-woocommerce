@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 4.0.6
+Stable tag: 4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,15 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.1
+* Kvikk automatikus árazás: az aktuális árlista alapján kiszámolja a szállítási kültségeket a csomag súlya alapján, így nem kell minden szolgáltatót és országot külön-külön beállítani
+* Pénztár blokk országválasztó: a csomagpontos opciónál is van egy országválasztó, illetve a számlázási adatoknál lévő országválasztó is újratölti a csomagpontos opciókat
+* Szállítási mód csere: a rendelésen belül lehet cserélni csomagpontról házhozszállításra(és fordítva) egy kattintással
+* A vp_woo_pont_extra_service_enabled filterrel állíthatók az extra szolgáltatások alapértelmezett állapota kóddal
+* A csomagpont adatait nem tárolja el szállítási címként a felhasználó fiókjában
+* Súly feltétel működik súly korrekciónál is
+* Több csomagos címke nyomtatás javítás
 
 4.0.6
 * Pénztár blokk javítás

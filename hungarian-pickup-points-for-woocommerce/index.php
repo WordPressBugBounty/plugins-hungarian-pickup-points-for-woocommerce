@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.0.6
+Version: 4.1
 WC requires at least: 7.0
 WC tested up to: 10.4.3
 Requires Plugins: woocommerce
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.0.6';
+		self::$version = '4.1';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -171,6 +171,7 @@ class VP_Woo_Pont {
 		add_action( 'wp_ajax_vp_woo_pont_remove_point', array( $this, 'remove_pont_from_order' ) );
 		add_action( 'wp_ajax_vp_woo_pont_replace_point', array( $this, 'replace_pont_in_order' ) );
 		add_action( 'wp_ajax_vp_woo_pont_save_provider', array( $this, 'save_provider_in_order' ) );
+		add_action( 'wp_ajax_vp_woo_pont_change_shipping_method', array( $this, 'change_shipping_method_in_order' ) );
 
 		//Filter orders bassed on provider type
 		add_action( 'restrict_manage_posts', array( $this, 'display_provider_filter' ) );
@@ -927,6 +928,20 @@ class VP_Woo_Pont {
 		//And save the order
 		$order->save();
 
+		//If user was logged in, remove the shipping address from the account
+		$customer_id = $order->get_customer_id();
+		if( ! empty($customer_id) && $customer_id != 0) {
+			$user = new WP_User($customer_id);
+			if ( in_array( 'customer', (array) $user->roles ) ) {
+				delete_user_meta( $customer_id, 'shipping_address_1' );
+				delete_user_meta( $customer_id, 'shipping_address_2' );
+				delete_user_meta( $customer_id, 'shipping_city' );
+				delete_user_meta( $customer_id, 'shipping_postcode' );
+				delete_user_meta( $customer_id, 'shipping_country' );
+				delete_user_meta( $customer_id, 'shipping_state' );
+			}
+		}
+
 		//Allow plugins to customize
 		do_action('vp_woo_pont_update_order_with_selected_point', $order, $point);
 	}
@@ -1028,6 +1043,106 @@ class VP_Woo_Pont {
 
 		//Send success response
 		wp_send_json_success();
+	}
+
+	public function change_shipping_method_in_order() {
+
+		//Security check
+		check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
+		if ( !current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+		}
+
+		//Get parameters
+		$order_id = intval($_POST['order']);
+		$order = wc_get_order($order_id);
+		$new_method = sanitize_text_field($_POST['shipping_method']);
+		$new_cost_gross = isset($_POST['shipping_cost']) ? sanitize_text_field($_POST['shipping_cost']) : '';
+
+		//Parse method id and instance id
+		$method_parts = explode(':', $new_method);
+		$method_id = $method_parts[0];
+		$instance_id = isset($method_parts[1]) ? $method_parts[1] : 0;
+
+		//Get the method title from available methods
+		$available_methods = VP_Woo_Pont_Helpers::get_available_shipping_methods(false);
+		$method_title = isset($available_methods[$new_method]) ? $available_methods[$new_method] : $method_id;
+
+		//Remove zone info from title for cleaner display
+		$method_title = preg_replace('/\s*\(.*zóna\)$/', '', $method_title);
+		$method_title = preg_replace('/\s*\(Worldwide\)$/', '', $method_title);
+		$method_title = preg_replace('/\s*\(' . preg_quote(__('Local pickup', 'vp-woo-pont'), '/') . '\)$/', '', $method_title);
+
+		//Get existing shipping methods
+		$shipping_methods = $order->get_shipping_methods();
+
+		if ( !empty($shipping_methods) ) {
+			$shipping_item = reset($shipping_methods);
+		} else {
+			//Create new shipping line item if none exists
+			$shipping_item = new WC_Order_Item_Shipping();
+			$order->add_item($shipping_item);
+		}
+
+		//Update method
+		$shipping_item->set_method_id($method_id);
+		$shipping_item->set_instance_id($instance_id);
+		$shipping_item->set_method_title($method_title);
+
+		//Update cost if provided
+		if ( $new_cost_gross !== '' ) {
+			$new_cost_gross = floatval(str_replace(',', '.', $new_cost_gross));
+
+			//Calculate net price from gross
+			$tax_rates = WC_Tax::get_shipping_tax_rates();
+			if ( !empty($tax_rates) && wc_tax_enabled() ) {
+				$taxes = WC_Tax::calc_inclusive_tax($new_cost_gross, $tax_rates);
+				$tax_total = array_sum($taxes);
+				$net_cost = $new_cost_gross - $tax_total;
+			} else {
+				$net_cost = $new_cost_gross;
+				$taxes = array();
+			}
+
+			$shipping_item->set_total($net_cost);
+			$shipping_item->set_taxes(array('total' => $taxes));
+		}
+
+		$shipping_item->save();
+
+		//If the order was a pickup point order, remove point meta and reset shipping address
+		$was_pickup = $order->get_meta('_vp_woo_pont_point_id');
+		if ( $was_pickup ) {
+			$order->delete_meta_data( '_vp_woo_pont_provider' );
+			$order->delete_meta_data( '_vp_woo_pont_point_id' );
+			$order->delete_meta_data( '_vp_woo_pont_point_name' );
+			$order->delete_meta_data( '_vp_woo_pont_point_coordinates' );
+
+			//Reset shipping address to billing address
+			$order->set_address( array(
+				'first_name' => $order->get_billing_first_name(),
+				'last_name'  => $order->get_billing_last_name(),
+				'company'    => $order->get_billing_company(),
+				'address_1'  => $order->get_billing_address_1(),
+				'address_2'  => $order->get_billing_address_2(),
+				'city'       => $order->get_billing_city(),
+				'state'      => $order->get_billing_state(),
+				'postcode'   => $order->get_billing_postcode(),
+				'country'    => $order->get_billing_country(),
+			), 'shipping' );
+		}
+
+		//Recalculate order totals
+		$order->calculate_totals();
+		$order->save();
+
+		//Send success response
+		wp_send_json_success(array(
+			'method_id' => $method_id,
+			'method_title' => $method_title,
+			'instance_id' => $instance_id,
+			'is_pickup' => (strpos($method_id, 'vp_pont') !== false),
+		));
 	}
 
 	public function display_provider_filter() {
@@ -1520,7 +1635,7 @@ class VP_Woo_Pont {
 		return $locales;
 	}
 
-	public function remove_states($states): mixed {
+	public function remove_states($states) {
 		$states['HU'] = array();
 		return $states;
 	}

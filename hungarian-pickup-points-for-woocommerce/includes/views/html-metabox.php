@@ -84,6 +84,9 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 							<?php endif; ?>
 						</li>
 					<?php endforeach; ?>
+					<li>
+						<a href="#" class="change-shipping-method"><?php esc_html_e('Change shipping method','vp-woo-pont'); ?></a>
+					</li>
 				</ul>
 				<p class="vp-woo-pont-metabox-rows-data-home-delivery-providers-info <?php if(!$provider_id): ?>show<?php endif; ?>">
 					<?php printf( __( 'Theres no carrier paired with the order\'s shipping method. You can select one here for the order, or <a href="%s" target="_blank">pair it in settings</a>, so you don\'t have to do this the next time.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_labels' ) ) ); ?>
@@ -102,7 +105,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			</li>
 			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-remove <?php if(!$has_label && !$pending): ?>show<?php endif; ?>">
 				<div class="vp-woo-pont-metabox-rows-data-inside">
-					<a href="#" data-trigger-value="<?php esc_attr_e('Remove selected point','vp-woo-pont'); ?>" data-question="<?php echo esc_attr_x('Are you sure?', 'Delete point', 'vp-woo-pont'); ?>" class="delete"><?php esc_html_e('Remove selected point','vp-woo-pont'); ?></a>
+					<a href="#" class="change-shipping-method"><?php esc_html_e('Change shipping method','vp-woo-pont'); ?></a>
 				</div>
 			</li>
 			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-replace <?php if(!$has_label && !$pending): ?>show<?php endif; ?>">
@@ -216,10 +219,11 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 							$checked = false;
 							$saved_options_field = ($order->get_meta('_vp_woo_pont_point_id')) ? 'gls_extra_services_points' : 'gls_extra_services';
 							$saved_options = VP_Woo_Pont_Helpers::get_option($saved_options_field, array());
+							$is_checked = apply_filters('vp_woo_pont_extra_service_enabled', in_array($service_id, $saved_options), $service_id, 'gls', $order);
 							?>
 							<li>
 								<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
-									<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />
+									<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked($is_checked); ?> />
 									<span><?php echo esc_html($service); ?></span>
 								</label>
 							</li>
@@ -241,10 +245,12 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 							}
 							if($is_oversized) {
 								$saved_options[] = 'K_TER';
-							}							?>
+							}
+							$is_checked = apply_filters('vp_woo_pont_extra_service_enabled', in_array($service_id, $saved_options), $service_id, 'posta', $order);
+							?>
 							<li>
 								<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
-									<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />
+									<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked($is_checked); ?> />
 									<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
 								</label>
 							</li>
@@ -324,3 +330,5 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 	</div>
 
 	<?php include( dirname( __FILE__ ) . '/html-modal-replace-point.php' ); ?>
+	
+	<?php include( dirname( __FILE__ ) . '/html-modal-change-shipping-method.php' ); ?>

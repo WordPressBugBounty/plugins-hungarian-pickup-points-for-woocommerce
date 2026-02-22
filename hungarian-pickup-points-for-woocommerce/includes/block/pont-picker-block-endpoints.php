@@ -71,6 +71,24 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 					WC()->session->set('vp_selected_payment_method', $data['payment_method']);
 				}
 
+				//Runs when the country is changed in the pickup point block
+				if(isset($data['country'])) {
+					$country = sanitize_text_field($data['country']);
+					WC()->customer->set_shipping_country($country);
+					WC()->customer->set_billing_country($country);
+					WC()->customer->save();
+
+					//Reset shipping cost cache so prices recalculate for the new country
+					$packages = WC()->cart->get_shipping_packages();
+					foreach ($packages as $key => $value) {
+						$shipping_session = "shipping_for_package_$key";
+						unset(WC()->session->$shipping_session);
+					}
+
+					//Clear selected pont since it may not exist in the new country
+					WC()->session->set('selected_vp_pont', null);
+				}
+
 				//If we need to select a point
 				if(isset($data['selected_point'])) {
 

@@ -89,13 +89,45 @@ use Automattic\WooCommerce\StoreApi\Exceptions\InvalidCartException;
 	//An array of key, value pairs of data made available to the block on the client side, easy to translate
 	public function get_script_data() {
 		$styles = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_styles', array());
+
+		//Extract available countries from JSON files
+		$json_files = VP_Woo_Pont_Helpers::get_json_files();
+		$available_countries = array();
+		foreach ( $json_files as $provider => $files ) {
+			if ( is_array($files) ) {
+				foreach ( $files as $file ) {
+					if ( isset($file['country']) && !in_array($file['country'], $available_countries) ) {
+						$available_countries[] = $file['country'];
+					}
+				}
+			}
+		}
+
+		//Build country labels
+		$country_labels = array();
+		$wc_countries = WC()->countries->get_countries();
+		foreach ( $available_countries as $code ) {
+			$country_labels[$code] = isset($wc_countries[$code]) ? $wc_countries[$code] : $code;
+		}
+
+		//Get default country
+		$default_country = 'HU';
+		if ( WC()->customer ) {
+			$customer_country = WC()->customer->get_shipping_country();
+			if ( $customer_country ) {
+				$default_country = $customer_country;
+			}
+		}
+
 		$data = [
 			'defaultText' => __('Select a pickup point', 'vp-woo-pont'),
 			'enabledProviders' => VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers', array('foxpost', 'gls', 'dpd')),
 			'codFeesEnabled' => (get_option('vp_woo_pont_cod_fees')),
 			'kvikkMapApiKey' => VP_Woo_Pont_Helpers::get_option('kvikk_map_api_key', ''),
 			'primaryColor' => isset($styles['primary_color']) ? $styles['primary_color'] : '#2471B1',
-			'textColor' => isset($styles['text_color']) ? $styles['text_color'] : '#838383'
+			'textColor' => isset($styles['text_color']) ? $styles['text_color'] : '#838383',
+			'availableCountries' => $country_labels,
+			'defaultCountry' => $default_country
 		];
 
 		return $data;

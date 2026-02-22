@@ -24,6 +24,7 @@ class VP_Woo_Pont_Kvikk {
 		add_filter('vp_woo_pont_merged_pdf_parameters', array($this, 'get_merged_pdf_parameters'), 10, 3);
 		add_filter('vp_woo_pont_tracking_page_variables', array($this, 'tracking_page_variables'), 10, 2);
 		add_filter('vp_woo_pont_email_order_details_params', array($this, 'tracking_email_variables'), 10, 2);
+		add_filter('vp_woo_pont_get_provider_name', array($this, 'get_provider_name'), 10, 3);
 
 		//Load custom admin JS
 		add_action('admin_enqueue_scripts', array($this, 'load_admin_scripts'));
@@ -75,6 +76,10 @@ class VP_Woo_Pont_Kvikk {
 		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_additional_package_fields'));
 		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_extra_services_fields'));
 
+		//Automatic pricing
+		add_filter('vp_woo_pont_provider_costs', array($this, 'apply_auto_pricing'), 10, 2);
+		add_filter('woocommerce_package_rates', array($this, 'apply_auto_pricing_home_delivery'), 10, 2);
+
 		$this->extra_services = array(
 			'insurance' => __('Value insurance', 'vp-woo-pont'),
 			'oversized' => __('Bulky handling', 'vp-woo-pont'),
@@ -113,6 +118,311 @@ class VP_Woo_Pont_Kvikk {
 		if(apply_filters('vp_woo_pont_show_label_metabox', $order->needs_processing(), $order)) {
 			include( VP_Woo_Pont::$plugin_path . 'includes/views/html-metabox-kvikk.php' );
 		}
+	}
+
+	//Calculate shipping cost from Kvikk price list
+	public function apply_auto_pricing($provider_costs, $cart_details) {
+
+		//Check if auto pricing is enabled
+		if(VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing', 'no') !== 'yes') {
+			return $provider_costs;
+		}
+
+		//Load pricing data from JSON file
+		$pricing_index = $this->load_pricing_index();
+		if($pricing_index === false) {
+			return $provider_costs;
+		}
+
+		//Get customer country
+		$selected_country = WC()->customer->get_shipping_country();
+
+		//Get cart weight in grams
+		$weight = isset($cart_details['weight']) ? $cart_details['weight'] : 0;
+		$weight_in_grams = round(wc_get_weight($weight, 'g', get_option('woocommerce_weight_unit')));
+
+		//Map provider IDs to courier names used in the pricing JSON
+		$provider_courier_map = array(
+			'kvikk_mpl_posta' => 'mpl_posta',
+			'kvikk_mpl_postapont' => 'mpl_postapont',
+			'kvikk_mpl_automata' => 'mpl_automata',
+			'kvikk_packeta_zpont' => 'foxpost_zpont',
+			'kvikk_packeta_zbox' => 'foxpost_zbox',
+			'kvikk_foxpost' => 'foxpost_foxpost',
+			'kvikk_gls_locker' => 'gls_locker',
+			'kvikk_gls_shop' => 'gls_shop',
+			'kvikk_dpd_parcelshop' => 'dpd_parcelshop',
+			'kvikk_dpd_alzabox' => 'dpd_alzabox',
+		);
+
+		foreach($provider_costs as $provider_id => $cost_data) {
+
+			//Skip non-kvikk providers
+			if(!isset($provider_courier_map[$provider_id])) {
+				continue;
+			}
+
+			//If a price is already set manually(not 0), respect it as an overwrite
+			if(!$cost_data['is_default']) {
+				continue;
+			}
+
+			//Calculate the cost from the price list
+			$courier_name = $provider_courier_map[$provider_id];
+			$calculated_cost = $this->calculate_kvikk_shipping_cost($courier_name, $selected_country, $weight_in_grams, $pricing_index);
+
+			//If no price found, hide the provider
+			if($calculated_cost === false) {
+				unset($provider_costs[$provider_id]);
+				continue;
+			}
+
+			//Apply markup
+			$calculated_cost = $this->apply_pricing_markup($calculated_cost);
+
+			//Calculate taxes on net price
+			$tax = array();
+			$shipping_tax_rates = array();
+			if(wc_tax_enabled() && VP_Woo_Pont_Helpers::get_option('tax_status', 'taxable') == 'taxable') {
+				$shipping_tax_rates = WC_Tax::get_shipping_tax_rates();
+				$tax = WC_Tax::calc_shipping_tax($calculated_cost, $shipping_tax_rates);
+			}
+			if(!$tax) $tax = array();
+
+			//Apply rounding to gross price, then back-calculate net
+			$gross = $calculated_cost + array_sum($tax);
+			$rounded_gross = $this->apply_pricing_rounding($gross);
+
+			if($rounded_gross !== $gross && !empty($shipping_tax_rates)) {
+				//Back-calculate net from rounded gross using inclusive tax
+				$tax = WC_Tax::calc_inclusive_tax($rounded_gross, $shipping_tax_rates);
+				$calculated_cost = $rounded_gross - array_sum($tax);
+			} elseif($rounded_gross !== $gross) {
+				//No taxes, net = gross
+				$calculated_cost = $rounded_gross;
+			}
+
+			//Switch currency
+			$formatted_cost = VP_Woo_Pont_Helpers::exchange_currency($calculated_cost);
+			$formatted_tax = VP_Woo_Pont_Helpers::exchange_currency(array_sum($tax));
+
+			//Update the provider cost
+			$provider_costs[$provider_id]['net'] = $calculated_cost;
+			$provider_costs[$provider_id]['tax'] = $tax;
+			$provider_costs[$provider_id]['gross'] = $calculated_cost + array_sum($tax);
+			$provider_costs[$provider_id]['formatted_net'] = wc_price($formatted_cost);
+			$provider_costs[$provider_id]['formatted_gross'] = wc_price($formatted_cost + $formatted_tax);
+		}
+
+		return $provider_costs;
+	}
+
+	//Calculate shipping cost for home delivery methods paired with Kvikk
+	public function apply_auto_pricing_home_delivery($rates, $package) {
+
+		//Check if auto pricing is enabled
+		if(VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing', 'no') !== 'yes') {
+			return $rates;
+		}
+
+		//Get home delivery pairing
+		$home_delivery = get_option('vp_woo_pont_home_delivery', array());
+		if(empty($home_delivery)) {
+			return $rates;
+		}
+
+		//Check if any shipping method is paired with a kvikk provider
+		$has_kvikk = false;
+		foreach($home_delivery as $method_id => $provider_id) {
+			if(!empty($provider_id) && strpos($provider_id, 'kvikk_') === 0) {
+				$has_kvikk = true;
+				break;
+			}
+		}
+		if(!$has_kvikk) {
+			return $rates;
+		}
+
+		//Load pricing data
+		$pricing_index = $this->load_pricing_index();
+		if($pricing_index === false) {
+			return $rates;
+		}
+
+		//Get customer country
+		$selected_country = WC()->customer->get_shipping_country();
+
+		//Get cart weight in grams
+		$cart_weight = WC()->cart->get_cart_contents_weight();
+		$weight_in_grams = round(wc_get_weight($cart_weight, 'g', get_option('woocommerce_weight_unit')));
+
+		//Map home delivery provider IDs to courier names in the pricing JSON
+		$home_delivery_courier_map = array(
+			'kvikk_mpl' => 'mpl',
+			'kvikk_gls' => 'gls',
+			'kvikk_dpd' => 'dpd',
+			'kvikk_foxpost' => 'foxpost',
+			'kvikk_packeta' => 'packeta',
+			'kvikk_famafutar' => 'famafutar',
+		);
+
+		foreach($rates as $rate_id => $rate) {
+
+			//Build the shipping method key (method_id:instance_id)
+			$method_key = $rate->get_method_id() . ':' . $rate->get_instance_id();
+
+			//Check if this shipping method is paired with a kvikk provider
+			if(!isset($home_delivery[$method_key]) || empty($home_delivery[$method_key])) {
+				continue;
+			}
+
+			$provider_id = $home_delivery[$method_key];
+
+			//Skip non-kvikk providers
+			if(!isset($home_delivery_courier_map[$provider_id])) {
+				continue;
+			}
+
+			//Skip free shipping methods, those should stay free
+			if($rate->get_method_id() === 'free_shipping') {
+				continue;
+			}
+
+			//Calculate the cost from the price list
+			$courier_name = $home_delivery_courier_map[$provider_id];
+			$calculated_cost = $this->calculate_kvikk_shipping_cost($courier_name, $selected_country, $weight_in_grams, $pricing_index);
+
+			//If no price found, hide the shipping method
+			if($calculated_cost === false) {
+				unset($rates[$rate_id]);
+				continue;
+			}
+
+			//Apply markup
+			$calculated_cost = $this->apply_pricing_markup($calculated_cost);
+
+			//Calculate taxes on net price
+			$taxes = array();
+			$shipping_tax_rates = array();
+			if(wc_tax_enabled() && VP_Woo_Pont_Helpers::get_option('tax_status', 'taxable') == 'taxable') {
+				$shipping_tax_rates = WC_Tax::get_shipping_tax_rates();
+				$taxes = WC_Tax::calc_shipping_tax($calculated_cost, $shipping_tax_rates);
+			}
+			if(!$taxes) $taxes = array();
+
+			//Apply rounding to gross price, then back-calculate net
+			$gross = $calculated_cost + array_sum($taxes);
+			$rounded_gross = $this->apply_pricing_rounding($gross);
+
+			if($rounded_gross !== $gross && !empty($shipping_tax_rates)) {
+				$taxes = WC_Tax::calc_inclusive_tax($rounded_gross, $shipping_tax_rates);
+				$calculated_cost = $rounded_gross - array_sum($taxes);
+			} elseif($rounded_gross !== $gross) {
+				$calculated_cost = $rounded_gross;
+			}
+
+			//Update the rate
+			$rates[$rate_id]->cost = $calculated_cost;
+			$rates[$rate_id]->taxes = $taxes;
+		}
+
+		return $rates;
+	}
+
+	//Load and index pricing data from JSON file
+	public function load_pricing_index() {
+		$paths = VP_Woo_Pont_Helpers::get_download_folder('kvikk_all_shipping_prices');
+		if(!file_exists($paths['path'])) {
+			return false;
+		}
+
+		$pricing_data = json_decode(file_get_contents($paths['path']), true);
+		if(!$pricing_data || !is_array($pricing_data)) {
+			return false;
+		}
+
+		$pricing_index = array();
+		foreach($pricing_data as $entry) {
+			$key = $entry['courier'] . '_' . $entry['country'];
+			$pricing_index[$key] = $entry['prices'];
+		}
+
+		return $pricing_index;
+	}
+
+	//Look up shipping cost from Kvikk price list
+	public function calculate_kvikk_shipping_cost($courier, $country, $weight_in_grams, $pricing_index) {
+		$key = $courier . '_' . $country;
+
+		//Check if pricing exists for this courier + country
+		if(!isset($pricing_index[$key])) {
+			return false;
+		}
+
+		//Find the matching weight range
+		foreach($pricing_index[$key] as $range) {
+			if($weight_in_grams >= $range['min'] && $weight_in_grams <= $range['max']) {
+				return (float)$range['cost'];
+			}
+		}
+
+		return false;
+	}
+
+	//Apply markup to calculated price
+	private function apply_pricing_markup($cost) {
+		$markup_type = VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing_markup_type', 'none');
+		if($markup_type === 'none') {
+			return $cost;
+		}
+
+		$markup_value = (float)VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing_markup_value', 0);
+		if($markup_value <= 0) {
+			return $cost;
+		}
+
+		if($markup_type === 'fixed') {
+			$cost += $markup_value;
+		} elseif($markup_type === 'percentage') {
+			$cost += $cost * ($markup_value / 100);
+		}
+
+		return $cost;
+	}
+
+	//Apply rounding to calculated price
+	private function apply_pricing_rounding($cost) {
+		$rounding = VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing_rounding', 'none');
+		if($rounding === 'none') {
+			return $cost;
+		}
+
+		switch($rounding) {
+			case 'round_9':
+				$cost = ceil($cost / 10) * 10 - 1;
+				break;
+			case 'round_10':
+				$cost = ceil($cost / 10) * 10;
+				break;
+			case 'round_49':
+				$original_cost = $cost;
+				$cost = floor($cost / 100) * 100 + 49;
+				if($cost < $original_cost) $cost += 100;
+				break;
+			case 'round_90':
+				$original_cost = $cost;
+				$cost = floor($cost / 100) * 100 + 90;
+				if($cost < $original_cost) $cost += 100;
+				break;
+			case 'round_99':
+				$cost = ceil($cost / 100) * 100 - 1;
+				break;
+			case 'round_100':
+				$cost = ceil($cost / 100) * 100;
+				break;
+		}
+
+		return $cost;
 	}
 
 	public function get_settings($settings) {
@@ -184,6 +494,53 @@ class VP_Woo_Pont_Kvikk {
 				'options' => array(),
 				'id' => 'kvikk_oversized_products',
 				'desc_tip' => __('Select a product attribute or shipping class that relates to oversized shipments, so the generated label will be marked as oversized by default.', 'vp-woo-pont'),
+			),
+			array(
+				'title' => __('Enable automatic pricing', 'vp-woo-pont'),
+				'type' => 'checkbox',
+				'desc' => __('Enable', 'vp-woo-pont'),
+				'desc_tip' => __('Calculate shipping costs automatically based on the Kvikk price list', 'vp-woo-pont'),
+				'default' => 'no',
+				'id' => 'kvikk_auto_pricing',
+				'class' => 'vp-woo-pont-toggle-group-kvikk-auto-pricing',
+			),
+			array(
+				'title' => __('Price rounding', 'vp-woo-pont'),
+				'type' => 'select',
+				'class' => 'wc-enhanced-select vp-woo-pont-toggle-group-kvikk-auto-pricing-item',
+				'default' => 'none',
+				'options' => array(
+					'none' => __('No rounding', 'vp-woo-pont'),
+					'round_9' => __('Round up to nearest 9 (e.g. 1059)', 'vp-woo-pont'),
+					'round_10' => __('Round up to nearest 10 (e.g. 1060)', 'vp-woo-pont'),
+					'round_49' => __('Round up to nearest 49 (e.g. 1049)', 'vp-woo-pont'),
+					'round_90' => __('Round up to nearest 90 (e.g. 1090)', 'vp-woo-pont'),
+					'round_99' => __('Round up to nearest 99 (e.g. 1099)', 'vp-woo-pont'),
+					'round_100' => __('Round up to nearest 100 (e.g. 1100)', 'vp-woo-pont'),
+				),
+				'desc_tip' => __('Round the final price to a specific ending. Rounding is applied after markup.', 'vp-woo-pont'),
+				'id' => 'kvikk_auto_pricing_rounding'
+			),
+			array(
+				'title' => __('Markup type', 'vp-woo-pont'),
+				'type' => 'select',
+				'class' => 'wc-enhanced-select vp-woo-pont-toggle-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing',
+				'default' => 'none',
+				'options' => array(
+					'none' => __('No markup', 'vp-woo-pont'),
+					'fixed' => __('Fixed amount', 'vp-woo-pont'),
+					'percentage' => __('Percentage', 'vp-woo-pont'),
+				),
+				'desc_tip' => __('Add a markup on top of the Kvikk price.', 'vp-woo-pont'),
+				'id' => 'kvikk_auto_pricing_markup_type'
+			),
+			array(
+				'title' => __('Markup value', 'vp-woo-pont'),
+				'type' => 'text',
+				'class' => 'vp-woo-pont-toggle-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing-item-fixed vp-woo-pont-select-group-kvikk-auto-pricing-item-percentage',
+				'default' => '0',
+				'desc_tip' => __('The markup amount (fixed value in your currency) or percentage (e.g. 10 for 10%).', 'vp-woo-pont'),
+				'id' => 'kvikk_auto_pricing_markup_value'
 			),
 			array(
 				'type' => 'sectionend'
@@ -761,7 +1118,20 @@ class VP_Woo_Pont_Kvikk {
 				}
 
 				//Store the rest
-				update_option('vp_woo_pont_kvikk_courier_details', $response['data']);
+				$couriers_details = array();
+				if(isset($response['data']['couriers'])) $couriers_details['couriers'] = $response['data']['couriers'];
+				update_option('vp_woo_pont_kvikk_courier_details', $couriers_details);
+
+				//Store shipping pricing data as a JSON file
+				if(isset($response['data']['pricing']['shipping']) && is_array($response['data']['pricing']['shipping'])) {
+					$saved_file = VP_Woo_Pont_Import_Database::save_json_file(array(
+						'courier' => 'kvikk',
+						'country' => 'all',
+						'type' => 'shipping_prices',
+						'points' => $response['data']['pricing']['shipping'],
+					));
+					update_option('vp_woo_pont_kvikk_pricing_file', $saved_file['file']);
+				}
 
 			} else {
 				return false;
@@ -920,7 +1290,7 @@ class VP_Woo_Pont_Kvikk {
 			$provider_id = VP_Woo_Pont_Helpers::get_provider_from_order($order);
 			$provider_id = explode('_', $provider_id);
 			$args['provider'] = 'kvikk_'.$provider_id[1];
-			$args['carrier_name'] = str_replace('Kvikk - Kvikk', '', $args['carrier_name']);
+			$args['carrier_name'] = str_replace('Kvikk - ', '', $args['carrier_name']);
 		}
 		return $args;
 	}
@@ -936,6 +1306,11 @@ class VP_Woo_Pont_Kvikk {
 			$args['carrier_logo'] = $logo;
 		}
 		return $args;
+	}
+
+	public function get_provider_name($name, $provider_id, $prefix) {
+		$name = str_replace('Kvikk - ', '', $name);
+		return $name;
 	}
 
 	public function display_ad() {
@@ -1293,10 +1668,11 @@ class VP_Woo_Pont_Kvikk {
 								$saved_options[] = $check_service;
 							}
 						}
+						$is_checked = apply_filters('vp_woo_pont_extra_service_enabled', in_array($service_id, $saved_options), $service_id, 'kvikk', $order);
 						?>
 						<li>
 							<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
-								<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />
+								<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked($is_checked); ?> />
 								<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
 							</label>
 						</li>

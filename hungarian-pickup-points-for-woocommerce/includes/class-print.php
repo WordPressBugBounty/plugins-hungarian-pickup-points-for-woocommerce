@@ -278,8 +278,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 							$label_counter++;
 							$label = $mpdf->ImportPage($i);
 							$mpdf->UseTemplate($label, $sticker_parameter['x'][$label_counter-1], $sticker_parameter['y'][$label_counter-1]);
+
+							//Check if this is the very last label across all files and pages
+							$is_last_label = ($key === array_key_last($pdf_files) && $i === $pagecount);
 				
-							if ($label_counter == $sticker_parameter['sections'] && $key !== array_key_last($pdf_files)) {
+							if ($label_counter == $sticker_parameter['sections'] && !$is_last_label) {
 								$label_counter = 0;
 								$mpdf->AddPage();
 							}
