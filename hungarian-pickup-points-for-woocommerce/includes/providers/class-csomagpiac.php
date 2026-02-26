@@ -157,7 +157,7 @@ class VP_Woo_Pont_Csomagpiac {
 		}
 
 		//Create a new json
-		$results = array('dpd' => array(), 'sameday' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'mpl_automata' => array());
+		$results = array('dpd' => array(), 'sameday' => array(), 'mpl_postapont' => array(), 'mpl_posta' => array(), 'mpl_automata' => array(), 'foxpost' => array());
 
 		// Get the XML content from the response
 		$xml_content = wp_remote_retrieve_body($response);
@@ -232,11 +232,12 @@ class VP_Woo_Pont_Csomagpiac {
         $providers['csomagpiac_mpl_postapont'] = 'MPL Postapont';
         $providers['csomagpiac_mpl_posta'] = 'MPL Posta';
         $providers['csomagpiac_mpl_automata'] = 'MPL Csomagautomata';
+        $providers['csomagpiac_foxpost'] = 'Foxpost';
         return $providers;
     }
 
     public function add_provider_subgroups($subgroups) {
-        $subgroups['csomagpiac'] = array('dpd', 'sameday', 'mpl_postapont', 'mpl_posta', 'mpl_automata');
+        $subgroups['csomagpiac'] = array('dpd', 'sameday', 'mpl_postapont', 'mpl_posta', 'mpl_automata', 'foxpost');
         return $subgroups;
     }
 

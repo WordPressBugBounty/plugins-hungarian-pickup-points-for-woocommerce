@@ -125,6 +125,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			add_action( 'wp_ajax_vp_woo_pont_generate_label', array( $this, 'ajax_generate_label' ) );
 			add_action( 'wp_ajax_vp_woo_pont_update_package_details', array( $this, 'ajax_update_package_details' ) );
 			add_action( 'wp_ajax_vp_woo_pont_void_label', array( $this, 'ajax_void_label' ) );
+			add_action( 'wp_ajax_vp_woo_pont_new_label', array( $this, 'ajax_new_label' ) );
 			add_action( 'wp_ajax_vp_woo_pont_generate_quick_label', array( $this, 'ajax_generate_quick_label' ) );
 
 			//Custom email when label generated
@@ -368,6 +369,59 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 			//So developers can hook in here
 			do_action('vp_woo_pont_label_removed', $order, $data, $provider);
+
+			//Return response
+			return $response;
+
+		}
+
+		public function new_label($order_id) {
+
+			//Create response object
+			$response = array();
+			$response['error'] = false;
+			$response['messages'] = array();
+
+			//Get order data
+			$order = wc_get_order($order_id);
+
+			//Collect current label details for the order note
+			$parcel_number = $order->get_meta('_vp_woo_pont_parcel_number');
+			$parcel_id = $order->get_meta('_vp_woo_pont_parcel_id');
+			$provider = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
+			$provider_name = VP_Woo_Pont_Helpers::get_provider_name($provider);
+
+			//Build order note with previous label details
+			$note_parts = array();
+			$note_parts[] = esc_html__('Previous shipping label cleared to generate a new label.', 'vp-woo-pont');
+			if($provider_name) {
+				$note_parts[] = sprintf(esc_html__('Provider: %s', 'vp-woo-pont'), $provider_name);
+			}
+			if($parcel_number) {
+				$note_parts[] = sprintf(esc_html__('Tracking number: %s', 'vp-woo-pont'), $parcel_number);
+			}
+			if($parcel_id) {
+				$note_parts[] = sprintf(esc_html__('Parcel ID: %s', 'vp-woo-pont'), $parcel_id);
+			}
+
+			//Delete label metadata locally(no API call)
+			$order->delete_meta_data('_vp_woo_pont_parcel_id');
+			$order->delete_meta_data('_vp_woo_pont_parcel_pdf');
+			$order->delete_meta_data('_vp_woo_pont_parcel_number');
+			$order->delete_meta_data('_vp_woo_pont_parcel_pending');
+			$order->delete_meta_data('_vp_woo_pont_parcel_info');
+			$order->delete_meta_data('_vp_woo_pont_parcel_count');
+			$order->delete_meta_data('_vp_woo_pont_kvikk_accounting');
+			$order->save();
+
+			//Save order note
+			$order->add_order_note(implode("\n", $note_parts));
+
+			//Create response
+			$response['messages'][] = esc_html__('Shipping label cleared locally. You can now generate a new label for this order.', 'vp-woo-pont');
+
+			//So developers can hook in here
+			do_action('vp_woo_pont_new_label', $order, $provider);
 
 			//Return response
 			return $response;
@@ -624,6 +678,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			}
 			$order_id = intval($_POST['order']);
 			$response = $this->void_label($order_id);
+			wp_send_json_success($response);
+		}
+
+		//Ajax function to clear label locally and allow generating a new one
+		public function ajax_new_label() {
+			check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
+			if ( !current_user_can( 'edit_shop_orders' ) ) {
+				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			}
+			$order_id = intval($_POST['order']);
+			$response = $this->new_label($order_id);
 			wp_send_json_success($response);
 		}
 

@@ -200,7 +200,7 @@ $enabled_providers = $this->get_enabled_couriers();
 				<div class="vp-woo-pont-settings-pricing-countries">
 					<label><?php _e('Apply to the following pickup point countries:', 'vp-woo-pont'); ?></label>
 					<ul>
-						<?php foreach ($supported_countries as $country_code => $country_name): ?>
+						<?php foreach ($supported_countries as $country_code => $country): ?>
 							<?php
 								//Skip if the only country is Hungary
 								if(count($supported_countries) == 1 && isset($supported_countries['HU'])) {
@@ -210,7 +210,7 @@ $enabled_providers = $this->get_enabled_couriers();
 							<li class="country-<?php echo esc_attr($country_code); ?>">
 								<label>
 									<input type="checkbox" data-name="vp_woo_pont_pricing[X][countries][]" value="<?php echo esc_attr($country_code); ?>">
-									<span><?php echo esc_html($country_name); ?></span>
+									<span><?php echo esc_html($country['label']); ?></span>
 								</label>
 							</li>
 						<?php endforeach; ?>

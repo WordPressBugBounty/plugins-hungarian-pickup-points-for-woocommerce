@@ -170,6 +170,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 				<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-void <?php if($has_label): ?>show<?php endif; ?>">
 					<div class="vp-woo-pont-metabox-rows-data-inside">
 						<a href="#" data-trigger-value="<?php esc_attr_e('Delete label','vp-woo-pont'); ?>" data-question="<?php echo esc_attr_x('Are you sure?', 'Delete label', 'vp-woo-pont'); ?>" class="delete"><?php esc_html_e('Delete label','vp-woo-pont'); ?></a>
+						<a href="#" data-trigger-value="<?php esc_attr_e('New label','vp-woo-pont'); ?>" data-question="<?php echo esc_attr_x('Are you sure?', 'Delete label', 'vp-woo-pont'); ?>" class="new-label"><?php esc_html_e('New label','vp-woo-pont'); ?></a>
 					</div>
 				</li>
 				<?php if($order->get_meta('_vp_woo_pont_mpl_closed') || $order->get_meta('_vp_woo_pont_closed')): ?>

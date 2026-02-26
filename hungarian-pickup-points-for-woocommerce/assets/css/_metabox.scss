@@ -67,6 +67,10 @@
 		margin: 0;
 		padding: 0;
 
+		a.delete {
+			color: var(--wc-red);
+		}
+
 		&-label {
 
 			&-download {
