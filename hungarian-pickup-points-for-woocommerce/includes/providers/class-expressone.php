@@ -85,6 +85,13 @@ class VP_Woo_Pont_ExpressOne {
 				'id' => 'expressone_sticker_size'
 			),
 			array(
+				'type' => 'text',
+				'title' => __('Value insurance limit', 'vp-woo-pont'),
+				'default' => 50000,
+				'desc_tip' => __('If empty, it will be the order total up to 50.000 HUF. If you need a higher maximum limit, enter that here.', 'vp-woo-pont'),
+				'id' => 'expressone_insurance_limit'
+			),
+			array(
 				'type' => 'sectionend',
 			),
 		);
@@ -96,6 +103,7 @@ class VP_Woo_Pont_ExpressOne {
 
 		//Get order details
 		$order = wc_get_order($data['order_id']);
+		$comment = VP_Woo_Pont()->labels->get_package_contents_label($data, 'expressone');
 
 		//Set package weight
 		$weight = ($data['package']['weight'] == 0) ? 1 : wc_get_weight($data['package']['weight'], 'kg');
@@ -124,7 +132,7 @@ class VP_Woo_Pont_ExpressOne {
 					'services' => array(
 						'delivery_type' => ($data['point_id']) ? 'D2S' : '24H',
 						'insurance' => array(
-							'enable' => true,
+							'enable' => false,
 							'parcel_price' => (double) $order->get_total() //Net order total
 						),
 						'notification' => array(
@@ -133,7 +141,7 @@ class VP_Woo_Pont_ExpressOne {
 						)
 					),
 					'ref_number' => $data['reference_number'],
-					'note' => '',
+					'note' => $comment,
 					'invoice_number' => $data['invoice_number'],
 				)
 			),
@@ -143,6 +151,14 @@ class VP_Woo_Pont_ExpressOne {
 				'pdf_etiket_position' => 0
 			)
 		);
+
+		//Set maximum insurance value
+		if($insurance_limit = VP_Woo_Pont_Helpers::get_option('expressone_insurance_limit', 50000)) {
+			if($data['package']['total'] > $insurance_limit) {
+				$item['deliveries'][0]['services']['insurance']['enabled'] = true;
+				$item['deliveries'][0]['services']['insurance']['parcel_price'] = $insurance_limit;
+			}
+		}
 
 		//If package count set
 		if(isset($data['options']) && isset($data['options']['package_count']) && $data['options']['package_count'] > 1) {

@@ -290,9 +290,9 @@ class VP_Woo_Pont_Csomagpiac {
 				);
 			}
 
-			if($data['provider'] == 'csomagpiac_sameday') {
+			if($data['provider'] == 'csomagpiac_foxpost') {
 				$services[] = array(
-					'name' => 'sameday_easybox',
+					'name' => 'foxpost_csomagpont',
 					'value' => $data['point_id']
 				);
 			}
@@ -322,7 +322,7 @@ class VP_Woo_Pont_Csomagpiac {
 		}
 
 		//Extra services
-		if($extra_services = VP_Woo_Pont_Helpers::get_option('csomagpiac_extra_services')) {
+		if($extra_services = VP_Woo_Pont_Helpers::get_option('csomagpiac_extra_services') && $data['provider'] != 'csomagpiac_foxpost') {
 			foreach($extra_services as $extra_service) {
 				$item['services'][] = array(
 					'name' => $extra_service

@@ -409,7 +409,7 @@ class VP_Woo_Pont_GLS {
 		//For EU points, we need to supply the address of the point too
 		if($data['point_id'] && $order->get_shipping_country() != 'HU') {
 			$provider_id = $data['order']->get_meta('_vp_woo_pont_provider');
-			$point = VP_Woo_Pont()->find_point_info($provider_id, $data['point_id']);
+			$point = VP_Woo_Pont()->find_point_info($provider_id, $data['point_id'], $order->get_shipping_country());
 			if($point) {
 				$parcel['DeliveryAddress']['Street'] = $point['addr'];
 				$parcel['DeliveryAddress']['HouseNumberInfo'] = '';

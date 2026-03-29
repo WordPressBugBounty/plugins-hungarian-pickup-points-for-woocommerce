@@ -288,7 +288,7 @@ class VP_Woo_Pont_Sameday {
 
 			//Set a different service code for international home delivery shipments
 			if($order->get_shipping_country() != 'HU') {
-				$item['service'] = 28;
+				$item['service'] = 28; //Crossborder HD 24H
 			}
 
 		}

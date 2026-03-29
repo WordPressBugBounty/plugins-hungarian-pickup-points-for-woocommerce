@@ -360,6 +360,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                         $home_delivery[sanitize_text_field($shipping_method_id)] = sanitize_text_field($provider_id);
                     }
                 }
+                
                 update_option('vp_woo_pont_home_delivery', $home_delivery);
             
                 $weight_corrections = array();

@@ -1916,7 +1916,11 @@ class VP_Woo_Pont_Kvikk {
 	}
 
 	public function get_enabled_countries() {
-		$countries = array_keys(get_option('vp_woo_pont_kvikk_countries', array('HU' => 'Hungary')));
+		$saved_countries = get_option('vp_woo_pont_kvikk_countries', array('HU' => 'Hungary'));
+		if(!is_array($saved_countries)) {
+			$saved_countries = array('HU' => 'Hungary');
+		}
+		$countries = array_keys($saved_countries);
 		return $countries;
 	}
 

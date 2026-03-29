@@ -137,10 +137,16 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 				$calculated_fee = apply_filters('vp_woo_pont_cod_fee', $calculated_fee, $cart_details);
 
 				//Set tax class
+				$standard_tax_class = '';
 				$shipping_tax_rate = WC()->cart->get_cart_item_tax_classes_for_shipping();
 				$cod_tax_rate = VP_Woo_Pont_Helpers::get_option('cod_tax_class', '');
 				if($cod_tax_rate == 'inherit' && $shipping_tax_rate && is_array($shipping_tax_rate) && count($shipping_tax_rate) > 0) {
 					$cod_tax_rate = $shipping_tax_rate[0];
+
+					//Standard class takes priority over any other tax class.
+					if ( in_array( $standard_tax_class, $shipping_tax_rate, true ) ) {
+						$cod_tax_rate = $standard_tax_class;
+					}
 				}
 				
 				//And create the fee

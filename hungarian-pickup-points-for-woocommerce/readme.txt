@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,14 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.1.2
+* Csomagpiac Foxpost javítás
+* Utánvét díj áfakulcs javítás
+* ExpressOne címke megjegyzés mező
+* GLS külföldi címkegenerálás javítás
+* Express One maximum biztosítás összeg beállítás
+* Sameday csomagpont lista import javítás
 
 4.1.1
 * Új címke gomb: ha már van generálva a rendeléshez címke és nem lehet törölni(már szállítás alatt van), akkor az új címke gomb kitörli a rendelésből a címke adatait és így lehet új címkét generálni ugyanahhoz a rendeléshez.
