@@ -24,7 +24,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			'sameday',
 			'csomagpiac',
 			'transsped',
-			'custom'
+			'custom',
+			'gls_xxl'
 
 			/*
 			'foxpost',

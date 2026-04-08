@@ -1036,7 +1036,8 @@
 	}
 }
 
-.vp-woo-pont-kvikk-parcel {
+.vp-woo-pont-kvikk-parcel,
+.vp-woo-pont-gls-xxl-parcel {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
@@ -1048,6 +1049,7 @@
 
 	&-unit {
 		position: relative;
+		width: 100%;
 
 		span {
 			height: 30px;
@@ -1124,5 +1126,19 @@
 .vp-woo-pont-modal-change-shipping-method {
 	.wc-backbone-modal-content {
 		max-width: 400px !important;
+	}
+}
+
+#vp_woo_pont_gls_xxl_parcels {
+	margin: 0 !important;
+}
+
+.vp-woo-pont-gls-xxl-parcel {
+	margin: 0 -10px 0 -10px !important;
+	border-bottom: 1px solid #eee;
+	padding: 10px;
+
+	&:last-child {
+		border: none;
 	}
 }

@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.1.2
+Version: 4.2
 WC requires at least: 7.0
 WC tested up to: 10.6.1
 Requires Plugins: woocommerce
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.1.2';
+		self::$version = '4.2';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -275,6 +275,7 @@ class VP_Woo_Pont {
 		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-foxpost.php' );
 		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-packeta.php' );
 		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-gls.php' );
+		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-gls-xxl.php' );
 		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-posta.php' );
 		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-dpd.php' );
 		include_once( plugin_dir_path( __FILE__ ) . 'includes/providers/class-sameday.php' );
@@ -287,6 +288,7 @@ class VP_Woo_Pont {
 		$this->providers['foxpost'] = new VP_Woo_Pont_Foxpost();
 		$this->providers['packeta'] = new VP_Woo_Pont_Packeta();
 		$this->providers['gls'] = new VP_Woo_Pont_GLS();
+		$this->providers['gls_xxl'] = new VP_Woo_Pont_GLS_XXL();
 		$this->providers['posta'] = new VP_Woo_Pont_Posta();
 		$this->providers['dpd'] = new VP_Woo_Pont_DPD();
 		$this->providers['sameday'] = new VP_Woo_Pont_Sameday();

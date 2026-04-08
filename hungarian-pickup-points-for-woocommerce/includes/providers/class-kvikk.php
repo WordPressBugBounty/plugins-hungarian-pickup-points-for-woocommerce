@@ -153,6 +153,8 @@ class VP_Woo_Pont_Kvikk {
 			'kvikk_gls_shop' => 'gls_shop',
 			'kvikk_dpd_parcelshop' => 'dpd_parcelshop',
 			'kvikk_dpd_alzabox' => 'dpd_alzabox',
+			'kvikk_sameday_easybox' => 'sameday_easybox',
+			'kvikk_sameday_pickpackpont' => 'sameday_pickpackpont',
 		);
 
 		foreach($provider_costs as $provider_id => $cost_data) {
@@ -264,6 +266,7 @@ class VP_Woo_Pont_Kvikk {
 			'kvikk_foxpost' => 'foxpost',
 			'kvikk_packeta' => 'packeta',
 			'kvikk_famafutar' => 'famafutar',
+			'kvikk_sameday' => 'sameday',
 		);
 
 		foreach($rates as $rate_id => $rate) {
@@ -565,14 +568,16 @@ class VP_Woo_Pont_Kvikk {
 
 		//Check if we need to get multiple countries
 		$countries = get_option('vp_woo_pont_kvikk_countries', array());
-		
+
 		//Default to HU with basic point types if no countries are set
 		if(empty($countries)) {
 			$countries = array('HU' => array(
 				'packeta_zpont' => 1,
 				'foxpost' => 1,
 				'gls_locker' => 1,
-				'dpd_parcelshop' => 1
+				'dpd_parcelshop' => 1,
+				'sameday_easybox' => 1,
+				'sameday_pickpackpont' => 1,
 			));
 		}
 
@@ -582,7 +587,7 @@ class VP_Woo_Pont_Kvikk {
 		//Loop through each country and save separate JSON files
 		foreach (array_keys($countries) as $country) {
 			//URL of the database for this country
-			$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls,dpd&country=' . $country;
+			$url = 'https://points-api.kvikk.hu/points?search=packeta,mpl,foxpost,gls,dpd,sameday&country=' . $country;
 
 			//Get data
 			$request = wp_remote_get($url, array(
@@ -617,7 +622,9 @@ class VP_Woo_Pont_Kvikk {
 				'gls_locker' => array(), 
 				'gls_shop' => array(), 
 				'dpd_parcelshop' => array(), 
-				'dpd_alzabox' => array()
+				'dpd_alzabox' => array(),
+				'sameday_easybox' => array(),
+				'sameday_pickpackpont' => array()
 			);
 
 			//Process points and categorize
@@ -626,7 +633,7 @@ class VP_Woo_Pont_Kvikk {
 				if(!isset($country_results[$point_type])) {
 					$point_type = $point['courier'].'_'.$point['type'];
 				}
-				if(isset($country_results[$point_type])) {
+				if(isset($countries[$country][$point_type])) {
 					$country_results[$point_type][] = $point;
 				}
 			}
@@ -679,6 +686,7 @@ class VP_Woo_Pont_Kvikk {
         //$groups['kvikk_dhl'] = __('Kvikk DHL', 'vp-woo-pont');
         $groups['kvikk_foxpost'] = __('Kvikk Foxpost', 'vp-woo-pont');
         $groups['kvikk_packeta'] = __('Kvikk Packeta', 'vp-woo-pont');
+		$groups['kvikk_sameday'] = __('Kvikk Sameday', 'vp-woo-pont');
         return $groups;
     }
 
@@ -700,11 +708,13 @@ class VP_Woo_Pont_Kvikk {
         $providers['kvikk_gls_shop'] = 'GLS Csomagpont';
         $providers['kvikk_dpd_parcelshop'] = 'DPD Csomagpont';
         $providers['kvikk_dpd_alzabox'] = 'DPD AlzaBox';
+        $providers['kvikk_sameday_easybox'] = 'Sameday easybox';
+        $providers['kvikk_sameday_pickpackpont'] = 'Sameday Pick Pack Pont';
         return $providers;
     }
 
     public function add_provider_subgroups($subgroups) {
-		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'gls_shop', 'gls_locker', 'dpd_parcelshop', 'dpd_alzabox');
+		$subgroups['kvikk'] = array('mpl_posta', 'mpl_postapont', 'mpl_automata', 'packeta_zpont', 'packeta_zbox', 'foxpost', 'gls_shop', 'gls_locker', 'dpd_parcelshop', 'dpd_alzabox', 'sameday_easybox', 'sameday_pickpackpont');
         return $subgroups;
     }
 
@@ -1332,6 +1342,7 @@ class VP_Woo_Pont_Kvikk {
 				<li><i class="vp-woo-pont-provider-icon-gls"></i> GLS <strong data-kvikk-promo-price="gls"> </strong></li>
 				<li><i class="vp-woo-pont-provider-icon-dpd"></i> DPD <strong data-kvikk-promo-price="dpd"> </strong></li>
 				<li><i class="vp-woo-pont-provider-icon-famafutar"></i> FámaFutár <strong data-kvikk-promo-price="famafutar"> </strong></li>
+				<li><i class="vp-woo-pont-provider-icon-sameday"></i> Sameday <strong data-kvikk-promo-price="sameday"> </strong></li>
 			</ul>
 			<p class="kvikk-promo-footnote">Nettó árak, <strong>tartalmazza az útdíjat és az üzemanyagköltséget</strong>.</p>
 			<div class="kvikk-promo-buttons">

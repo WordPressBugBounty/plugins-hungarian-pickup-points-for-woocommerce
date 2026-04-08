@@ -11,6 +11,7 @@ $tabs        = array(
 	'expressone'   => __( 'Express One', 'vp-woo-pont' ),
 	'dpd'   => __( 'DPD', 'vp-woo-pont' ),
 	'transsped'   => __( 'Trans-Sped', 'vp-woo-pont' ),
+	'gls_xxl'   => __( 'GLS XXL', 'vp-woo-pont' ),
 );
 
 //Add support for GLS if needed based on custom settings

@@ -277,7 +277,11 @@ class VP_Woo_Pont_Pending_Table extends WP_List_Table {
 
 	//Checkbox column
 	function column_cb( $order ) {
-		return '<input type="checkbox" value="'.esc_attr($order->get_meta('_vp_woo_pont_parcel_number')).'" data-order="'.esc_attr($order->get_id()).'" checked name="selected_packages" />';
+		$parcel_number = $order->get_meta('_vp_woo_pont_parcel_number');
+		if(self::$carrier_id == 'gls_xxl') {
+			$parcel_number = $order->get_meta('_vp_woo_pont_parcel_id');
+		}
+		return '<input type="checkbox" value="'.esc_attr($parcel_number).'" data-order="'.esc_attr($order->get_id()).'" checked name="selected_packages" />';
 	}
 
 	//Setup columns

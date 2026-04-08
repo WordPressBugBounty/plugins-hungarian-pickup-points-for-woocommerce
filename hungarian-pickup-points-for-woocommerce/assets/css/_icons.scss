@@ -31,6 +31,7 @@
 	&-expressone_packeta {background-image: url(../images/icon-expressone-packeta.svg);}
 	&-expressone_exobox {background-image: url(../images/icon-expressone.svg);}
 	&-gls {background-image: url(../images/icon-gls.svg);}
+	&-gls_xxl {background-image: url(../images/icon-gls-xxl.svg);}
 	&-gls_locker {background-image: url(../images/icon-gls-locker.svg);}
 	&-gls_shop {background-image: url(../images/icon-gls-shop.svg);}
 	&-dpd {background-image: url(../images/icon-dpd.svg);}
@@ -86,6 +87,9 @@
 	&-kvikk_dpd {background-image: url(../images/icon-dpd.svg);}
 	&-kvikk_dpd_parcelshop {background-image: url(../images/icon-dpd.svg);}
 	&-kvikk_dpd_alzabox {background-image: url(../images/icon-expressone-alzabox.svg);}
+	&-kvikk_sameday {background-image: url(../images/icon-easybox.svg);}
+	&-kvikk_sameday_easybox {background-image: url(../images/icon-easybox.svg);}
+	&-kvikk_sameday_pickpackpont {background-image: url(../images/icon-sameday-pickpackpont.svg);}
 
 	//External packeta groups
 	&-packeta_33777, &-packeta_35369, &-packeta_20409, &-packeta_35319 {background-image: url(../images/icon-boxnow.svg);}
@@ -147,6 +151,11 @@
 		&-kvikk_dpd {background-image: url(../images/icon-kvikk-dpd.svg); width: 72px !important;background-size: 100% !important;}	
 		&-kvikk_dpd_parcelshop {background-image: url(../images/icon-kvikk-dpd.svg); width: 72px !important;background-size: 100% !important;}	
 		&-kvikk_dpd_alzabox {background-image: url(../images/icon-kvikk-expressone-alzabox.svg); width: 72px !important;background-size: 100% !important;}
+
+
+		&-kvikk_sameday {background-image: url(../images/icon-kvikk-sameday.svg); width: 72px !important;background-size: 100% !important;}	
+		&-kvikk_sameday_easybox {background-image: url(../images/icon-kvikk-sameday.svg); width: 72px !important;background-size: 100% !important;}	
+		&-kvikk_sameday_pickpackpont {background-image: url(../images/icon-kvikk-sameday-pickpackpont.svg); width: 72px !important;background-size: 100% !important;}	
 	}
 }
 

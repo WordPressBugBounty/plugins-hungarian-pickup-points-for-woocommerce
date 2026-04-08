@@ -204,9 +204,9 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			</div>
 
 			<ul class="vp-woo-pont-metabox-generate-options" style="display:none">
-				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls, dpd, posta, postapont, expressone, sameday, kvikk, csomagpiac]">
+				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls, dpd, posta, postapont, expressone, sameday, kvikk, csomagpiac, gls_xxl]">
 					<label for="vp_woo_pont_package_count"><?php esc_html_e('Number of packages','vp-woo-pont'); ?></label>
-					<input type="number" id="vp_woo_pont_package_count" value="1" />
+					<input type="number" id="vp_woo_pont_package_count" min="1" value="1" />
 				</li>
 				<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[gls]">
 					<label for="vp_woo_pont_pickup_date"><?php esc_html_e('Pickup date','vp-woo-pont'); ?></label>
@@ -319,7 +319,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 						<?php endforeach; ?>
 					</ul>
 				</li>
-				<li>
+				<li class="vp-woo-pont-package-contents">
 					<label for="vp_woo_pont_package_contents"><?php esc_html_e('Package contents','vp-woo-pont'); ?></label>
 					<input type="text" id="vp_woo_pont_package_contents" value="<?php echo VP_Woo_Pont()->labels->get_package_contents_label(array('order' => $order), $provider_id); ?>">
 				</li>

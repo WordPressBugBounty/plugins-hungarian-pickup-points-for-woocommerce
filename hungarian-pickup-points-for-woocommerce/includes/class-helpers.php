@@ -40,7 +40,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'expressone' => __('Express One', 'vp-woo-pont'),
 				'gls' => __('GLS', 'vp-woo-pont'),
 				'dpd' => __('DPD', 'vp-woo-pont'),
-				'sameday' => __('Sameday', 'vp-woo-pont')
+				'sameday' => __('Sameday', 'vp-woo-pont'),
+				'gls_xxl' => __('GLS XXL', 'vp-woo-pont'),
 			));
 		}
 
@@ -64,6 +65,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'gls_locker' => __('ParcelLocker', 'vp-woo-pont'),
 				'dpd_parcelshop' => __('Csomagpont', 'vp-woo-pont'),
 				'dpd_alzabox' => __('AlzaBox', 'vp-woo-pont'),
+				'gls_xxl' => __('GLS XXL', 'vp-woo-pont'),
 				'sameday_easybox' => __('Easybox', 'vp-woo-pont'),
 				'sameday_pick-pack-pont' => __('Pick Pack Pont', 'vp-woo-pont'),
 				'custom' => self::get_option('custom_title', __( 'Store Pickup', 'vp-woo-pont' ))
@@ -81,7 +83,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'sameday' => __('Sameday', 'vp-woo-pont'),
 				'expressone' => __('Express One', 'vp-woo-pont'),
 				'custom' => __( 'Custom Labels', 'vp-woo-pont' ),
-				'transsped' => __('Trans-Sped ZERO', 'vp-woo-pont')
+				'transsped' => __('Trans-Sped ZERO', 'vp-woo-pont'),
+				'gls_xxl' => __('GLS XXL', 'vp-woo-pont')
 			));
 		}
 
@@ -658,6 +661,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			if($provider == 'sameday') $field_to_check = 'samdeday_password';
 			if($provider == 'transsped') $field_to_check = 'trans_sped_password';
 			if($provider == 'csomagpiac') $field_to_check = 'csomagpiac_api_token';
+			if($provider == 'gls_xxl') $field_to_check = 'gls_xxl_password';
 
 			if($provider == 'custom') {
 				return (self::get_option('custom_enabled', 'no') == 'yes');

@@ -235,6 +235,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
 				'foxpost' => __('Foxpost', 'vp-woo-pont'),
 				'packeta' => __('Packeta', 'vp-woo-pont'),
                 'gls' => __('GLS', 'vp-woo-pont'),
+                'gls_xxl' => __('GLS XXL', 'vp-woo-pont'),
 				'posta' => __('MPL', 'vp-woo-pont'),
 				'dpd' => __('DPD', 'vp-woo-pont'),
 				'sameday' => __('Sameday', 'vp-woo-pont'),

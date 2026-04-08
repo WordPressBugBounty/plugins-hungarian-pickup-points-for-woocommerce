@@ -62,6 +62,8 @@
   background-image: url(../images/icon-expressone.svg); }
 .vp-woo-pont-provider-icon-gls {
   background-image: url(../images/icon-gls.svg); }
+.vp-woo-pont-provider-icon-gls_xxl {
+  background-image: url(../images/icon-gls-xxl.svg); }
 .vp-woo-pont-provider-icon-gls_locker {
   background-image: url(../images/icon-gls-locker.svg); }
 .vp-woo-pont-provider-icon-gls_shop {
@@ -170,6 +172,12 @@
   background-image: url(../images/icon-dpd.svg); }
 .vp-woo-pont-provider-icon-kvikk_dpd_alzabox {
   background-image: url(../images/icon-expressone-alzabox.svg); }
+.vp-woo-pont-provider-icon-kvikk_sameday {
+  background-image: url(../images/icon-easybox.svg); }
+.vp-woo-pont-provider-icon-kvikk_sameday_easybox {
+  background-image: url(../images/icon-easybox.svg); }
+.vp-woo-pont-provider-icon-kvikk_sameday_pickpackpont {
+  background-image: url(../images/icon-sameday-pickpackpont.svg); }
 .vp-woo-pont-provider-icon-packeta_33777, .vp-woo-pont-provider-icon-packeta_35369, .vp-woo-pont-provider-icon-packeta_20409, .vp-woo-pont-provider-icon-packeta_35319 {
   background-image: url(../images/icon-boxnow.svg); }
 .vp-woo-pont-provider-icon-packeta_25989, .vp-woo-pont-provider-icon-packeta_25985, .vp-woo-pont-provider-icon-packeta_25992, .vp-woo-pont-provider-icon-packeta_25988, .vp-woo-pont-provider-icon-packeta_25990, .vp-woo-pont-provider-icon-packeta_25987 {
@@ -305,6 +313,18 @@
   background-size: 100% !important; }
 .wp-admin .vp-woo-pont-provider-icon-kvikk_dpd_alzabox {
   background-image: url(../images/icon-kvikk-expressone-alzabox.svg);
+  width: 72px !important;
+  background-size: 100% !important; }
+.wp-admin .vp-woo-pont-provider-icon-kvikk_sameday {
+  background-image: url(../images/icon-kvikk-sameday.svg);
+  width: 72px !important;
+  background-size: 100% !important; }
+.wp-admin .vp-woo-pont-provider-icon-kvikk_sameday_easybox {
+  background-image: url(../images/icon-kvikk-sameday.svg);
+  width: 72px !important;
+  background-size: 100% !important; }
+.wp-admin .vp-woo-pont-provider-icon-kvikk_sameday_pickpackpont {
+  background-image: url(../images/icon-kvikk-sameday-pickpackpont.svg);
   width: 72px !important;
   background-size: 100% !important; }
 
