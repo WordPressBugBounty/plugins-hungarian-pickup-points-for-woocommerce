@@ -339,7 +339,7 @@ class VP_Woo_Pont_ExpressOne {
 				'date' => strtotime($event['created_at']),
 				'event' => $event['event_code'],
 				'label' => $event['event_name'],
-				'comment' => $event['event_name'].' '.$event['event_location']
+				'comment' => $event['event_name'].' '.$location
 			);
 		}
 

@@ -614,10 +614,35 @@ jQuery(document).ready(function($) {
 			} else {
 				// Handle regular provider toggle
 				var provider = id.replace('provider-', '');
-				if($(this).prop('checked')) {
-					vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[provider]);
+				var $allProviderCheckboxes = vp_woo_pont_frontend.$filters.find('li:not(.filter-feature) input[type="checkbox"]');
+				var allCheckedBefore = true;
+				$allProviderCheckboxes.each(function() {
+					if($(this).attr('id') === id) {
+						// This one just changed, so its state is already toggled; check the opposite
+						if($(this).prop('checked')) allCheckedBefore = allCheckedBefore && false;
+					} else {
+						if(!$(this).prop('checked')) allCheckedBefore = false;
+					}
+				});
+
+				if(allCheckedBefore && !$(this).prop('checked')) {
+					// All were checked before this click — solo-select the clicked provider
+					$(this).prop('checked', true);
+					$allProviderCheckboxes.each(function() {
+						var pid = $(this).attr('id').replace('provider-', '');
+						if($(this).attr('id') !== id) {
+							$(this).prop('checked', false);
+							vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[pid]);
+						} else {
+							vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[pid]);
+						}
+					});
 				} else {
-					vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[provider]);
+					if($(this).prop('checked')) {
+						vp_woo_pont_frontend.$map.addLayer(vp_woo_pont_frontend.groups[provider]);
+					} else {
+						vp_woo_pont_frontend.$map.removeLayer(vp_woo_pont_frontend.groups[provider]);
+					}
 				}
 			}
 

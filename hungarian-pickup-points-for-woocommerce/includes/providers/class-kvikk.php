@@ -73,6 +73,7 @@ class VP_Woo_Pont_Kvikk {
 		add_action( 'wp_ajax_vp_woo_pont_kvikk_foxpost_packeta_notice', array( $this, 'hide_foxpost_packeta_notice' ) );
 
 		//Support multi-parcel shipments
+		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_sender_id_field'));
 		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_additional_package_fields'));
 		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_extra_services_fields'));
 
@@ -568,17 +569,29 @@ class VP_Woo_Pont_Kvikk {
 
 		//Check if we need to get multiple countries
 		$countries = get_option('vp_woo_pont_kvikk_countries', array());
+		$hu_couriers = array(
+			'packeta_zpont' => 1,
+			'packeta_zbox' => 1, 
+			'foxpost' => 1, 
+			'mpl_automata' => 1, 
+			'mpl_postapont' => 1, 
+			'mpl_posta' => 1, 
+			'gls_locker' => 1, 
+			'gls_shop' => 1, 
+			'dpd_parcelshop' => 1, 
+			'dpd_alzabox' => 1,
+			'sameday_easybox' => 1,
+			'sameday_pickpackpont' => 1
+		);
 
 		//Default to HU with basic point types if no countries are set
 		if(empty($countries)) {
-			$countries = array('HU' => array(
-				'packeta_zpont' => 1,
-				'foxpost' => 1,
-				'gls_locker' => 1,
-				'dpd_parcelshop' => 1,
-				'sameday_easybox' => 1,
-				'sameday_pickpackpont' => 1,
-			));
+			$countries = array('HU' => $hu_couriers);
+		}
+
+		//Make sure we have all for HU
+		if(isset($countries['HU'])) {
+			$countries['HU'] = $hu_couriers;
 		}
 
 		//Initialize saved files array
@@ -756,6 +769,11 @@ class VP_Woo_Pont_Kvikk {
 				)
 			)
 		);
+
+		//Change sender ID if its set as a parameter
+		if(isset($_POST['vp_woo_pont_kvikk_sender_id'])) {
+			$shipment['senderID'] = sanitize_text_field($_POST['vp_woo_pont_kvikk_sender_id']);
+		}
 
 		//If manually generated, use submitted weight instead
 		if(isset($data['options']) && isset($data['options']['package_weight']) && $data['options']['package_weight'] > 0) {
@@ -1658,6 +1676,34 @@ class VP_Woo_Pont_Kvikk {
 		check_ajax_referer( 'vp_woo_pont_kvikk_foxpost_packeta_notice', 'nonce' );
 		update_option('vp_woo_pont_kvikk_foxpost_type_selected', true);
 		wp_send_json_success();
+	}
+
+	public function add_sender_id_field($order) {
+		$senders = $this->get_pickup_points_response();
+		if($senders === false || count($senders) < 2) {
+			return;
+		}
+		?>
+			<li data-providers="[kvikk]" id="vp-woo-pont-metabox-generate-options-item vp-woo-pont-sender-id">
+				<label>Feladási cím</label>
+				<select name="vp_woo_pont_kvikk_sender_id">
+					<?php foreach ($senders as $id => $name) { ?>
+						<option value="<?php echo esc_attr($id); ?>" <?php selected(VP_Woo_Pont_Helpers::get_option('kvikk_sender_id'), $id); ?>><?php echo esc_html($name); ?></option>
+					<?php } ?>
+				</select>
+			</li>
+
+			<script>
+			jQuery(document).ready(function($){
+				$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+					if(options && typeof options.data === 'string' && options.data.includes('vp_woo_pont_generate_label')) {
+						var sender_id = $('select[name="vp_woo_pont_kvikk_sender_id"]').val();
+						options.data += '&vp_woo_pont_kvikk_sender_id=' + encodeURIComponent(sender_id);
+					}
+				});
+			});
+			</script>
+		<?php
 	}
 
 	public function add_extra_services_fields($order) {

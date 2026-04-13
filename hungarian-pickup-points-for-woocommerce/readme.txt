@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 4.2
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,13 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.2.1
+* Térképen a szolgáltató választónál az első kattintás az adott szolgáltatót választja csak ki, a többit elrejti
+* Kvikk Sameday javítás
+* Kvikk feladási cím választás címkegenerálás előtt
+* Express One csomagkövetés javítás
+* Külföldi geolokáció javítás
 
 4.2
 * GLS XXL
