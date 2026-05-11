@@ -1684,7 +1684,7 @@ class VP_Woo_Pont_Kvikk {
 			return;
 		}
 		?>
-			<li data-providers="[kvikk]" id="vp-woo-pont-metabox-generate-options-item vp-woo-pont-sender-id">
+			<li class="vp-woo-pont-metabox-generate-options-item" data-providers="[kvikk]">
 				<label>Feladási cím</label>
 				<select name="vp_woo_pont_kvikk_sender_id">
 					<?php foreach ($senders as $id => $name) { ?>

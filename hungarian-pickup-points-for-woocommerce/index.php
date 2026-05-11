@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.2.1
+Version: 4.2.2
 WC requires at least: 7.0
 WC tested up to: 10.6.1
 Requires Plugins: woocommerce
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.2.1';
+		self::$version = '4.2.2';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -409,7 +409,7 @@ class VP_Woo_Pont {
 				'db_url' => $download_folders['url'],
 				'features' => VP_Woo_Pont_Helpers::get_enabled_features(),
 				'kvikk_map_api_key' => VP_Woo_Pont_Helpers::get_option('kvikk_map_api_key', ''),
-				'default_country' => WC()->customer && WC()->customer->get_billing_country() ? WC()->customer->get_billing_country() : WC()->countries->get_base_country(),
+				'default_country' => WC()->customer && WC()->customer->get_billing_country() ? WC()->customer->get_billing_country() : WC()->countries->get_base_country()
 			);
 
 			wp_localize_script( 'vp_woo_pont_frontend_js', 'vp_woo_pont_frontend_params', apply_filters('vp_woo_pont_frontend_params', $vp_woo_pont_local) );
@@ -756,6 +756,17 @@ class VP_Woo_Pont {
 
 			//Create new labels with price and optional icons
 			$label = '<span class="vp-woo-pont-shipping-method-label">'.$method->get_label().': <span class="vp-woo-pont-shipping-method-label-price">'.$min_cost_label.'</span></span>';
+
+			//Add tax label, so its the same as regular shipping modes
+			if ( WC()->cart->display_prices_including_tax() && $shipping_cost > 0 ) {
+				if (! wc_prices_include_tax() ) {
+					$label .= ' <small class="tax_label">' . WC()->countries->inc_tax_or_vat() . '</small>';
+				}
+			} else {
+				if ( wc_prices_include_tax() ) {
+					$label .= ' <small class="tax_label">' . WC()->countries->ex_tax_or_vat() . '</small>';
+				}
+			}
 
 			//If we need to display small icons below the label(based on customizer option)
 			if(get_option('vp_woo_pont_small_icons', 'yes') == 'yes' && (is_checkout() || is_cart())) {

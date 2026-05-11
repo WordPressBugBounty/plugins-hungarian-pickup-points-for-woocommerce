@@ -19,6 +19,14 @@ class VP_Woo_Pont_Sameday {
 			$this->api_url = 'https://sameday-api-hu.demo.zitec.com/api/';
 		}
 
+		if(VP_Woo_Pont_Helpers::get_option('sameday_romanian_api', 'no') == 'yes') {
+			$this->api_url = 'https://api.sameday.ro/api/';
+
+			if(VP_Woo_Pont_Helpers::get_option('sameday_dev_mode', 'no') == 'yes') {
+				$this->api_url = 'https://sameday-api-ro.demo.zitec.com/api/';
+			}
+		}
+
 		//Load settings
 		add_filter('vp_woo_pont_carrier_settings_sameday', array($this, 'get_settings'));
 
@@ -89,6 +97,11 @@ class VP_Woo_Pont_Sameday {
 				'title'    => __( 'Enable DEV mode', 'vp-woo-pont' ),
 				'type'     => 'checkbox',
 				'id' 	 => 'sameday_dev_mode',
+			),
+			array(
+				'title'    => __( 'Romanian API', 'vp-woo-pont' ),
+				'type'     => 'checkbox',
+				'id' 	 => 'sameday_romanian_api',
 			),
 			array(
 				'type' => 'select',

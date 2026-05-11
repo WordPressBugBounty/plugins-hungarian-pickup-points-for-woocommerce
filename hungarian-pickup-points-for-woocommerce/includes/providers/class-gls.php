@@ -821,7 +821,7 @@ class VP_Woo_Pont_GLS {
 					$offset_seconds = ($offset_hours * 3600) + ($offset_minutes * 60);
 	
 					// Adjust the timestamp with the offset
-					$adjusted_timestamp = $timestamp + $offset_seconds;
+					$adjusted_timestamp = (int) floor($timestamp + $offset_seconds);
 	
 					$datetime = new \DateTime("@$adjusted_timestamp");
 					

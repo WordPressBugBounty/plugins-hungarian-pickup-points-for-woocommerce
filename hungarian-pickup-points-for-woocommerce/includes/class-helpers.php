@@ -962,7 +962,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				if($product) {
 					$product_weight = $product->get_weight();
 					$quantity = $product_item->get_quantity();
-					if($product_weight) {
+					if($product_weight && !$product_item->get_meta('wooco_parent_id')) {
 						$total_weight += floatval( $product_weight * $quantity );
 					}
 				}
