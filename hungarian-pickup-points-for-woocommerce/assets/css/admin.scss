@@ -143,6 +143,10 @@ th .vp_woo_pont_pro_label,
 			align-items: center;
 			color: #2271b1;
 
+			.version-7-0 & {
+				color: var(--wp-admin-theme-color);
+			}
+
 			.dashicons {
 				width: 24px;
 				height: 24px;

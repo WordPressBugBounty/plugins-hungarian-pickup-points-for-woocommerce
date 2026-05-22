@@ -2,8 +2,8 @@
 Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
-Tested up to: 6.9
-Stable tag: 4.2.2
+Tested up to: 7.0
+Stable tag: 4.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.2.3
+* MPL csomagpont lista frissítés
+* Kompatibilitás javítások WP 7.0-val
 
 4.2.2
 * Sameday román API használata opcionálisan

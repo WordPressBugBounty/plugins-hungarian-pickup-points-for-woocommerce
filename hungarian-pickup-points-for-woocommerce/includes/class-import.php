@@ -56,7 +56,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			$need_sync = self::check_if_sync_needed('postapont');
 			if(!$need_sync) return false;
 
-			$request = wp_remote_get('https://www.posta.hu/szolgaltatasok/posta-srv-postoffice/rest/postoffice/listPPMarkers?callback');
+			$request = wp_remote_get('https://net.posta.hu/postoffice/public/postoffice-api/rest/postoffice/listPPMarkers?callback');
 
 			//Check for errors
 			if( is_wp_error( $request ) ) {

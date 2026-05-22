@@ -58,7 +58,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 			}
 
 			//Execute request
-			$response = wp_remote_get( self::$activation_url.'activate/'.$pro_key.'/'.self::$name );
+			$args = array(
+				'method'  => 'POST',
+				'timeout' => 20,
+				'headers' => array(
+					'Accept'       => 'application/json',
+					'Content-Type' => 'application/json',
+				),
+				'body' => wp_json_encode(array(
+					'key' => $pro_key,
+					'product'     => self::$name,
+					'site_url'    => home_url(),
+					'timestamp'   => time(),
+				)),
+			);
+			$response = wp_remote_post(self::$activation_url.'activate', $args);
 
 			//Check for errors
 			if( is_wp_error( $response ) ) {

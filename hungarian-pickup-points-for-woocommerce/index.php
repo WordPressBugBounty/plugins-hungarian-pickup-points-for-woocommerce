@@ -7,9 +7,9 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.2.2
+Version: 4.2.3
 WC requires at least: 7.0
-WC tested up to: 10.6.1
+WC tested up to: 10.7.0
 Requires Plugins: woocommerce
 */
 
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.2.2';
+		self::$version = '4.2.3';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -822,7 +822,7 @@ class VP_Woo_Pont {
 				break;
 			}
 		}
-
+		
 		//Check if a a vp_pont is selected
 		if($vp_pont_chosen && !$selected_pont) {
 			$errors->add( 'validation', apply_filters('vp_woo_pont_required_pont_message', esc_html__( 'Please select a pick-up point or choose a different shipping method.', 'vp-woo-pont'), $fields) );

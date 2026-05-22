@@ -67,6 +67,11 @@
 		margin: 0;
 		padding: 0;
 
+		.change-shipping-method {
+			display: flex;
+			padding: 10px;
+		}
+
 		a.delete {
 			color: var(--wc-red);
 		}
@@ -199,11 +204,12 @@
 
 					&.selected {
 						background: rgba(35,113,177,0.10);
-						border: 1px solid #2371B1;
+						border: 1px solid var(--wp-admin-theme-color);
+						
 
 						&:before {
 							opacity: 1;
-							color: #2371B1;
+							color: var(--wp-admin-theme-color);
 						}
 					}
 				}
@@ -382,7 +388,7 @@
 
 				&.active span.dashicons {
 					transform: rotate(45deg);
-					color: #0073AA;
+					color: var(--wp-admin-theme-color);
 				}
 			}
 

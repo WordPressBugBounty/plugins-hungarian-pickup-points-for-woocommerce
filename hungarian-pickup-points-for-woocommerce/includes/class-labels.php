@@ -642,7 +642,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		//Render metabox content
 		public function render_metabox_content($post_or_order_object) {
 			$order = ( $post_or_order_object instanceof \WP_Post ) ? wc_get_order( $post_or_order_object->ID ) : $post_or_order_object;
-			if(apply_filters('vp_woo_pont_show_label_metabox', $order->needs_processing(), $order)) {
+			if(apply_filters('vp_woo_pont_show_label_metabox', ($order->needs_processing() || $this->is_label_generated($order)), $order)) {
 				include( dirname( __FILE__ ) . '/views/html-metabox.php' );
 			} else {
 				echo '<p class="vp-woo-pont-metabox-no-shipping">'.__('This order doesn\'t need shipping. Add a shipping line item to generate a label.', 'vp-woo-pont');'</p>';
