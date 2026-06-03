@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.2.3
+Version: 4.2.4
 WC requires at least: 7.0
 WC tested up to: 10.7.0
 Requires Plugins: woocommerce
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.2.3';
+		self::$version = '4.2.4';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -360,9 +360,9 @@ class VP_Woo_Pont {
 			'print_url' => esc_url(add_query_arg(array('vp_woo_pont_label_pdf' => 'X','position' => 'Y'), get_admin_url() )),
 			'bulk_download_zip' => (VP_Woo_Pont_Helpers::get_option('bulk_download_zip', 'no') == 'yes'),
 			'nonces' => array(
-				'generate' => current_user_can( 'manage_woocommerce' ) ? wp_create_nonce( 'vp-woo-pont-generate' ) : null,
+				'generate' => current_user_can( 'edit_shop_orders' ) ? wp_create_nonce( 'vp-woo-pont-generate' ) : null,
 				'settings' => current_user_can( 'manage_woocommerce' ) ? wp_create_nonce( 'vp-woo-pont-settings' ) : null,
-				'tracking' => current_user_can( 'manage_woocommerce' ) ? wp_create_nonce( 'vp-woo-pont-tracking' ) : null,
+				'tracking' => current_user_can( 'edit_shop_orders' ) ? wp_create_nonce( 'vp-woo-pont-tracking' ) : null,
 			),
 			'db_url' => $download_folders['url']
 		);
@@ -910,7 +910,7 @@ class VP_Woo_Pont {
 			'last_name'  => $order->get_billing_last_name(),
 			'company'    => $point['name'],
 			'email'      => '',
-			'phone'      => '',
+			'phone'      => $order->get_billing_phone(),
 			'address_1'  => $point['addr'],
 			'address_2'  => '',
 			'city'       => $point['city'],

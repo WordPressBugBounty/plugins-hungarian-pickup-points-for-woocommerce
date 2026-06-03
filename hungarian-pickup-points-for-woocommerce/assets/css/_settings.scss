@@ -1722,12 +1722,14 @@
 
 				.dashicons {
 					margin: 0 5px 0 0;
+					line-height: 1 !important;
 				}
 			}
 
 			.dashicons {
 				color: #00A42A;
 				margin: 0 5px 0 0;
+				line-height: 1 !important;
 			}
 
 			&.expired {
@@ -2340,6 +2342,7 @@
 
 			.dashicons {
 				margin-right: 10px;
+				line-height: 1 !important;
 			}
 		}
 
