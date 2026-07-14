@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 4.2.4
+Stable tag: 4.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.2.5
+* PHP Warning javítások
+* Kvikk automata árazás javítás pénznemváltáshoz
+* Kompatibilitás megjelölése legújabb WooCommerce verzióval
 
 4.2.4
 * manage_woocommerce jogosultság cseréje edit_shop_orders-re a címkegeneráláshoz, így boltkezelő jogosultsággal is megy

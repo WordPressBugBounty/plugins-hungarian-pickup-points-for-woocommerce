@@ -79,7 +79,7 @@ class VP_Woo_Pont_Kvikk {
 
 		//Automatic pricing
 		add_filter('vp_woo_pont_provider_costs', array($this, 'apply_auto_pricing'), 10, 2);
-		add_filter('woocommerce_package_rates', array($this, 'apply_auto_pricing_home_delivery'), 10, 2);
+		add_filter('woocommerce_package_rates', array($this, 'apply_auto_pricing_home_delivery'), 100, 2);
 
 		$this->extra_services = array(
 			'insurance' => __('Value insurance', 'vp-woo-pont'),
@@ -323,6 +323,14 @@ class VP_Woo_Pont_Kvikk {
 				$calculated_cost = $rounded_gross - array_sum($taxes);
 			} elseif($rounded_gross !== $gross) {
 				$calculated_cost = $rounded_gross;
+			}
+
+			//Convert currency
+			$calculated_cost = VP_Woo_Pont_Helpers::exchange_currency($calculated_cost);
+			if(!empty($taxes)) {
+				foreach($taxes as $tax_id => $tax_amount) {
+					$taxes[$tax_id] = VP_Woo_Pont_Helpers::exchange_currency($tax_amount);
+				}
 			}
 
 			//Update the rate

@@ -373,7 +373,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 				'current_time' => strtotime( wp_date( 'H:i' ) ),
 				'current_day' => wp_date('N'),
 				'user_logged_in' => (is_user_logged_in()) ? 'yes' : 'no',
-				'user_role' => (is_user_logged_in()) ? wp_get_current_user()->roles[0] : '',
+				'user_role' => (is_user_logged_in() && !empty(wp_get_current_user()->roles)) ? wp_get_current_user()->roles[0] : '',
 			);
 
 			//Custom conditions

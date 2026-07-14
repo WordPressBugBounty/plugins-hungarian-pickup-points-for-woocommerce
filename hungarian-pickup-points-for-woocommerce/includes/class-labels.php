@@ -465,6 +465,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 		}
 
+		//Foxpost can fail on UTF-8 4-byte characters (emoji), so strip them from recipient name fields.
+		private function strip_4byte_utf8_chars($value) {
+			if(!is_string($value) || $value === '') {
+				return $value;
+			}
+
+			$value = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $value);
+			$value = preg_replace('/\s+/u', ' ', $value);
+			return trim($value);
+		}
+
 		//Function to create an array that can be used by all providers to generate labels
 		public function prepare_order_data($order) {
 
@@ -530,6 +541,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if($data['customer']['company']) {
 				$data['customer']['name_with_company'] .= ' ('.$data['customer']['company'].')';
 			}
+
+			//Strip 4-byte UTF-8 characters from customer name fields to avoid issues with certain providers
+			$data['customer']['name'] = $this->strip_4byte_utf8_chars($data['customer']['name']);
+			$data['customer']['first_name'] = $this->strip_4byte_utf8_chars($data['customer']['first_name']);
+			$data['customer']['last_name'] = $this->strip_4byte_utf8_chars($data['customer']['last_name']);
 
 			//If custom options set(manual label generate)
 			$data['options'] = array();
