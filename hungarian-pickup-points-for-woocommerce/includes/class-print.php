@@ -236,6 +236,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 
 				//If we only have one type of provider, we can use the layout options to skip a label when printing
 				$sticker_parameter = false;
+				$provider_breaks = array();
+				$page_break_between_providers = false;
 				if(apply_filters('vp_woo_pont_print_group_by_providers', $merge_print)) {
 
 					//Get provider type
@@ -249,15 +251,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 						$sticker_parameter = $sticker_parameters;
 					}
 
-					//Reset groups
+					//Optionally start each provider's labels on a fresh page
+					$page_break_between_providers = apply_filters('vp_woo_pont_print_page_break_between_providers', false, array_keys($grouped_by_providers));
+
+					//Reset groups, while remembering at which index each provider's labels start
 					$merged_grouped_by_providers = array();
 					foreach ($grouped_by_providers as $provider_id => $pdf_files) {
+						if(!empty($merged_grouped_by_providers)) $provider_breaks[] = count($merged_grouped_by_providers);
 						foreach ($pdf_files as $pdf_file) {
 							$merged_grouped_by_providers[] = $pdf_file;
 						}
 					}
 					$grouped_by_providers = $merged_grouped_by_providers;
-
+					
 				}
 				
 				if($sticker_parameter) {
@@ -271,6 +277,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					$pdf_files = $grouped_by_providers;
 
 					foreach ($pdf_files as $key => $pdf_file) {
+
+						//Start a new page when a different provider's labels begin, unless the current page is still empty
+						if($page_break_between_providers && $label_counter != 0 && in_array($key, $provider_breaks, true)) {
+							$label_counter = 0;
+							$mpdf->AddPage();
+						}
+
 						$mpdf->setSourceFile($pdf_file);
 						$pagecount = $mpdf->setSourceFile($pdf_file);
 				

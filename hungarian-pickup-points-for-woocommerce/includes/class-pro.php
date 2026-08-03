@@ -122,7 +122,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 			//Check for errors
 			if( is_wp_error( $response ) ) {
 				wp_send_json_error(array(
-					'message' => __('Unable to activate the PRO version. Please make sure that the entered data is correct.', self::$name)
+					'message' => __('Unable to deactivate the PRO version. Please make sure that the entered data is correct.', self::$name)
 				));
 			}
 

@@ -105,6 +105,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 					)
 				);
 
+				$conditions['coupon_code'] = array(
+					'label' => __('Coupon code', 'vp-woo-pont'),
+					'options' => VP_Woo_Pont_Helpers::get_available_coupons()
+				);
+
 			}
 
 			if($group != 'pricings') {
@@ -352,6 +357,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 				$provider = $selected_pont['provider'];
 			}
 
+			//Get coupons in the cart
+			$coupons = WC()->cart->get_applied_coupons();
+			$cart_coupons = array();
+			foreach($coupons as $coupon) {
+				$cart_coupons[] = $coupon;
+			}
+
 			//Setup an array to match conditions
 			$cart_details = array(
 				'cart_total' => $cart_total,
@@ -374,6 +386,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 				'current_day' => wp_date('N'),
 				'user_logged_in' => (is_user_logged_in()) ? 'yes' : 'no',
 				'user_role' => (is_user_logged_in() && !empty(wp_get_current_user()->roles)) ? wp_get_current_user()->roles[0] : '',
+				'coupon_code' => $cart_coupons
 			);
 
 			//Custom conditions
@@ -410,6 +423,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 						break;
 					case 'shipping_class':
 						if(in_array($condition['value'], $order_details['shipping_classes'])) {
+							$items[$item_id]['conditions'][$condition_id]['match'] = $comparison;
+						} else {
+							$items[$item_id]['conditions'][$condition_id]['match'] = !$comparison;
+						}
+						break;
+					case 'coupon_code':
+						if(in_array($condition['value'], $order_details['coupon_code'])) {
 							$items[$item_id]['conditions'][$condition_id]['match'] = $comparison;
 						} else {
 							$items[$item_id]['conditions'][$condition_id]['match'] = !$comparison;

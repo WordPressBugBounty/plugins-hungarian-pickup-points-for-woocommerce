@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 4.2.5
+Stable tag: 4.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.2.6
+* Árazásnál kupon feltétel
+* vp_woo_pont_print_page_break_between_providers filterrel bekapcsolható oldaltörés csoportos nyomtatásnál szolgáltatók között
+* PHP warning javítás
 
 4.2.5
 * PHP Warning javítások

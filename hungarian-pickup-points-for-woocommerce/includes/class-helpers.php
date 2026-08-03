@@ -960,10 +960,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			foreach ( $order_items as $item_id => $product_item ) {
 				$product = $product_item->get_product();
 				if($product) {
-					$product_weight = $product->get_weight();
-					$quantity = $product_item->get_quantity();
+					$product_weight = floatval( wc_format_decimal( $product->get_weight() ) );
+					$quantity = floatval( $product_item->get_quantity() );
 					if($product_weight && !$product_item->get_meta('wooco_parent_id')) {
-						$total_weight += floatval( $product_weight * $quantity );
+						$total_weight += $product_weight * $quantity;
 					}
 				}
 			}
@@ -1332,6 +1332,24 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			}
 
 			return apply_filters('vp_woo_pont_enabled_features', $features);
+		}
+
+		public static function get_available_coupons() {
+			$coupon_posts = get_posts( array(
+				'posts_per_page'   => -1,
+				'orderby'          => 'name',
+				'order'            => 'asc',
+				'post_type'        => 'shop_coupon',
+				'post_status'      => 'publish',
+			) );
+
+			$coupon_codes = [];
+			foreach ( $coupon_posts as $coupon_post ) {
+				if($coupon_post->post_title) {
+					$coupon_codes[$coupon_post->post_name] = $coupon_post->post_title;
+				}
+			}
+			return $coupon_codes;
 		}
 
 	}

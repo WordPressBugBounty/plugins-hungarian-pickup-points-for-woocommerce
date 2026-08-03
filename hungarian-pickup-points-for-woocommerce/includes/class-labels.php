@@ -490,10 +490,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				$product = $product_item->get_product();
 				$total_qty = $total_qty + $product_item->get_quantity();
 				if($product) {
-					$product_weight = $product->get_weight();
-					$quantity = $product_item->get_quantity();
+					$product_weight = floatval( wc_format_decimal( $product->get_weight() ) );
+					$quantity = floatval( $product_item->get_quantity() );
 					if($product_weight && !$product_item->get_meta('wooco_parent_id')) {
-						$total_weight += floatval( $product_weight * $quantity );
+						$total_weight += $product_weight * $quantity;
 					}
 				}
 			}
