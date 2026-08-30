@@ -276,6 +276,7 @@ class VP_Woo_Pont_GLS {
 					'A4_4x1' => __( 'A4_4x1', 'vp-woo-pont' ),
 					'Connect' => __( 'Connect', 'vp-woo-pont' ),
 					'Thermo' => __( 'Thermo', 'vp-woo-pont' ),
+					'ShipItThermoPdf' => __( 'ShipItThermoPdf', 'vp-woo-pont' ),
 				),
 				'id' => 'gls_sticker_size'
 			),
@@ -518,7 +519,7 @@ class VP_Woo_Pont_GLS {
 
 		//If its A6, use the Thermo one, which will give us a portrait label we can put on an A6
 		if($label_size == 'A6') {
-			$options['TypeOfPrinter'] = 'Thermo';
+			$options['TypeOfPrinter'] = 'ShipItThermoPdf';
 		}
 
 		//So developers can modify
@@ -583,7 +584,13 @@ class VP_Woo_Pont_GLS {
 
 			//Crop to A6 if needed, but only if it doesn't contain a return label
 			if($label_size == 'A6') {
-				$pdf = VP_Woo_Pont_Print::crop_to_a6($pdf);
+				
+				//Only if its in eastern europe region, otherwise the GLS API returns a simple A6 label anyway
+				$eastern_europe_gls_regions = ['HU', 'SK', 'CZ', 'HR', 'RO', 'SI', 'RS'];
+				if(in_array($parcel['DeliveryAddress']['CountryIsoCode'], $eastern_europe_gls_regions)) {
+					$pdf = VP_Woo_Pont_Print::crop_to_a6($pdf);
+				}
+
 			}
 
 			//Try to save PDF file

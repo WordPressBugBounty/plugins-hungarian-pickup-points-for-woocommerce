@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 4.2.6
+Stable tag: 4.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.2.7
+* GLS ShipitThermo címkeméret(ha külföldre is szállítasz, ezt kell használni, vagy a javasolt A6 A4-es lapon beállítást)
+* Kompatibilitás megjelölése legújabb WooCommerce verzióval
+* Pénztár blokk javítások
 
 4.2.6
 * Árazásnál kupon feltétel

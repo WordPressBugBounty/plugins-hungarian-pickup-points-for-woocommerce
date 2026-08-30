@@ -388,18 +388,31 @@ class VP_Woo_Pont_Kvikk {
 			return $cost;
 		}
 
-		$markup_value = (float)VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing_markup_value', 0);
-		if($markup_value <= 0) {
-			return $cost;
-		}
+		$markup_value = VP_Woo_Pont_Helpers::get_option('kvikk_auto_pricing_markup_value', 0);
 
 		if($markup_type === 'fixed') {
-			$cost += $markup_value;
+			$cost += $this->parse_markup_amount($markup_value);
 		} elseif($markup_type === 'percentage') {
-			$cost += $cost * ($markup_value / 100);
+			$cost += $cost * ($this->parse_markup_amount($markup_value) / 100);
+		} elseif($markup_type === 'percentage_fixed') {
+
+			//Value is in a percentage+fixed format, eg. 27+100 means 27% markup, plus 100 on top of that
+			$parts = explode('+', (string)$markup_value);
+			$percentage = $this->parse_markup_amount($parts[0]);
+			$fixed = isset($parts[1]) ? $this->parse_markup_amount($parts[1]) : 0;
+
+			$cost += $cost * ($percentage / 100);
+			$cost += $fixed;
 		}
 
 		return $cost;
+	}
+
+	//Turn a single markup value into a positive float, negative or invalid values are ignored
+	private function parse_markup_amount($value) {
+		$value = (float)str_replace(',', '.', trim((string)$value));
+
+		return ($value > 0) ? $value : 0;
 	}
 
 	//Apply rounding to calculated price
@@ -542,6 +555,7 @@ class VP_Woo_Pont_Kvikk {
 					'none' => __('No markup', 'vp-woo-pont'),
 					'fixed' => __('Fixed amount', 'vp-woo-pont'),
 					'percentage' => __('Percentage', 'vp-woo-pont'),
+					'percentage_fixed' => __('Percentage + fixed amount', 'vp-woo-pont'),
 				),
 				'desc_tip' => __('Add a markup on top of the Kvikk price.', 'vp-woo-pont'),
 				'id' => 'kvikk_auto_pricing_markup_type'
@@ -549,9 +563,9 @@ class VP_Woo_Pont_Kvikk {
 			array(
 				'title' => __('Markup value', 'vp-woo-pont'),
 				'type' => 'text',
-				'class' => 'vp-woo-pont-toggle-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing-item-fixed vp-woo-pont-select-group-kvikk-auto-pricing-item-percentage',
+				'class' => 'vp-woo-pont-toggle-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing-item vp-woo-pont-select-group-kvikk-auto-pricing-item-fixed vp-woo-pont-select-group-kvikk-auto-pricing-item-percentage vp-woo-pont-select-group-kvikk-auto-pricing-item-percentage_fixed',
 				'default' => '0',
-				'desc_tip' => __('The markup amount (fixed value in your currency) or percentage (e.g. 10 for 10%).', 'vp-woo-pont'),
+				'desc_tip' => __('The markup amount (fixed value in your currency) or percentage (e.g. 10 for 10%). For percentage + fixed amount, use a percentage+amount format, e.g. 27+100 adds a 27% markup, then 100 on top of that.', 'vp-woo-pont'),
 				'id' => 'kvikk_auto_pricing_markup_value'
 			),
 			array(
