@@ -234,6 +234,11 @@ class VP_Woo_Pont_Kvikk {
 			return $rates;
 		}
 
+		//Check if auto pricing is enabled
+		if(!apply_filters('vp_woo_pont_should_apply_auto_kvikk_home_delivery_pricing', true, $rates, $package)) {
+			return $rates;
+		}
+
 		//Check if any shipping method is paired with a kvikk provider
 		$has_kvikk = false;
 		foreach($home_delivery as $method_id => $provider_id) {
@@ -805,6 +810,10 @@ class VP_Woo_Pont_Kvikk {
 		//Check for COD
 		if($data['package']['cod']) {
 			$shipment['cod'] = round($data['package']['total']);
+
+			if($order->get_currency() != 'HUF') {
+				return new WP_Error( 'wrong_currency_for_cod', __('The order currency is not HUF.', 'vp-woo-pont') );
+			}
 		}
 
 		//Check for points
@@ -1470,34 +1479,54 @@ class VP_Woo_Pont_Kvikk {
 		register_rest_route('kvikk', '/order-details', array(
 			'methods' => 'POST',
 			'callback' => array(__CLASS__, 'get_order_details'),
-			'permission_callback' => '__return_true',
+			'permission_callback' => array(__CLASS__, 'validate_api_key_permission'),
 		));
 
 		register_rest_route('kvikk', '/update-order', array(
 			'methods' => 'POST',
 			'callback' => array(__CLASS__, 'update_order_status'),
-			'permission_callback' => '__return_true',
+			'permission_callback' => array(__CLASS__, 'validate_api_key_permission'),
 		));
+	}
+
+	public static function validate_api_key_permission(WP_REST_Request $request) {
+
+		//Validate stored api key
+		$stored_api_key = VP_Woo_Pont_Helpers::get_option('kvikk_api_key');
+		if (!is_string($stored_api_key) || $stored_api_key === '') {
+			return new WP_Error('invalid_api_key', 'Invalid API Key', array('status' => 401));
+		}
+
+		//Get api key from header and make sure its not empty
+		$api_key = $request->get_header('authorization');
+		if (!is_string($api_key) || $api_key === '') {
+			return new WP_Error('invalid_api_key', 'Invalid API Key', array('status' => 401));
+		}
+
+		//Check if valid
+		if (!hash_equals($stored_api_key, $api_key)) {
+			return new WP_Error('invalid_api_key', 'Invalid API Key', array('status' => 401));
+		}
+
+		return true;
 	}
 
 	public static function validate_api_endpoint(WP_REST_Request $request) {
 
-		//Get api key from header
-		$api_key = $request->get_header('authorization');
-
-		//Check if valid
-		if ($api_key !== VP_Woo_Pont_Helpers::get_option('kvikk_api_key')) {
-			return new WP_Error('invalid_api_key', 'Invalid API Key', array('status' => 401));
+		//Check the api key again, in case this is called outside of the rest routes above
+		$has_valid_api_key = self::validate_api_key_permission($request);
+		if (is_wp_error($has_valid_api_key)) {
+			return $has_valid_api_key;
 		}
 
-		//Get JSON body params
+		//Get JSON body params, and make sure they are strings, so they can't be compared loosely
 		$params = $request->get_json_params();
-		$order_id = isset($params['orderID']) ? $params['orderID'] : null;
-		$tracking_number = isset($params['trackingNumber']) ? $params['trackingNumber'] : null;
-		$billing_email = isset($params['email']) ? $params['email'] : null;
+		$order_id = (isset($params['orderID']) && is_scalar($params['orderID'])) ? (string) $params['orderID'] : '';
+		$tracking_number = (isset($params['trackingNumber']) && is_string($params['trackingNumber'])) ? $params['trackingNumber'] : '';
+		$billing_email = (isset($params['email']) && is_string($params['email'])) ? $params['email'] : '';
 
 		//Validate parameters
-		if (empty($order_id) || empty($tracking_number) || empty($billing_email)) {
+		if ($order_id === '' || $tracking_number === '' || $billing_email === '') {
 			return new WP_Error('missing_params', 'Missing parameters', array('status' => 400));
 		}
 
@@ -1508,7 +1537,13 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//Verify order details
-		if ($order->get_meta('_vp_woo_pont_parcel_number') !== $tracking_number || $order->get_billing_email() != $billing_email) {
+		$parcel_number = $order->get_meta('_vp_woo_pont_parcel_number');
+		if (!is_string($parcel_number) || $parcel_number === '' || !hash_equals($parcel_number, $tracking_number)) {
+			return new WP_Error('invalid_order', 'Invalid order details', array('status' => 404));
+		}
+
+		//Verify billing email
+		if (strtolower($order->get_billing_email()) !== strtolower($billing_email)) {
 			return new WP_Error('invalid_order', 'Invalid order details', array('status' => 404));
 		}
 
