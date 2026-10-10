@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 4.2.8
+Stable tag: 4.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,12 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 2. Beállítások oldal
 
 == Changelog ==
+
+4.2.9
+* Kvikk automata árazás a súlykorrekciót is beleszámolja a kalkulációba
+* Pénztár blokk utánvét díj javítás
+* JS hiba javítás térképen TODO macbookon van
+* Dobozméret kalkuláció javítás
 
 4.2.8
 * Kvikk utánvét validáció

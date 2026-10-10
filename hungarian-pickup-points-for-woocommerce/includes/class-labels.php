@@ -1127,38 +1127,37 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			//Get dimensions of all products in the order
 			$items = $order->get_items();
 			$total_volume = 0;
-			$max_length = 0;
-			$max_width = 0;
-			$max_height = 0;
-		
-			//Calculate total volume and find the largest product
+			$total_quantity = 0;
+			$products = array();
+
+			//Calculate total volume and collect the dimensions of the products
 			foreach ($items as $item) {
 				$product = $item->get_product();
 				if(!$product) continue;
 
-				$length = $product->get_length();
-				$width = $product->get_width();
-				$height = $product->get_height();
-				$quantity = $item->get_quantity();
-				if(!$length || !$width || !$height) continue;
+				$length = (float) $product->get_length();
+				$width = (float) $product->get_width();
+				$height = (float) $product->get_height();
+				$quantity = (int) $item->get_quantity();
+				if(!$length || !$width || !$height || $quantity < 1) continue;
 
 				$total_volume += $length * $width * $height * $quantity;
-				$max_length = max($max_length, $length);
-				$max_width = max($max_width, $width);
-				$max_height = max($max_height, $height);
+				$total_quantity += $quantity;
+				$products[] = array(
+					'dimensions' => array($length, $width, $height),
+					'volume' => $length * $width * $height,
+					'quantity' => $quantity
+				);
 			}
-		
+
 			//Find the smallest box that can fit the order if we have volume
 			$best_box = null;
 			if($total_volume) {
 				foreach ($boxes as $box) {
-					if ($box['volume'] >= $total_volume &&
-						$box['length'] >= $max_length &&
-						$box['width'] >= $max_width &&
-						$box['height'] >= $max_height) {
-						if (is_null($best_box) || $box['volume'] < $best_box['volume']) {
-							$best_box = $box;
-						}
+					if ($box['volume'] < $total_volume) continue;
+					if (!is_null($best_box) && $box['volume'] >= $best_box['volume']) continue;
+					if ($this->can_box_fit_products($box, $products, $total_quantity)) {
+						$best_box = $box;
 					}
 				}
 			} else {
@@ -1171,6 +1170,62 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			}
 		
 			return $best_box;
+		}
+
+		//Check if the products can be arranged in the box, products can be rotated
+		public function can_box_fit_products($box, $products, $total_quantity) {
+			$box_dimensions = array((float) $box['length'], (float) $box['width'], (float) $box['height']);
+			$rotations = array(array(0, 1, 2), array(0, 2, 1), array(1, 0, 2), array(1, 2, 0), array(2, 0, 1), array(2, 1, 0));
+
+			//For large orders, only check if every product fits on its own, the volume was checked already
+			if($total_quantity > 200) {
+				rsort($box_dimensions);
+				foreach ($products as $product) {
+					$dimensions = $product['dimensions'];
+					rsort($dimensions);
+					if($dimensions[0] > $box_dimensions[0] || $dimensions[1] > $box_dimensions[1] || $dimensions[2] > $box_dimensions[2]) return false;
+				}
+				return true;
+			}
+
+			//Place the largest products first
+			usort($products, function($a, $b) {
+				return $b['volume'] <=> $a['volume'];
+			});
+
+			//Place products one by one into the free spaces, and split the remaining space after each one
+			$spaces = array($box_dimensions);
+			foreach ($products as $product) {
+				for ($i = 0; $i < $product['quantity']; $i++) {
+					$placed = false;
+
+					//Try the smallest free space first
+					usort($spaces, function($a, $b) {
+						return ($a[0] * $a[1] * $a[2]) <=> ($b[0] * $b[1] * $b[2]);
+					});
+
+					foreach ($spaces as $space_id => $space) {
+						foreach ($rotations as $rotation) {
+							$length = $product['dimensions'][$rotation[0]];
+							$width = $product['dimensions'][$rotation[1]];
+							$height = $product['dimensions'][$rotation[2]];
+							if($length > $space[0] || $width > $space[1] || $height > $space[2]) continue;
+
+							//Replace the used space with the leftover spaces next to, behind and above the product
+							unset($spaces[$space_id]);
+							if($space[0] - $length > 0) $spaces[] = array($space[0] - $length, $space[1], $space[2]);
+							if($space[1] - $width > 0) $spaces[] = array($length, $space[1] - $width, $space[2]);
+							if($space[2] - $height > 0) $spaces[] = array($length, $width, $space[2] - $height);
+							$placed = true;
+							break 2;
+						}
+					}
+
+					if(!$placed) return false;
+				}
+			}
+
+			return true;
 		}
 
 		public function get_package_size($order) {

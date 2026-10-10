@@ -292,7 +292,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 		public static function get_cart_details($group) {
 
 			//Get weight
-			$cart_weight = WC()->cart->get_cart_contents_weight();
+			$cart_weight = VP_Woo_Pont_Helpers::get_cart_weight();
 
 			//Get volume
 			$cart_volume = VP_Woo_Pont_Helpers::get_cart_volume();

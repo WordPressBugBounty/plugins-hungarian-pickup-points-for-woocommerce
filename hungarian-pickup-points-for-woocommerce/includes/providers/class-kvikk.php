@@ -261,8 +261,7 @@ class VP_Woo_Pont_Kvikk {
 		$selected_country = WC()->customer->get_shipping_country();
 
 		//Get cart weight in grams
-		$cart_weight = WC()->cart->get_cart_contents_weight();
-		$weight_in_grams = round(wc_get_weight($cart_weight, 'g', get_option('woocommerce_weight_unit')));
+		$weight_in_grams = VP_Woo_Pont_Helpers::get_package_weight_in_gramms(WC()->cart);
 
 		//Map home delivery provider IDs to courier names in the pricing JSON
 		$home_delivery_courier_map = array(

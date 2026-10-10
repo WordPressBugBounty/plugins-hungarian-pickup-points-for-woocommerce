@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.2.8
+Version: 4.2.9
 WC requires at least: 7.0
 WC tested up to: 11.0.1
 Requires Plugins: woocommerce
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.2.8';
+		self::$version = '4.2.9';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat

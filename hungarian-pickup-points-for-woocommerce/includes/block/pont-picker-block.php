@@ -3,6 +3,7 @@
 use Automattic\WooCommerce\StoreApi\Exceptions\InvalidCartException;
 use Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils;
 use Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils;
+use Automattic\WooCommerce\StoreApi\Utilities\PaymentUtils;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -292,10 +293,16 @@ add_action('woocommerce_blocks_loaded', function() {
 		//Get available paymetn methods
 		$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
 
-		//Get first payment method and store it
-		//Since payment method selection is not persistent, on page load always the first one will be selected
-		$first_payment_method = key($available_gateways);
-		WC()->session->set('vp_selected_payment_method', $first_payment_method);
+		//Store the payment method the checkout block preselects on page load: the one saved in session,
+		//or the customer's default saved payment method, and if neither is available, the first one
+		$selected_payment_method = WC()->session->get('chosen_payment_method');
+		if((!$selected_payment_method || !isset($available_gateways[$selected_payment_method])) && method_exists('Automattic\WooCommerce\StoreApi\Utilities\PaymentUtils', 'get_default_payment_method')) {
+			$selected_payment_method = PaymentUtils::get_default_payment_method();
+		}
+		if(!$selected_payment_method || !isset($available_gateways[$selected_payment_method])) {
+			$selected_payment_method = key($available_gateways);
+		}
+		WC()->session->set('vp_selected_payment_method', $selected_payment_method);
 		
 	});
 

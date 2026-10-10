@@ -146,6 +146,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 			return $paths;
 		}
+
+		public static function get_cart_weight() {
+			return WC()->cart->get_cart_contents_weight();
+		}
 		
 		public static function get_cart_volume() {
 			// Initializing variables
@@ -954,16 +958,31 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			return $available_classes;
 		}
 
+		//Accepts an order or a cart object
 		public static function get_package_weight_in_gramms($order) {
 			$total_weight = 0;
-			$order_items = $order->get_items();
-			foreach ( $order_items as $item_id => $product_item ) {
-				$product = $product_item->get_product();
-				if($product) {
-					$product_weight = floatval( wc_format_decimal( $product->get_weight() ) );
-					$quantity = floatval( $product_item->get_quantity() );
-					if($product_weight && !$product_item->get_meta('wooco_parent_id')) {
-						$total_weight += $product_weight * $quantity;
+			$is_cart = is_a($order, 'WC_Cart');
+			if($is_cart) {
+				foreach ( $order->get_cart() as $cart_item_key => $cart_item ) {
+					$product = $cart_item['data'];
+					if($product) {
+						$product_weight = floatval( wc_format_decimal( $product->get_weight() ) );
+						$quantity = floatval( $cart_item['quantity'] );
+						if($product_weight && empty($cart_item['wooco_parent_id'])) {
+							$total_weight += $product_weight * $quantity;
+						}
+					}
+				}
+			} else {
+				$order_items = $order->get_items();
+				foreach ( $order_items as $item_id => $product_item ) {
+					$product = $product_item->get_product();
+					if($product) {
+						$product_weight = floatval( wc_format_decimal( $product->get_weight() ) );
+						$quantity = floatval( $product_item->get_quantity() );
+						if($product_weight && !$product_item->get_meta('wooco_parent_id')) {
+							$total_weight += $product_weight * $quantity;
+						}
 					}
 				}
 			}
@@ -973,7 +992,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			if(!$weight_corrections) $weight_corrections = array();
 
 			//Get order details
-			$order_details = VP_Woo_Pont_Conditions::get_order_details($order, 'weight_corrections');
+			if($is_cart) {
+				$order_details = VP_Woo_Pont_Conditions::get_cart_details('weight_corrections');
+			} else {
+				$order_details = VP_Woo_Pont_Conditions::get_order_details($order, 'weight_corrections');
+			}
 			$order_details['weight'] = $total_weight;
 			foreach ($weight_corrections as $weight_correction_id => $weight_correction) {
 
@@ -1016,7 +1039,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 			}
 
 			//If a custom value is saved
-			if($order->get_meta('_vp_woo_pont_package_weight')) {
+			if(!$is_cart && $order->get_meta('_vp_woo_pont_package_weight')) {
 				$total_weight = $order->get_meta('_vp_woo_pont_package_weight');
 				return wc_get_weight($total_weight, 'g', 'g');
 			}

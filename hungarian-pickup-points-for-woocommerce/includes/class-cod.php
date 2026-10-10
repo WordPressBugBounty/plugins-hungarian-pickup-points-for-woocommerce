@@ -10,12 +10,24 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 
 	class VP_Woo_Pont_COD {
 
+		//Payment method submitted when an order is placed with the checkout block
+		private static $submitted_payment_method = false;
+
 		public static function init() {
 
 			//Load template based on get parameter
 			add_action( 'woocommerce_cart_calculate_fees', array( __CLASS__, 'add_cod_fee') );
 			add_filter( 'woocommerce_available_payment_gateways', array( __CLASS__, 'hide_cod') );
+			add_filter( 'rest_request_before_callbacks', array( __CLASS__, 'store_submitted_payment_method'), 10, 3 );
 
+		}
+
+		//When an order is placed with the checkout block, WC calculates the fees before it saves the submitted payment method in session, so store it here
+		public static function store_submitted_payment_method($response, $handler, $request) {
+			if(!is_wp_error($response) && $request->get_method() == 'POST' && preg_match('#^/wc/store(/v\d+)?/checkout/?$#', $request->get_route()) && !empty($request['payment_method'])) {
+				self::$submitted_payment_method = wc_clean($request['payment_method']);
+			}
+			return $response;
 		}
 
 		public static function hide_cod($available_gateways) {
@@ -61,6 +73,11 @@ if ( ! class_exists( 'VP_Woo_Pont_COD', false ) ) :
 			//Check for block version too
 			if(class_exists( 'Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils' ) && CartCheckoutUtils::is_checkout_block_default() && WC()->session->get( 'vp_selected_payment_method')){
 				$chosen_gateway = WC()->session->get( 'vp_selected_payment_method');
+			}
+
+			//If an order is being placed with the checkout block, use the payment method it was submitted with
+			if(self::$submitted_payment_method) {
+				$chosen_gateway = self::$submitted_payment_method;
 			}
 			
 			//Check if selected payment method is cod
