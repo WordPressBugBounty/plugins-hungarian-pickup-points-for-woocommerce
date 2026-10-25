@@ -116,7 +116,7 @@ class VP_Woo_Pont_Shipments_Table extends WP_List_Table {
 		}
 
 		foreach($documents as $carrier => $document) {
-			$pdf_file_url = $paths['baseurl'].$document;
+			$pdf_file_url = VP_Woo_Pont_Document_Storage::get_manifest_base_url().rawurlencode($document);
 			?>
 				<p class="vp-woo-pont-admin-shipments-download-link">
 					<a href="<?php echo esc_url($pdf_file_url); ?>" target="_blank">

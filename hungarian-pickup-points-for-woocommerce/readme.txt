@@ -3,7 +3,7 @@ Contributors: passatgt
 Tags: gls, postapont, foxpost, packeta, dpd
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 4.2.9
+Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,10 +56,16 @@ A PRO verzióval címkét is generálhatsz, házhozszállításos rendelésekhez
 
 == Changelog ==
 
+4.3
+* Biztonságosabb PDF tárolás és hozzáférés
+* Jogosultság-ellenőrzés címkenyomtatásnál (biztonsági javítás, köszönet: Alan Karl, AHK Solutions LLC & wellknown.info)
+* Csoportos ZIP letöltés javítás
+* Figyelmeztetés, ha a címkék mappája közvetlenül elérhető (pl. nginx szerveren)
+* JS hiba javítás térképen
+
 4.2.9
 * Kvikk automata árazás a súlykorrekciót is beleszámolja a kalkulációba
 * Pénztár blokk utánvét díj javítás
-* JS hiba javítás térképen TODO macbookon van
 * Dobozméret kalkuláció javítás
 
 4.2.8

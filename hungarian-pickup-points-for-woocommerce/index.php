@@ -7,7 +7,7 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.2.9
+Version: 4.3
 WC requires at least: 7.0
 WC tested up to: 11.0.1
 Requires Plugins: woocommerce
@@ -68,7 +68,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.2.9';
+		self::$version = '4.3';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -77,6 +77,7 @@ class VP_Woo_Pont {
 		//Helper functions & classes
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-pro.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-helpers.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-document-storage.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-conditions.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-import.php' );
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-customizer.php' );
@@ -236,6 +237,11 @@ class VP_Woo_Pont {
 			}
 		}
 
+		//Block direct access to the labels folder
+		if ( class_exists( 'VP_Woo_Pont_Document_Storage' ) ) {
+			VP_Woo_Pont_Document_Storage::protect();
+		}
+
 		//Store and check version number
 		$version = get_option('vp_woo_pont_version_number');
 
@@ -357,7 +363,7 @@ class VP_Woo_Pont {
 			'print_link' => (VP_Woo_Pont_Helpers::get_option('print_link', 'no') == 'yes'),
 			'sticker_parameters' => array(),
 			'show_settings_metabox' => (VP_Woo_Pont_Helpers::get_option('show_settings_metabox', 'no') == 'yes'),
-			'print_url' => esc_url(add_query_arg(array('vp_woo_pont_label_pdf' => 'X','position' => 'Y'), get_admin_url() )),
+			'print_url' => current_user_can( 'edit_shop_orders' ) ? esc_url(add_query_arg(array('vp_woo_pont_label_pdf' => 'X','position' => 'Y', '_wpnonce' => wp_create_nonce('vp_woo_pont_print_label')), get_admin_url() )) : '',
 			'bulk_download_zip' => (VP_Woo_Pont_Helpers::get_option('bulk_download_zip', 'no') == 'yes'),
 			'nonces' => array(
 				'generate' => current_user_can( 'edit_shop_orders' ) ? wp_create_nonce( 'vp-woo-pont-generate' ) : null,

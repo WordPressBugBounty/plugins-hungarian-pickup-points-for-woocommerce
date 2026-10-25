@@ -340,9 +340,7 @@ jQuery(document).ready(function($) {
 
 			//Disable scrolling
 			bodyScrollLock.disableBodyScroll(vp_woo_pont_frontend.$modal[0], {
-				allowTouchMove: function(el) {
-					return $(el).closest(vp_woo_pont_frontend.$list).length > 0;
-				}
+				allowTouchMove: vp_woo_pont_frontend.$list
 			});
 
 			//For developers to run extra stuff

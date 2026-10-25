@@ -99,7 +99,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 				'shipment_id' => $shipment_id,
 				'processed' => $results['orders'],
 				'documents' => $results['pdf'],
-				'download_path' => $paths['baseurl']
+				'download_path' => VP_Woo_Pont_Document_Storage::get_manifest_base_url()
 			);
 
 			//Check for failed shipments

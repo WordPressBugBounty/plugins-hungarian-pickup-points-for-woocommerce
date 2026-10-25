@@ -146,12 +146,23 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 				return;
 			}
 
+			//Requests from the url: only shop managers can print labels, and the link must have a valid nonce
+			if(!$orders) {
+				if(!VP_Woo_Pont_Document_Storage::is_shop_manager()) {
+					wp_die(esc_html__('You are not allowed to print shipping labels.', 'vp-woo-pont'), '', array('response' => 403));
+				}
+				$nonce = isset($_GET['_wpnonce']) ? sanitize_key(wp_unslash($_GET['_wpnonce'])) : '';
+				if(!wp_verify_nonce($nonce, 'vp_woo_pont_print_label')) {
+					wp_die(esc_html__('This print link has expired. Please reload the page and try again.', 'vp-woo-pont'), '', array('response' => 403));
+				}
+			}
+
 			//Get submitted parameters
 			$order_id = $orders;
 			$position = 1;
 			if(!$orders) {
-				$order_id = sanitize_text_field($_GET['vp_woo_pont_label_pdf']);
-				$position = intval($_GET['position']);
+				$order_id = sanitize_text_field(wp_unslash($_GET['vp_woo_pont_label_pdf']));
+				$position = isset($_GET['position']) ? intval($_GET['position']) : 1;
 			}
 
 			//Handle single and bulk print
@@ -164,14 +175,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 				//If we need to zip the files, we need to do it here
 				if(isset($_GET['format']) && $_GET['format'] == 'zip') {
 
-					//Create an object from the ZipArchive class.
+					//Create the zip in a private temporary file, not in the current folder(which is publicly accessible)
+					if(!function_exists('wp_tempnam')) {
+						require_once ABSPATH . 'wp-admin/includes/file.php';
+					}
 					$zipArchive = new ZipArchive();
-					$zip_filename = 'labels.zip';
-					if ($zipArchive->open($zip_filename, ZipArchive::CREATE) !== true) {
-						die("Cannot open $zip_filename\n");
+					$zip_filename = wp_tempnam('vp-woo-pont-labels.zip');
+					if ($zipArchive->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+						@unlink($zip_filename);
+						wp_die(esc_html__('Unable to create the zip file.', 'vp-woo-pont'));
 					}
 
 					//An array of files that we want to add to our zip archive.
+					$zip_file_count = 0;
 					foreach ( $order_ids as $order_id ) {
 						$order = wc_get_order($order_id);
 						if($order && VP_Woo_Pont()->labels->is_label_generated($order_id)) {
@@ -180,6 +196,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 
 								//Add file to zip
 								$zipArchive->addFile($pdf_file, basename($pdf_file));
+								$zip_file_count++;
 
 							}
 						}
@@ -187,10 +204,15 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 
 					//Finally, close the active archive.
 					$zipArchive->close();
+					if(!$zip_file_count || !file_exists($zip_filename)) {
+						@unlink($zip_filename);
+						wp_die(esc_html__('No labels found for the selected orders.', 'vp-woo-pont'), '', array('response' => 404));
+					}
 
 					// Set appropriate headers for ZIP file download
+					nocache_headers();
 					header('Content-Type: application/zip');
-					header('Content-Disposition: attachment; filename="' . $zip_filename . '"');
+					header('Content-Disposition: attachment; filename="labels.zip"');
 					header('Content-Length: ' . filesize($zip_filename));
 
 					// Output the ZIP file
@@ -198,6 +220,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 
 					// Delete the ZIP file after sending it to the browser
 					unlink($zip_filename);
+					exit();
 
 				}
 

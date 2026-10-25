@@ -607,13 +607,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				$pdf_name = '';
 				$pdf_name = $order->get_meta('_vp_woo_pont_parcel_pdf');
 				if($pdf_name) {
-					$paths = $this->get_pdf_file_path();
+					//The file path for attachments and printing, or the protected download url
 					if($absolute) {
-						$pdf_file_url = $paths['basedir'].$pdf_name;
+						$link = VP_Woo_Pont_Document_Storage::get_label_path($order);
 					} else {
-						$pdf_file_url = $paths['baseurl'].$pdf_name;
+						$link = VP_Woo_Pont_Document_Storage::get_label_url($order);
 					}
-					return $pdf_file_url;
+					return apply_filters('vp_woo_pont_label_download_link', $link, $order, $absolute);
 				} else {
 					return false;
 				}
@@ -624,10 +624,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 		//Get file path for pdf files
 		public static function get_pdf_file_path($provider = 'postapont', $order_id = 0) {
-			$upload_dir = wp_upload_dir( null, false );
-			$basedir = $upload_dir['basedir'] . '/vp-woo-pont-labels/';
-			$baseurl = $upload_dir['baseurl'] . '/vp-woo-pont-labels/';
-			$random_file_name = substr(md5(rand()),5);
+			$basedir = VP_Woo_Pont_Document_Storage::get_base_dir();
+			$baseurl = VP_Woo_Pont_Document_Storage::get_base_url(); //Not used for downloads anymore, kept for compatibility
+			$random_file_name = VP_Woo_Pont_Document_Storage::generate_random_string();
 			$pdf_file_name = implode( '-', array( $provider, $order_id, $random_file_name ) ).'.pdf';
 			$file_dir = $basedir;
 
@@ -758,6 +757,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 		//Save PDF file
 		public static function save_pdf_file($pdf, $pdf_file) {
+
+			//Make sure the main folder is protected
+			VP_Woo_Pont_Document_Storage::protect();
 
 			//If upload folder doesn't exists, create it with an empty index.html file
 			$file = array(
