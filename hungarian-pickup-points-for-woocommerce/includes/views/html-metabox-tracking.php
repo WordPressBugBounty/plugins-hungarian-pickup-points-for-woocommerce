@@ -30,11 +30,11 @@ $provider_id = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 					<div class="note_content">
 						<?php $label = (isset($event['label'])) ? $event['label'] : false; ?>
 						<?php if(!$label) $label = $parcel_statuses[$provider_id][$event['event']]; ?>
-						<p><?php echo esc_html__($label, 'vp-woo-pont'); ?></p>
+						<p><?php echo esc_html__($label, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the stored status labels. ?></p>
 					</div>
 					<p class="meta">
 						<abbr class="exact-date" title="<?php echo esc_attr( date_i18n('Y-m-d H:i:s',$event['date'])); ?>">
-							<?php echo esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ); ?>
+							<?php /* translators: %1$s: date, %2$s: time */ echo esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ); ?>
 						</abbr>
 					</p>
 				</li>

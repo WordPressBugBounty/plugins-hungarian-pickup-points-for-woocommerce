@@ -34,7 +34,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 		<p class="vp-woo-pont-metabox-unsupported">A kiválasztott szolgáltatóhoz(<?php echo esc_html($provider_name); ?>) jelenleg nem érhető el a címkenyomtatás funkció.</p>
 	<?php endif; ?>
 
-	<div class="vp-woo-pont-metabox-content" data-order="<?php echo $order->get_id(); ?>" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_manage" ); ?>" data-provider_id="<?php echo $carrier_id; ?>" data-cod="<?php echo esc_attr($cod); ?>">
+	<div class="vp-woo-pont-metabox-content" data-order="<?php echo esc_attr($order->get_id()); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_manage" ) ); ?>" data-provider_id="<?php echo esc_attr($carrier_id); ?>" data-cod="<?php echo esc_attr($cod); ?>">
 	
 		<?php do_action('vp_woo_pont_metabox_before_content', $order); ?>
 	
@@ -62,7 +62,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-provider <?php if($provider_id): ?>show<?php endif; ?>">
 				<div class="vp-woo-pont-metabox-rows-data-inside">
 					<i class="vp-woo-pont-provider-icon-<?php echo esc_attr($provider_id); ?>"></i>
-					<strong><?php echo $provider_name; ?></strong>
+					<strong><?php echo esc_html($provider_name); ?></strong>
 					<?php if(!$has_label): ?>
 						<a href="#" id="vp_woo_pont_modify_provider"><?php echo esc_html__('Modify', 'vp-woo-pont'); ?></a>
 					<?php endif; ?>
@@ -89,7 +89,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 					</li>
 				</ul>
 				<p class="vp-woo-pont-metabox-rows-data-home-delivery-providers-info <?php if(!$provider_id): ?>show<?php endif; ?>">
-					<?php printf( __( 'Theres no carrier paired with the order\'s shipping method. You can select one here for the order, or <a href="%s" target="_blank">pair it in settings</a>, so you don\'t have to do this the next time.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_labels' ) ) ); ?>
+					<?php /* translators: %s: Settings page URL */ echo wp_kses_post( sprintf( __( 'Theres no carrier paired with the order\'s shipping method. You can select one here for the order, or <a href="%s" target="_blank">pair it in settings</a>, so you don\'t have to do this the next time.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_labels' ) ) ) ); ?>
 				</p>
 			</li>
 			<?php endif; ?>
@@ -99,8 +99,8 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-provider show">
 				<div class="vp-woo-pont-metabox-rows-data-inside">
 					<i class="vp-woo-pont-provider-icon-<?php echo esc_attr($provider_id); ?>"></i>
-					<strong><?php echo $provider_name; ?></strong>
-					<span title="<?php echo esc_attr($order->get_meta('_vp_woo_pont_point_id')); ?>"><?php echo $order->get_meta('_vp_woo_pont_point_name'); ?></span>
+					<strong><?php echo esc_html($provider_name); ?></strong>
+					<span title="<?php echo esc_attr($order->get_meta('_vp_woo_pont_point_id')); ?>"><?php echo esc_html($order->get_meta('_vp_woo_pont_point_name')); ?></span>
 				</div>
 			</li>
 			<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-remove <?php if(!$has_label && !$pending): ?>show<?php endif; ?>">
@@ -143,13 +143,13 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 					<div class="vp-woo-pont-metabox-rows-data-inside">
 						<div class="vp-woo-pont-metabox-rows-label-download">
 							<span><?php esc_html_e('Shipping label', 'vp-woo-pont'); ?></span>
-							<a target="_blank" class="vp-woo-pont-download-label" href="<?php echo $this->generate_download_link($order); ?>">
+							<a target="_blank" class="vp-woo-pont-download-label" href="<?php echo esc_url($this->generate_download_link($order)); ?>">
 								<span class="dashicons dashicons-download"></span>
 								<strong><?php esc_html_e('Download','vp-woo-pont'); ?></strong>
 							</a>
 						</div>
 						<div class="vp-woo-pont-metabox-rows-label-print">
-							<a target="_blank" class="vp-woo-pont-print-label" href="<?php echo $this->generate_download_link($order); ?>">
+							<a target="_blank" class="vp-woo-pont-print-label" href="<?php echo esc_url($this->generate_download_link($order)); ?>">
 								<span class="dashicons dashicons-printer"></span>
 							</a>
 						</div>
@@ -164,7 +164,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 				<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-link-tracking <?php if($has_label): ?>show<?php endif; ?>">
 					<div class="vp-woo-pont-metabox-rows-data-inside">
 						<span><?php esc_html_e('Tracking number', 'vp-woo-pont'); ?></span>
-						<strong><a href="<?php echo VP_Woo_Pont()->tracking->get_tracking_link($order); ?>" target="_blank"><?php echo esc_html($order->get_meta('_vp_woo_pont_parcel_number')); ?></a></strong>
+						<strong><a href="<?php echo esc_url(VP_Woo_Pont()->tracking->get_tracking_link($order)); ?>" target="_blank"><?php echo esc_html($order->get_meta('_vp_woo_pont_parcel_number')); ?></a></strong>
 					</div>
 				</li>
 				<li class="vp-woo-pont-metabox-rows-data vp-woo-pont-metabox-rows-data-void <?php if($has_label): ?>show<?php endif; ?>">
@@ -252,7 +252,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 							<li>
 								<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
 									<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked($is_checked); ?> />
-									<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
+									<span><?php echo esc_html__($service, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the service labels. ?></span>
 								</label>
 							</li>
 						<?php endforeach; ?>
@@ -260,7 +260,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 				</li>
 				<li class="vp-woo-pont-package-weight vp-woo-pont-metabox-generate-options-item" data-providers="[posta, postapont, kvikk, sameday, dpd, csomagpiac]">
 					<label for="vp_woo_pont_package_weight"><?php esc_html_e('Package weight','vp-woo-pont'); ?></label>
-					<input type="text" id="vp_woo_pont_package_weight" value="<?php echo VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order); ?>">
+					<input type="text" id="vp_woo_pont_package_weight" value="<?php echo esc_attr(VP_Woo_Pont_Helpers::get_package_weight_in_gramms($order)); ?>">
 					<em><?php esc_html_e('gramms', 'vp-woo-pont'); ?></em>
 				</li>
 
@@ -308,7 +308,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 					<ul>
 						<?php foreach (VP_Woo_Pont()->providers['transsped']->packaging_types as $package_type => $package_name): ?>
 						<li>
-							<label><?php echo esc_html__($package_name, 'vp-woo-pont'); ?></label>
+							<label><?php echo esc_html__($package_name, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the package names. ?></label>
 							<div class="qty">
 								<a href="#" class="minus"><span class="dashicons dashicons-minus"></span></a>
 								<span class="value">0</span>
@@ -321,7 +321,7 @@ $packaging = ($order->get_meta('_vp_woo_pont_packaging')) ? $order->get_meta('_v
 				</li>
 				<li class="vp-woo-pont-package-contents">
 					<label for="vp_woo_pont_package_contents"><?php esc_html_e('Package contents','vp-woo-pont'); ?></label>
-					<input type="text" id="vp_woo_pont_package_contents" value="<?php echo VP_Woo_Pont()->labels->get_package_contents_label(array('order' => $order), $provider_id); ?>">
+					<input type="text" id="vp_woo_pont_package_contents" value="<?php echo esc_attr(VP_Woo_Pont()->labels->get_package_contents_label(array('order' => $order), $provider_id)); ?>">
 				</li>
 				<?php do_action('vp_woo_pont_metabox_after_generate_options', $order); ?>
 			</ul>

@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php if($order->get_meta('_vp_woo_pont_parcel_info_time')): ?>
 						<span>
 							<?php esc_html_e('Refreshed:', 'vp-woo-pont'); ?>
-							<?php echo esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $order->get_meta('_vp_woo_pont_parcel_info_time') ), date_i18n( wc_time_format(), $order->get_meta('_vp_woo_pont_parcel_info_time') ) ) ); ?>
+							<?php /* translators: %1$s: date, %2$s: time */ echo esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $order->get_meta('_vp_woo_pont_parcel_info_time') ), date_i18n( wc_time_format(), $order->get_meta('_vp_woo_pont_parcel_info_time') ) ) ); ?>
 						</span>
 					<?php endif; ?>
 				</li>
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<li class="vp-woo-pont-tracking-event">
 								<span class="vp-woo-pont-tracking-event-date">
 									<abbr class="exact-date" title="<?php echo esc_attr( date_i18n('Y-m-d H:i:s',$event['date'])); ?>">
-										<?php echo esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ); ?>
+										<?php /* translators: %1$s: date, %2$s: time */ echo esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ); ?>
 									</abbr>
 								</span>
 								<?php $label = (isset($event['label'])) ? $event['label'] : false; ?>
@@ -50,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<p class="vp-woo-pont-tracking-event-label"><?php echo esc_html($event['comment']); ?></p>
 								<?php else: ?>
 									<p class="vp-woo-pont-tracking-event-label">
-										<?php echo esc_html__($label, 'vp-woo-pont'); ?>
+										<?php echo esc_html__($label, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the stored status labels. ?>
 										<?php if(isset($event['location']) && $event['location']): ?>
 											<br><em class="vp-woo-pont-tracking-event-label-location"><?php echo esc_html($event['location']); ?></em>
 										<?php endif; ?>

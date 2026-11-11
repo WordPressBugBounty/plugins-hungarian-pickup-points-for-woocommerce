@@ -27,6 +27,58 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			//Ajax function to trigger import manually
 			add_action( 'wp_ajax_vp_woo_pont_import_json_manually', array( __CLASS__, 'import_manually' ) );
 
+			//Hourly import for a few providers and countries, to keep availability(like GLS out of order lockers) up to date
+			add_action( 'vp_woo_pont_hourly_import', array( __CLASS__, 'run_hourly_import' ) );
+			add_action( 'admin_init', array( __CLASS__, 'schedule_hourly_import' ) );
+
+		}
+
+		//Providers and countries that are imported every hour, on top of the regular import
+		public static function get_hourly_import_providers() {
+			return apply_filters('vp_woo_pont_hourly_import_providers', array(
+				'gls' => array('HU')
+			));
+		}
+
+		//Make sure the hourly import is scheduled, or unscheduled if nothing needs it
+		public static function schedule_hourly_import() {
+			if(!function_exists('WC') || !WC()->queue()) return;
+
+			$is_scheduled = WC()->queue()->get_next( 'vp_woo_pont_hourly_import', array(), 'vp_woo_pont' );
+			$providers = self::get_hourly_import_providers();
+
+			if(empty($providers) && $is_scheduled) {
+				WC()->queue()->cancel_all( 'vp_woo_pont_hourly_import' );
+			} else if(!empty($providers) && !$is_scheduled) {
+				WC()->queue()->schedule_recurring( time()+HOUR_IN_SECONDS, HOUR_IN_SECONDS, 'vp_woo_pont_hourly_import', array(), 'vp_woo_pont' );
+			}
+		}
+
+		public static function run_hourly_import() {
+			$enabled_providers = get_option('vp_woo_pont_enabled_providers', array());
+
+			foreach (self::get_hourly_import_providers() as $provider => $countries) {
+
+				//Skip if the provider is not enabled(enabled providers look like gls_shop, gls_locker, etc...)
+				$enabled = false;
+				foreach ($enabled_providers as $enabled_provider) {
+					if(strpos($enabled_provider, $provider) === 0) {
+						$enabled = true;
+					}
+				}
+				if(!$enabled) continue;
+
+				//Only import countries that are enabled for this provider
+				$enabled_countries = get_option('vp_woo_pont_'.$provider.'_countries', array('HU'));
+				$countries = array_values(array_intersect($countries, $enabled_countries));
+				if(empty($countries)) continue;
+
+				//Run the import for these countries only
+				$func = array(__CLASS__, 'get_'.$provider.'_json');
+				if(is_callable($func)) {
+					call_user_func($func, $countries);
+				}
+			}
 		}
 
 		public static function schedule_actions($frequency = false) {
@@ -469,12 +521,14 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			return $saved_files;
 		}
 
-		public static function get_gls_json() {
+		//If $countries is set, only those countries are imported, the rest of the saved files are kept(used by the hourly import)
+		public static function get_gls_json($countries = false) {
 			$need_sync = self::check_if_sync_needed('gls');
 			if(!$need_sync) return false;
 
 			//Get supported countries
-			$enabled_countries = get_option('vp_woo_pont_gls_countries', array('HU'));
+			$partial_import = is_array($countries);
+			$enabled_countries = $partial_import ? $countries : get_option('vp_woo_pont_gls_countries', array('HU'));
 			$saved_files = array();
 
 			//Get data for each country
@@ -564,6 +618,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 						$result['features'][] = 'milkrun';
 					}
 
+					//Mark out of order points, so they are visible on the map, but can't be selected
+					if(isset($place['lockerSaturation']) && $place['lockerSaturation'] == 'outOfOrder') {
+						$result['features'][] = 'out-of-order';
+					}
+
 					//Group parcel lockers and shops
 					if($place['type'] == 'parcel-locker') {
 						$results['locker'][] = $result;
@@ -591,7 +650,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			}
 
 			//Save to DB
-			self::save_json_files('gls', $saved_files);
+			self::save_json_files('gls', $saved_files, $partial_import);
 
 			return $saved_files;
 		}
@@ -767,7 +826,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 			);
 		}
 
-		public static function save_json_files($provider, $files) {
+		//If $merge is true, only the countries in $files are replaced, other saved countries are kept
+		public static function save_json_files($provider, $files, $merge = false) {
 
 			$grouped = array();
 			foreach ($files as $file) {
@@ -777,18 +837,44 @@ if ( ! class_exists( 'VP_Woo_Pont_Import_Database', false ) ) :
 				$grouped[$file['type']][] = $file;
 			}
 
-			foreach ($grouped as $type => $file) {
-				update_option('_vp_woo_pont_db_'.$provider.'_'.$type, $file);
+			foreach ($grouped as $type => $type_files) {
+				$option_name = '_vp_woo_pont_db_'.$provider.'_'.$type;
+
+				if($merge) {
+					$existing_files = get_option($option_name, array());
+					if(!is_array($existing_files)) $existing_files = array();
+
+					//Replace existing countries in place, so the order stays the same, and append new ones
+					foreach ($type_files as $new_file) {
+						$replaced = false;
+						foreach ($existing_files as $index => $existing_file) {
+							if(isset($existing_file['country']) && $existing_file['country'] == $new_file['country']) {
+								$existing_files[$index] = $new_file;
+								$replaced = true;
+							}
+						}
+						if(!$replaced) {
+							$existing_files[] = $new_file;
+						}
+					}
+
+					$type_files = array_values($existing_files);
+				}
+
+				update_option($option_name, $type_files);
 			}
 
 		}
 
 		public static function import_manually() {
 			check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
+			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+				wp_send_json_error( null, 403 );
+			}
 
 			//Get provider id
-			$provider = sanitize_text_field($_POST['provider']);
-			$pont_type = sanitize_text_field($_POST['provider']);
+			$provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
+			$pont_type = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
 			$pont_type = explode('_', $pont_type);
 			$carrier = $pont_type[0];
 

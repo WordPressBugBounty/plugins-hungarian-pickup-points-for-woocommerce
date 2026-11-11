@@ -67,12 +67,12 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 			'callback'  => function( $data ) {
 
 				//Runs when a payment method is selected
-				if(isset($data['payment_method'])) {
-					WC()->session->set('vp_selected_payment_method', $data['payment_method']);
+				if(isset($data['payment_method']) && is_string($data['payment_method'])) {
+					WC()->session->set('vp_selected_payment_method', sanitize_text_field($data['payment_method']));
 				}
 
 				//Runs when the country is changed in the pickup point block
-				if(isset($data['country'])) {
+				if(isset($data['country']) && is_string($data['country'])) {
 					$country = sanitize_text_field($data['country']);
 					WC()->customer->set_shipping_country($country);
 					WC()->customer->set_billing_country($country);
@@ -90,7 +90,7 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 				}
 
 				//If we need to select a point
-				if(isset($data['selected_point'])) {
+				if(isset($data['selected_point']) && is_array($data['selected_point'])) {
 
 					//If ID is empty, we clear the selected point
 					if(isset($data['selected_point']['reset'])) {
@@ -99,14 +99,20 @@ class VP_Woo_Pont_Block_Extend_Store_Endpoint {
 					}
 
 					//Get submitted data
-					$provider = sanitize_text_field($data['selected_point']['provider']);
+					$provider = isset($data['selected_point']['provider']) && is_string($data['selected_point']['provider']) ? sanitize_text_field($data['selected_point']['provider']) : '';
 					$provider = str_replace('_custom', '', $provider); //Remove custom suffix if any
-					$id = sanitize_text_field($data['selected_point']['id']);
-					$country = sanitize_text_field($data['selected_point']['country']);
+					$id = isset($data['selected_point']['id']) && is_scalar($data['selected_point']['id']) ? sanitize_text_field((string) $data['selected_point']['id']) : '';
+					$country = isset($data['selected_point']['country']) && is_string($data['selected_point']['country']) ? sanitize_text_field($data['selected_point']['country']) : '';
 					$point = false;
 
 					//Get point data
 					$point = VP_Woo_Pont()->find_point_info($provider, $id, $country);
+
+					//Out of order points can't be selected
+					if($point && VP_Woo_Pont_Helpers::is_point_out_of_order($point)) {
+						WC()->session->set('selected_vp_pont', null);
+						return;
+					}
 
 					//Check if we have a point found
 					if($point) {

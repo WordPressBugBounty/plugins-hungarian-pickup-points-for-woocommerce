@@ -19,7 +19,7 @@ $courier_details = get_option('vp_woo_pont_kvikk_courier_details', array('courie
             value="<?php echo esc_attr( $saved_value ); ?>"
             class="<?php echo esc_attr( $data['class'] ); ?>"
         />
-        <a href="#" class="button vp-woo-pont-kvikk-api-key-test" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-validate-kvikk-api' )?>"><?php esc_html_e('Test', 'vp-woo-pont'); ?></a>
+        <a href="#" class="button vp-woo-pont-kvikk-api-key-test" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-validate-kvikk-api' ) ); ?>"><?php esc_html_e('Test', 'vp-woo-pont'); ?></a>
         <a href="https://app.kvikk.hu" target="_blank" class="button"><?php esc_html_e('Create API key', 'vp-woo-pont'); ?></a>
 
         <div class="vp-woo-pont-kvikk-api-key-results">

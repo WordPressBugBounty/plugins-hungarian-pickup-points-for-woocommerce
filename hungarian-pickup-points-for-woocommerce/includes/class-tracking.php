@@ -121,7 +121,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			}
 
 			//Skip at night
-			$hour = date('H');
+			$hour = (int) wp_date('H');
 			if($hour < 5 || $hour > 22) {
 				return false;
 			}
@@ -225,7 +225,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 							//Change order status otherwise
 							$target_status = apply_filters('vp_woo_pont_tracking_automation_target_status', $target_status, $order, $provider, $tracking_info, $automation, $event_status);
 							if($target_status) {
-								$order->update_status($target_status, sprintf(__( 'Order status updated, because of the following tracking status event: %s', 'vp-woo-pont' ), $tracking_statuses[$provider][$tracking_info['event']]));
+								$order->update_status($target_status, sprintf(/* translators: %s: Tracking status */ __( 'Order status updated, because of the following tracking status event: %s', 'vp-woo-pont' ), $tracking_statuses[$provider][$tracking_info['event']]));
 								$order->save();
 							}
 
@@ -292,7 +292,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 				$email->trigger( $order->get_id() );
 				$emails_sent[] = $name;
 				$order->update_meta_data('_vp_woo_pont_tracking_emails_sent', $emails_sent);
-				$order->add_order_note(sprintf(esc_html__('Tracking e-mail %s sent to the customer.', 'vp-woo-pont'), $email->get_title()));
+				$order->add_order_note(sprintf(/* translators: %s: E-mail name */ esc_html__('Tracking e-mail %s sent to the customer.', 'vp-woo-pont'), $email->get_title()));
 				$order->save();	
 			}
 		}
@@ -302,9 +302,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 
 			//Validate nonce
 			check_ajax_referer( 'vp-woo-pont-tracking', 'nonce' );
+			if ( ! current_user_can( 'edit_shop_orders' ) ) {
+				wp_send_json_error( null, 403 );
+			}
 
 			//Gather data
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$order = wc_get_order($order_id);
 			$provider_id = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 
@@ -343,8 +346,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 					$label = $event['label'];
 					if(!$label) $label = $parcel_statuses[$provider_id][$event['event']];
 					$response['tracking_info'][] = array(
-						'date' => esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ),
-						'label' => esc_html__($label, 'vp-woo-pont')
+						'date' => esc_html( sprintf( /* translators: %1$s: Date, %2$s: Time */ __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ),
+						'label' => esc_html__($label, 'vp-woo-pont') // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the stored status labels.
 					);
 				}
 			}
@@ -377,9 +380,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 
 			//Validate nonce
 			check_ajax_referer( 'vp-woo-pont-tracking', 'nonce' );
+			if ( ! current_user_can( 'edit_shop_orders' ) ) {
+				wp_send_json_error( null, 403 );
+			}
 
 			//Gather data
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$order = wc_get_order($order_id);
 			$provider_id = VP_Woo_Pont_Helpers::get_carrier_from_order($order);
 
@@ -403,8 +409,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 						$location = $event['location'];
 					}
 					$events[] = array(
-						'date' => esc_html( sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ),
-						'label' => esc_html__($label, 'vp-woo-pont'),
+						'date' => esc_html( sprintf( /* translators: %1$s: Date, %2$s: Time */ __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $event['date'] ), date_i18n( wc_time_format(), $event['date'] ) ) ),
+						'label' => esc_html__($label, 'vp-woo-pont'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the stored status labels.
 						'location' => $location
 					);
 				}
@@ -421,7 +427,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			$response['events'] = $events;
 			$response['link'] = $tracking_link;
 			$response['tracking_number'] = $parcel_number;
-			$response['updated'] = sprintf(esc_html__('%s ago', 'vp-woo-pont'), human_time_diff($updated_on, current_time('timestamp')));
+			$response['updated'] = sprintf(/* translators: %s: Time passed */ esc_html__('%s ago', 'vp-woo-pont'), human_time_diff($updated_on, current_time('timestamp')));
 
 			wp_send_json_success($response);
 		}
@@ -467,9 +473,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 				$text = VP_Woo_Pont_Helpers::get_option('email_tracking_number_desc', __('You can track the order by clicking on the tracking number: {tracking_number}', 'vp-woo-pont'));
 				$params = array( 'order' => $order, 'tracking_url' => $tracking_url, 'tracking_link' => $tracking_link, 'tracking_number' => $tracking_number, 'tracking_text' => $text );
 				if($plain_text) {
-					echo wc_get_template_html( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the template.
 				} else {
-					echo wc_get_template_html( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the template.
 				}
 				return;
 			}
@@ -482,9 +488,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 				$params = array( 'order' => $order, 'tracking_url' => $tracking_url, 'tracking_link' => $tracking_link, 'tracking_number' => $tracking_number, 'tracking_text' => $text );
 
 				if($plain_text) {
-					echo wc_get_template( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/plain/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the template.
 				} else {
-					echo wc_get_template_html( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' );
+					echo wc_get_template_html( 'emails/email-vp-woo-pont-section.php', $params, '', VP_Woo_Pont::$plugin_path . '/templates/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the template.
 				}
 				return;
 			}
@@ -606,13 +612,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 				$tooltip = wc_sanitize_tooltip( $label );
 				$updated_date = '';
 				if($updated_on) {
-					$updated_date = sprintf( __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $updated_on ), date_i18n( wc_time_format(), $updated_on ) );
-					$tooltip = wc_sanitize_tooltip( $label . '<br/><small style="display:block">' . sprintf(esc_html__('Refreshed %s ago', 'vp-woo-pont'), human_time_diff($updated_on, current_time('timestamp'))) . '</small>' );
+					$updated_date = sprintf( /* translators: %1$s: Date, %2$s: Time */ __( '%1$s at %2$s', 'vp-woo-pont' ), date_i18n( wc_date_format(), $updated_on ), date_i18n( wc_time_format(), $updated_on ) );
+					$tooltip = wc_sanitize_tooltip( $label . '<br/><small style="display:block">' . sprintf(/* translators: %s: Time passed */ esc_html__('Refreshed %s ago', 'vp-woo-pont'), human_time_diff($updated_on, current_time('timestamp'))) . '</small>' );
 				}
 				?>
-				<div class="order-status vp-woo-pont-orders-tracking-event tips" data-updated="<?php echo esc_attr($updated_date); ?>" data-tip="<?php echo $tooltip; ?>" data-event-category="<?php echo esc_attr($class); ?>" data-event-type="<?php echo esc_attr($event_type); ?>">
-					<a class="vp-woo-pont-orders-tracking-event-external" target="_blank" href="<?php echo $tracking_link; ?>"><i class="vp-woo-pont-provider-icon-<?php echo esc_attr($provider_id); ?>"></i></a>
-					<a class="vp-woo-pont-orders-tracking-event-label" href="#" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_manage" ); ?>" data-order_id="<?php echo $order->get_id(); ?>"><span><?php echo esc_html__($label, 'vp-woo-pont'); ?></span></a>
+				<div class="order-status vp-woo-pont-orders-tracking-event tips" data-updated="<?php echo esc_attr($updated_date); ?>" data-tip="<?php echo esc_attr($tooltip); ?>" data-event-category="<?php echo esc_attr($class); ?>" data-event-type="<?php echo esc_attr($event_type); ?>">
+					<a class="vp-woo-pont-orders-tracking-event-external" target="_blank" href="<?php echo esc_url($tracking_link); ?>"><i class="vp-woo-pont-provider-icon-<?php echo esc_attr($provider_id); ?>"></i></a>
+					<a class="vp-woo-pont-orders-tracking-event-label" href="#" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_manage" ) ); ?>" data-order_id="<?php echo esc_attr($order->get_id()); ?>"><span><?php echo esc_html__($label, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the stored status labels. ?></span></a>
 				</div>
 				<?php do_action('vp_woo_pont_after_order_list_tracking_column', $order, $event, $event_type); ?>
 				<?php
@@ -639,15 +645,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			if($tag == 'woocommerce_order_tracking') {
 
 				//If we have a custom parameter set, check it and show tracking details
-				$order_id = empty( $_REQUEST['orderid'] ) ? 0 : ltrim( wc_clean( wp_unslash( $_REQUEST['orderid'] ) ), '#' );
+				//Public tracking page link from the e-mails, checked with the secret tracking hash below instead of a nonce
+				// phpcs:disable WordPress.Security.NonceVerification.Recommended
+				$order_id = empty( $_REQUEST['orderid'] ) ? 0 : ltrim( sanitize_text_field( wp_unslash( $_REQUEST['orderid'] ) ), '#' );
 				$tracking_link = empty( $_REQUEST['x'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['x'] ) );
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 				//If we have both, check validity
 				if ($order_id && $tracking_link) {
 					$order = wc_get_order($order_id);
 
 					//If order exists and the tracking link is the same
-					if($order && ($order->get_meta('_vp_woo_pont_tracking_link') == $tracking_link || (is_user_logged_in() && current_user_can( 'manage_options' )))) {
+					$saved_tracking_link = $order ? (string) $order->get_meta('_vp_woo_pont_tracking_link') : '';
+					if($order && (($saved_tracking_link !== '' && hash_equals($saved_tracking_link, $tracking_link)) || (is_user_logged_in() && current_user_can( 'manage_options' )))) {
 
 						//Load the default tracking page results
 						echo '<div class="woocommerce">';
@@ -681,7 +691,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Tracking', false ) ) :
 			$order = wc_get_order($order_id);
 
 			//Check for tracking link in URL parameter and for logged in user
-			$tracking_link = empty( $_REQUEST['x'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['x'] ) );
+			$tracking_link = empty( $_REQUEST['x'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['x'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Secret tracking hash from the e-mail link.
 			$show_customer_details = is_user_logged_in() && $order->get_user_id() === get_current_user_id();
 
 			//Get provider ID, only show tracking page if this is set

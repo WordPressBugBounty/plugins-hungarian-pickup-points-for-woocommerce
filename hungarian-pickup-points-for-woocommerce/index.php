@@ -7,7 +7,9 @@ Author: Viszt Péter
 Author URI: https://visztpeter.me
 Text Domain: vp-woo-pont
 Domain Path: /languages/
-Version: 4.3
+Version: 4.3.1
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 7.0
 WC tested up to: 11.0.1
 Requires Plugins: woocommerce
@@ -47,12 +49,12 @@ class VP_Woo_Pont {
 
 	//Just for a little extra security
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cloning this object is forbidden.', 'vp-woo-pont' ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cloning this object is forbidden.', 'vp-woo-pont' ), esc_html( VP_Woo_Pont::$version ) );
 	}
 
 	//Just for a little extra security
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Unserializing instances of this class is forbidden.', 'vp-woo-pont' ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Unserializing instances of this class is forbidden.', 'vp-woo-pont' ), esc_html( VP_Woo_Pont::$version ) );
 	}
 
 	//Construct
@@ -68,7 +70,7 @@ class VP_Woo_Pont {
 		self::$plugin_prefix = 'vp_woo_pont';
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
-		self::$version = '4.3';
+		self::$version = '4.3.1';
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 
 		//Checkout Block Compat
@@ -230,10 +232,7 @@ class VP_Woo_Pont {
 
 		foreach ( $files as $file ) {
 			if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {
-				if ( $file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ) ) {
-					fwrite( $file_handle, $file['content'] );
-					fclose( $file_handle );
-				}
+				@file_put_contents( trailingslashit( $file['base'] ) . $file['file'], $file['content'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			}
 		}
 
@@ -272,7 +271,8 @@ class VP_Woo_Pont {
 	public function on_activate_success($plugin) {
 		//Redirect to setup wizard if not run already
 		if(!get_option('_vp_woo_pont_walkthrough_finished') && $plugin == 'hungarian-pickup-points-for-woocommerce/index.php') {
-			exit( wp_redirect( admin_url( 'options.php?page=vp-woo-pont-walkthrough' ) ) );
+			wp_safe_redirect( admin_url( 'options.php?page=vp-woo-pont-walkthrough' ) );
+			exit;
 		}
 	}
 
@@ -347,9 +347,9 @@ class VP_Woo_Pont {
 		if(
 			in_array($screen_id, wc_get_screen_ids()) || 
 			$screen_id == 'woocommerce_page_vp-woo-pont-shipments' || 
-			(isset( $_GET['page']) && ($_GET['page'] == 'vp-woo-pont-update' || $_GET['page'] == 'vp-woo-pont-walkthrough')) || 
-			(isset( $_GET['section']) && ($_GET['section'] == 'vp_carriers' || $_GET['section'] == 'vp_labels' || $_GET['section'] == 'vp_tracking')) ||
-			(isset( $_GET['tab']) && ($_GET['tab'] == 'shipping'))
+			(isset( $_GET['page']) && ($_GET['page'] == 'vp-woo-pont-update' || $_GET['page'] == 'vp-woo-pont-walkthrough')) || // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which admin page is loaded.
+			(isset( $_GET['section']) && ($_GET['section'] == 'vp_carriers' || $_GET['section'] == 'vp_labels' || $_GET['section'] == 'vp_tracking')) || // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which admin page is loaded.
+			(isset( $_GET['tab']) && ($_GET['tab'] == 'shipping')) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which admin page is loaded.
 		) {
 			wp_enqueue_script( 'vp_woo_pont_print_js', plugins_url( '/assets/js/'.$print_js,__FILE__ ), array('jquery'), VP_Woo_Pont::$version, TRUE );
 			wp_enqueue_script( 'vp_woo_pont_tiny_autocomplete', plugins_url( '/assets/js/tiny-autocomplete.js',__FILE__ ), array('jquery'), VP_Woo_Pont::$version, TRUE );
@@ -479,7 +479,7 @@ class VP_Woo_Pont {
 	public function is_settings_page() {
 		global $current_section;
 		$is_settings_page = false;
-		if( isset( $_GET['page'], $_GET['tab'], $_GET['section'] ) && 'wc-settings' === $_GET['page'] && 'shipping' === $_GET['tab'] && 'vp_pont' === $_GET['section'] ) {
+		if( isset( $_GET['page'], $_GET['tab'], $_GET['section'] ) && 'wc-settings' === $_GET['page'] && 'shipping' === $_GET['tab'] && 'vp_pont' === $_GET['section'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which admin page is loaded.
 			$is_settings_page = true;
 		}
 		return $is_settings_page;
@@ -638,15 +638,20 @@ class VP_Woo_Pont {
 		check_ajax_referer( 'vp-woo-pont-map', 'security' );
 
 		//Get submitted data
-		$provider = sanitize_text_field($_POST['provider']);
-		$id = sanitize_text_field($_POST['id']);
-		$country = sanitize_text_field($_POST['country']);
+		$provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
+		$id = isset($_POST['id']) ? sanitize_text_field(wp_unslash($_POST['id'])) : '';
+		$country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
 		$points = array();
 		$download_folders = VP_Woo_Pont_Helpers::get_download_folder();
 		$point = false;
 
 		//Get point data
 		$point = $this->find_point_info($provider, $id, $country);
+
+		//Out of order points can't be selected
+		if($point && VP_Woo_Pont_Helpers::is_point_out_of_order($point)) {
+			wp_send_json_error(array('message' => __('This pickup point is currently out of order and cannot be selected.', 'vp-woo-pont')));
+		}
 
 		//Check if we have a point found
 		if($point) {
@@ -742,22 +747,22 @@ class VP_Woo_Pont {
 
 			//Minimum cost label, only 1 paid shipping
 			if(!$has_free_shipping && $minimum_cost_count == 1) {
-				$min_cost_label = sprintf( esc_html_x( '%s', 'shipping cost summary on cart & checkout(one shipping cost only)', 'vp-woo-pont' ), '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>';
 			}
 
 			//Minimum cost label, multiple paid shipping
 			if(!$has_free_shipping && $minimum_cost_count > 1) {
-				$min_cost_label = sprintf( esc_html_x( 'from %s', 'shipping cost summary on cart & checkout(multiple shipping costs)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = sprintf( /* translators: %s: Shipping cost */ esc_html_x( 'from %s', 'shipping cost summary on cart & checkout(multiple shipping costs)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
 			}
 
 			//Minimum cost label, free shipping + paid shipping
 			if($has_free_shipping && $minimum_cost_count == 1) {
-				$min_cost_label = sprintf( esc_html_x( 'free or %s', 'shipping cost summary on cart & checkout(free & 1 shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = sprintf( /* translators: %s: Shipping cost */ esc_html_x( 'free or %s', 'shipping cost summary on cart & checkout(free & 1 shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
 			}
 
 			//Minimum cost label, free shipping + paid shipping
 			if($has_free_shipping && $minimum_cost_count > 1) {
-				$min_cost_label = sprintf( esc_html_x( 'free & from %s', 'shipping cost summary on cart & checkout(free & 1+ shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = sprintf( /* translators: %s: Shipping cost */ esc_html_x( 'free & from %s', 'shipping cost summary on cart & checkout(free & 1+ shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
 			}
 
 			//Create new labels with price and optional icons
@@ -995,11 +1000,11 @@ class VP_Woo_Pont {
 		//Security check
 		check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Get order id
-		$order_id = intval($_POST['order']);
+		$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 		$order = wc_get_order($order_id);
 
 		//Remove from order
@@ -1018,15 +1023,15 @@ class VP_Woo_Pont {
 		//Security check
 		check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Get order id
-		$order_id = intval($_POST['order']);
+		$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 		$order = wc_get_order($order_id);
-		$provider = sanitize_text_field($_POST['provider']);
-		$point_id = sanitize_text_field($_POST['point_id']);
-		$country = sanitize_text_field($_POST['country']);
+		$provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
+		$point_id = isset($_POST['point_id']) ? sanitize_text_field(wp_unslash($_POST['point_id'])) : '';
+		$country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
 
 		//Get point data
 		$point = $this->find_point_info($provider, $point_id, $country);
@@ -1054,13 +1059,13 @@ class VP_Woo_Pont {
 		//Security check
 		check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Get order id
-		$order_id = intval($_POST['order']);
+		$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 		$order = wc_get_order($order_id);
-		$provider = sanitize_text_field($_POST['provider']);
+		$provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
 
 		//Update provider
 		$order->update_meta_data('_vp_woo_pont_provider', $provider);
@@ -1077,14 +1082,14 @@ class VP_Woo_Pont {
 		//Security check
 		check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Get parameters
-		$order_id = intval($_POST['order']);
+		$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 		$order = wc_get_order($order_id);
-		$new_method = sanitize_text_field($_POST['shipping_method']);
-		$new_cost_gross = isset($_POST['shipping_cost']) ? sanitize_text_field($_POST['shipping_cost']) : '';
+		$new_method = isset($_POST['shipping_method']) ? sanitize_text_field(wp_unslash($_POST['shipping_method'])) : '';
+		$new_cost_gross = isset($_POST['shipping_cost']) ? sanitize_text_field(wp_unslash($_POST['shipping_cost'])) : '';
 
 		//Parse method id and instance id
 		$method_parts = explode(':', $new_method);
@@ -1190,10 +1195,10 @@ class VP_Woo_Pont {
 	public function render_provider_filter() {
 		$providers_for_home_delivery = VP_Woo_Pont_Helpers::get_supported_providers_for_home_delivery();
 		$enabled_providers = VP_Woo_Pont_Helpers::get_option('vp_woo_pont_enabled_providers', array());
-		$selected_filter = isset($_GET['vp_woo_pont_provider_filter']) ? sanitize_text_field($_GET['vp_woo_pont_provider_filter']) : '';
+		$selected_filter = isset($_GET['vp_woo_pont_provider_filter']) ? sanitize_text_field(wp_unslash($_GET['vp_woo_pont_provider_filter'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Orders list filter.
 		?>
 		<select name="vp_woo_pont_provider_filter">
-			<option value=""><?php _e('Filter shipping providers', 'vp-woo-pont'); ?></option>
+			<option value=""><?php esc_html_e('Filter shipping providers', 'vp-woo-pont'); ?></option>
 			<optgroup label="<?php esc_attr_e('Pickup points', 'vp-woo-pont'); ?>">
 				<?php foreach ($enabled_providers as $provider_id): ?>
 					<option value="point|<?php echo esc_attr($provider_id); ?>" <?php selected($provider_id, $selected_filter); ?>><?php echo esc_html(VP_Woo_Pont_Helpers::get_provider_name($provider_id, true)); ?></option>
@@ -1214,11 +1219,13 @@ class VP_Woo_Pont {
 
 	public function process_provider_filter( $query ) {
 		global $pagenow;
-		if ( $query->is_admin && $pagenow == 'edit.php' && isset( $_GET['vp_woo_pont_provider_filter'] ) && $_GET['vp_woo_pont_provider_filter'] != '' && $_GET['post_type'] == 'shop_order' ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Orders list filter.
+		$filter = isset( $_GET['vp_woo_pont_provider_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['vp_woo_pont_provider_filter'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Orders list filter.
+		if ( $query->is_admin && $pagenow == 'edit.php' && $filter != '' && strpos( $filter, '|' ) !== false && isset( $_GET['post_type'] ) && $_GET['post_type'] == 'shop_order' ) {
 			$meta_query = $query->get( 'meta_query' );
 			if(!$meta_query) $meta_query = array();
 
-			$filter = esc_attr($_GET['vp_woo_pont_provider_filter']);
 			$filter_type = explode('|', $filter)[0];
 			$filter_string = explode('|', $filter)[1];
 			$new_query = array(
@@ -1241,10 +1248,11 @@ class VP_Woo_Pont {
 
 
 	public function process_provider_filter_hpos( $query ) {
-		if (isset( $_GET['vp_woo_pont_provider_filter'] ) && $_GET['vp_woo_pont_provider_filter'] != '') {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Orders list filter.
+		$filter = isset( $_GET['vp_woo_pont_provider_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['vp_woo_pont_provider_filter'] ) ) : '';
+		if ($filter != '' && strpos( $filter, '|' ) !== false) {
 			$query['meta_key'] = '_vp_woo_pont_provider';
 
-			$filter = esc_attr($_GET['vp_woo_pont_provider_filter']);
 			$filter_type = explode('|', $filter)[0];
 			$filter_string = explode('|', $filter)[1];
 			$query['meta_value'] = $filter_string;
@@ -1299,11 +1307,11 @@ class VP_Woo_Pont {
 		//Security check
 		check_ajax_referer( 'vp_woo_pont_settings_export', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Get saved data and convert it to a json string
-		$type = sanitize_text_field($_POST['type']);
+		$type = isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '';
 		$saved_values = array();
 		if($type == 'points') {
 			$saved_values = get_option('vp_woo_pont_points');
@@ -1321,15 +1329,15 @@ class VP_Woo_Pont {
 		//Security check
 		check_ajax_referer( 'vp_woo_pont_settings_export', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Check type
-		$type = sanitize_text_field($_POST['type']);
+		$type = isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '';
 
 		//Check for file
-		if (isset($_FILES['file'])){
-			$file = $_FILES['file']['tmp_name'];
+		if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])){ // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Path of the uploaded temp file.
+			$file = $_FILES['file']['tmp_name']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Path of the uploaded temp file.
 			$data = file_get_contents($file);
 			$array = json_decode($data, true );
 
@@ -1451,8 +1459,8 @@ class VP_Woo_Pont {
 					//Get point data
 					$point = $this->find_point_info($provider, $point_id, $country);
 
-					//Check if we have a point found
-					if($point) {
+					//Check if we have a point found (skip out of order points)
+					if($point && !VP_Woo_Pont_Helpers::is_point_out_of_order($point)) {
 
 						//Store it in the checkout session.
 						WC()->session->set('selected_vp_pont', $point);
@@ -1625,7 +1633,7 @@ class VP_Woo_Pont {
 					</div>
 				</div>
 			<?php endif; ?>
-			<a href="#" id="vp-woo-pont-show-map" class="vp-woo-pont-show-map-my-account" data-shipping-costs="<?php echo $shipping_costs_attr; ?>">Csomagpont kiválasztása</a>
+			<a href="#" id="vp-woo-pont-show-map" class="vp-woo-pont-show-map-my-account" data-shipping-costs="<?php echo $shipping_costs_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json(). ?>">Csomagpont kiválasztása</a>
 		</div>
 		<?php
 	}

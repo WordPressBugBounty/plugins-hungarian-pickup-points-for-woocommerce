@@ -18,13 +18,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Customizer', false ) ) :
 
 		//To do live refresh while customizing
 		public function load_customizer_preview_js() {
-			if((isset( $_GET['section']) && ($_GET['section'] == 'vp_pont'))) {
+			if((isset( $_GET['section']) && ($_GET['section'] == 'vp_pont'))) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 				wp_enqueue_style( 'vp_woo_pont_frontend_css', VP_Woo_Pont()::$plugin_url.'/assets/css/frontend.css', array(), VP_Woo_Pont::$version );
 			}
 		}
 
 		public function load_design_modal() {
-			if((isset( $_GET['section']) && ($_GET['section'] == 'vp_pont'))) {
+			if((isset( $_GET['section']) && ($_GET['section'] == 'vp_pont'))) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 				$options = $this->get_options();
 				include( dirname( __FILE__ ) . '/views/html-modal-design.php' );
 			}
@@ -198,6 +198,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Customizer', false ) ) :
 
 		public function save_design() {
 			check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
+			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+				wp_send_json_error( null, 403 );
+			}
 
 			//Options to save
 			$options = $this->get_options();
@@ -209,7 +212,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Customizer', false ) ) :
 			}
 
 			//Get submitted values, we will sanitize later
-			$values = $_POST['values'];
+			$values = wp_unslash($_POST['values']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
 
 			//Get color values
 			foreach($options['colors'] as $key => $color) {

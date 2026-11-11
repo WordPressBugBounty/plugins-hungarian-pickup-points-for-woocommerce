@@ -93,9 +93,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 				
 				//Verify nonce
 				check_ajax_referer( 'vp_woo_pont_dismiss_notice', 'security' );
+				if ( ! current_user_can( 'manage_woocommerce' ) ) {
+					wp_send_json_error( null, 403 );
+				}
 
 				//Notice to hide
-				$notice = isset($_POST['notice']) ? sanitize_text_field($_POST['notice']) : '';
+				$notice = isset($_POST['notice']) ? sanitize_text_field(wp_unslash($_POST['notice'])) : '';
 
 				//Delete the option to hide the notice
 				delete_option('vp_woo_pont_show_'.$notice);
@@ -283,8 +286,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Update_Database', false ) ) :
 			//Add new database column
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'vp_woo_pont_mpl_shipments';
-			$sql = "ALTER TABLE $table_name ADD COLUMN carrier varchar(50) DEFAULT NULL";
-			$wpdb->query( $sql ); //This will return an error if already exists, but doesn't really matter
+			$wpdb->query( "ALTER TABLE {$table_name} ADD COLUMN carrier varchar(50) DEFAULT NULL" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- Table name from $wpdb->prefix. This will return an error if already exists, but doesn't really matter
 
 			return true;
 		}

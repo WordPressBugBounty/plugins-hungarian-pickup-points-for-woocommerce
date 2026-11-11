@@ -130,9 +130,6 @@ class VP_Woo_Pont_GLS_XXL {
 			'INS' => __('Declared Value Insurance Service (INS)', 'vp-woo-pont')
 		);
 
-		//Small fix for tracking automation, since the return shipment has the same delivered status as the normal one
-		add_filter('vp_woo_pont_tracking_automation_target_status', array($this, 'tracking_automation_target_status'), 10, 6);
-
 		//Support multi-parcel shipments
 		add_action('vp_woo_pont_metabox_after_generate_options', array( $this, 'add_additional_package_fields'));
 
@@ -349,9 +346,12 @@ class VP_Woo_Pont_GLS_XXL {
 		}
 
 		//Setup XXL parcel details
-		if(isset($_POST['additional_package_data_gls_xxl'])) {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- The nonce is checked in the AJAX handler that generates the label.
+		if(isset($_POST['additional_package_data_gls_xxl']) && is_string($_POST['additional_package_data_gls_xxl'])) {
 
-			$additional_package_data = json_decode(stripslashes($_POST['additional_package_data_gls_xxl']), true);
+			$additional_package_data = json_decode(wp_unslash($_POST['additional_package_data_gls_xxl']), true); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, values are sanitized below.
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
+			if(!is_array($additional_package_data)) $additional_package_data = array();
 			foreach ($additional_package_data as $parcel_index => $parcel_data) {
 				$weight = $parcel_data['weight'];
 				$length = $parcel_data['length'];
@@ -795,25 +795,6 @@ class VP_Woo_Pont_GLS_XXL {
 	public function get_enabled_countries() {
 		$enabled_countries = get_option('vp_woo_pont_gls_countries', array('HU'));
 		return $enabled_countries;
-	}
-
-	public function tracking_automation_target_status($target_status, $order, $provider, $tracking_info, $automation, $event_status) {
-		if($provider == 'gls' && (in_array('delivered', $automation[$provider]) && $event_status == 'delivered')) {
-			$existing_tracking_info = $order->get_meta('_vp_woo_pont_parcel_info');
-			if($existing_tracking_info && $this->has_shipment_returned($existing_tracking_info)) {
-				return false;
-			}
-		}
-		return $target_status;
-	}
-
-	private function has_shipment_returned($tracking_info) {
-		foreach ($tracking_info as $info) {
-			if (isset($info['event']) && $info['event'] == '23') {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public function close_shipments($packages = array(), $orders = array()) {

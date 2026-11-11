@@ -29,7 +29,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Background_Generator', false ) ) :
 		public static function background_generator_status() {
 			check_ajax_referer( 'vp-woo-pont-bg-generator', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 			$response = array();
 			if(self::is_async_generate_running()) {
@@ -45,7 +45,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Background_Generator', false ) ) :
 		public static function background_generator_stop() {
 			check_ajax_referer( 'vp-woo-pont-bg-generator', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 			WC()->queue()->cancel_all('vp_woo_pont_generate_label_async');
 			wp_send_json_success();

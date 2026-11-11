@@ -28,21 +28,21 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 			//Security check
 			check_ajax_referer( 'vp-woo-pont-close-shipments', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 
 			//Get selected packages
 			$packages = array();
 			$orders = array();
-			if(isset($_POST['packages'])) {
-				foreach ($_POST['packages'] as $package) {
+			if(isset($_POST['packages']) && is_array($_POST['packages'])) {
+				foreach (wp_unslash($_POST['packages']) as $package) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 					$packages[] = sanitize_text_field($package);
 				}
 			}
 
-			if(isset($_POST['orders'])) {
-				foreach ($_POST['orders'] as $order_id) {
-					$orders[] = intval($order_id);
+			if(isset($_POST['orders']) && is_array($_POST['orders'])) {
+				foreach (array_map('intval', $_POST['orders']) as $order_id) {
+					$orders[] = $order_id;
 				}
 			}
 
@@ -57,7 +57,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 			$response['message'] = '';
 
 			//Get provider
-			$provider = sanitize_text_field($_POST['provider']);
+			$provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
 
 			//Run closing
 			$results = VP_Woo_Pont()->providers[$provider]->close_shipments($packages, $orders);
@@ -88,7 +88,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 				$order = wc_get_order($order_id);
 				if($order) {
 					$order->update_meta_data('_vp_woo_pont_closed', $shipment_id);
-					$order->add_order_note(sprintf(esc_html__('Shipment closed. Generated delivery note ID: %s', 'vp-woo-pont'), $shipment_id));
+					$order->add_order_note(sprintf(/* translators: %s: Delivery note ID */ esc_html__('Shipment closed. Generated delivery note ID: %s', 'vp-woo-pont'), $shipment_id));
 					$order->save();
 				}
 			}
@@ -127,17 +127,18 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 			//Security check
 			check_ajax_referer( 'vp-woo-pont-close-shipments', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 
 			//Get selected packages
 			$selected = array();
-			if(isset($_POST['orders'])) {
-				foreach ($_POST['orders'] as $order_id) {
-					$order_id = sanitize_text_field($order_id);
+			$provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
+			if(isset($_POST['orders']) && is_array($_POST['orders'])) {
+				foreach (array_map('intval', $_POST['orders']) as $order_id) {
 					$order = wc_get_order($order_id);
+					if(!$order) continue;
 					$order->update_meta_data('_vp_woo_pont_closed', 'yes');
-					if($_POST['provider'] == 'posta') {
+					if($provider == 'posta') {
 						$order->update_meta_data('_vp_woo_pont_mpl_closed', 'yes');
 					}
 					$order->save();
@@ -155,11 +156,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Shipments', false ) ) :
 			//Security check
 			check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 
 			//Get selected packages
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$order = wc_get_order($order_id);
 			if($order) {
 				$order->update_meta_data('_vp_woo_pont_closed', 'no');

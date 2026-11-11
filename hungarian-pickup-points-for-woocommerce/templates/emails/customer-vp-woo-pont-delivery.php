@@ -16,7 +16,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <?php if($tracking_link): ?>
 	<p>
-		<a href="<?php echo esc_url( $tracking_link ); ?>" target="_blank" style="background-color: <?php echo esc_attr( $base ); ?>; color: <?php echo esc_attr( $base_text ); ?>; display: inline-block; text-decoration: none; font-weight: bold; line-height: 1.4; text-align: center; cursor: pointer; border-radius: 3px; font-size: 16px; padding: 12px 20px; border-radius: 4px;"><?php _e( 'Track your order', 'vp-woo-pont' ); ?></a>
+		<a href="<?php echo esc_url( $tracking_link ); ?>" target="_blank" style="background-color: <?php echo esc_attr( $base ); ?>; color: <?php echo esc_attr( $base_text ); ?>; display: inline-block; text-decoration: none; font-weight: bold; line-height: 1.4; text-align: center; cursor: pointer; border-radius: 3px; font-size: 16px; padding: 12px 20px; border-radius: 4px;"><?php esc_html_e('Track your order', 'vp-woo-pont' ); ?></a>
 	</p>
 <?php endif; ?>
 

@@ -670,7 +670,7 @@ class VP_Woo_Pont_Packeta {
 	public function get_carriers_with_ajax() {
 		check_ajax_referer( 'vp-woo-pont-packeta-get-carriers', 'nonce' );
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 
 		//Get API key
@@ -721,11 +721,11 @@ class VP_Woo_Pont_Packeta {
 	public function save_product_options_fields($product) {
 		$fields = ['packeta_age_verification'];
 		foreach ($fields as $field) {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- WooCommerce checks the product edit nonce before this hook runs.
 			if(isset($_REQUEST['vp_woo_pont_'.$field])) {
-				$posted_data = $_REQUEST['vp_woo_pont_'.$field];
-				if(!empty($posted_data) && !is_array($posted_data)) {
-					$posted_data = wp_kses_post( trim( wp_unslash($_REQUEST['vp_woo_pont_'.$field]) ) );
-				} else {
+				$posted_data = is_array($_REQUEST['vp_woo_pont_'.$field]) ? '' : trim( wp_kses_post( wp_unslash($_REQUEST['vp_woo_pont_'.$field]) ) );
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
+				if(empty($posted_data)) {
 					$posted_data = '';
 				}
 				$product->update_meta_data( 'vp_woo_pont_'.$field, $posted_data);
@@ -740,10 +740,12 @@ class VP_Woo_Pont_Packeta {
 		$fields = ['packeta_age_verification'];
 		$product_variation = wc_get_product_object( 'variation', $variation_id );
 		foreach ($fields as $field) {
+			// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce checks the save variations nonce before this hook runs.
 			if(isset($_POST['vp_woo_pont_'.$field][$i])) {
-				$custom_field = $_POST['vp_woo_pont_'.$field][$i];
+				$custom_field = trim( wp_kses_post( wp_unslash($_POST['vp_woo_pont_'.$field][$i]) ) );
+				// phpcs:enable WordPress.Security.NonceVerification.Missing
 				if ( ! empty( $custom_field ) ) {
-					$product_variation->update_meta_data('vp_woo_pont_'.$field, wp_kses_post( trim( wp_unslash($custom_field) ) ));
+					$product_variation->update_meta_data('vp_woo_pont_'.$field, $custom_field);
 				}
 			} else {
 				$product_variation->delete_meta_data('vp_woo_pont_'.$field);

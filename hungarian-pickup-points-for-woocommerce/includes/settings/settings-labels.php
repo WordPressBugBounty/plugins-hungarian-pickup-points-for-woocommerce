@@ -61,7 +61,7 @@ $settings = array(
 		'type' => 'select',
 		'class' => 'wc-enhanced-select',
 		'title' => __( 'Set order status', 'vp-woo-pont' ),
-		'options' => self::get_order_statuses(__('None', 'Order status after label generated', 'vp-woo-pont')),
+		'options' => self::get_order_statuses(_x('None', 'Order status after label generated', 'vp-woo-pont')),
 		'desc_tip' => __( 'If a label was generated for the order, change the order status automatically.', 'vp-woo-pont' ),
 		'id' => 'auto_order_status',
 	),

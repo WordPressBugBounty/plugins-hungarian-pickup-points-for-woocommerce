@@ -104,7 +104,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Email_Label_Generated' ) ) :
 		}
 
 		public function init_form_fields() {
-			$placeholder_text  = sprintf( __( 'Available placeholders: %s', 'vp-woo-pont' ), '<code>' . implode( '</code>, <code>', array_keys( $this->placeholders ) ) . '</code>' );
+			$placeholder_text  = sprintf( /* translators: %s: List of placeholders */ __( 'Available placeholders: %s', 'vp-woo-pont' ), '<code>' . implode( '</code>, <code>', array_keys( $this->placeholders ) ) . '</code>' );
 			$this->form_fields = array(
 				'enabled'            => array(
 					'title'   => __( 'Enable/Disable', 'vp-woo-pont' ),
@@ -115,7 +115,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Email_Label_Generated' ) ) :
 				'recipient'          => array(
 					'title'       => __( 'Recipient(s)', 'vp-woo-pont' ),
 					'type'        => 'text',
-					'description' => sprintf( __( 'Enter recipients (comma separated) for this email. Defaults to %s.', 'vp-woo-pont' ), '<code>' . esc_attr( get_option( 'admin_email' ) ) . '</code>' ),
+					'description' => sprintf( /* translators: %s: Admin e-mail address */ __( 'Enter recipients (comma separated) for this email. Defaults to %s.', 'vp-woo-pont' ), '<code>' . esc_attr( get_option( 'admin_email' ) ) . '</code>' ),
 					'placeholder' => '',
 					'default'     => '',
 					'desc_tip'    => true,

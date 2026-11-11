@@ -172,8 +172,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			}
 
 			//If still not set, check for paramter
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is checked in the AJAX handlers that call this.
 			if(isset($_POST['provider'])) {
-				$provider = sanitize_text_field($_POST['provider']);
+				$provider = sanitize_text_field(wp_unslash($_POST['provider'])); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 
 			//Set label data
@@ -207,7 +208,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			}
 
 			//Check for PRO verson
-			$is_localhost = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], ".local") !== false);
+			$is_localhost = (isset($_SERVER['HTTP_HOST']) && strpos(sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])), ".local") !== false);
 			if($api_provider != 'kvikk' && !get_option('_vp_woo_pont_pro_enabled', false) && !$is_localhost) {
 				$response['error'] = true;
 				$response['messages'][] = __('Upgrade to the PRO version to generate shipping labels and to track shipments.', 'vp-woo-pont');
@@ -234,7 +235,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				$response['messages'][] = $label->get_error_message();
 
 				//Log error message
-				$order->add_order_note(sprintf(esc_html__('Unable to create shipping label. Error code: %s', 'vp-woo-pont'), urldecode($label->get_error_code())));
+				$order->add_order_note(sprintf(/* translators: %s: Error code */ esc_html__('Unable to create shipping label. Error code: %s', 'vp-woo-pont'), urldecode($label->get_error_code())));
 
 				//So developers can hook in here
 				do_action('vp_woo_pont_label_generate_error', $order, $label, $api_provider);
@@ -278,7 +279,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$order->save();
 
 			//Save order note
-			$order->add_order_note(sprintf(esc_html__('Shipping label generated successfully. ID number: %s', 'vp-woo-pont'), $label['number']));
+			$order->add_order_note(sprintf(/* translators: %s: Parcel number */ esc_html__('Shipping label generated successfully. ID number: %s', 'vp-woo-pont'), $label['number']));
 
 			//Create response
 			$response['number'] = $label['number'];
@@ -335,7 +336,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				$response['messages'][] = $label->get_error_message();
 
 				//Log error message
-				$order->add_order_note(sprintf(esc_html__('Unable to void the shipping label. Error code: %s', 'vp-woo-pont'), urldecode($label->get_error_code())));
+				$order->add_order_note(sprintf(/* translators: %s: Error code */ esc_html__('Unable to void the shipping label. Error code: %s', 'vp-woo-pont'), urldecode($label->get_error_code())));
 
 				return $response;
 			}
@@ -353,7 +354,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if(isset($label['deleted_locally'])) {
 
 				//Save order note
-				$order->add_order_note(sprintf(esc_html__("Shipping label removed from the order only. You still need to remove it in the provider's system. ID number: %s", 'vp-woo-pont'), $data['parcel_number']));
+				$order->add_order_note(sprintf(/* translators: %s: Parcel number */ esc_html__("Shipping label removed from the order only. You still need to remove it in the provider's system. ID number: %s", 'vp-woo-pont'), $data['parcel_number']));
 
 				//Create response
 				$response['messages'][] = esc_html__("Shipping label removed from WooCommerce. You still need to remove it in the provider's system.",'vp-woo-pont');
@@ -361,7 +362,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			} else {
 
 				//Save order note
-				$order->add_order_note(sprintf(esc_html__('Shipping label removed successfully. ID number: %s', 'vp-woo-pont'), $data['parcel_number']));
+				$order->add_order_note(sprintf(/* translators: %s: Parcel number */ esc_html__('Shipping label removed successfully. ID number: %s', 'vp-woo-pont'), $data['parcel_number']));
 
 				//Create response
 				$response['messages'][] = esc_html__('Shipping label removed successfully.','vp-woo-pont');
@@ -396,13 +397,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$note_parts = array();
 			$note_parts[] = esc_html__('Previous shipping label cleared to generate a new label.', 'vp-woo-pont');
 			if($provider_name) {
-				$note_parts[] = sprintf(esc_html__('Provider: %s', 'vp-woo-pont'), $provider_name);
+				$note_parts[] = sprintf(/* translators: %s: Provider name */ esc_html__('Provider: %s', 'vp-woo-pont'), $provider_name);
 			}
 			if($parcel_number) {
-				$note_parts[] = sprintf(esc_html__('Tracking number: %s', 'vp-woo-pont'), $parcel_number);
+				$note_parts[] = sprintf(/* translators: %s: Tracking number */ esc_html__('Tracking number: %s', 'vp-woo-pont'), $parcel_number);
 			}
 			if($parcel_id) {
-				$note_parts[] = sprintf(esc_html__('Parcel ID: %s', 'vp-woo-pont'), $parcel_id);
+				$note_parts[] = sprintf(/* translators: %s: Parcel ID */ esc_html__('Parcel ID: %s', 'vp-woo-pont'), $parcel_id);
 			}
 
 			//Delete label metadata locally(no API call)
@@ -548,9 +549,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			$data['customer']['last_name'] = $this->strip_4byte_utf8_chars($data['customer']['last_name']);
 
 			//If custom options set(manual label generate)
+			// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce is checked in the AJAX handlers that call this.
 			$data['options'] = array();
 			if(isset($_POST['package_count'])) {
-				$package_count = sanitize_text_field($_POST['package_count']);
+				$package_count = isset($_POST['package_count']) ? sanitize_text_field(wp_unslash($_POST['package_count'])) : '';
 				$data['options']['package_count'] = intval($package_count);
 			}
 			
@@ -560,29 +562,29 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			}
 
 			if(isset($_POST['pickup_date'])) {
-				$pickup_date = sanitize_text_field($_POST['pickup_date']);
+				$pickup_date = isset($_POST['pickup_date']) ? sanitize_text_field(wp_unslash($_POST['pickup_date'])) : '';
 				$data['options']['pickup_date'] = $pickup_date;
 			}
 
 			if(isset($_POST['package_contents'])) {
-				$package_contents = sanitize_text_field($_POST['package_contents']);
+				$package_contents = isset($_POST['package_contents']) ? sanitize_text_field(wp_unslash($_POST['package_contents'])) : '';
 				$data['options']['package_contents'] = $package_contents;
 			}
 
 			if(isset($_POST['package_weight'])) {
-				$package_weight = sanitize_text_field($_POST['package_weight']);
+				$package_weight = isset($_POST['package_weight']) ? sanitize_text_field(wp_unslash($_POST['package_weight'])) : '';
 				$data['options']['package_weight'] = $package_weight;
 			}
 
 			if(isset($_POST['extra_services'])) {
-				$extra_services = array_map( 'sanitize_text_field', $_POST['extra_services'] );
+				$extra_services = array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['extra_services'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with array_map().
 				$data['options']['extra_services'] = $extra_services;
 			}
 
 			if(isset($_POST['transsped_packaging'])) {
 				$data['options']['transsped_packaging'] = array();
-				if (isset($_POST['transsped_packaging'])) {
-				  foreach ($_POST['transsped_packaging'] as $package_type => $quantity) {
+				if (isset($_POST['transsped_packaging']) && is_array($_POST['transsped_packaging'])) {
+				  foreach (wp_unslash($_POST['transsped_packaging']) as $package_type => $quantity) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
 					$package_type = sanitize_text_field($package_type);
 					$quantity = absint($quantity);
 				
@@ -597,6 +599,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if(isset($_POST['source']) && $_POST['source'] == 'metabox') {
 				$data['source'] = 'metabox';
 			}
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 			return apply_filters('vp_woo_pont_prepare_label_data', $data, $order);
 		}
@@ -660,7 +663,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			if(apply_filters('vp_woo_pont_show_label_metabox', ($order->needs_processing() || $this->is_label_generated($order)), $order)) {
 				include( dirname( __FILE__ ) . '/views/html-metabox.php' );
 			} else {
-				echo '<p class="vp-woo-pont-metabox-no-shipping">'.__('This order doesn\'t need shipping. Add a shipping line item to generate a label.', 'vp-woo-pont');'</p>';
+				echo '<p class="vp-woo-pont-metabox-no-shipping">'.esc_html__('This order doesn\'t need shipping. Add a shipping line item to generate a label.', 'vp-woo-pont').'</p>';
 			}
 		}
 
@@ -668,9 +671,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function ajax_generate_label() {
 			check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$response = $this->generate_label($order_id);
 			wp_send_json_success($response);
 		}
@@ -679,9 +682,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function ajax_generate_quick_label() {
 			check_ajax_referer( 'vp-woo-pont-generate', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$response = $this->generate_label($order_id);
 			wp_send_json_success($response);
 		}
@@ -690,9 +693,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function ajax_void_label() {
 			check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$response = $this->void_label($order_id);
 			wp_send_json_success($response);
 		}
@@ -701,9 +704,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function ajax_new_label() {
 			check_ajax_referer( 'vp_woo_pont_manage', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$response = $this->new_label($order_id);
 			wp_send_json_success($response);
 		}
@@ -712,9 +715,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function ajax_update_package_details() {
 			check_ajax_referer( 'vp-woo-pont-generate', 'nonce' );
 			if ( !current_user_can( 'edit_shop_orders' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this action.', 'wc-szamlazz' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
-			$order_id = intval($_POST['order']);
+			$order_id = isset($_POST['order']) ? intval($_POST['order']) : 0;
 			$order = wc_get_order($order_id);
 
 			//For now, this function only updates/stores the package weight
@@ -730,8 +733,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 
 				//Get the packaging data
 				$packaging = array(
-					'name' => sanitize_text_field($_POST['packaging_name']),
-					'sku' => sanitize_text_field($_POST['packaging_sku'])
+					'name' => sanitize_text_field(wp_unslash($_POST['packaging_name'])),
+					'sku' => isset($_POST['packaging_sku']) ? sanitize_text_field(wp_unslash($_POST['packaging_sku'])) : ''
 				);
 
 				//If its not a custom size, replace it with the default one
@@ -743,9 +746,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 						}
 					}
 				} else {
-					$packaging['length'] = intval($_POST['packaging_length']);
-					$packaging['width'] = intval($_POST['packaging_width']);
-					$packaging['height'] = intval($_POST['packaging_height']);
+					$packaging['length'] = isset($_POST['packaging_length']) ? intval($_POST['packaging_length']) : 0;
+					$packaging['width'] = isset($_POST['packaging_width']) ? intval($_POST['packaging_width']) : 0;
+					$packaging['height'] = isset($_POST['packaging_height']) ? intval($_POST['packaging_height']) : 0;
 				}
 
 				$order->update_meta_data('_vp_woo_pont_packaging', $packaging);
@@ -769,10 +772,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 			);
 
 			if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {
-				if ( $file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ) ) {
-					fwrite( $file_handle, $file['content'] );
-					fclose( $file_handle );
-				}
+				@file_put_contents( trailingslashit( $file['base'] ) . $file['file'], $file['content'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			}
 
 			//Make a GET request and store the pdf file
@@ -851,24 +851,24 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 					?>
 					<div class="vp-woo-pont-order-column" data-provider="<?php echo esc_attr($provider_id); ?>" data-order="<?php echo esc_attr($order->get_id()); ?>">
 						<?php if($order->get_meta('shipping_parcel_number')): ?>
-							<a target="_blank" href="<?php echo VP_Woo_Pont()->tracking->get_tracking_link($order); ?>" class="vp-woo-pont-order-column-tracking help_tip" data-tip="<?php esc_attr_e('Tracking number', 'vp-woo-pont'); ?>">
+							<a target="_blank" href="<?php echo esc_url(VP_Woo_Pont()->tracking->get_tracking_link($order)); ?>" class="vp-woo-pont-order-column-tracking help_tip" data-tip="<?php esc_attr_e('Tracking number', 'vp-woo-pont'); ?>">
 								<span><?php echo esc_html($order->get_meta('shipping_parcel_number')); ?></span>
 							</a>
 						<?php endif; ?>
 						<?php if($this->is_label_generated($order)): ?>
 							<div class="vp-woo-pont-order-column-provider">
-								<a target="_blank" href="<?php echo VP_Woo_Pont()->tracking->get_tracking_link($order); ?>" class="vp-woo-pont-order-column-tracking help_tip" data-tip="<?php esc_attr_e('Tracking number', 'vp-woo-pont'); ?>">
+								<a target="_blank" href="<?php echo esc_url(VP_Woo_Pont()->tracking->get_tracking_link($order)); ?>" class="vp-woo-pont-order-column-tracking help_tip" data-tip="<?php esc_attr_e('Tracking number', 'vp-woo-pont'); ?>">
 									<i class="vp-woo-pont-provider-icon-<?php echo esc_attr($provider_id); ?>"></i>
 									<span><?php echo esc_html($order->get_meta('_vp_woo_pont_parcel_number')); ?></span>
 								</a>
 								<?php if($closed = $order->get_meta('_vp_woo_pont_closed')): ?>
-									<?php if($closed == 'no'): ?><em class="vp-woo-pont-shipment-status dashicons dashicons-yes-alt pending help_tip" data-tip="<?php esc_html_e('To be closed', 'vp-woo-pont', 'mpl shipment status'); ?>"></em><?php endif; ?>
-									<?php if($closed != 'no'): ?><em class="vp-woo-pont-shipment-status dashicons dashicons-yes-alt closed help_tip" data-tip="<?php esc_html_e('Closed', 'vp-woo-pont', 'mpl shipment status'); ?>"></em><?php endif; ?>
+									<?php if($closed == 'no'): ?><em class="vp-woo-pont-shipment-status dashicons dashicons-yes-alt pending help_tip" data-tip="<?php esc_attr_e('To be closed', 'vp-woo-pont'); ?>"></em><?php endif; ?>
+									<?php if($closed != 'no'): ?><em class="vp-woo-pont-shipment-status dashicons dashicons-yes-alt closed help_tip" data-tip="<?php esc_attr_e('Closed', 'vp-woo-pont'); ?>"></em><?php endif; ?>
 								<?php endif; ?>
 							</div>
 							<?php if($this->generate_download_link($order)): ?>
 								<div class="vp-woo-pont-order-column-printing">
-									<a target="_blank" href="<?php echo $this->generate_download_link($order); ?>" class="vp-woo-pont-order-column-pdf">
+									<a target="_blank" href="<?php echo esc_url($this->generate_download_link($order)); ?>" class="vp-woo-pont-order-column-pdf">
 										<i></i>
 										<span><?php esc_html_e('Download', 'vp-woo-pont'); ?></span>
 									</a>
@@ -888,7 +888,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 									<span><?php echo esc_html($provider_name); ?></span>
 								</span>
 							</div>
-							<div class="vp-woo-pont-order-column-printing vp-woo-pont-order-column-quick" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_quick_generate" ); ?>">
+							<div class="vp-woo-pont-order-column-printing vp-woo-pont-order-column-quick" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_quick_generate" ) ); ?>">
 								<a target="_blank" href="#" class="vp-woo-pont-order-column-pdf" style="display:none;">
 									<i></i>
 									<span><?php esc_html_e('Download', 'vp-woo-pont'); ?></span>
@@ -1058,7 +1058,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				
 				//Convert to JSON and add as data attribute
 				$json_order_details = json_encode($order_details);
-				echo '<span class="vp-woo-pont-order-details" style="display:none;" data-order-details=\'' . htmlspecialchars($json_order_details, ENT_QUOTES, 'UTF-8') . '\'></span>';
+				echo '<span class="vp-woo-pont-order-details" style="display:none;" data-order-details=\'' . esc_attr($json_order_details) . '\'></span>';
 			}
 		}
 
@@ -1078,16 +1078,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 		public function single_order_button($order_id) {
 			?>
 			<li class="wide dpd-big-single-button">
-				<label><?php _e('DPD Weblabel','wc-szamlazz'); ?></label> <a href="<?php echo admin_url( "?vp_label_export=1&order_id=$order_id" ); ?>" class="button" target="_blank" alt="" data-tip="<?php _e('DPD Weblabel Export','wc-szamlazz'); ?>"><?php _e('Letöltés','wc-szamlazz'); ?></a>
+				<label><?php esc_html_e('DPD Weblabel','vp-woo-pont'); ?></label> <a href="<?php echo esc_url( admin_url( "?vp_label_export=1&order_id=$order_id" ) ); ?>" class="button" target="_blank" alt="" data-tip="<?php esc_attr_e('DPD Weblabel Export','vp-woo-pont'); ?>"><?php esc_html_e('Letöltés','vp-woo-pont'); ?></a>
 			</li>
 			<?php
 		}
 
 		public function generate_export() {
-			if(isset($_GET['vp_label_export']) && $_GET['vp_label_export'] == 1 && isset($_GET['order_id'])) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Not hooked at the moment, only shop managers can run it.
+			if(isset($_GET['vp_label_export']) && $_GET['vp_label_export'] == 1 && isset($_GET['order_id']) && current_user_can('edit_shop_orders')) {
 				
 				//Get order data
-				$order_id = intval($_GET['order_id']);
+				$order_id = intval($_GET['order_id']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$order = wc_get_order($order_id);
 
 				//If provider not set, find it
@@ -1102,7 +1103,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				$export = VP_Woo_Pont()->providers[$provider]->export_label($data);
 
 				//Set file name
-				$filename = $provider.date('-Y-m-d-H:i').'-'.$order_id;
+				$filename = $provider.wp_date('-Y-m-d-H:i').'-'.$order_id;
 
 				//Check separator
 				$separator = ';';
@@ -1111,11 +1112,11 @@ if ( ! class_exists( 'VP_Woo_Pont_Labels', false ) ) :
 				//Return downloadable CSV file
 				header('Content-Type: text/csv; charset=utf-8');
 				header('Content-Disposition: attachment; filename='.$filename.'.csv');
-				$output = fopen('php://output', 'w');
+				$output = fopen('php://output', 'w'); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Writes the CSV to php://output.
 				foreach($export['data'] as $row) {
 					fputcsv($output, $row, $separator);
 				}
-				fclose($output);
+				fclose($output); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Writes the CSV to php://output.
 				exit;
 			}
 		}

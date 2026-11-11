@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $date_format = get_option('date_format');
 $time_format = get_option('time_format');
-$current_date_time = date($date_format . ' ' . $time_format);
+$current_date_time = wp_date($date_format . ' ' . $time_format);
 $total_weight = 0;
 
 foreach ($orders as $order_id) {
@@ -106,7 +106,7 @@ foreach ($orders as $order_id) {
 					<?php echo esc_html($order->get_order_number()); ?>
 				</td>
 				<td valign="top">
-					<?php echo $order->get_formatted_shipping_address(); ?>
+					<?php echo wp_kses_post( $order->get_formatted_shipping_address() ); ?>
 				</td>
 				<td valign="top" align="right">
 					<?php echo esc_html($order->get_meta('_vp_woo_pont_parcel_number')); ?>

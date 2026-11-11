@@ -22,18 +22,18 @@ $notes_attr = function_exists( 'wc_esc_json' ) ? wc_esc_json( $notes_json ) : _w
 	<th><?php echo esc_html_x('Pickup point', 'frontend', 'vp-woo-pont'); ?></th>
 	<td data-title="<?php echo esc_attr_x('Pickup point', 'frontend', 'vp-woo-pont'); ?>">
 		<?php if(!$selected_vp_pont || empty($shipping_cost)): ?>
-			<a href="#" id="vp-woo-pont-show-map" data-shipping-costs="<?php echo $shipping_costs_attr; ?>" data-notes="<?php echo $notes_attr; ?>"><?php echo esc_html($button_label); ?></a>
+			<a href="#" id="vp-woo-pont-show-map" data-shipping-costs="<?php echo $shipping_costs_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>" data-notes="<?php echo $notes_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>"><?php echo esc_html($button_label); ?></a>
 		<?php else: ?>
 			<div class="vp-woo-pont-review-order-selected">
 				<i class="vp-woo-pont-provider-icon-<?php echo esc_attr($selected_vp_pont['provider']); ?>"></i>
 				<div class="vp-woo-pont-review-order-selected-info">
 					<strong class="vp-woo-pont-review-order-selected-provider"><?php echo esc_html($selected_vp_pont['name']); ?>:</strong>
 					<?php if ( WC()->cart->display_prices_including_tax() ): ?>
-						<strong class="vp-woo-pont-review-order-selected-cost"><?php echo $shipping_cost['formatted_gross']; ?></strong><br>
+						<strong class="vp-woo-pont-review-order-selected-cost"><?php echo $shipping_cost['formatted_gross']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></strong><br>
 					<?php else: ?>
-						<strong class="vp-woo-pont-review-order-selected-cost"><?php echo $shipping_cost['formatted_net']; ?></strong><br>
+						<strong class="vp-woo-pont-review-order-selected-cost"><?php echo $shipping_cost['formatted_net']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></strong><br>
 					<?php endif; ?>
-					<span class="vp-woo-pont-review-order-selected-address"><?php echo esc_html($selected_vp_pont['addr']); ?>, <?php echo esc_html($selected_vp_pont['zip']); ?> <?php echo esc_html($selected_vp_pont['city']); ?></span> - <a href="#" id="vp-woo-pont-show-map" data-shipping-costs="<?php echo $shipping_costs_attr; ?>" data-notes="<?php echo $notes_attr; ?>"><?php esc_html_e('Modify', 'vp-woo-pont'); ?></a>
+					<span class="vp-woo-pont-review-order-selected-address"><?php echo esc_html($selected_vp_pont['addr']); ?>, <?php echo esc_html($selected_vp_pont['zip']); ?> <?php echo esc_html($selected_vp_pont['city']); ?></span> - <a href="#" id="vp-woo-pont-show-map" data-shipping-costs="<?php echo $shipping_costs_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>" data-notes="<?php echo $notes_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>"><?php esc_html_e('Modify', 'vp-woo-pont'); ?></a>
 				</div>
 			</div>
 		<?php endif; ?>

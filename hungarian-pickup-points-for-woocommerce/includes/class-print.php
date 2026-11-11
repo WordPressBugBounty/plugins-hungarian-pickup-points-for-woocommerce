@@ -129,7 +129,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 				$mpdf->Image($tmp_img, 0, 0, $widthMM, $heightMM, 'png', '', true, false);
 
 				// Clean up
-				unlink($tmp_img);
+				wp_delete_file($tmp_img);
 
 				return $mpdf->Output('file.pdf', 'S');
 				
@@ -182,7 +182,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					$zipArchive = new ZipArchive();
 					$zip_filename = wp_tempnam('vp-woo-pont-labels.zip');
 					if ($zipArchive->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-						@unlink($zip_filename);
+						wp_delete_file($zip_filename);
 						wp_die(esc_html__('Unable to create the zip file.', 'vp-woo-pont'));
 					}
 
@@ -205,7 +205,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					//Finally, close the active archive.
 					$zipArchive->close();
 					if(!$zip_file_count || !file_exists($zip_filename)) {
-						@unlink($zip_filename);
+						wp_delete_file($zip_filename);
 						wp_die(esc_html__('No labels found for the selected orders.', 'vp-woo-pont'), '', array('response' => 404));
 					}
 
@@ -216,10 +216,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					header('Content-Length: ' . filesize($zip_filename));
 
 					// Output the ZIP file
-					readfile($zip_filename);
+					readfile($zip_filename); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- Streams the file to the browser.
 
 					// Delete the ZIP file after sending it to the browser
-					unlink($zip_filename);
+					wp_delete_file($zip_filename);
 					exit();
 
 				}
@@ -352,7 +352,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 					//If we need to return a file
 					if($output == 'file') {
 						header("Content-type:application/pdf");
-						echo $merger->merge();
+						echo $merger->merge(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Binary PDF output.
 						exit();
 					} else {
 						return $merger->merge();
@@ -408,7 +408,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Print', false ) ) :
 						header("Content-type:application/pdf");
 
 						//Display PDF file, so it can be printed
-						readfile($pdf_file);
+						readfile($pdf_file); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- Streams the file to the browser.
 						exit();
 					} else {
 						return file_get_contents($pdf_file);

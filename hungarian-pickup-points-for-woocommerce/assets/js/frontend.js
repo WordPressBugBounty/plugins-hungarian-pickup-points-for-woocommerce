@@ -882,6 +882,11 @@ jQuery(document).ready(function($) {
 		},
 		select_in_sidebar: function() {
 
+			//Out of order points can't be clicked
+			if($(this).hasClass('feature-out-of-order')) {
+				return false;
+			}
+
 			//If filter is not turned on, turn it on so the layer is visible on the map
 			var provider = $(this).data('provider');
 			if(!vp_woo_pont_frontend.$filters.find('input#provider-'+provider).is(':checked')) {
@@ -926,6 +931,12 @@ jQuery(document).ready(function($) {
 		},
 		select_in_map: function(e) {
 
+			//Out of order points can't be clicked
+			var features = e.target.options.data.features;
+			if(Array.isArray(features) && features.includes('out-of-order')) {
+				return;
+			}
+
 			//Remove active marker class
 			$('.leaflet-marker-icon.selected').removeClass('selected');
 
@@ -965,6 +976,12 @@ jQuery(document).ready(function($) {
 
 			//Collect data
 			var $item = $(this).parent();
+
+			//Out of order points can't be selected
+			if($item.hasClass('feature-out-of-order')) {
+				return false;
+			}
+
 			var provider = $item.data('provider');
 			var id = $item.data('id');
 			var page = 'checkout';

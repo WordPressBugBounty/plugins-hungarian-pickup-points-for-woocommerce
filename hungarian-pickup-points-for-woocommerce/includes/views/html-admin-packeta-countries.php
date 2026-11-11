@@ -50,7 +50,7 @@ $key = 'packeta_countries';
 			</tbody>
 		</table>
 		<p class="description"><?php echo esc_html($data['desc']); ?></p>	
-		<a href="#" class="reload-packeta-carriers" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-packeta-get-carriers' )?>">
+		<a href="#" class="reload-packeta-carriers" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-packeta-get-carriers' ) ); ?>">
 			<span class="dashicons dashicons-update"></span>
 			<span><?php esc_html_e('Refresh providers', 'vp-woo-pont'); ?></span>
 		</a>

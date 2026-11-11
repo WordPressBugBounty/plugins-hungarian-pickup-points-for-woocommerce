@@ -223,7 +223,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Document_Storage', false ) ) :
 		}
 
 		private static function download_error( $message, $status ) {
-			wp_die( wp_kses_post( $message ), esc_html__( 'Shipping label', 'vp-woo-pont' ), array( 'response' => $status ) );
+			wp_die( wp_kses_post( $message ), esc_html__( 'Shipping label', 'vp-woo-pont' ), array( 'response' => absint( $status ) ) );
 		}
 
 		//Check if a file in the folder can be downloaded directly. Returns true, false, or null if we can't tell
@@ -246,7 +246,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Document_Storage', false ) ) :
 				'redirection' => 0,
 				'sslverify' => false, //It's a request to our own site, which might use a self-signed certificate
 			) );
-			@unlink( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			wp_delete_file( $path );
 
 			if ( is_wp_error( $response ) ) {
 				$result = null;
@@ -271,7 +271,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Document_Storage', false ) ) :
 		//The plugin's settings are sections of the WooCommerce shipping tab, like section=vp_labels
 		private static function is_settings_page() {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return is_admin() && isset( $_GET['page'], $_GET['tab'], $_GET['section'] ) && $_GET['page'] === 'wc-settings' && $_GET['tab'] === 'shipping' && strpos( $_GET['section'], 'vp_' ) === 0;
+			return is_admin() && isset( $_GET['page'], $_GET['tab'], $_GET['section'] ) && $_GET['page'] === 'wc-settings' && $_GET['tab'] === 'shipping' && strpos( sanitize_key( wp_unslash( $_GET['section'] ) ), 'vp_' ) === 0;
 		}
 
 		//Path of the folder relative to the domain, for the nginx rule
@@ -331,7 +331,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Document_Storage', false ) ) :
 				'label' => __( 'Shipping labels are not publicly accessible', 'vp-woo-pont' ),
 				'status' => 'good',
 				'badge' => array(
-					'label' => __( 'Security' ),
+					'label' => __( 'Security', 'vp-woo-pont' ),
 					'color' => 'blue',
 				),
 				'description' => '<p>' . esc_html__( 'Direct access to the folder where shipping labels are stored is blocked.', 'vp-woo-pont' ) . '</p>',

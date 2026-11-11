@@ -33,7 +33,7 @@ $services_labels = VP_Woo_Pont()->providers['kvikk']->extra_services;
 			<li class="vp-woo-pont-metabox-rows-data show">
 				<div class="vp-woo-pont-metabox-rows-data-inside">
 					<span><?php esc_html_e('Shipping cost(net)', 'vp-woo-pont'); ?></span>
-					<strong><?php echo wc_price($accounting_info['shipping']); ?></strong>
+					<strong><?php echo wc_price($accounting_info['shipping']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></strong>
 				</div>
 			</li>
 			<?php endif; ?>
@@ -43,7 +43,7 @@ $services_labels = VP_Woo_Pont()->providers['kvikk']->extra_services;
 				<li class="vp-woo-pont-metabox-rows-data show">
 					<div class="vp-woo-pont-metabox-rows-data-inside">
 						<span><?php esc_html_e('COD fixed fee(net)', 'vp-woo-pont'); ?></span>
-						<strong><?php echo wc_price($accounting_info['codFee']); ?></strong>
+						<strong><?php echo wc_price($accounting_info['codFee']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></strong>
 					</div>
 				</li>
 				<?php endif; ?>
@@ -52,7 +52,7 @@ $services_labels = VP_Woo_Pont()->providers['kvikk']->extra_services;
 				<li class="vp-woo-pont-metabox-rows-data show">
 					<div class="vp-woo-pont-metabox-rows-data-inside">
 						<span><?php esc_html_e('COD % fee', 'vp-woo-pont'); ?></span>
-						<strong><?php echo $accounting_info['codPercentage']; ?>% - <?php echo wc_price($order->get_total() * $accounting_info['codPercentage'] / 100); ?></strong>
+						<strong><?php echo esc_html($accounting_info['codPercentage']); ?>% - <?php echo wc_price($order->get_total() * $accounting_info['codPercentage'] / 100); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></strong>
 					</div>
 				</li>
 				<?php endif; ?>
@@ -63,8 +63,8 @@ $services_labels = VP_Woo_Pont()->providers['kvikk']->extra_services;
 				<?php foreach($accounting_info['services'] as $service): ?>
 					<li class="vp-woo-pont-metabox-rows-data show">
 						<div class="vp-woo-pont-metabox-rows-data-inside">
-							<span><?php echo $services_labels[$service['type']]; ?></span>
-							<strong><?php echo wc_price($service['cost']); ?></strong>
+							<span><?php echo esc_html($services_labels[$service['type']]); ?></span>
+							<strong><?php echo wc_price($service['cost']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></strong>
 						</div>
 					</li>
 				<?php endforeach; ?>

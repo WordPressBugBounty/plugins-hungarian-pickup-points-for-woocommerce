@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="wc-backbone-modal-content">
 			<section class="wc-backbone-modal-main" role="main">
 				<header class="wc-backbone-modal-header">
-					<h1><?php echo esc_html_e('Add provider', 'vp-woo-pont'); ?></h1>
+					<h1><?php esc_html_e('Add provider', 'vp-woo-pont'); ?></h1>
 					<button class="modal-close modal-close-link dashicons dashicons-no-alt">
 						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'vp-woo-pont' ); ?></span>
 					</button>

@@ -57,7 +57,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Walkthrough', false ) ) :
 		public static function save() {
 			check_ajax_referer( 'vp-woo-pont-walkthrough', 'security' );
 			if ( ! current_user_can( 'manage_woocommerce' ) ) {
-				wp_die( esc_html__( 'Cheatin&#8217; huh?' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 
 			//Get existing options
@@ -66,16 +66,18 @@ if ( ! class_exists( 'VP_Woo_Pont_Walkthrough', false ) ) :
 
 			//Get submitted providers
 			$providers = array();
-			if ( isset( $_POST['providers'] ) ) {
-				foreach ($_POST['providers'] as $checkbox_value) {
+			if ( isset( $_POST['providers'] ) && is_array( $_POST['providers'] ) ) {
+				foreach (wp_unslash($_POST['providers']) as $checkbox_value) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 					$providers[] = wc_clean($checkbox_value);
 				}
 			}
 
 			//Set costs
 			$costs = array();
-			if ( isset( $_POST['shipping_cost'] ) ) {
-				foreach ($_POST['shipping_cost'] as $provider_id => $shipping_cost) {
+			if ( isset( $_POST['shipping_cost'] ) && is_array( $_POST['shipping_cost'] ) ) {
+				foreach (wp_unslash($_POST['shipping_cost']) as $provider_id => $shipping_cost) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
+					$provider_id = wc_clean($provider_id);
+					$shipping_cost = wc_clean($shipping_cost);
 					$costs[] = array(
 						'cost' => $shipping_cost,
 						'conditional' => false,
@@ -89,28 +91,28 @@ if ( ! class_exists( 'VP_Woo_Pont_Walkthrough', false ) ) :
 			$text_fields = ['dpd_username', 'dpd_password', 'expressone_company_id', 'expressone_username', 'expressone_password'];
 			foreach ($text_fields as $field_id) {
 				if(isset($_POST[$field_id]) && !empty($_POST[$field_id])) {
-					$separate_options['vp_woo_pont_'.$field_id] = sanitize_text_field($_POST[$field_id]);
+					$separate_options['vp_woo_pont_'.$field_id] = sanitize_text_field(wp_unslash($_POST[$field_id]));
 				}
 			}
 
 			//Title
 			if(isset($_POST['method_name']) && !empty($_POST['method_name'])) {
-				$options['title'] = sanitize_text_field($_POST['method_name']);
+				$options['title'] = isset($_POST['method_name']) ? sanitize_text_field(wp_unslash($_POST['method_name'])) : '';
 			}
 
 			//Primary color
 			if(isset($_POST['primary_color']) && !empty($_POST['primary_color'])) {
-				set_theme_mod('vp_woo_pont_primary_color', sanitize_text_field($_POST['primary_color']));
+				set_theme_mod('vp_woo_pont_primary_color', sanitize_text_field(wp_unslash($_POST['primary_color'])));
 			}
 
 			//Try to activate the pro version
 			if(!VP_Woo_Pont_Pro::is_pro_enabled() && isset($_POST['pro_key']) && !empty($_POST['pro_key'])) {
-				VP_Woo_Pont_Pro::pro_activate(sanitize_text_field($_POST['pro_key']));
+				VP_Woo_Pont_Pro::pro_activate(sanitize_text_field(wp_unslash($_POST['pro_key'])));
 			}
 
 			//Try to set shipping method in zone
-			if(isset($_POST['zones'])) {
-				foreach ($_POST['zones'] as $zone_id) {
+			if(isset($_POST['zones']) && is_array($_POST['zones'])) {
+				foreach (array_map('absint', $_POST['zones']) as $zone_id) {
 					$zone = WC_Shipping_Zones::get_zone($zone_id);
 					$methods = $zone->get_shipping_methods();
 
@@ -151,7 +153,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Walkthrough', false ) ) :
 		public static function restart_setup_wizard() {
 			check_ajax_referer( 'vp-woo-pont-restart-setup-wizard', 'nonce' );
 			if ( ! current_user_can( 'manage_woocommerce' ) ) {
-				wp_die( esc_html__( 'Cheatin&#8217; huh?' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 			update_option('_vp_woo_pont_walkthrough_finished', false);
 			wp_send_json_success();
@@ -161,7 +163,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Walkthrough', false ) ) :
 		public static function cancel_setup_wizard() {
 			check_ajax_referer( 'vp-woo-pont-cancel-setup-wizard', 'nonce' );
 			if ( ! current_user_can( 'manage_woocommerce' ) ) {
-				wp_die( esc_html__( 'Cheatin&#8217; huh?' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 			update_option('_vp_woo_pont_walkthrough_finished', true);
 			wp_send_json_success();

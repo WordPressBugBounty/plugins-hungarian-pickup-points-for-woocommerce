@@ -34,7 +34,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 		}
 
 		public static function is_pro_enabled() {
-			if ((isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], ".local") !== false) || get_option('vp_woo_pont_kvikk_courier_details')){
+			if ((isset($_SERVER['HTTP_HOST']) && strpos(sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])), ".local") !== false) || get_option('vp_woo_pont_kvikk_courier_details')){
 				return true;
 			}
 
@@ -51,10 +51,13 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 
 		public static function pro_activate($pro_key = false) {
 			check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
+			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+				wp_send_json_error( null, 403 );
+			}
 
 			//Get submitted key
 			if(!$pro_key) {
-				$pro_key = sanitize_text_field($_POST['key']);
+				$pro_key = isset($_POST['key']) ? sanitize_text_field(wp_unslash($_POST['key'])) : '';
 			}
 
 			//Execute request
@@ -77,7 +80,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 			//Check for errors
 			if( is_wp_error( $response ) ) {
 				wp_send_json_error(array(
-					'message' => __('Unable to activate the PRO version. Please make sure that the entered data is correct.', self::$name)
+					'message' => __('Unable to activate the PRO version. Please make sure that the entered data is correct.', 'vp-woo-pont')
 				));
 			}
 
@@ -91,7 +94,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 			//If not 200, its an error
 			if($response_code != 200 || isset($json['fail'])) {
 				wp_send_json_error(array(
-					'message' => __('Unable to activate the PRO version. Please make sure that the entered data is correct.', self::$name)
+					'message' => __('Unable to activate the PRO version. Please make sure that the entered data is correct.', 'vp-woo-pont')
 				));
 			} else {
 				update_option('_'.self::$id.'_pro_key', $pro_key);
@@ -110,7 +113,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 		public static function pro_deactivate() {
 			check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
 			if ( !current_user_can( 'manage_woocommerce' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 			}
 
 			//Get submitted key
@@ -122,7 +125,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 			//Check for errors
 			if( is_wp_error( $response ) ) {
 				wp_send_json_error(array(
-					'message' => __('Unable to deactivate the PRO version. Please make sure that the entered data is correct.', self::$name)
+					'message' => __('Unable to deactivate the PRO version. Please make sure that the entered data is correct.', 'vp-woo-pont')
 				));
 			}
 
@@ -139,6 +142,9 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 
 		public static function pro_validate() {
 			check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
+			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+				wp_send_json_error( null, 403 );
+			}
 
 			//Get submitted key
 			$pro_key = self::get_license_key();
@@ -196,7 +202,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Pro', false ) ) :
 			}
 
 			//Don't count in dev mode
-			if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], ".local") !== false || VP_Woo_Pont_Helpers::get_option($provider.'_dev_mode', 'no') == 'yes'){
+			if (isset($_SERVER['HTTP_HOST']) && strpos(sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])), ".local") !== false || VP_Woo_Pont_Helpers::get_option($provider.'_dev_mode', 'no') == 'yes'){
 				return;
 			}
 

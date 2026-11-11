@@ -222,7 +222,7 @@ class VP_Woo_Pont_TransSped {
 			array(
 				'title' => __('Custom import date', 'vp-woo-pont'),
 				'desc' => sprintf( 
-					__( 'By default it will auto-select the next available day for pickup. Enter it in this format: year-month-day. Leave empty to use the default value: <strong>%s</strong>', 'vp-woo-pont' ),
+					/* translators: %s: Default pickup date */ __( 'By default it will auto-select the next available day for pickup. Enter it in this format: year-month-day. Leave empty to use the default value: <strong>%s</strong>', 'vp-woo-pont' ),
 					$this->get_next_workday(true)
 				),
 				'type' => 'text',
@@ -587,7 +587,7 @@ class VP_Woo_Pont_TransSped {
 			'transsped',
 			$current_date
 		);
-		$result = $wpdb->get_results($query);
+		$result = $wpdb->get_results($query); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Prepared above.
 		return ($result);
 	}
 
@@ -596,10 +596,10 @@ class VP_Woo_Pont_TransSped {
 			return $custom_import_date;
 		}
 
-		$tomorrow = date('Y-m-d', strtotime('+2 day'));
-		$currentDayOfWeek = date('N');
-		$dayOfWeek = date('N', strtotime($tomorrow));
-		$nextMonday = date('Y-m-d', strtotime('next Tuesday', strtotime($tomorrow)));
+		$tomorrow = gmdate('Y-m-d', strtotime('+2 day'));
+		$currentDayOfWeek = gmdate('N');
+		$dayOfWeek = gmdate('N', strtotime($tomorrow));
+		$nextMonday = gmdate('Y-m-d', strtotime('next Tuesday', strtotime($tomorrow)));
 		if ($dayOfWeek >= 6 || $currentDayOfWeek == 6 || $currentDayOfWeek == 7) {
 			return $nextMonday;
 		} else {

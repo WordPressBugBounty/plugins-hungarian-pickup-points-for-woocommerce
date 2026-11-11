@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <h2 class="vp-woo-pont-settings vp-woo-pont-settings-title-carrier">
-    <a href="<?php echo admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' ); ?>"><?php _e( 'Pickup points', 'vp-woo-pont' ); ?></a> &gt;
+    <a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' ) ); ?>"><?php esc_html_e('Pickup points', 'vp-woo-pont' ); ?></a> &gt;
         <?php echo esc_html( $data['title'] ); ?>
     </h2>
 <?php

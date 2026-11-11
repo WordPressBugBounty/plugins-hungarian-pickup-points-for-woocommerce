@@ -1143,9 +1143,7 @@ msgstr "E-mail típus"
 #: includes/settings/settings-labels.php:119
 #: includes/providers/class-kvikk.php:530
 msgid "Enable"
-msgstr ""
-"\n"
-"Bekapcsolás/Kikapcsolás"
+msgstr "Bekapcsolás/Kikapcsolás"
 
 #: includes/settings/settings-carriers.php:16
 msgid ""
@@ -4883,3 +4881,15 @@ msgstr "Z-Pont"
 #: includes/providers/class-posta.php:182
 msgid "ZPL document"
 msgstr "ZPL dokumentum"
+
+#: includes/class-document-storage.php
+msgid "Security"
+msgstr "Biztonság"
+
+#: templates/checkout/pont-map.php
+msgid "Currently unavailable!"
+msgstr "Jelenleg nem elérhető!"
+
+#: index.php
+msgid "This pickup point is currently out of order and cannot be selected."
+msgstr "Ez a csomagpont jelenleg nem üzemel, ezért nem választható ki."

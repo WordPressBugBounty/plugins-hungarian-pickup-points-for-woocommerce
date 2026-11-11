@@ -22,8 +22,10 @@ class Vp_Woo_Pont_CheckoutWC_Compatibility {
 	}
 
 	public static function is_selected($selected) {
-		if(isset($_POST['post_data'])) {
-			parse_str( wp_unslash( $_POST['post_data'] ), $post_data );
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Runs during the checkout update, WooCommerce checks the nonce.
+		if(isset($_POST['post_data']) && is_string($_POST['post_data'])) {
+			parse_str( wp_unslash( $_POST['post_data'] ), $post_data ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only compared to fixed values below.
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 			if(isset($post_data['cfw_delivery_method'])) {
 				$selected = $post_data['cfw_delivery_method'] == 'pickup';
 				if($selected && isset($post_data['shipping_method']) && is_array($post_data['shipping_method'])) {

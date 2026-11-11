@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<header class="wc-backbone-modal-header">
 					<h1>
 						<?php if(VP_Woo_Pont_Pro::is_pro_enabled()): ?>
-							<span class="dashicons dashicons-yes-alt"></span> <?php _e('The PRO version is active', 'vp-woo-pont'); ?>
+							<span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('The PRO version is active', 'vp-woo-pont'); ?>
 						<?php else: ?>
-							<span class="dashicons dashicons-warning"></span> <?php _e('The PRO version is expired', 'vp-woo-pont'); ?>
+							<span class="dashicons dashicons-warning"></span> <?php esc_html_e('The PRO version is expired', 'vp-woo-pont'); ?>
 						<?php endif; ?>
 					</h1>
 					<button class="modal-close modal-close-link dashicons dashicons-no-alt">
@@ -23,23 +23,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php if(VP_Woo_Pont_Pro::is_pro_enabled() || (!VP_Woo_Pont_Pro::is_pro_enabled() && VP_Woo_Pont_Pro::get_license_key())): ?>
 					<article class="vp-woo-pont-modal-pro-version-content vp-woo-pont-settings-widget-pro-<?php if(VP_Woo_Pont_Pro::is_pro_enabled()): ?>state-active<?php else: ?>state-expired<?php endif; ?>">
 						<p>
-							<span class="vp-woo-pont-settings-widget-pro-label"><?php _e('License key', 'vp-woo-pont'); ?></span><br>
+							<span class="vp-woo-pont-settings-widget-pro-label"><?php esc_html_e('License key', 'vp-woo-pont'); ?></span><br>
 							<?php echo esc_html(VP_Woo_Pont_Pro::get_license_key()); ?>
 						</p>
 						<?php $license = VP_Woo_Pont_Pro::get_license_key_meta(); ?>
 						<?php if(isset($license['type'])): ?>
 						<p class="single-license-info">
-							<span class="vp-woo-pont-settings-widget-pro-label"><?php _e('License type', 'vp-woo-pont'); ?></span><br>
+							<span class="vp-woo-pont-settings-widget-pro-label"><?php esc_html_e('License type', 'vp-woo-pont'); ?></span><br>
 							<?php if ( $license['type'] == 'unlimited' ): ?>
-								<?php _e( 'Unlimited', 'vp-woo-pont' ); ?>
+								<?php esc_html_e('Unlimited', 'vp-woo-pont' ); ?>
 							<?php else: ?>
-								<?php _e( 'Subscription', 'vp-woo-pont' ); ?>
+								<?php esc_html_e('Subscription', 'vp-woo-pont' ); ?>
 							<?php endif; ?>
 						</p>
 						<?php endif; ?>
 						<?php if(isset($license['next_payment'])): ?>
 						<p class="single-license-info">
-							<span class="vp-woo-pont-settings-widget-pro-label"><?php _e('Next payment', 'vp-woo-pont'); ?></span><br>
+							<span class="vp-woo-pont-settings-widget-pro-label"><?php esc_html_e('Next payment', 'vp-woo-pont'); ?></span><br>
 							<?php echo esc_html($license['next_payment']); ?>
 						</p>
 						<?php endif; ?>

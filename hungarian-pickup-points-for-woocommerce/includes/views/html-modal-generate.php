@@ -6,12 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 $prograss_bar_text = array(
     'total' => array(
         'singular' => __( 'One in total', 'vp-woo-pont' ),
-        'plural' => __( '%d in total', 'vp-woo-pont' ),    
+        /* translators: %d: Total number of orders */
+		'plural' => __( '%d in total', 'vp-woo-pont' ),    
     ),
     'current' => array(
         'default' => __( '1 label generating', 'vp-woo-pont' ),
         'singular' => __( '1 label generated', 'vp-woo-pont' ),
-        'plural' => __( '%d labels generated', 'vp-woo-pont' ),    
+        /* translators: %d: Number of generated labels */
+		'plural' => __( '%d labels generated', 'vp-woo-pont' ),    
     ),
 );
 
@@ -25,7 +27,7 @@ $prograss_bar_text_attr = function_exists( 'wc_esc_json' ) ? wc_esc_json( $progr
 		<div class="wc-backbone-modal-content">
 			<section class="wc-backbone-modal-main" role="main">
 				<header class="wc-backbone-modal-header">
-					<h1><?php echo esc_html_e('Generate labels', 'vp-woo-pont'); ?></h1>
+					<h1><?php esc_html_e('Generate labels', 'vp-woo-pont'); ?></h1>
 					<button class="modal-close modal-close-link dashicons dashicons-no-alt">
 						<span class="screen-reader-text"><?php esc_html_e( 'Close modal panel', 'vp-woo-pont' ); ?></span>
 					</button>
@@ -52,7 +54,7 @@ $prograss_bar_text_attr = function_exists( 'wc_esc_json' ) ? wc_esc_json( $progr
                                 <div class="vp-woo-pont-modal-generate-progress-bar">
                                     <div class="vp-woo-pont-modal-generate-progress-bar-inner"></div>
                                 </div>
-                                <div class="vp-woo-pont-modal-generate-progress-bar-text" data-labels="<?php echo $prograss_bar_text_attr; ?>">
+                                <div class="vp-woo-pont-modal-generate-progress-bar-text" data-labels="<?php echo $prograss_bar_text_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>">
                                     <span class="vp-woo-pont-modal-generate-progress-bar-text-current"></span>
                                     <span class="vp-woo-pont-modal-generate-progress-bar-text-total"></span>
                                 </div>

@@ -79,7 +79,7 @@ class VP_Woo_Pont_Custom {
 				'type' => 'select',
 				'class' => 'wc-enhanced-select',
 				'title' => __( 'Package in delivery order status', 'vp-woo-pont' ),
-				'options' => $this->get_order_statuses(__('None', 'Order status after label generated', 'vp-woo-pont')),
+				'options' => $this->get_order_statuses(_x('None', 'Order status after label generated', 'vp-woo-pont')),
 				'desc_tip' => __( 'Mark order tracking status "in delivery", if the order status changes to this.', 'vp-woo-pont' ),
 				'id' => 'custom_delivery_status',
 			),
@@ -87,7 +87,7 @@ class VP_Woo_Pont_Custom {
 				'type' => 'select',
 				'class' => 'wc-enhanced-select',
 				'title' => __( 'Package delivered order status', 'vp-woo-pont' ),
-				'options' => $this->get_order_statuses(__('None', 'Order status after label generated', 'vp-woo-pont')),
+				'options' => $this->get_order_statuses(_x('None', 'Order status after label generated', 'vp-woo-pont')),
 				'desc_tip' => __( 'Mark order tracking status "delivered", if the order status changes to this.', 'vp-woo-pont' ),
 				'id' => 'custom_delivered_status',
 			),
@@ -263,13 +263,13 @@ class VP_Woo_Pont_Custom {
 	}
 
 	public function load_preview_template() {
-		if(!isset( $_GET['vp_woo_pont_custom_label_preview'] )) {
+		if(!isset( $_GET['vp_woo_pont_custom_label_preview'] )) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Preview for shop managers, checked below.
 			return;
 		}
 
 		//Check for user role
 		if ( !current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this action.', 'vp-woo-pont' ) );
 		}
 	
 		//Init mPDF
@@ -279,9 +279,9 @@ class VP_Woo_Pont_Custom {
 		$mpdf = new \Mpdf\Mpdf(apply_filters('vp_woo_pont_custom_label_mpdf_config', ['mode' => 'c', 'format' => VP_Woo_Pont_Helpers::get_option('custom_sticker_size', 'A5'), 'allow_charset_conversion' => true]));
 
 		//Setup tempalte data
-		$order_id = intval($_GET['vp_woo_pont_custom_label_preview']);
+		$order_id = intval($_GET['vp_woo_pont_custom_label_preview']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$order = wc_get_order($order_id);
-		if(!$order) wp_die( __( 'Order not found', 'vp-woo-pont' ) );
+		if(!$order) wp_die( esc_html__( 'Order not found', 'vp-woo-pont' ) );
 		$data = VP_Woo_Pont()->labels->prepare_order_data($order);
 		$label_data = array(
 			'sender' => VP_Woo_Pont_Helpers::get_option('custom_sender', ''),

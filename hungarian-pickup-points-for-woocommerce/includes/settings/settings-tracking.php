@@ -42,6 +42,7 @@ $settings = array(
 		'default' => array('customer_completed_order'),
 		'options' => self::get_email_ids(),
 		'desc' => sprintf(
+			/* translators: %1$s: Shipped e-mail link, %2$s: Out for delivery e-mail link, %3$s: Ready for pickup e-mail link */
 			__(
 				'Select the e-mails where you want to include the tracking number and tracking link. You can also set up separate %1$s, %2$s, and %3$s e-mails.',
 				'vp-woo-pont'

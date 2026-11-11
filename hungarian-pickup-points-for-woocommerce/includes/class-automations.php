@@ -133,17 +133,17 @@ if ( ! class_exists( 'VP_Woo_Pont_Automations', false ) ) :
 			$deferred = true;
 
 			//Don't create deferred if we are in an admin page and only mark one order completed
-			if(is_admin() && isset( $_GET['action']) && $_GET['action'] == 'woocommerce_mark_order_status') {
+			if(is_admin() && isset( $_GET['action']) && $_GET['action'] == 'woocommerce_mark_order_status') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks how the order status was changed.
 				$deferred = false;
 			}
 
 			//Don't defer if we are just changing one or two order status using bulk actions
-			if(is_admin() && isset($_GET['_wp_http_referer']) && isset($_GET['post']) && count($_GET['post']) < 3) {
+			if(is_admin() && isset($_GET['_wp_http_referer']) && isset($_GET['post']) && is_array($_GET['post']) && count($_GET['post']) < 3) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks how the order status was changed.
 				$deferred = false;
 			}
 
 			//Don't defer if we are just changing one or two order status using bulk actions
-			if(is_admin() && isset($_GET['id']) && $_GET['id'] == $order_id) {
+			if(is_admin() && isset($_GET['id']) && $_GET['id'] == $order_id) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks how the order status was changed.
 				$deferred = false;
 			}
 

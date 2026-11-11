@@ -51,7 +51,7 @@ $enabled_providers = $this->get_enabled_couriers();
 					<div class="vp-woo-pont-settings-pricing vp-woo-pont-settings-repeat-item">
 						<div class="vp-woo-pont-settings-pricing-title">
 							<div class="cost-field">
-								<input placeholder="<?php _e('Shipping cost(net)', 'vp-woo-pont'); ?>" type="text" data-name="vp_woo_pont_pricing[X][cost]" value="<?php echo esc_attr($pricing['cost']); ?>">
+								<input placeholder="<?php esc_attr_e('Shipping cost(net)', 'vp-woo-pont'); ?>" type="text" data-name="vp_woo_pont_pricing[X][cost]" value="<?php echo esc_attr($pricing['cost']); ?>">
 								<small><?php echo esc_html(get_woocommerce_currency_symbol()); ?></small>
 							</div>
 							<label class="weight-toggle">
@@ -65,8 +65,8 @@ $enabled_providers = $this->get_enabled_couriers();
 							<div class="actions">
 								<a href="#" class="move-up"><span class="dashicons dashicons-arrow-up-alt2"></span></a>
 								<a href="#" class="move-down"><span class="dashicons dashicons-arrow-down-alt2"></span></a>
-								<a href="#" class="duplicate-pricing"><?php _e('duplicate', 'vp-woo-pont'); ?></a>
-								<a href="#" class="delete-pricing"><?php _e('delete', 'vp-woo-pont'); ?></a>
+								<a href="#" class="duplicate-pricing"><?php esc_html_e('duplicate', 'vp-woo-pont'); ?></a>
+								<a href="#" class="delete-pricing"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 							</div>
 						</div>
 						<div class="vp-woo-pont-settings-pricing-weight" <?php if(isset($pricing['weight_based']) && $pricing['weight_based'] ): ?>style="display:block"<?php else: ?>style="display:none"<?php endif; ?>>
@@ -84,17 +84,17 @@ $enabled_providers = $this->get_enabled_couriers();
 						</div>
 						<div class="vp-woo-pont-settings-pricing-if" <?php if(!$pricing['conditional']): ?>style="display:none"<?php endif; ?>>
 							<div class="vp-woo-pont-settings-pricing-if-header">
-								<span><?php _e('Apply this pricing, if', 'vp-woo-pont'); ?></span>
+								<span><?php esc_html_e('Apply this pricing, if', 'vp-woo-pont'); ?></span>
 								<select data-name="vp_woo_pont_pricing[X][logic]">
-									<option value="and" <?php if(isset($pricing['logic'])) selected( $pricing['logic'], 'and' ); ?>><?php _e('All', 'vp-woo-pont'); ?></option>
-									<option value="or" <?php if(isset($pricing['logic'])) selected( $pricing['logic'], 'or' ); ?>><?php _e('One', 'vp-woo-pont'); ?></option>
+									<option value="and" <?php if(isset($pricing['logic'])) selected( $pricing['logic'], 'and' ); ?>><?php esc_html_e('All', 'vp-woo-pont'); ?></option>
+									<option value="or" <?php if(isset($pricing['logic'])) selected( $pricing['logic'], 'or' ); ?>><?php esc_html_e('One', 'vp-woo-pont'); ?></option>
 								</select>
-								<span><?php _e('of the following match', 'vp-woo-pont'); ?></span>
+								<span><?php esc_html_e('of the following match', 'vp-woo-pont'); ?></span>
 							</div>
 							<ul class="vp-woo-pont-settings-pricing-if-options conditions" <?php if(isset($pricing['conditions'])): ?>data-options="<?php echo esc_attr(json_encode($pricing['conditions'])); ?>"<?php endif; ?>></ul>
 						</div>
 						<div class="vp-woo-pont-settings-pricing-points">
-							<label><?php _e('Apply to the following pickup points:', 'vp-woo-pont'); ?></label>
+							<label><?php esc_html_e('Apply to the following pickup points:', 'vp-woo-pont'); ?></label>
 							<ul>
 								<?php foreach ($pickup_providers as $id => $label): ?>
 									<li class="provider-<?php echo esc_attr($id); ?>">
@@ -107,7 +107,7 @@ $enabled_providers = $this->get_enabled_couriers();
 							</ul>
 						</div>
 						<div class="vp-woo-pont-settings-pricing-countries" <?php if(count($supported_countries) == 1 && isset($supported_countries['HU'])): ?>style="display:none"<?php endif; ?>>
-							<label><?php _e('Apply to the following pickup point countries:', 'vp-woo-pont'); ?></label>
+							<label><?php esc_html_e('Apply to the following pickup point countries:', 'vp-woo-pont'); ?></label>
 							<ul>
 								<?php foreach ($supported_countries as $country_code => $country): ?>
 									<?php
@@ -132,17 +132,17 @@ $enabled_providers = $this->get_enabled_couriers();
 			<?php endif; ?>
 		</div>
 		<div class="vp-woo-pont-settings-pricing-add">
-			<a href="#" class="add button"><?php _e('Add new cost', 'vp-woo-pont'); ?></a>
-			<a href="#" class="import" data-type="pricing"><span class="dashicons dashicons-database-import"></span> <span><?php _e('Import', 'vp-woo-pont'); ?></span></a>
-			<a href="#" class="export" data-type="pricing" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_settings_export" ); ?>"><span class="dashicons dashicons-database-export"></span> <span><?php _e('Export', 'vp-woo-pont'); ?></span></a>
+			<a href="#" class="add button"><?php esc_html_e('Add new cost', 'vp-woo-pont'); ?></a>
+			<a href="#" class="import" data-type="pricing"><span class="dashicons dashicons-database-import"></span> <span><?php esc_html_e('Import', 'vp-woo-pont'); ?></span></a>
+			<a href="#" class="export" data-type="pricing" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_settings_export" ) ); ?>"><span class="dashicons dashicons-database-export"></span> <span><?php esc_html_e('Export', 'vp-woo-pont'); ?></span></a>
 		</div>
-		<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+		<?php echo wp_kses_post( $this->get_description_html( $data ) ); ?>
 
 		<script type="text/html" id="vp_woo_pont_pricing_sample_row">
 			<div class="vp-woo-pont-settings-pricing vp-woo-pont-settings-repeat-item">
 				<div class="vp-woo-pont-settings-pricing-title">
 					<div class="cost-field">
-						<input placeholder="<?php _e('Shipping cost(net)', 'vp-woo-pont'); ?>" type="text" data-name="vp_woo_pont_pricing[X][cost]">
+						<input placeholder="<?php esc_attr_e('Shipping cost(net)', 'vp-woo-pont'); ?>" type="text" data-name="vp_woo_pont_pricing[X][cost]">
 						<small><?php echo esc_html(get_woocommerce_currency_symbol()); ?></small>
 					</div>
 					<label class="weight-toggle">
@@ -156,8 +156,8 @@ $enabled_providers = $this->get_enabled_couriers();
 					<div class="actions">
 						<a href="#" class="move-up"><span class="dashicons dashicons-arrow-up-alt2"></span></a>
 						<a href="#" class="move-down"><span class="dashicons dashicons-arrow-down-alt2"></span></a>
-						<a href="#" class="duplicate-pricing"><?php _e('duplicate', 'vp-woo-pont'); ?></a>
-						<a href="#" class="delete-pricing"><?php _e('delete', 'vp-woo-pont'); ?></a>
+						<a href="#" class="duplicate-pricing"><?php esc_html_e('duplicate', 'vp-woo-pont'); ?></a>
+						<a href="#" class="delete-pricing"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 					</div>
 				</div>
 				<div class="vp-woo-pont-settings-pricing-weight" style="display:none">
@@ -175,17 +175,17 @@ $enabled_providers = $this->get_enabled_couriers();
 				</div>
 				<div class="vp-woo-pont-settings-pricing-if" style="display:none">
 					<div class="vp-woo-pont-settings-pricing-if-header">
-						<span><?php _e('Apply this pricing, if', 'vp-woo-pont'); ?></span>
+						<span><?php esc_html_e('Apply this pricing, if', 'vp-woo-pont'); ?></span>
 						<select data-name="vp_woo_pont_pricing[X][logic]">
-							<option value="and"><?php _e('All', 'vp-woo-pont'); ?></option>
-							<option value="or"><?php _e('One', 'vp-woo-pont'); ?></option>
+							<option value="and"><?php esc_html_e('All', 'vp-woo-pont'); ?></option>
+							<option value="or"><?php esc_html_e('One', 'vp-woo-pont'); ?></option>
 						</select>
-						<span><?php _e('of the following match', 'vp-woo-pont'); ?></span>
+						<span><?php esc_html_e('of the following match', 'vp-woo-pont'); ?></span>
 					</div>
 					<ul class="vp-woo-pont-settings-pricing-if-options conditions"></ul>
 				</div>
 				<div class="vp-woo-pont-settings-pricing-points">
-					<label><?php _e('Apply to the following pickup points:', 'vp-woo-pont'); ?></label>
+					<label><?php esc_html_e('Apply to the following pickup points:', 'vp-woo-pont'); ?></label>
 					<ul>
 						<?php foreach ($pickup_providers as $id => $label): ?>
 							<li class="provider-<?php echo esc_attr($id); ?>">
@@ -198,7 +198,7 @@ $enabled_providers = $this->get_enabled_couriers();
 					</ul>
 				</div>
 				<div class="vp-woo-pont-settings-pricing-countries">
-					<label><?php _e('Apply to the following pickup point countries:', 'vp-woo-pont'); ?></label>
+					<label><?php esc_html_e('Apply to the following pickup point countries:', 'vp-woo-pont'); ?></label>
 					<ul>
 						<?php foreach ($supported_countries as $country_code => $country): ?>
 							<?php
@@ -219,7 +219,7 @@ $enabled_providers = $this->get_enabled_couriers();
 			</div>
 		</script>
 
-		<?php echo VP_Woo_Pont_Conditions::get_sample_row('pricings'); ?>
+		<?php echo VP_Woo_Pont_Conditions::get_sample_row('pricings'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML template, escaped in get_sample_row(). ?>
 
 		<script type="text/html" id="vp_woo_pont_weight_range_sample_row">
 			<tr>

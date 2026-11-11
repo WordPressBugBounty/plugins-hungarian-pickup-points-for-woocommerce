@@ -90,7 +90,7 @@ class VP_Woo_Pont_Pactic {
 		$provider_names = $this->get_provider_names();
 		foreach($enabled_providers as $provider_id) {
 			$pactic_settings[] = array(
-				'title' => sprintf( __( '%s Service ID', 'vp-woo-pont' ), $provider_names[$provider_id] ),
+				'title' => sprintf( /* translators: %s: Provider name */ __( '%s Service ID', 'vp-woo-pont' ), $provider_names[$provider_id] ),
 				'type' => 'text',
 				'id' => 'pactic_'.$provider_id.'_service_id'
 			);

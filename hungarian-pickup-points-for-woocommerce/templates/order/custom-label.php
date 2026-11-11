@@ -57,7 +57,7 @@ $order = $data['order'];
 				<?php if($logo): ?>
 					<img src="<?php echo esc_url($logo); ?>" width="200">
 				<?php else: ?>
-					<h3><?php echo get_bloginfo( 'name', 'display' ); ?></h3>
+					<h3><?php echo esc_html( get_bloginfo( 'name', 'display' ) ); ?></h3>
 				<?php endif; ?>
 			</td>
 		</tr>
@@ -84,7 +84,7 @@ $order = $data['order'];
 		<?php if($data['package']['cod']): ?>
 			<tr>
 				<td width="30%"><?php esc_html_e('COD', 'vp-woo-pont'); ?></td>
-				<td width="70%"><h4><?php echo wp_strip_all_tags(wc_price($data['package']['total'])); ?></h4></td>
+				<td width="70%"><h4><?php echo esc_html( wp_strip_all_tags(wc_price($data['package']['total'])) ); ?></h4></td>
 			</tr>
 		<?php endif; ?>
 		<tr>

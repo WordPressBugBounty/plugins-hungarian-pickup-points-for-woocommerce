@@ -14,7 +14,7 @@ foreach ($providers_for_home_delivery as $id => $name) {
 
 <tr valign="top">
 	<th scope="row" class="titledesc">
-        <label><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); ?></label>
+        <label><?php echo wp_kses_post( $data['title'] ); ?> <?php echo wp_kses_post( $this->get_tooltip_html( $data ) ); ?></label>
     </th>
 	<td class="forminp <?php echo esc_attr( $data['class'] ); ?>">
         <ul class="vp-woo-pont-settings-email-content">

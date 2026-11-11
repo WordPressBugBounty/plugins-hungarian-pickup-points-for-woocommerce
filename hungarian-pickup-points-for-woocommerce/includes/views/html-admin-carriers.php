@@ -27,7 +27,7 @@ $home_delivery_pairs = array_map(function($item) {
                                 <th></th>
                                 <th><?php esc_html_e('Carrier', 'vp-woo-pont'); ?></th>
                                 <th><?php esc_html_e('Status', 'vp-woo-pont'); ?></th>
-                                <th><?php esc_html_e('Shipping methods', 'vp-woo-pont'); ?> <?php echo wc_help_tip(__('If an order has this shipping method, it will use the selected carrier to generate a shipping label by default.', 'vp-woo-pont')); ?></th>
+                                <th><?php esc_html_e('Shipping methods', 'vp-woo-pont'); ?> <?php echo wp_kses_post( wc_help_tip(__('If an order has this shipping method, it will use the selected carrier to generate a shipping label by default.', 'vp-woo-pont')) ); ?></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -54,7 +54,7 @@ $home_delivery_pairs = array_map(function($item) {
                                         case 'name':
                                             echo '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers&carrier=' . strtolower( $carrier_id ) ) ) . '">' . wp_kses_post( $carrier_label ) . '</a>';
                                             if($carrier_id == 'kvikk' && !get_option('vp_woo_pont_kvikk_courier_details')) {
-                                                echo '<div><p>'.__('A Kvikk rendszerével kedvezményes áron szállíthatsz WooCommerce áruházadból a népszerű futárcégekkel egy egyszerű regisztráció után.', 'vp-woo-pont').' <a href="https://kvikk.hu/?source=plugin">Érdekel <span class="dashicons dashicons-arrow-right-alt"></span></a></p></div>';
+                                                echo '<div><p>'.esc_html__('A Kvikk rendszerével kedvezményes áron szállíthatsz WooCommerce áruházadból a népszerű futárcégekkel egy egyszerű regisztráció után.', 'vp-woo-pont').' <a href="https://kvikk.hu/?source=plugin">Érdekel <span class="dashicons dashicons-arrow-right-alt"></span></a></p></div>';
                                             }
                                             break;
                                         case 'shipping_methods':
@@ -72,14 +72,14 @@ $home_delivery_pairs = array_map(function($item) {
                                             break;
                                         case 'api_status':
                                             if(VP_Woo_Pont_Helpers::is_provider_configured($carrier_id)) {
-                                                echo '<span class="vp-woo-pont-api-status vp-woo-pont-api-status-ok">'.__('Configured', 'vp-woo-pont').'</span>';
+                                                echo '<span class="vp-woo-pont-api-status vp-woo-pont-api-status-ok">'.esc_html__('Configured', 'vp-woo-pont').'</span>';
                                             } else {
-                                                echo '<span class="vp-woo-pont-api-status vp-woo-pont-api-status-error">'.__('Inactive', 'vp-woo-pont').'</span>';
+                                                echo '<span class="vp-woo-pont-api-status vp-woo-pont-api-status-error">'.esc_html__('Inactive', 'vp-woo-pont').'</span>';
                                             }
                                             break;
                                         case 'action':
-                                            echo '<a class="button help-link" aria-label="'.esc_attr(__('Find out more', 'vp-woo-pont')).'" href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/'.$carrier_id.'/" target="_blank">?</a>';
-                                            echo '<a class="button" aria-label="' . esc_attr( sprintf( __( 'Manage the "%s" carrier', 'vp-woo-pont' ), $carrier_label ) ) . '" href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers&carrier=' . strtolower( $carrier_id ) ) ) . '">' . esc_html__( 'Manage', 'vp-woo-pont' ) . '</a>';
+                                            echo '<a class="button help-link" aria-label="'.esc_attr(__('Find out more', 'vp-woo-pont')).'" href="'.esc_url('https://visztpeter.me/kb-article/csomagpontok-es-cimkek/'.$carrier_id.'/').'" target="_blank">?</a>';
+                                            echo '<a class="button" aria-label="' . esc_attr( sprintf( /* translators: %s: Carrier name */ __( 'Manage the "%s" carrier', 'vp-woo-pont' ), $carrier_label ) ) . '" href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers&carrier=' . strtolower( $carrier_id ) ) ) . '">' . esc_html__( 'Manage', 'vp-woo-pont' ) . '</a>';
                                             break;
                                     }
     

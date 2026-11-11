@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 ?>
 
 <?php
-$current_tab = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : false;
+$current_tab = ! empty( $_REQUEST['tab'] ) ? sanitize_title( wp_unslash( $_REQUEST['tab'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only selects the visible tab.
 $tabs        = array(
 	'kvikk' => __( 'Kvikk', 'vp-woo-pont' ),
 	'posta' => __( 'MPL', 'vp-woo-pont' ),
@@ -70,15 +70,15 @@ if (VP_Woo_Pont_Helpers::get_option('gls_delivery_notes', 'no') == 'yes') {
 				<div class="vp-woo-pont-admin-shipments-table vp-woo-pont-admin-shipments-table-pending">
 					<?php if(count($orders_table->items) > 10): ?>
 					<p>
-						<a class="button button-primary button-large vp_woo_pont_close_shipments" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-close-shipments' )?>"><?php esc_html_e( 'Generate delivery note', 'vp-woo-pont' ); ?></a>
-						<a class="button button-secondary button-large vp_woo_pont_close_orders" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-close-shipments' )?>"><?php esc_html_e( 'Mark as shipped', 'vp-woo-pont' ); ?></a>
+						<a class="button button-primary button-large vp_woo_pont_close_shipments" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-close-shipments' ) ); ?>"><?php esc_html_e( 'Generate delivery note', 'vp-woo-pont' ); ?></a>
+						<a class="button button-secondary button-large vp_woo_pont_close_orders" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-close-shipments' ) ); ?>"><?php esc_html_e( 'Mark as shipped', 'vp-woo-pont' ); ?></a>
 						<?php do_action('vp_woo_pont_shipments_after_close_buttons', $current_tab); ?>
 					</p>	
 					<?php endif; ?>
 					<?php $orders_table->display(); ?>
 					<p>
-						<a class="button button-primary button-large vp_woo_pont_close_shipments" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-close-shipments' )?>"><?php esc_html_e( 'Generate delivery note', 'vp-woo-pont' ); ?></a>
-						<a class="button button-secondary button-large vp_woo_pont_close_orders" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-close-shipments' )?>"><?php esc_html_e( 'Mark as shipped', 'vp-woo-pont' ); ?></a>
+						<a class="button button-primary button-large vp_woo_pont_close_shipments" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-close-shipments' ) ); ?>"><?php esc_html_e( 'Generate delivery note', 'vp-woo-pont' ); ?></a>
+						<a class="button button-secondary button-large vp_woo_pont_close_orders" href="#" data-provider="<?php echo esc_attr($current_tab); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-close-shipments' ) ); ?>"><?php esc_html_e( 'Mark as shipped', 'vp-woo-pont' ); ?></a>
 						<?php do_action('vp_woo_pont_shipments_after_close_buttons', $current_tab); ?>
 					</p>
 				</div>

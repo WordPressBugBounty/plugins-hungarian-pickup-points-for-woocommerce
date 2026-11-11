@@ -120,7 +120,7 @@ class VP_Woo_Pont_Csomagpiac {
 		if($this->is_settings_page()) {
 			foreach($this->service_codes as $service_key => $service_code) {
 				$csomagpiac_settings[] = array(
-					'title' => sprintf( __( '%s shipping methods', 'vp-woo-pont' ), VP_Woo_Pont_Helpers::get_provider_name($service_key) ),
+					'title' => sprintf( /* translators: %s: Provider name */ __( '%s shipping methods', 'vp-woo-pont' ), VP_Woo_Pont_Helpers::get_provider_name($service_key) ),
 					'type' => 'multiselect',
 					'class'   => 'wc-enhanced-select',
 					'options' => VP_Woo_Pont_Helpers::get_available_shipping_methods(),
@@ -139,7 +139,7 @@ class VP_Woo_Pont_Csomagpiac {
 
 	//Check if we are on the settings page
 	public function is_settings_page() {
-		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers');
+		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 	}
 
     public function get_csomagpiac_db() {
@@ -377,7 +377,7 @@ class VP_Woo_Pont_Csomagpiac {
 
 		//So developers can modify
 		$options = apply_filters('vp_woo_pont_csomagpiac_label', $item, $data);
-
+		
 		//Build request params
 		$remote_url = $this->api_url . 'shipment/new' . '?' . http_build_query($options, '', '&');
 
@@ -587,7 +587,7 @@ class VP_Woo_Pont_Csomagpiac {
 	public function get_pickup_points() {
 		$blocks = array();
 		//Needs this if so it won't load on every page load
-		if(is_admin() && isset( $_GET['tab']) && $_GET['tab'] == 'shipping' && isset($_GET['section']) && $_GET['section'] == 'vp_carriers' && isset($_GET['carrier']) && $_GET['carrier'] == 'csomagpiac') {
+		if(is_admin() && isset( $_GET['tab']) && $_GET['tab'] == 'shipping' && isset($_GET['section']) && $_GET['section'] == 'vp_carriers' && isset($_GET['carrier']) && $_GET['carrier'] == 'csomagpiac') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 			$blocks = $this->get_pickup_points_response();
 		}
 		return $blocks;
@@ -595,6 +595,9 @@ class VP_Woo_Pont_Csomagpiac {
 
 	public function reload_pickup_points() {
 		check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( null, 403 );
+		}
 		$pickup_points = $this->get_pickup_points_response(true);
 		$pickup_points_response = array();
 		foreach ($pickup_points as $id => $name) {

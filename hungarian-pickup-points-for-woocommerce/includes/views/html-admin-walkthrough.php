@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <?php foreach ($grouped_providers as $carrier => $carrier_providers): ?>
 						<?php if($carrier == 'custom') continue; ?>
                         <li>
-                            <h4><?php echo VP_Woo_Pont_Helpers::get_provider_name($carrier, true); ?></h4>
+                            <h4><?php echo esc_html(VP_Woo_Pont_Helpers::get_provider_name($carrier, true)); ?></h4>
                             <ul>
                                 <?php foreach ($carrier_providers as $provider_id => $label): ?>
 									<li>
@@ -182,6 +182,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span>Tovább</span>
 			<span class="dashicons dashicons-arrow-right-alt2"></span>
 		</a>
-		<a href="#" data-url="<?php echo esc_url(admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' )); ?>" data-nonce="<?php echo wp_create_nonce( 'vp-woo-pont-cancel-setup-wizard' )?>" class="vp-woo-pont-walkthrough-nav-cancel">Nem érdekel a varázsló</a>
+		<a href="#" data-url="<?php echo esc_url(admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' )); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'vp-woo-pont-cancel-setup-wizard' ) ); ?>" class="vp-woo-pont-walkthrough-nav-cancel">Nem érdekel a varázsló</a>
 	</nav>
 </div>

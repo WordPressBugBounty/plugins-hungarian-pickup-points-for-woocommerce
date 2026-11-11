@@ -310,7 +310,7 @@ class VP_Woo_Pont_Posta {
 
 	//Check if we are on the settings page
 	public function is_settings_page() {
-		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers');
+		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 	}
 
 	public function create_label($data) {

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     
 	<div class="vp-woo-pont-pro-widget-activate">
 		<input class="input-text regular-input" type="text" name="woocommerce_vp_woo_pont_pro_key" id="woocommerce_vp_woo_pont_pro_key" value="" placeholder="<?php esc_html_e( 'License key', 'vp-woo-pont' ); ?>">
-		<button class="button" type="button" id="vp_woo_pont_activate_pro"><?php _e('Activate', 'vp-woo-pont'); ?></button>
+		<button class="button" type="button" id="vp_woo_pont_activate_pro"><?php esc_html_e('Activate', 'vp-woo-pont'); ?></button>
     </div>
     <div class="vp-woo-pont-pro-widget-notice" style="display:none">
 		<span class="dashicons dashicons-warning"></span>

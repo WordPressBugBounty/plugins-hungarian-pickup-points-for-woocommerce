@@ -181,30 +181,30 @@ if ( ! class_exists( 'VP_Woo_Pont_Conditions', false ) ) :
 			$conditions = self::get_conditions($group);
 			ob_start();
 			?>
-			<script type="text/html" id="vp_woo_pont_<?php echo $group; ?>_condition_sample_row">
+			<script type="text/html" id="vp_woo_pont_<?php echo esc_attr($group); ?>_condition_sample_row">
 				<li>
-					<select class="condition" data-name="vp_woo_pont_<?php echo substr($group, 0, -1); ?>[X][conditions][Y][category]">
+					<select class="condition" data-name="vp_woo_pont_<?php echo esc_attr(substr($group, 0, -1)); ?>[X][conditions][Y][category]">
 						<?php foreach ($conditions as $condition_id => $condition): ?>
 							<option value="<?php echo esc_attr($condition_id); ?>"><?php echo esc_html($condition['label']); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<select class="comparison" data-name="vp_woo_pont_<?php echo substr($group, 0, -1); ?>[X][conditions][Y][comparison]">
-						<option value="equal"><?php _e('equal', 'vp-woo-pont'); ?></option>
-						<option value="not_equal"><?php _e('not equal', 'vp-woo-pont'); ?></option>
-						<option value="greater"><?php _e('greater than', 'vp-woo-pont'); ?></option>
-						<option value="greater_or_equal"><?php _e('greater or equal', 'vp-woo-pont'); ?></option>
-						<option value="less"><?php _e('less than', 'vp-woo-pont'); ?></option>
-						<option value="less_or_equal"><?php _e('less or equal', 'vp-woo-pont'); ?></option>
+					<select class="comparison" data-name="vp_woo_pont_<?php echo esc_attr(substr($group, 0, -1)); ?>[X][conditions][Y][comparison]">
+						<option value="equal"><?php esc_html_e('equal', 'vp-woo-pont'); ?></option>
+						<option value="not_equal"><?php esc_html_e('not equal', 'vp-woo-pont'); ?></option>
+						<option value="greater"><?php esc_html_e('greater than', 'vp-woo-pont'); ?></option>
+						<option value="greater_or_equal"><?php esc_html_e('greater or equal', 'vp-woo-pont'); ?></option>
+						<option value="less"><?php esc_html_e('less than', 'vp-woo-pont'); ?></option>
+						<option value="less_or_equal"><?php esc_html_e('less or equal', 'vp-woo-pont'); ?></option>
 					</select>
 					<?php foreach ($conditions as $condition_id => $condition): ?>
 						<?php if($condition['options']): ?>
-							<select class="value <?php if($condition_id == 'payment_method'): ?>selected<?php endif; ?>" data-condition="<?php echo esc_attr($condition_id); ?>" data-name="vp_woo_pont_<?php echo substr($group, 0, -1); ?>[X][conditions][Y][<?php echo esc_attr($condition_id); ?>]" <?php if($condition_id != 'payment_method'): ?>disabled="disabled"<?php endif; ?>>
+							<select class="value <?php if($condition_id == 'payment_method'): ?>selected<?php endif; ?>" data-condition="<?php echo esc_attr($condition_id); ?>" data-name="vp_woo_pont_<?php echo esc_attr(substr($group, 0, -1)); ?>[X][conditions][Y][<?php echo esc_attr($condition_id); ?>]" <?php if($condition_id != 'payment_method'): ?>disabled="disabled"<?php endif; ?>>
 								<?php foreach ($condition['options'] as $option_id => $option_name): ?>
 									<option value="<?php echo esc_attr($option_id); ?>"><?php echo esc_html($option_name); ?></option>
 								<?php endforeach; ?>
 							</select>
 						<?php else: ?>
-							<input type="text" data-condition="<?php echo esc_attr($condition_id); ?>" data-name="vp_woo_pont_<?php echo substr($group, 0, -1); ?>[X][conditions][Y][<?php echo esc_attr($condition_id); ?>]" class="value" <?php if($condition_id != 'cart_total'): ?>disabled="disabled"<?php endif; ?>>
+							<input type="text" data-condition="<?php echo esc_attr($condition_id); ?>" data-name="vp_woo_pont_<?php echo esc_attr(substr($group, 0, -1)); ?>[X][conditions][Y][<?php echo esc_attr($condition_id); ?>]" class="value" <?php if($condition_id != 'cart_total'): ?>disabled="disabled"<?php endif; ?>>
 						<?php endif; ?>
 					<?php endforeach; ?>
 					<a href="#" class="add-row"><span class="dashicons dashicons-plus-alt"></span></a>

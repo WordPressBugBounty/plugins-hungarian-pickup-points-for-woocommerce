@@ -30,7 +30,7 @@ $days = array(
 								<span class="dashicons dashicons-arrow-up"></span>
 								<span class="point-value-title"><?php echo esc_html($point['name']); ?> #<?php echo esc_html($point['id']); ?></span>
 							</div>
-							<a href="#" class="delete-point"><?php _e('delete', 'vp-woo-pont'); ?></a>
+							<a href="#" class="delete-point"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 						</div>
 						<ul class="vp-woo-pont-settings-point-options">
 							<li>
@@ -87,9 +87,9 @@ $days = array(
 			<?php endif; ?>
 		</div>
 		<div class="vp-woo-pont-settings-points-add">
-			<a href="#" class="add button"><?php _e('Add custom pickup point', 'vp-woo-pont'); ?></a>
-			<a href="#" class="import" data-type="points"><span class="dashicons dashicons-database-import"></span> <span><?php _e('Import', 'vp-woo-pont'); ?></span></a>
-			<a href="#" class="export" data-type="points" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_settings_export" ); ?>"><span class="dashicons dashicons-database-export"></span> <span><?php _e('Export', 'vp-woo-pont'); ?></span></a>
+			<a href="#" class="add button"><?php esc_html_e('Add custom pickup point', 'vp-woo-pont'); ?></a>
+			<a href="#" class="import" data-type="points"><span class="dashicons dashicons-database-import"></span> <span><?php esc_html_e('Import', 'vp-woo-pont'); ?></span></a>
+			<a href="#" class="export" data-type="points" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_settings_export" ) ); ?>"><span class="dashicons dashicons-database-export"></span> <span><?php esc_html_e('Export', 'vp-woo-pont'); ?></span></a>
 		</div>
 		<p class="description"><?php echo esc_html($data['desc']); ?></p>	
 
@@ -100,7 +100,7 @@ $days = array(
 						<span class="dashicons dashicons-arrow-up"></span>
 						<span class="point-value-title"></span>
 					</div>
-					<a href="#" class="delete-point"><?php _e('delete', 'vp-woo-pont'); ?></a>
+					<a href="#" class="delete-point"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 				</div>
 				<ul class="vp-woo-pont-settings-point-options">
 					<li>

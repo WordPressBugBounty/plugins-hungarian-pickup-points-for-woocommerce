@@ -24,7 +24,7 @@ class VP_Woo_Pont_Shipments_Table extends WP_List_Table {
 		if(self::$carrier_id == 'posta') {
 			$sql = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE carrier = %s OR carrier IS NULL ORDER BY time DESC", self::$carrier_id );
 		}
-		$result = $wpdb->get_results( $sql, 'ARRAY_A' );
+		$result = $wpdb->get_results( $sql, 'ARRAY_A' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Prepared above.
 		return apply_filters('vp_woo_pont_shipments_table_data', $result);
 	}
 
@@ -48,7 +48,7 @@ class VP_Woo_Pont_Shipments_Table extends WP_List_Table {
 			?>
 			<ul>
 				<?php foreach ($packages as $package): ?>
-					<li><?php echo esc_html($package->tracking); ?> - <?php echo wc_price($package->cost); ?></li>
+					<li><?php echo esc_html($package->tracking); ?> - <?php echo wc_price($package->cost); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() escapes its output. ?></li>
 				<?php endforeach; ?>
 			</ul>
 			<?php
@@ -59,7 +59,7 @@ class VP_Woo_Pont_Shipments_Table extends WP_List_Table {
 					<?php $order = wc_get_order($order_id); ?>
 					<?php if($order): ?>
 						<li <?php if($count > $limit): ?>class="hidden"<?php endif; ?>>
-							<a target="_blank" href="<?php echo VP_Woo_Pont()->labels->generate_download_link($order); ?>" target="_blank" class="vp-woo-pont-order-column-pdf">
+							<a target="_blank" href="<?php echo esc_url(VP_Woo_Pont()->labels->generate_download_link($order)); ?>" target="_blank" class="vp-woo-pont-order-column-pdf">
 								<i></i>
 								<span><?php echo esc_html($order->get_meta('_vp_woo_pont_parcel_number')); ?></span>
 							</a>
@@ -68,7 +68,7 @@ class VP_Woo_Pont_Shipments_Table extends WP_List_Table {
 				<?php endforeach; ?>
 			</ul>
 			<?php if(count($orders) > $limit): ?>
-				<a href="#" class="vp-woo-pont-shipments-show-all"><span class="dashicons dashicons-arrow-down-alt2"></span><?php printf( esc_html__( 'Show %d more', 'vp-woo-pont' ), count($orders)-$limit ); ?></a>
+				<a href="#" class="vp-woo-pont-shipments-show-all"><span class="dashicons dashicons-arrow-down-alt2"></span><?php printf( /* translators: %d: Number of hidden items */ esc_html__( 'Show %d more', 'vp-woo-pont' ), count($orders)-$limit ); ?></a>
 			<?php endif; ?>
 			<?php
 		}
@@ -93,7 +93,7 @@ class VP_Woo_Pont_Shipments_Table extends WP_List_Table {
 			<?php endforeach; ?>
 		</ul>
 		<?php if(count($orders) > $limit): ?>
-				<a href="#" class="vp-woo-pont-shipments-show-all"><span class="dashicons dashicons-arrow-down-alt2"></span><?php printf( esc_html__( 'Show %d more', 'vp-woo-pont' ), count($orders)-$limit ); ?></a>
+				<a href="#" class="vp-woo-pont-shipments-show-all"><span class="dashicons dashicons-arrow-down-alt2"></span><?php printf( /* translators: %d: Number of hidden items */ esc_html__( 'Show %d more', 'vp-woo-pont' ), count($orders)-$limit ); ?></a>
 			<?php endif; ?>
 		<?php
 		}
@@ -243,7 +243,7 @@ class VP_Woo_Pont_Pending_Table extends WP_List_Table {
 	function column_total($order) {
 		$payment_method = $order->get_payment_method();
 		$payment_method_title = $order->get_payment_method_title();
-		echo '<span data-tip="'.$payment_method_title.'" class="tips vp-woo-pont-admin-shipments-order-total payment-method-'.$payment_method.'">' . $order->get_formatted_order_total() . '</span>';
+		echo '<span data-tip="'.esc_attr($payment_method_title).'" class="tips vp-woo-pont-admin-shipments-order-total payment-method-'.esc_attr($payment_method).'">' . $order->get_formatted_order_total() . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Formatted by WooCommerce.
 	}
 
   //Shipping address column
@@ -267,7 +267,7 @@ class VP_Woo_Pont_Pending_Table extends WP_List_Table {
   function column_tracking( $order ) {
 		?>
 		<div class="vp-woo-pont-order-column">
-			<a target="_blank" href="<?php echo VP_Woo_Pont()->labels->generate_download_link($order); ?>" class="vp-woo-pont-order-column-pdf">
+			<a target="_blank" href="<?php echo esc_url(VP_Woo_Pont()->labels->generate_download_link($order)); ?>" class="vp-woo-pont-order-column-pdf">
 				<i></i>
 				<span><?php echo esc_html($order->get_meta('_vp_woo_pont_parcel_number')); ?></span>
 			</a>

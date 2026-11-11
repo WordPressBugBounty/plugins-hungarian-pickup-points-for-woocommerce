@@ -23,7 +23,7 @@ $preview_url = add_query_arg('vp_woo_pont_custom_label_preview', $latest_order_i
 	<td class="forminp <?php echo esc_attr( $data['class'] ); ?>">
 		<?php if ( file_exists( $local_file ) ) : ?>
 			<p>
-				<?php printf( esc_html__( 'This template has been overridden by your theme and can be found in: %s.', 'vp-woo-pont' ), '<code>' . esc_html( trailingslashit( basename( get_stylesheet_directory() ) ) . $template_dir . '/' . $template ) . '</code>' ); ?>
+				<?php printf( /* translators: %s: Template path */ esc_html__( 'This template has been overridden by your theme and can be found in: %s.', 'vp-woo-pont' ), '<code>' . esc_html( trailingslashit( basename( get_stylesheet_directory() ) ) . $template_dir . '/' . $template ) . '</code>' ); ?>
 			</p>
 		<?php else: ?>
 			<p>
@@ -40,7 +40,7 @@ $preview_url = add_query_arg('vp_woo_pont_custom_label_preview', $latest_order_i
 						$target_dir = $theme_dir;
 					}
 				?>
-				<?php printf( esc_html__( 'To override and edit this label template copy %1$s to your theme folder: %2$s.', 'vp-woo-pont' ), '<code>' . esc_html( plugin_basename( $template_file ) ) . '</code>', '<code>' . esc_html( trailingslashit( basename( get_stylesheet_directory() ) ) . $template_dir . '/' . $template ) . '</code>' ); ?>
+				<?php printf( /* translators: %1$s: Template file, %2$s: Path in the theme folder */ esc_html__( 'To override and edit this label template copy %1$s to your theme folder: %2$s.', 'vp-woo-pont' ), '<code>' . esc_html( plugin_basename( $template_file ) ) . '</code>', '<code>' . esc_html( trailingslashit( basename( get_stylesheet_directory() ) ) . $template_dir . '/' . $template ) . '</code>' ); ?>
 			</p>
 		<?php endif; ?>
 		<p>

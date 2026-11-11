@@ -70,14 +70,14 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
  
             //Bugfix for WC 8.4+
             add_action( 'woocommerce_sections_shipping', function(){
-                if(version_compare( WC()->version, '8.4.0', "=" ) && isset($_GET['section']) && $_GET['section'] == 'vp_pont') {
+                if(version_compare( WC()->version, '8.4.0', "=" ) && isset($_GET['section']) && $_GET['section'] == 'vp_pont') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
                     echo '<table class="form-table">';
                 }
             }, 9 );
 
             //Bugfix for WC 8.4+
             add_action( 'woocommerce_settings_shipping', function(){
-                if(version_compare( WC()->version, '8.4.0', "=" ) && isset($_GET['section']) && $_GET['section'] == 'vp_pont') {
+                if(version_compare( WC()->version, '8.4.0', "=" ) && isset($_GET['section']) && $_GET['section'] == 'vp_pont') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
                     echo '</table>';
                 }
             }, 20);
@@ -87,7 +87,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
         //Append sections under the shipping tab
         public static function add_settings($tab) {
             foreach ( self::$sections as $section_id => $section_label ) {
-                $tab[$section_id] = __($section_label, 'vp-woo-pont');
+                $tab[$section_id] = __($section_label, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- The section labels are also translated where they are defined.
             }
             return $tab;
         }
@@ -124,8 +124,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             $settings = include __DIR__ . '/settings/settings-'.$section_name.'.php';
 
             //If a single carrier is selected, show only the settings for that carrier
-            if($section_name == 'carriers' && isset($_GET['carrier'])) {
-                $settings = apply_filters('vp_woo_pont_carrier_settings_'.sanitize_text_field($_GET['carrier']), array());
+            if($section_name == 'carriers' && isset($_GET['carrier'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
+                $settings = apply_filters('vp_woo_pont_carrier_settings_'.sanitize_text_field(wp_unslash($_GET['carrier'])), array()); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
             }
 
             //Prefix the settings fields
@@ -193,7 +193,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
         public static function generate_carrier_title_html($value) {           
             ?>
             <h2 class="vp-woo-pont-settings vp-woo-pont-settings-title-carrier">
-                <a href="<?php echo admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers' ); ?>"><?php _e( 'Carriers', 'vp-woo-pont' ); ?></a> &gt;
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers' ) ); ?>"><?php esc_html_e('Carriers', 'vp-woo-pont' ); ?></a> &gt;
                 <?php echo esc_html( $value['title'] ); ?>
             </h2>
             <?php
@@ -213,7 +213,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
         public static function generate_points_title_html($value) {           
             ?>
             <h2 class="vp-woo-pont-settings vp-woo-pont-settings-title-carrier">
-                <a href="<?php echo admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' ); ?>"><?php _e( 'Pickup points', 'vp-woo-pont' ); ?></a> &gt;
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_pont' ) ); ?>"><?php esc_html_e('Pickup points', 'vp-woo-pont' ); ?></a> &gt;
                 <?php echo esc_html( $value['title'] ); ?>
             </h2>
             <?php
@@ -256,7 +256,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             if ( current_user_can( 'manage_woocommerce' ) && check_ajax_referer( 'vp-woo-pont-toggle-carrier-enabled', 'security' ) && isset( $_POST['carrier_id'] ) ) {
     
                 // Get posted carrier
-                $carrier_id = wc_clean( wp_unslash( $_POST['carrier_id'] ) );
+                $carrier_id = sanitize_key( wp_unslash( $_POST['carrier_id'] ) );
 
                 //Get current value and save opposite
                 $current_value = get_option('vp_woo_pont_'.$carrier_id.'_enabled', 'no');
@@ -290,17 +290,24 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             $template_name = str_replace('vp_', '', $data['type']);
             ob_start();
             include( dirname( __FILE__ ) . '/views/html-admin-'.str_replace('_', '-', $template_name).'.php' );
-            echo ob_get_clean();
+            echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output of the settings view template, escaped there.
         }
 
         //Related to Packeta settings update
         public static function pre_save_settings() {
-            if(isset($_GET['carrier']) && $_GET['carrier'] == 'packeta') {
+            //WooCommerce checks the nonce before saving the settings, check it here too, so this can't run on its own
+            if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-settings' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+                return;
+            }
+            $posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
+            $carrier = isset( $_GET['carrier'] ) ? sanitize_key( wp_unslash( $_GET['carrier'] ) ) : '';
+            $section = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
+            if($carrier == 'packeta') {
 
                 //Schedule Packeta import if countries changed
                 $packeta_countries = array();
-                if ( isset( $_POST['vp_woo_pont_packeta_countries'] ) ) {
-                    foreach ($_POST['vp_woo_pont_packeta_countries'] as $checkbox_value) {
+                if ( isset( $posted['vp_woo_pont_packeta_countries'] ) ) {
+                    foreach ($posted['vp_woo_pont_packeta_countries'] as $checkbox_value) {
                         $packeta_countries[] = wc_clean($checkbox_value);
                     }
                     if($packeta_countries != get_option('vp_woo_pont_packeta_countries')) {
@@ -309,7 +316,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 }
 
                 //If the Packeta API key was updated, run the importer
-                if(VP_Woo_Pont_Helpers::get_option('packeta_api_key') != $_POST['vp_woo_pont_packeta_api_key']) {
+                if(isset($posted['vp_woo_pont_packeta_api_key']) && VP_Woo_Pont_Helpers::get_option('packeta_api_key') != $posted['vp_woo_pont_packeta_api_key']) {
                     WC()->queue()->add( 'vp_woo_pont_update_packeta_list', array(), 'vp_woo_pont' );
                 }
             }
@@ -317,12 +324,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
 
         //Save custom field settings
         public static function save_settings() {
+            //WooCommerce checks the nonce before saving the settings, check it here too, so this can't run on its own
+            if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-settings' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+                return;
+            }
+            $posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
+            $carrier = isset( $_GET['carrier'] ) ? sanitize_key( wp_unslash( $_GET['carrier'] ) ) : '';
+            $section = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
             
             //Save packeta home delivery carriers
-            if(isset($_GET['carrier']) && $_GET['carrier'] == 'packeta') {
+            if($carrier == 'packeta') {
                 $packeta_carriers = array();
-                if ( isset( $_POST['vp_woo_pont_packeta_carriers'] ) ) {
-                    foreach ($_POST['vp_woo_pont_packeta_carriers'] as $country_group => $info) {
+                if ( isset( $posted['vp_woo_pont_packeta_carriers'] ) ) {
+                    foreach ($posted['vp_woo_pont_packeta_carriers'] as $country_group => $info) {
                         $packeta_carriers[sanitize_text_field($info['country'])] = sanitize_text_field($info['carrier']);
                     }
                     update_option('vp_woo_pont_packeta_carriers', $packeta_carriers);
@@ -330,12 +344,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save posta countries / services
-            if(isset($_GET['carrier']) && $_GET['carrier'] == 'posta') {
+            if($carrier == 'posta') {
                 $posta_countries = array();
-                if(isset($_POST['vp_woo_pont_posta_countries'])) {
-                    foreach ($_POST['vp_woo_pont_posta_countries'] as $service_id => $countries) {
+                if(isset($posted['vp_woo_pont_posta_countries'])) {
+                    foreach ($posted['vp_woo_pont_posta_countries'] as $service_id => $countries) {
                         $service_id = wc_clean($service_id);
-                        $countries = array_map( 'esc_attr', $countries );
+                        $countries = array_map( 'wc_clean', (array) $countries );
                         $posta_countries[$service_id] = $countries;
                     }
                 }
@@ -343,10 +357,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save pactic external providers(this way it can be reset to default if needed)
-            if(isset($_GET['carrier']) && $_GET['carrier'] == 'pactic') {
+            if($carrier == 'pactic') {
                 $pactic_external_providers = array();
-                if ( isset( $_POST['vp_woo_pont_pactic_external_providers'] ) ) {
-                    foreach ($_POST['vp_woo_pont_pactic_external_providers'] as $checkbox_value) {
+                if ( isset( $posted['vp_woo_pont_pactic_external_providers'] ) ) {
+                    foreach ($posted['vp_woo_pont_pactic_external_providers'] as $checkbox_value) {
                         $pactic_external_providers[] = wc_clean($checkbox_value);
                     }
                 }
@@ -354,10 +368,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save home delivery options
-            if(isset($_GET['section']) && $_GET['section'] == 'vp_labels') {
+            if($section == 'vp_labels') {
                 $home_delivery = array();
-                if ( isset( $_POST['vp_woo_pont_home_delivery'] ) ) {
-                    foreach ($_POST['vp_woo_pont_home_delivery'] as $shipping_method_id => $provider_id) {
+                if ( isset( $posted['vp_woo_pont_home_delivery'] ) ) {
+                    foreach ($posted['vp_woo_pont_home_delivery'] as $shipping_method_id => $provider_id) {
                         $home_delivery[sanitize_text_field($shipping_method_id)] = sanitize_text_field($provider_id);
                     }
                 }
@@ -365,8 +379,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 update_option('vp_woo_pont_home_delivery', $home_delivery);
             
                 $weight_corrections = array();
-                if ( isset( $_POST['vp_woo_pont_weight_correction'] ) ) {
-                    foreach ($_POST['vp_woo_pont_weight_correction'] as $weight_correction_id => $weight_correction) {
+                if ( isset( $posted['vp_woo_pont_weight_correction'] ) ) {
+                    foreach ($posted['vp_woo_pont_weight_correction'] as $weight_correction_id => $weight_correction) {
 
                         $correction = wc_clean($weight_correction['correction']);
                         $weight_corrections[$weight_correction_id] = array(
@@ -386,7 +400,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                                 $condition_details = array(
                                     'category' => wc_clean($condition['category']),
                                     'comparison' => wc_clean($condition['comparison']),
-                                    'value' => $condition[$condition['category']]
+                                    'value' => isset($condition[$condition['category']]) ? wc_clean($condition[$condition['category']]) : ''
                                 );
 
                                 $weight_corrections[$weight_correction_id]['conditions'][] = $condition_details;
@@ -398,8 +412,8 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                 update_option( 'vp_woo_pont_weight_corrections', $weight_corrections );
 
                 $packagings = array();
-                if ( isset( $_POST['vp_woo_pont_packaging'] ) ) {
-                    foreach ($_POST['vp_woo_pont_packaging'] as $packaging_id => $packaging) {
+                if ( isset( $posted['vp_woo_pont_packaging'] ) ) {
+                    foreach ($posted['vp_woo_pont_packaging'] as $packaging_id => $packaging) {
 
                         $name = wc_clean($packaging['name']);
                         $sku = wc_clean($packaging['sku']);
@@ -424,10 +438,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save automations options
-            if(isset($_GET['section']) && $_GET['section'] == 'vp_labels') {
+            if($section == 'vp_labels') {
                 $automations = array();
-                if ( isset( $_POST['vp_woo_pont_automation'] ) ) {
-                    foreach ($_POST['vp_woo_pont_automation'] as $automation_id => $automation) {
+                if ( isset( $posted['vp_woo_pont_automation'] ) ) {
+                    foreach ($posted['vp_woo_pont_automation'] as $automation_id => $automation) {
 
                         $trigger = sanitize_text_field($automation['trigger']);
                         $automations[$automation_id] = array(
@@ -447,7 +461,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                                 $condition_details = array(
                                     'category' => wc_clean($condition['category']),
                                     'comparison' => wc_clean($condition['comparison']),
-                                    'value' => $condition[$condition['category']]
+                                    'value' => isset($condition[$condition['category']]) ? wc_clean($condition[$condition['category']]) : ''
                                 );
 
                                 $automations[$automation_id]['conditions'][] = $condition_details;
@@ -460,10 +474,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save tracking automations
-            if(isset($_GET['section']) && $_GET['section'] == 'vp_tracking') {
+            if($section == 'vp_tracking') {
                 $tracking_automations = array();
-                if ( isset( $_POST['vp_woo_pont_tracking_automation'] ) ) {
-                    foreach ($_POST['vp_woo_pont_tracking_automation'] as $automation_id => $automation) {
+                if ( isset( $posted['vp_woo_pont_tracking_automation'] ) ) {
+                    foreach ($posted['vp_woo_pont_tracking_automation'] as $automation_id => $automation) {
 
                         $trigger = sanitize_text_field($automation['order_status']);
                         $tracking_automations[$automation_id] = array(
@@ -489,10 +503,10 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
             }
 
             //Save custom points
-            if(isset($_GET['section']) && $_GET['section'] == 'points') {
+            if($section == 'points') {
                 $points = array();
-                if ( isset( $_POST['vp_woo_pont_points'] ) ) {
-                    foreach ($_POST['vp_woo_pont_points'] as $point_id => $point) {
+                if ( isset( $posted['vp_woo_pont_points'] ) ) {
+                    foreach ($posted['vp_woo_pont_points'] as $point_id => $point) {
                         $name = wc_clean($point['name']);
                         $id = wc_clean($point['id']);
                         $provider = wc_clean($point['provider']);
@@ -500,7 +514,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                         $zip = wc_clean($point['zip']);
                         $addr = wc_clean($point['addr']);
                         $city = wc_clean($point['city']);
-                        $comment = wp_kses_post( trim( wp_unslash($point['comment']) ) );
+                        $comment = wp_kses_post( trim( $point['comment'] ) );
                         $email = wc_clean($point['email']);
                         $hidden = isset($point['hidden']) ? true : false;
 
@@ -537,12 +551,19 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
 
         //Save COD settings
         public static function save_cod_settings() {
+            //WooCommerce checks the nonce before saving the settings, check it here too, so this can't run on its own
+            if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-settings' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+                return;
+            }
+            $posted = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
+            $carrier = isset( $_GET['carrier'] ) ? sanitize_key( wp_unslash( $_GET['carrier'] ) ) : '';
+            $section = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
 
             //Save cod fee options
-            if(isset($_GET['section']) && ($_GET['section'] == 'cod' || $_GET['section'] == 'vp_cod')) {
+            if(($section == 'cod' || $section == 'vp_cod')) {
                 $cod_fees = array();
-                if ( isset( $_POST['vp_woo_pont_cod_fee'] ) ) {
-                    foreach ($_POST['vp_woo_pont_cod_fee'] as $cod_fee_id => $cod_fee) {
+                if ( isset( $posted['vp_woo_pont_cod_fee'] ) ) {
+                    foreach ($posted['vp_woo_pont_cod_fee'] as $cod_fee_id => $cod_fee) {
 
                         $cost = wc_clean($cod_fee['cost']);
                         $type = wc_clean($cod_fee['type']);
@@ -564,7 +585,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Settings', false ) ) :
                                 $condition_details = array(
                                     'category' => wc_clean($condition['category']),
                                     'comparison' => wc_clean($condition['comparison']),
-                                    'value' => $condition[$condition['category']]
+                                    'value' => isset($condition[$condition['category']]) ? wc_clean($condition[$condition['category']]) : ''
                                 );
 
                                 $cod_fees[$cod_fee_id]['conditions'][] = $condition_details;

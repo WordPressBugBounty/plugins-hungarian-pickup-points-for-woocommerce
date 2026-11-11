@@ -9,7 +9,7 @@ $saved_values = get_option('vp_woo_pont_tracking_automations');
 //Order status settings
 $trigger_types = array();
 foreach (self::get_order_statuses() as $key => $label) {
-	$trigger_types[$key] = sprintf( esc_html__( '%1$s', 'tracking automation status label', 'vp-woo-pont' ), $label);
+	$trigger_types[$key] = esc_html( $label );
 }
 
 //Allow plugins to customize
@@ -60,7 +60,7 @@ $providers['kvikk'] = 'Kvikk';
 								</div>
 								<span class="text"><?php esc_html_e('When package status is one of the following', 'vp-woo-pont'); ?></span>
 							</div>
-							<a href="#" class="delete-tracking-automation"><?php _e('delete', 'vp-woo-pont'); ?></a>
+							<a href="#" class="delete-tracking-automation"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 						</div>
 						<div class="vp-woo-pont-settings-tracking-automation-if">
 							<?php foreach ($packages_statuses as $provider_id => $statuses): ?>
@@ -74,7 +74,7 @@ $providers['kvikk'] = 'Kvikk';
 										<option value="delivered" <?php if(isset($automation[$provider_id])) selected( in_array('delivered', $automation[$provider_id]) ); ?>><?php esc_html_e('Delivered', 'vp-woo-pont'); ?></option>
 										<?php foreach ($statuses as $status_id => $status): ?>
 											<option value="<?php echo esc_attr($status_id); ?>" <?php if(isset($automation[$provider_id])) selected( in_array($status_id, $automation[$provider_id]) ); ?>>
-												<?php echo esc_html__($status, 'vp-woo-pont'); ?>
+												<?php echo esc_html__($status, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the tracking status labels. ?>
 											</option>
 										<?php endforeach; ?>
 									</select>
@@ -87,7 +87,7 @@ $providers['kvikk'] = 'Kvikk';
 			<?php endif; ?>
 		</div>
 		<div class="vp-woo-pont-settings-tracking-automation-add">
-			<a href="#" class="add button"><?php _e('Add new automation', 'vp-woo-pont'); ?></a>
+			<a href="#" class="add button"><?php esc_html_e('Add new automation', 'vp-woo-pont'); ?></a>
 		</div>
 		<p class="description"><?php echo esc_html($data['desc']); ?></p>
 	</td>
@@ -112,7 +112,7 @@ $providers['kvikk'] = 'Kvikk';
 				</div>
 				<span class="text"><?php esc_html_e('When package status is one of the following', 'vp-woo-pont'); ?></span>
 			</div>
-			<a href="#" class="delete-tracking-automation"><?php _e('delete', 'vp-woo-pont'); ?></a>
+			<a href="#" class="delete-tracking-automation"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 		</div>
 		<div class="vp-woo-pont-settings-tracking-automation-if">
 			<?php foreach ($packages_statuses as $provider_id => $statuses): ?>
@@ -125,7 +125,7 @@ $providers['kvikk'] = 'Kvikk';
 					<select multiple="multiple" class="multiselect wc-enhanced-select" data-name="vp_woo_pont_tracking_automation[X][package_status][<?php echo esc_attr($provider_id); ?>][]">
 						<option value="delivered"><?php esc_html_e('Delivered', 'vp-woo-pont'); ?></option>
 						<?php foreach ($statuses as $status_id => $status): ?>
-							<option value="<?php echo esc_attr($status_id); ?>"><?php echo esc_html__($status, 'vp-woo-pont'); ?></option>
+							<option value="<?php echo esc_attr($status_id); ?>"><?php echo esc_html__($status, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the tracking status labels. ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -135,4 +135,4 @@ $providers['kvikk'] = 'Kvikk';
 	</div>
 </script>
 
-<?php echo VP_Woo_Pont_Conditions::get_sample_row('automations'); ?>
+<?php echo VP_Woo_Pont_Conditions::get_sample_row('automations'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML template, escaped in get_sample_row(). ?>

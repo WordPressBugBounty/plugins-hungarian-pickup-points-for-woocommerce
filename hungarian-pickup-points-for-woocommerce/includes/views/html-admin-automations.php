@@ -14,7 +14,7 @@ $trigger_types = array(
 
 //Merge with order status settings
 foreach (self::get_order_statuses() as $key => $label) {
-	$trigger_types[$key] = sprintf( esc_html__( 'after %1$s status', 'vp-woo-pont' ), $label);
+	$trigger_types[$key] = sprintf( /* translators: %1$s: Order status name */ esc_html__( 'after %1$s status', 'vp-woo-pont' ), $label);
 }
 
 //Apply filters
@@ -51,16 +51,16 @@ $conditions = VP_Woo_Pont_Conditions::get_conditions('automations');
 								<input type="checkbox" data-name="vp_woo_pont_automation[X][condition_enabled]" <?php checked( $automation['conditional'] ); ?> class="condition" value="yes">
 								<span><?php esc_html_e('Conditional logic', 'vp-woo-pont'); ?></span>
 							</label>
-							<a href="#" class="delete-automation"><?php _e('delete', 'vp-woo-pont'); ?></a>
+							<a href="#" class="delete-automation"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 						</div>
 						<div class="vp-woo-pont-settings-automation-if" <?php if(!$automation['conditional']): ?>style="display:none"<?php endif; ?>>
 							<div class="vp-woo-pont-settings-automation-if-header">
-								<span><?php _e('Run this automation, if', 'vp-woo-pont'); ?></span>
+								<span><?php esc_html_e('Run this automation, if', 'vp-woo-pont'); ?></span>
 								<select data-name="vp_woo_pont_automation[X][logic]">
-									<option value="and" <?php if(isset($automation['logic'])) selected( $automation['logic'], 'and' ); ?>><?php _e('All', 'vp-woo-pont'); ?></option>
-									<option value="or" <?php if(isset($automation['logic'])) selected( $automation['logic'], 'or' ); ?>><?php _e('One', 'vp-woo-pont'); ?></option>
+									<option value="and" <?php if(isset($automation['logic'])) selected( $automation['logic'], 'and' ); ?>><?php esc_html_e('All', 'vp-woo-pont'); ?></option>
+									<option value="or" <?php if(isset($automation['logic'])) selected( $automation['logic'], 'or' ); ?>><?php esc_html_e('One', 'vp-woo-pont'); ?></option>
 								</select>
-								<span><?php _e('of the following match', 'vp-woo-pont'); ?></span>
+								<span><?php esc_html_e('of the following match', 'vp-woo-pont'); ?></span>
 							</div>
 							<ul class="vp-woo-pont-settings-automation-if-options conditions" <?php if(isset($automation['conditions'])): ?>data-options="<?php echo esc_attr(json_encode($automation['conditions'])); ?>"<?php endif; ?>></ul>
 						</div>
@@ -69,7 +69,7 @@ $conditions = VP_Woo_Pont_Conditions::get_conditions('automations');
 			<?php endif; ?>
 		</div>
 		<div class="vp-woo-pont-settings-automation-add">
-			<a href="#" class="add button"><?php _e('Add new automation', 'vp-woo-pont'); ?></a>
+			<a href="#" class="add button"><?php esc_html_e('Add new automation', 'vp-woo-pont'); ?></a>
 		</div>
 		<p class="description"><?php echo esc_html($data['desc']); ?></p>
 	</td>
@@ -99,20 +99,20 @@ $conditions = VP_Woo_Pont_Conditions::get_conditions('automations');
 				<input type="checkbox" data-name="vp_woo_pont_automation[X][condition_enabled]" class="condition" value="yes">
 				<span><?php esc_html_e('Conditional logic', 'vp-woo-pont'); ?></span>
 			</label>
-			<a href="#" class="delete-automation"><?php _e('delete', 'vp-woo-pont'); ?></a>
+			<a href="#" class="delete-automation"><?php esc_html_e('delete', 'vp-woo-pont'); ?></a>
 		</div>
 		<div class="vp-woo-pont-settings-automation-if" style="display:none">
 			<div class="vp-woo-pont-settings-automation-if-header">
-				<span><?php _e('Run this automation, if', 'vp-woo-pont'); ?></span>
+				<span><?php esc_html_e('Run this automation, if', 'vp-woo-pont'); ?></span>
 				<select data-name="vp_woo_pont_automation[X][logic]">
-					<option value="and"><?php _e('All', 'vp-woo-pont'); ?></option>
-					<option value="or"><?php _e('One', 'vp-woo-pont'); ?></option>
+					<option value="and"><?php esc_html_e('All', 'vp-woo-pont'); ?></option>
+					<option value="or"><?php esc_html_e('One', 'vp-woo-pont'); ?></option>
 				</select>
-				<span><?php _e('of the following match', 'vp-woo-pont'); ?></span>
+				<span><?php esc_html_e('of the following match', 'vp-woo-pont'); ?></span>
 			</div>
 			<ul class="vp-woo-pont-settings-automation-if-options conditions"></ul>
 		</div>
 	</div>
 </script>
 
-<?php echo VP_Woo_Pont_Conditions::get_sample_row('automations'); ?>
+<?php echo VP_Woo_Pont_Conditions::get_sample_row('automations'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML template, escaped in get_sample_row(). ?>

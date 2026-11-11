@@ -497,7 +497,7 @@ class VP_Woo_Pont_Kvikk {
 				'type' => 'select',
 				'class' => 'wc-enhanced-select',
 				'title' => __( 'Packaged order status', 'vp-woo-pont' ),
-				'options' => VP_Woo_Pont_Settings::get_order_statuses(__('None', 'Order status after scanning', 'vp-woo-pont')),
+				'options' => VP_Woo_Pont_Settings::get_order_statuses(_x('None', 'Order status after scanning', 'vp-woo-pont')),
 				'desc' => __( 'If you scan the label in the Kvikk App, you can mark the order to be in this status.', 'vp-woo-pont' ),
 				'id' => 'kvikk_packaged_order_status',
 			),
@@ -588,7 +588,7 @@ class VP_Woo_Pont_Kvikk {
 
 	//Check if we are on the settings page
 	public function is_settings_page() {
-		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers');
+		return (isset($_GET['section']) && $_GET['section'] === 'vp_carriers'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 	}
 
     public function get_kvikk_db() {
@@ -797,8 +797,8 @@ class VP_Woo_Pont_Kvikk {
 		);
 
 		//Change sender ID if its set as a parameter
-		if(isset($_POST['vp_woo_pont_kvikk_sender_id'])) {
-			$shipment['senderID'] = sanitize_text_field($_POST['vp_woo_pont_kvikk_sender_id']);
+		if(isset($_POST['vp_woo_pont_kvikk_sender_id'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- The nonce is checked in the AJAX handler that generates the label.
+			$shipment['senderID'] = sanitize_text_field(wp_unslash($_POST['vp_woo_pont_kvikk_sender_id'])); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		//If manually generated, use submitted weight instead
@@ -879,9 +879,11 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		//Support for multiple packages
-		if(isset($_POST['package_count']) && $_POST['package_count'] > 1 && isset($_POST['additional_package_data'])) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- The nonce is checked in the AJAX handler that generates the label.
+		if(isset($_POST['package_count']) && $_POST['package_count'] > 1 && isset($_POST['additional_package_data']) && is_string($_POST['additional_package_data'])) {
 			$shipment['parcels'] = array();
-			$additional_package_data = json_decode(stripslashes($_POST['additional_package_data']), true);
+			$additional_package_data = json_decode(wp_unslash($_POST['additional_package_data']), true); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, each value is used as a number below.
+			if(!is_array($additional_package_data)) $additional_package_data = array();
 
 			foreach ($additional_package_data as $parcel_index => $parcel_data) {
 				$weight = $parcel_data['weight'];
@@ -1063,7 +1065,7 @@ class VP_Woo_Pont_Kvikk {
 
 		//Use the refresh api if manually refreshed
 		$api_url = $this->api_url.'shipment/'.$parcel_number;
-		if(isset($_POST['action']) && $_POST['action'] == 'vp_woo_pont_update_tracking_info') {
+		if(isset($_POST['action']) && $_POST['action'] == 'vp_woo_pont_update_tracking_info') { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Only checks which request this is.
 			$api_url = $this->api_url.'tracking/'.$parcel_number;
 		}
 
@@ -1109,7 +1111,7 @@ class VP_Woo_Pont_Kvikk {
 	public function get_pickup_points() {
 		$blocks = array();
 		//Needs this if so it won't load on every page load
-		if(is_admin() && isset( $_GET['tab']) && $_GET['tab'] == 'shipping' && isset($_GET['section']) && $_GET['section'] == 'vp_carriers' && isset($_GET['carrier']) && $_GET['carrier'] == 'kvikk') {
+		if(is_admin() && isset( $_GET['tab']) && $_GET['tab'] == 'shipping' && isset($_GET['section']) && $_GET['section'] == 'vp_carriers' && isset($_GET['carrier']) && $_GET['carrier'] == 'kvikk') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 			$blocks = $this->get_pickup_points_response(false);
 		}
 		return $blocks;
@@ -1117,6 +1119,9 @@ class VP_Woo_Pont_Kvikk {
 
 	public function validate_api_key() {
 		check_ajax_referer( 'vp-woo-pont-validate-kvikk-api', 'nonce' );
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( null, 403 );
+		}
 		$pickup_points = $this->get_pickup_points_response(true);
 
 		//Check for errors
@@ -1140,11 +1145,13 @@ class VP_Woo_Pont_Kvikk {
 	public function get_pickup_points_response($refresh = false) {
 		$pickup_points = get_transient('vp_woo_pont_kvikk_senders');
 
-		//Get API key
-		if(isset($_POST['api_key'])) {
-			$api_key = sanitize_text_field($_POST['api_key']);
-		} elseif(isset($_POST['vp_woo_pont_kvikk_api_key'])) {
-			$api_key = sanitize_text_field($_POST['vp_woo_pont_kvikk_api_key']); 
+		//Get API key: a submitted one when testing or saving it in the settings(the nonce is checked there), or the stored one
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		if(isset($_POST['api_key']) && current_user_can('manage_woocommerce')) {
+			$api_key = sanitize_text_field(wp_unslash($_POST['api_key']));
+		} elseif(isset($_POST['vp_woo_pont_kvikk_api_key']) && current_user_can('manage_woocommerce')) {
+			$api_key = sanitize_text_field(wp_unslash($_POST['vp_woo_pont_kvikk_api_key']));
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		} else {
 			$api_key = $this->api_key;
 		}
@@ -1204,12 +1211,14 @@ class VP_Woo_Pont_Kvikk {
 
 	public function close_shipments($packages = array(), $orders = array()) {
 
-		//Get extra shipments parameter
-		$shipments_in_request = $_POST['shipments'];
+		//Get extra shipments parameter. The nonce is checked in the AJAX handler that calls this
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		$shipments_in_request = isset($_POST['shipments']) && is_array($_POST['shipments']) ? wp_unslash($_POST['shipments']) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 		
 		//Sanitize shipments
 		$shipments = array();
 		foreach ($shipments_in_request as $shipment) {
+			if(!is_array($shipment) || !isset($shipment['order'], $shipment['package'])) continue;
 			$order = intval($shipment['order']);
 			$package = sanitize_text_field($shipment['package']);
 			$shipments[$package] = $order;
@@ -1224,13 +1233,14 @@ class VP_Woo_Pont_Kvikk {
 
 		//Set pickup date
 		if(isset($_POST['pickup_date'])) {
-			$options['pickupDate'] = sanitize_text_field($_POST['pickup_date']);
+			$options['pickupDate'] = sanitize_text_field(wp_unslash($_POST['pickup_date']));
 		}
 
 		//Set couriers that needs pickup
 		if(isset($_POST['pickup_for'])) {
-			$options['pickupFor'] = $_POST['pickup_for'];
+			$options['pickupFor'] = array_map('sanitize_text_field', (array) wp_unslash($_POST['pickup_for'])); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with array_map().
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		//Try to create label
 		$request = wp_remote_post( $this->api_url.'delivery-note', array(
@@ -1379,7 +1389,7 @@ class VP_Woo_Pont_Kvikk {
 		}
 
 		?>
-		<div class="kvikk-promo" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_kvikk_promo" ); ?>">
+		<div class="kvikk-promo" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_kvikk_promo" ) ); ?>">
 			<div class="kvikk-promo-header">
 				<div class="kvikk-promo-logo"></div>
 				<a href="#" class="kvikk-promo-close"><span class="dashicons dashicons-no-alt"></span></a>
@@ -1394,7 +1404,7 @@ class VP_Woo_Pont_Kvikk {
 			</ul>
 			<p class="kvikk-promo-footnote">Nettó árak, <strong>tartalmazza az útdíjat és az üzemanyagköltséget</strong>.</p>
 			<div class="kvikk-promo-buttons">
-				<a href="https://kvikk.hu/?source=plugin" target="_blank" data-nonce="<?php echo wp_create_nonce( "vp_woo_pont_kvikk_promo" ); ?>" class="button kvikk-promo-cta">Érdekel</a>
+				<a href="https://kvikk.hu/?source=plugin" target="_blank" data-nonce="<?php echo esc_attr( wp_create_nonce( "vp_woo_pont_kvikk_promo" ) ); ?>" class="button kvikk-promo-cta">Érdekel</a>
 				<a href="#" class="button kvikk-promo-hide">Elrejtés</a>
 			</div>
 		</div>
@@ -1403,31 +1413,39 @@ class VP_Woo_Pont_Kvikk {
 
 	public function hide_ad() {
 		check_ajax_referer( 'vp_woo_pont_kvikk_promo', 'nonce' );
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( null, 403 );
+		}
 		update_option('_vp_woo_pont_hide_kvikk_info_v2', true);
 		wp_send_json_success();
 	}
 
 	public static function ipn_process() {
-		if(isset($_GET['vp_woo_pont_kvikk_ipn'])) {
+		if(isset($_GET['vp_woo_pont_kvikk_ipn'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Webhook, checked with the API key.
 
 			// Retrieve API key from the request header
-			$headers = getallheaders();
-			$normalized_headers = array_change_key_case($headers, CASE_LOWER);
-			$api_key = isset($normalized_headers['x-api-key']) ? esc_html($normalized_headers['x-api-key']) : '';
-	
-			// Validate API key
-			if ($api_key != VP_Woo_Pont_Helpers::get_option('kvikk_api_key')) {
-				wp_send_json_error();
+			$api_key = isset($_SERVER['HTTP_X_API_KEY']) && is_string($_SERVER['HTTP_X_API_KEY']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_API_KEY'])) : '';
+			$stored_api_key = VP_Woo_Pont_Helpers::get_option('kvikk_api_key');
+
+			// Validate API key. Reject the request if Kvikk is not set up, so an empty key can't match an empty setting
+			if (!is_string($stored_api_key) || $stored_api_key === '' || $api_key === '' || !hash_equals($stored_api_key, $api_key)) {
+				wp_send_json_error(null, 401);
 			}
 
 			// Get the raw POST data
 			$raw_post_data = file_get_contents('php://input');
 			$post_data = json_decode($raw_post_data, true);
 
-			// Setup parameters
+			// Setup parameters, both are required
+			if (!is_array($post_data) || !isset($post_data['orderID'], $post_data['trackingNumber']) || !is_scalar($post_data['orderID']) || !is_scalar($post_data['trackingNumber'])) {
+				wp_send_json_error(null, 400);
+			}
 			$ipn_parameters = array();
-			if (isset($post_data['orderID'])) $ipn_parameters['order_number'] = esc_html($post_data['orderID']);
-			if (isset($post_data['trackingNumber'])) $ipn_parameters['tracking_number'] = esc_html($post_data['trackingNumber']);
+			$ipn_parameters['order_number'] = sanitize_text_field((string) $post_data['orderID']);
+			$ipn_parameters['tracking_number'] = sanitize_text_field((string) $post_data['trackingNumber']);
+			if ($ipn_parameters['order_number'] === '' || $ipn_parameters['tracking_number'] === '') {
+				wp_send_json_error(null, 400);
+			}
 
 			//Get order based on the tracking number meta
 			$args = array(
@@ -1450,7 +1468,7 @@ class VP_Woo_Pont_Kvikk {
 			$order_id = $order->get_order_number();
 
 			//Check for order ID
-			if($order_id != $ipn_parameters['order_number']) {
+			if((string) $order_id !== $ipn_parameters['order_number']) {
 				wp_send_json_error();
 			}
 
@@ -1465,7 +1483,7 @@ class VP_Woo_Pont_Kvikk {
 			$order->save();
 
 			//Add note
-			$order->add_order_note(sprintf(esc_html__("Shipping label removed from the order, because it was removed from Kvikk. Tracking number was: %s", 'vp-woo-pont'), $ipn_parameters['tracking_number']));
+			$order->add_order_note(sprintf(/* translators: %s: Tracking number */ esc_html__("Shipping label removed from the order, because it was removed from Kvikk. Tracking number was: %s", 'vp-woo-pont'), $ipn_parameters['tracking_number']));
 
 			//Return success
 			wp_send_json_success();
@@ -1653,7 +1671,7 @@ class VP_Woo_Pont_Kvikk {
 	}
 
 	public static function save_settings() {
-		if(isset($_GET['carrier']) && $_GET['carrier'] == 'kvikk') {
+		if(isset($_GET['carrier']) && $_GET['carrier'] == 'kvikk') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 			update_option('vp_woo_pont_kvikk_foxpost_type_selected', true);
 		}
 	}
@@ -1713,7 +1731,7 @@ class VP_Woo_Pont_Kvikk {
 						$('.vp-woo-pont-kvikk-foxpost-packeta-notice').addClass('loading');
 						var data = {
 							action: 'vp_woo_pont_kvikk_foxpost_packeta_notice',
-							nonce: '<?php echo wp_create_nonce( "vp_woo_pont_kvikk_foxpost_packeta_notice" ); ?>'
+							nonce: '<?php echo esc_js( wp_create_nonce( "vp_woo_pont_kvikk_foxpost_packeta_notice" ) ); ?>'
 						};
 						$.post(ajaxurl, data, function(response) {
 							$('.vp-woo-pont-kvikk-foxpost-packeta-notice').slideUp();
@@ -1730,6 +1748,9 @@ class VP_Woo_Pont_Kvikk {
 
 	public function hide_foxpost_packeta_notice() {
 		check_ajax_referer( 'vp_woo_pont_kvikk_foxpost_packeta_notice', 'nonce' );
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( null, 403 );
+		}
 		update_option('vp_woo_pont_kvikk_foxpost_type_selected', true);
 		wp_send_json_success();
 	}
@@ -1786,7 +1807,7 @@ class VP_Woo_Pont_Kvikk {
 						<li>
 							<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
 								<input type="checkbox" name="vp_woo_pont_extra_services" id="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked($is_checked); ?> />
-								<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
+								<span><?php echo esc_html__($service, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the service labels. ?></span>
 							</label>
 						</li>
 					<?php endforeach; ?>
@@ -1868,7 +1889,7 @@ class VP_Woo_Pont_Kvikk {
 								<li>
 									<label for="vp_woo_pont_extra_service_<?php echo esc_attr($service_id); ?>">
 										<input type="checkbox" name="vp_woo_pont_kvikk_services" id="vp_woo_pont_kvikk_service_<?php echo esc_attr($service_id); ?>" value="<?php echo esc_attr($service_id); ?>" <?php checked(in_array($service_id, $saved_options)); ?> />
-										<span><?php echo esc_html__($service, 'vp-woo-pont'); ?></span>
+										<span><?php echo esc_html__($service, 'vp-woo-pont'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Translates the service labels. ?></span>
 									</label>
 								</li>
 							<?php endforeach; ?>

@@ -105,7 +105,7 @@ $sortedProviders += $providers;
 
 		<?php if($this->is_local_pickup_feature_needed()): ?>
 		<div class="notice notice-info notice-alt inline vp-woo-pont-providers-block-notice">
-			<p><?php printf( esc_html__( 'Since you are using the block based checkout page, you need to enable Woo\'s local pickup feature to show these options during checkout. To learn more about this, %1$sclick here%2$s.', 'vp-woo-pont' ), '<a href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/penztar-blokk-kompatibilitas/" target="_blank">', '</a>' ); ?></p>
+			<p><?php printf( /* translators: %1$s: Opening link tag, %2$s: Closing link tag */ esc_html__( 'Since you are using the block based checkout page, you need to enable Woo\'s local pickup feature to show these options during checkout. To learn more about this, %1$sclick here%2$s.', 'vp-woo-pont' ), '<a href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/penztar-blokk-kompatibilitas/" target="_blank">', '</a>' ); ?></p>
 			<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=pickup_location' ) ); ?>" class="button button-primary"><?php esc_html_e('Enable local pickup', 'vp-woo-pont'); ?></a></p>
 		</div>
 		<?php endif; ?>
@@ -119,7 +119,7 @@ $sortedProviders += $providers;
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
-			<a href="#" class="vp-woo-pont-providers-add-button button button-primary" data-providers="<?php echo $providers_attr; ?>"><?php esc_html_e('Select providers', 'vp-woo-pont'); ?></a>
+			<a href="#" class="vp-woo-pont-providers-add-button button button-primary" data-providers="<?php echo $providers_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>"><?php esc_html_e('Select providers', 'vp-woo-pont'); ?></a>
 		</div>
 
 		<table class="vp-woo-pont-providers wc_gateways widefat" cellspacing="0">
@@ -129,8 +129,8 @@ $sortedProviders += $providers;
 					<th></th>
 					<th><?php esc_html_e('Name', 'vp-woo-pont'); ?></th>
 					<th><?php esc_html_e('Database', 'vp-woo-pont'); ?></th>
-					<th><?php esc_html_e('Free with coupon', 'vp-woo-pont'); ?> <?php echo wc_help_tip(__('Make this option free if the cart contains a free shipping coupon.', 'vp-woo-pont')); ?></th>
-					<th><?php esc_html_e('Disable COD', 'vp-woo-pont'); ?> <?php echo wc_help_tip(__('Hide the COD payment method if the provider is selected.', 'vp-woo-pont')); ?></th>
+					<th><?php esc_html_e('Free with coupon', 'vp-woo-pont'); ?> <?php echo wp_kses_post( wc_help_tip(__('Make this option free if the cart contains a free shipping coupon.', 'vp-woo-pont')) ); ?></th>
+					<th><?php esc_html_e('Disable COD', 'vp-woo-pont'); ?> <?php echo wp_kses_post( wc_help_tip(__('Hide the COD payment method if the provider is selected.', 'vp-woo-pont')) ); ?></th>
 					<th></th>
                 </tr>
             </thead>
@@ -145,7 +145,7 @@ $sortedProviders += $providers;
 					</td>
 					<td class="vp-woo-pont-providers-cell-name">
 						<input type="checkbox" name="vp_woo_pont_enabled_providers[]" value="<?php echo esc_attr($provider_id); ?>" <?php checked(in_array($provider_id, $saved_values)); ?>>
-						<?php echo $provider_name; ?>
+						<?php echo esc_html($provider_name); ?>
 					</td>
 					<td class="vp-woo-pont-providers-cell-database">
 
@@ -161,7 +161,7 @@ $sortedProviders += $providers;
 								<?php if(count($custom_points) == 0): ?>
 									<?php esc_html_e('Setup custom points', 'vp-woo-pont'); ?>
 								<?php else: ?>
-									<?php echo sprintf( _n( '%s custom point', '%s custom point', count($custom_points), 'vp-woo-pont' ), count($custom_points) ); ?>
+									<?php /* translators: %s: Number of custom points */ echo esc_html( sprintf( _n( '%s custom point', '%s custom point', count($custom_points), 'vp-woo-pont' ), count($custom_points) ) ); ?>
 								<?php endif; ?>
 							</a>
 						</div>
@@ -213,7 +213,7 @@ $sortedProviders += $providers;
 				<tr>
 					<td colspan="7">
 						<div class="vp-woo-pont-providers-add">
-							<a href="#" class="vp-woo-pont-providers-add-button button button-primary" data-providers="<?php echo $providers_attr; ?>"><?php esc_html_e('Enable more providers', 'vp-woo-pont'); ?></a>
+							<a href="#" class="vp-woo-pont-providers-add-button button button-primary" data-providers="<?php echo $providers_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with wc_esc_json() above. ?>"><?php esc_html_e('Enable more providers', 'vp-woo-pont'); ?></a>
 							<a href="https://visztpeter.me/kb-article/csomagpontok-es-cimkek/mukodik-hazhozszallitassal-is/" target="_blank" class="vp-woo-pont-providers-add-button button button-secondary"><?php esc_html_e('Setup home delivery', 'vp-woo-pont'); ?></a>
 							<div class="vp-woo-pont-providers-add-list">
 								<?php if(is_array($random_disabled_providers)): ?>

@@ -24,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<strong class="name"></strong>
 						<span class="addr"></span>
 						<span class="cost"></span>
+						<span class="out-of-order"><?php esc_html_e('Currently unavailable!', 'vp-woo-pont'); ?></span>
 					</div>
 				</div>
 				<div class="vp-woo-pont-modal-sidebar-result-info-features features"></div>
@@ -34,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<span class="icon-chevron"></span>
 					</a>
 					<ul>
-						<?php $today_number = date('N'); ?>
+						<?php $today_number = wp_date('N'); ?>
 						<?php foreach ($days as $day_number => $day): ?>
 							<li <?php if($today_number-1 == $day_number): ?>class="today"<?php endif; ?>>
 								<span class="day">

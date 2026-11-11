@@ -26,7 +26,7 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 		//Get IPN url
 		public function get_webhook_url($provider) {
-			$ipn_id = add_option( '_vp_woo_pont_'.$provider.'_webhook_url', substr(md5(rand()),5)); //this will only store it if doesn't exists yet
+			$ipn_id = add_option( '_vp_woo_pont_'.$provider.'_webhook_url', wp_generate_password(27, false)); //this will only store it if doesn't exists yet
 			$url = get_admin_url().'admin-post.php?action=vp_woo_pont_webhook_'.$provider.'&id='.get_option('_vp_woo_pont_'.$provider.'_webhook_url').'&provider='.$provider;
 			return $url;
 		}
@@ -86,6 +86,12 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 				'transsped' => __('Trans-Sped ZERO', 'vp-woo-pont'),
 				'gls_xxl' => __('GLS XXL', 'vp-woo-pont')
 			));
+		}
+
+		//Out of order points are visible on the map, but can't be selected (GLS lockerSaturation: outOfOrder)
+		public static function is_point_out_of_order($point) {
+			$out_of_order = is_array($point) && isset($point['features']) && is_array($point['features']) && in_array('out-of-order', $point['features']);
+			return (bool) apply_filters('vp_woo_pont_is_point_out_of_order', $out_of_order, $point);
 		}
 
 		public static function get_provider_name($provider_id, $prefix = false) {
@@ -1229,31 +1235,31 @@ if ( ! class_exists( 'VP_Woo_Pont_Helpers', false ) ) :
 
 			//Minimum cost label, only 1 paid shipping
 			if(!$has_free_shipping && $minimum_cost_count == 1) {
-				$min_cost_label = sprintf( esc_html_x( '%s', 'shipping cost summary on cart & checkout(one shipping cost only)', 'vp-woo-pont' ), '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>';
 			}
 
 			//Minimum cost label, multiple paid shipping
 			if(!$has_free_shipping && $minimum_cost_count > 1) {
-				$min_cost_label = sprintf( esc_html_x( 'from %s', 'shipping cost summary on cart & checkout(multiple shipping costs)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = sprintf( /* translators: %s: Shipping cost */ esc_html_x( 'from %s', 'shipping cost summary on cart & checkout(multiple shipping costs)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
 			}
 
 			//Minimum cost label, free shipping + paid shipping
 			if($has_free_shipping && $minimum_cost_count == 1) {
-				$min_cost_label = sprintf( esc_html_x( 'free or %s', 'shipping cost summary on cart & checkout(free & 1 shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = sprintf( /* translators: %s: Shipping cost */ esc_html_x( 'free or %s', 'shipping cost summary on cart & checkout(free & 1 shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
 			}
 
 			//Minimum cost label, free shipping + paid shipping
 			if($has_free_shipping && $minimum_cost_count > 1) {
-				$min_cost_label = sprintf( esc_html_x( 'free & from %s', 'shipping cost summary on cart & checkout(free & 1+ shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
+				$min_cost_label = sprintf( /* translators: %s: Shipping cost */ esc_html_x( 'free & from %s', 'shipping cost summary on cart & checkout(free & 1+ shipping cost)', 'vp-woo-pont' ) . ' ', '<span class="vp-woo-pont-shipping-method-label-cost">' . $min_cost_formatted . '</span>' );
 			}
 
 			return $min_cost_label;
 		}
 
 		public static function get_next_workday() {
-			$next_workday = date('Y-m-d', strtotime('tomorrow'));
-			if(date('N', strtotime($next_workday)) >= 6) {
-				$next_workday = date('Y-m-d', strtotime('next monday'));
+			$next_workday = gmdate('Y-m-d', strtotime('tomorrow'));
+			if(gmdate('N', strtotime($next_workday)) >= 6) {
+				$next_workday = gmdate('Y-m-d', strtotime('next monday'));
 			}
 			return $next_workday;
 		}

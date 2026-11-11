@@ -558,7 +558,7 @@ class VP_Woo_Pont_Sameday {
 	//Get invoice blocks
 	public function get_pickup_points() {
 		$pickup_points = array();
-		if(is_admin() && isset( $_GET['tab']) && $_GET['tab'] == 'shipping' && isset($_GET['section']) && $_GET['section'] == 'vp_carriers' && isset($_GET['carrier']) && $_GET['carrier'] == 'sameday') {
+		if(is_admin() && isset( $_GET['tab']) && $_GET['tab'] == 'shipping' && isset($_GET['section']) && $_GET['section'] == 'vp_carriers' && isset($_GET['carrier']) && $_GET['carrier'] == 'sameday') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which settings page is loaded.
 			$pickup_points = $this->get_pickup_points_api();
 		}
 		return $pickup_points;
@@ -567,6 +567,9 @@ class VP_Woo_Pont_Sameday {
 	//Refresh pickup points with ajax
 	public function reload_pickup_points() {
 		check_ajax_referer( 'vp-woo-pont-settings', 'nonce' );
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( null, 403 );
+		}
 
 		//True parameter, so it will refresh the data, won't return the stored one
 		$pickup_points = $this->get_pickup_points_api(true);

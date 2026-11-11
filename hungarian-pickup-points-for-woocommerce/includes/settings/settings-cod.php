@@ -5,7 +5,7 @@ $settings = array(
 	array(
 		'title' => __( 'Fees', 'vp-woo-pont' ),
 		'type' => 'title',
-		'desc' => sprintf( __( 'Setup fees based on various conditions for this payment method. Available in the <a href="%s">PRO version</a>.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_labels' ) )),
+		'desc' => sprintf( /* translators: %s: URL of the PRO version page */ __( 'Setup fees based on various conditions for this payment method. Available in the <a href="%s">PRO version</a>.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_labels' ) )),
 	),
 	array(
 		'type' => 'sectionend',

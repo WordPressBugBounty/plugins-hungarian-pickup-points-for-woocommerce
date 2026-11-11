@@ -462,6 +462,27 @@ body.vp-woo-pont-modal-visible {
 				.selected & {
 					display: block;
 				}
+
+				.feature-out-of-order & {
+					display: none;
+				}
+			}
+
+			//Out of order points are visible, but grayed out and can't be selected
+			&.feature-out-of-order {
+				cursor: default;
+
+				&:hover {
+					background: transparent;
+				}
+
+				.vp-woo-pont-modal-sidebar-result-info-icon,
+				.vp-woo-pont-modal-sidebar-result-info-text strong,
+				.vp-woo-pont-modal-sidebar-result-info-text span.addr,
+				&:after {
+					filter: grayscale(1);
+					opacity: 0.6;
+				}
 			}
 
 			&:hover {
@@ -507,6 +528,20 @@ body.vp-woo-pont-modal-visible {
 						.amount {
 							color: var(--vp-woo-pont-price-color) !important;
 						}
+
+						.feature-out-of-order & {
+							display: none;
+						}
+					}
+
+					//Shown in place of the cost for out of order points
+					span.out-of-order {
+						display: none;
+						color: var(--vp-woo-pont-text-color);
+
+						.feature-out-of-order & {
+							display: block;
+						}
 					}
 
 				}
@@ -540,6 +575,7 @@ body.vp-woo-pont-modal-visible {
 						}
 					}
 				}
+
 
 				&-open-hours {
 					display: none;
@@ -787,6 +823,15 @@ body.vp-woo-pont-modal-visible {
 					display: block;
 					box-shadow: inset 0px 0px 0px 1px #0619B1;
 					border-radius: 50%;
+				}
+			}
+
+			&.feature-out-of-order {
+				cursor: default;
+
+				div {
+					filter: grayscale(1);
+					opacity: 0.6;
 				}
 			}
 

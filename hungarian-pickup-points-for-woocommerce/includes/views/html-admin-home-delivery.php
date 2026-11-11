@@ -76,7 +76,7 @@ foreach ($providers as $provider_id => $label) {
 									<i class="vp-woo-pont-provider-icon-<?php echo esc_attr($provider_id); ?>"></i>
 								<?php endforeach; ?>
 							</div>
-							<p class="vp-woo-pont-settings-home-deliveries-placeholder-text"><?php printf( __( 'To pair your carriers, configure them first by setting up your authentication details in the <a href="%s">settings</a>.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers' ) ) ); ?></p>						</td>
+							<p class="vp-woo-pont-settings-home-deliveries-placeholder-text"><?php /* translators: %s: Settings page URL */ echo wp_kses_post( sprintf( __( 'To pair your carriers, configure them first by setting up your authentication details in the <a href="%s">settings</a>.', 'vp-woo-pont' ), esc_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&section=vp_carriers' ) ) ) ); ?></p>						</td>
 					<?php endif; ?>
 				</tr>
 			<?php endforeach; ?>

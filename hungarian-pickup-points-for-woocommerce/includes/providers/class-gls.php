@@ -857,22 +857,41 @@ class VP_Woo_Pont_GLS {
 	}
 
 	public function tracking_automation_target_status($target_status, $order, $provider, $tracking_info, $automation, $event_status) {
-		if($provider == 'gls' && (in_array('delivered', $automation[$provider]) && $event_status == 'delivered')) {
-			$existing_tracking_info = $order->get_meta('_vp_woo_pont_parcel_info');
-			if($existing_tracking_info && $this->has_shipment_returned($existing_tracking_info)) {
-				return false;
-			}
+
+		//Check every delivered event, the automation can be set with the "Delivered" option, or with a single event code, like 5
+		if($provider != 'gls' || !$target_status || $event_status != 'delivered') {
+			return $target_status;
 		}
-		return $target_status;
+
+		//The new tracking info is already saved at this point, so this includes the events from the current sync too
+		$parcel_info = $order->get_meta('_vp_woo_pont_parcel_info');
+		if(!$parcel_info || !$this->has_shipment_returned($parcel_info)) {
+			return $target_status;
+		}
+
+		//Returned parcels are marked as failed instead
+		$failed_status = apply_filters('vp_woo_pont_gls_returned_order_status', 'wc-failed', $order, $automation);
+
+		//A returned parcel can have more than one delivered event, so change it only once
+		if(!$failed_status || $order->has_status(str_replace('wc-', '', $failed_status))) {
+			return false;
+		}
+
+		$order->add_order_note(__('The GLS parcel was returned to the sender, so the order status was not changed to the delivered status.', 'vp-woo-pont'));
+		return $failed_status;
 	}
 
+	//GLS uses the 23(return to sender) status before the delivered status, if the parcel was returned
+	//A single 23 status can be a mistake by the depot(for example during a redirection), a real return has at least 2 of them
 	private function has_shipment_returned($tracking_info) {
+		$min_count = apply_filters('vp_woo_pont_gls_returned_status_min_count', 2);
+		$count = 0;
 		foreach ($tracking_info as $info) {
 			if (isset($info['event']) && $info['event'] == '23') {
-				return true;
+				$count++;
 			}
 		}
-		return false;
+		return $count >= $min_count;
 	}
 
 	public function close_shipments($packages = array(), $orders = array()) {
